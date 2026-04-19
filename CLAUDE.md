@@ -5,7 +5,7 @@
 Automatizovan pipeline koji **svaki dan u 03:00 (Europe/Belgrade)** generiše jednu novu HTML5 igricu end-to-end. Svaki run je fresh Claude Code sesija na Anthropic cloud-u.
 
 Repo je objavljen na GitHub Pages — svaka igra živi na:
-`https://<owner>.github.io/gari-daily-games/games/YYYY-MM-DD-naziv/`
+`https://mkdsl.github.io/gari-daily-games/games/YYYY-MM-DD-naziv/`
 
 ## Ko si ti
 

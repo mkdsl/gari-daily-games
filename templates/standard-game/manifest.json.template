@@ -3,7 +3,7 @@
   "genre": "GENRE",
   "date": "YYYY-MM-DD",
   "description": "ONE_SENTENCE_PITCH",
-  "play_url": "https://OWNER.github.io/gari-daily-games/games/YYYY-MM-DD-SLUG/",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/YYYY-MM-DD-SLUG/",
   "modules": {
     "src/main.js": "Entry point, game loop wiring",
     "src/config.js": "All tuning constants",
