@@ -1,0 +1,24 @@
+{
+  "name": "GAME_TITLE",
+  "genre": "GENRE",
+  "date": "YYYY-MM-DD",
+  "description": "ONE_SENTENCE_PITCH",
+  "play_url": "https://OWNER.github.io/gari-daily-games/games/YYYY-MM-DD-SLUG/",
+  "modules": {
+    "src/main.js": "Entry point, game loop wiring",
+    "src/config.js": "All tuning constants",
+    "src/state.js": "Game state shape, save/load",
+    "src/input.js": "Keyboard/mouse/touch handlers",
+    "src/render.js": "Canvas rendering layer",
+    "src/ui.js": "HUD, menus, overlays",
+    "styles/base.css": "Layout, responsive canvas",
+    "styles/ui.css": "HUD styling",
+    "styles/game.css": "Animations, particles"
+  },
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "status": "in_progress"
+}
