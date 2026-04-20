@@ -1,27 +1,44 @@
-# Standard Game Template
+# Signal Lost
 
-Ova skela je startna tačka svake dnevne igre. Jova (dev) kopira ovaj folder, preimenuje ga u `games/YYYY-MM-DD-naziv-igre/`, pa popunjava modul po modul.
+**Žanr:** Puzzle / Roguelike mini
+**Datum:** 2026-04-20
+**Play:** https://mkdsl.github.io/gari-daily-games/games/2026-04-20-signal-lost/
 
-## Šta radi van kutije
+## Opis
 
-- ES6 moduli (import/export)
-- responsive full-screen canvas
-- game loop sa delta time
-- save/load u localStorage (ključ `gari-daily-game`, versioned)
-- input handling (kbd + mouse + touch, sa pressed/released detekcijom)
-- HUD + menu overlay sa CSS-om
-- ima mesto za audio, systems, entities, levels
+Svemirska sonda je izgubila vezu sa Zemljom. Ti si inženjer koji mora da provede signal kroz oštećenu mrežu čvorova. Mreža je proceduralno generisana svaki run — nijedan pokušaj nije isti.
 
-## Šta Jova MORA da uradi
+## Kako se igra
 
-1. Kopira folder, preimenuje u `games/YYYY-MM-DD-slug/`
-2. Preimenuje `manifest.json.template` u `manifest.json` i popuni vrednosti
-3. Ažurira `index.html` title + meta
-4. Popunjava config konstante iz Miletovog GDD-a
-5. Proširi `state.js` shape po GDD-u
-6. Implementira systems, entities, render po konceptu
-7. Brend-ira UI preko Perinog CSS-a
+- **Klikni** na Gate čvorove (tamno plavi) da ih otvoriš pre nego signal stigne
+- Signal putuje automatski — moraš da planiraš unapred
+- Ako signal naiđe na zatvoren Gate → SIGNAL LOST
+- **Scrambler** (ljubičast) menja stanje susednih Gate-ova pri prolasku
+- **OR-Splitter** (narandžast) bira slobodan put
 
-## Pravilo
+## Napredak
 
-Ako modul nije potreban za ovaj konkretan žanr igre — **obriši ga**. Manifest.json mora da reflektuje šta STVARNO postoji u folderu.
+- **15 nivoa** — grid raste od 5×5 do 7×7, signal se ubrzava
+- **Checkpoint** na nivou 6 i 11 — pogibija = restart od checkpointa
+- **Power-up-ovi** svakih 3 nivoa: Slow Signal, Reveal, Freeze, Time Bubble, Echo
+
+## Tim
+
+| Uloga | Ko |
+|-------|-----|
+| Koncept & narativ | Sine Scenario |
+| Game design & balans | Mile Mehanika |
+| Implementacija (JS) | Jova jQuery |
+| Estetika & CSS | Pera Piksel |
+| Web Audio | Ceca Čujka |
+| Premortem | Nega Negovanović |
+| Beta test | Beta Trio (Zora, Raša, Lela) |
+| Orkestracija | Gari |
+
+## Tehnički podaci
+
+- Vanilla JS ES6 modules, bez frameworka, bez npm
+- Canvas rendering — blueprint estetika (crna/cyan/narandžasta)
+- Web Audio API — svi zvuci sintetizovani u kodu, nema .mp3/.wav
+- 2504 linija JS + 532 linija CSS
+- Mobile + desktop (touch + mouse + keyboard)

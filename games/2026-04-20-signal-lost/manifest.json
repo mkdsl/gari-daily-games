@@ -20,9 +20,9 @@
     "styles/game.css": "Canvas animacije — glow efekti, ripple, green/red flash keyframes, checkpoint puls, signal fade"
   },
   "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+    "total_js": 2504,
+    "total_css": 532
   },
-  "beta_score": null,
-  "status": "in_progress"
+  "beta_score": "PASS WITH FIXES",
+  "status": "released"
 }
