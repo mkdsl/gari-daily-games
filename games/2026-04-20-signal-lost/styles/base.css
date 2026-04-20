@@ -1,4 +1,12 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ============================================================
+   base.css — Layout, full-screen canvas, reset, monospace font
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html, body {
   width: 100%;
@@ -6,21 +14,43 @@ html, body {
   overflow: hidden;
   background: #0a0a0f;
   color: #e5e5e5;
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  /* Blueprint / terminal monospace stack */
+  font-family: ui-monospace, 'SF Mono', 'Fira Code', 'Cascadia Code', Menlo, Consolas, monospace;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+  -webkit-user-select: none;
 }
 
+/* Root container — fixed, fills viewport */
 #game-root {
   position: fixed;
   inset: 0;
+  isolation: isolate; /* new stacking context for z-index containment */
 }
 
+/* Canvas — behind HUD and menu overlays */
 #game-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   display: block;
+  /* Prevent browser scroll/zoom gestures on touch devices */
   touch-action: none;
+}
+
+/* HUD sits above canvas */
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+/* Menu overlay — above HUD */
+#menu {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
 }
