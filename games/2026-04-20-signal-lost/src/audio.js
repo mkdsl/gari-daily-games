@@ -17,8 +17,26 @@ let _ambientOsc = null;
  * Safe to call multiple times — only creates context once.
  */
 export function initAudio() {
-  // TODO: create AudioContext + masterGain
-  // TODO: start low-volume ambient hum oscillator (saw wave ~50Hz, gain ~0.04)
+  if (_ctx) return; // already initialised
+  try {
+    _ctx = new (window.AudioContext || window.webkitAudioContext)();
+    _masterGain = _ctx.createGain();
+    _masterGain.gain.value = 0.3;
+    _masterGain.connect(_ctx.destination);
+
+    // Ambient hum: low sawtooth at 50Hz, very quiet
+    _ambientOsc = _ctx.createOscillator();
+    const ambGain = _ctx.createGain();
+    _ambientOsc.type = 'sawtooth';
+    _ambientOsc.frequency.value = 50;
+    ambGain.gain.value = 0.04;
+    _ambientOsc.connect(ambGain);
+    ambGain.connect(_masterGain);
+    _ambientOsc.start();
+  } catch (e) {
+    // Audio not supported or blocked — fail silently
+    _ctx = null;
+  }
 }
 
 /**
@@ -26,7 +44,7 @@ export function initAudio() {
  * Call on first user interaction.
  */
 export function resumeAudio() {
-  // TODO: if (_ctx && _ctx.state === 'suspended') _ctx.resume();
+  if (_ctx?.state === 'suspended') _ctx.resume();
 }
 
 /**
@@ -34,7 +52,7 @@ export function resumeAudio() {
  * @param {boolean} open - true = open (higher pitch), false = closed (lower pitch)
  */
 export function sfxGateToggle(open) {
-  // TODO: short sine envelope, 80ms, freq 880Hz if open else 440Hz
+  _playTone('sine', open ? 880 : 440, 0.08, 0.3);
 }
 
 /**
@@ -42,42 +60,79 @@ export function sfxGateToggle(open) {
  * @param {number} level - current level (affects pitch slightly)
  */
 export function sfxSignalStep(level) {
-  // TODO: filtered noise burst, 60ms, cutoff scales with level
+  _playTone('sine', 300 + (level ?? 1) * 20, 0.06, 0.15);
 }
 
 /**
  * Play a "clunk" / hard stop sound when the signal hits a Scrambler.
  */
 export function sfxScrambler() {
-  // TODO: low-freq sawtooth blip, 120ms, freq ~80Hz with rapid gain drop
+  if (!_ctx) return;
+  const t = _ctx.currentTime;
+  const osc = _ctx.createOscillator();
+  const gain = _ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(80, t);
+  osc.frequency.linearRampToValueAtTime(40, t + 0.12);
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(0.4, t + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+  osc.connect(gain);
+  gain.connect(_masterGain);
+  osc.start(t);
+  osc.stop(t + 0.13);
 }
 
 /**
  * Play an OR-Splitter "fork" sound — signal splits into two paths.
  */
 export function sfxOrSplit() {
-  // TODO: two simultaneous sine tones (440Hz + 660Hz), 100ms each
+  _playTone('sine', 440, 0.1, 0.2);
+  _playTone('sine', 660, 0.1, 0.2);
 }
 
 /**
  * Play the level-clear ascending melody.
  */
 export function sfxLevelClear() {
-  // TODO: pentatonic arpeggio, 4 notes, ~300ms total
+  if (!_ctx) return;
+  const freqs = [523, 659, 784, 1047]; // C5, E5, G5, C6
+  const t = _ctx.currentTime;
+  freqs.forEach((freq, i) => {
+    _playTone('sine', freq, 0.08, 0.3, t + i * 0.1);
+  });
 }
 
 /**
  * Play the checkpoint save "chime" (richer than level-clear).
  */
 export function sfxCheckpoint() {
-  // TODO: chord arpeggio C-E-G-C, 500ms total, soft attack
+  if (!_ctx) return;
+  const freqs = [523, 659, 784, 1047]; // C-E-G-C arpeggio
+  const t = _ctx.currentTime;
+  freqs.forEach((freq, i) => {
+    _playTone('sine', freq, 0.15, 0.25, t + i * 0.15);
+  });
 }
 
 /**
  * Play the failure "fail tone" when signal reaches a dead-end or scrambled.
  */
 export function sfxFail() {
-  // TODO: descending two-tone, 300ms, freq 440→220Hz with short decay
+  if (!_ctx) return;
+  const t = _ctx.currentTime;
+  const osc = _ctx.createOscillator();
+  const gain = _ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(440, t);
+  osc.frequency.linearRampToValueAtTime(220, t + 0.3);
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(0.5, t + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+  osc.connect(gain);
+  gain.connect(_masterGain);
+  osc.start(t);
+  osc.stop(t + 0.31);
 }
 
 /**
@@ -85,14 +140,42 @@ export function sfxFail() {
  * @param {string} powerupId - from CONFIG.POWERUPS keys
  */
 export function sfxPowerup(powerupId) {
-  // TODO: short rising sweep, 150ms; different pitch per powerupId
+  if (!_ctx) return;
+  // Each powerup gets a slightly different starting pitch
+  const pitchOffsets = {
+    SLOW_SIGNAL: 0,
+    REVEAL:      50,
+    FREEZE:      100,
+    TIME_BUBBLE: 150,
+    ECHO:        200,
+  };
+  const startFreq = 400 + (pitchOffsets[powerupId] ?? 0);
+  const t = _ctx.currentTime;
+  const osc = _ctx.createOscillator();
+  const gain = _ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(startFreq, t);
+  osc.frequency.linearRampToValueAtTime(startFreq * 2, t + 0.15);
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(0.3, t + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+  osc.connect(gain);
+  gain.connect(_masterGain);
+  osc.start(t);
+  osc.stop(t + 0.16);
 }
 
 /**
  * Play the victory fanfare (signal fully restored).
  */
 export function sfxVictory() {
-  // TODO: full ascending major scale arpeggio, ~800ms
+  if (!_ctx) return;
+  // Ascending C major scale: C4 D4 E4 F4 G4 A4 B4 C5
+  const freqs = [262, 294, 330, 349, 392, 440, 494, 523];
+  const t = _ctx.currentTime;
+  freqs.forEach((freq, i) => {
+    _playTone('sine', freq, 0.12, 0.3, t + i * 0.1);
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -108,5 +191,17 @@ export function sfxVictory() {
  * @param {number} [startTime] - AudioContext time, defaults to now
  */
 function _playTone(type, freq, durationSec, peakGain, startTime) {
-  // TODO: create OscillatorNode + GainNode, schedule ADSR-lite, start + stop
+  if (!_ctx) return;
+  const t = startTime ?? _ctx.currentTime;
+  const osc = _ctx.createOscillator();
+  const gain = _ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, t);
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(peakGain, t + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + durationSec);
+  osc.connect(gain);
+  gain.connect(_masterGain);
+  osc.start(t);
+  osc.stop(t + durationSec + 0.01);
 }

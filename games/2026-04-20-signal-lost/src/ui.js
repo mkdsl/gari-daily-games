@@ -30,7 +30,6 @@ export function initUI(state, callbacks = {}) {
   _onCheckpointUse = callbacks.onCheckpointUse ?? _onCheckpointUse;
   _onPowerupPick   = callbacks.onPowerupPick   ?? _onPowerupPick;
 
-  // TODO: build HUD HTML — level indicator, score, held power-up slots
   hud.innerHTML = `
     <div class="stat" id="stat-level">LVL 1</div>
     <div class="stat" id="stat-score">0</div>
@@ -49,7 +48,6 @@ export function initUI(state, callbacks = {}) {
  * @param {GameState} state
  */
 export function updateHUD(state) {
-  // TODO: update level, score, power-up slot indicators
   const lvlEl   = document.getElementById('stat-level');
   const scoreEl = document.getElementById('stat-score');
   if (lvlEl)   lvlEl.textContent   = `LVL ${state.level}`;
@@ -121,10 +119,13 @@ function _handleMenuClick(e) {
  * @param {GameState} state
  */
 function _renderPowerupSlots(state) {
-  // TODO: render up to 3 power-up slot indicators (held power-ups)
   const el = document.getElementById('stat-powerups');
   if (!el) return;
-  // placeholder — no rendering until implementation
+  const held = state.heldPowerups ?? [];
+  el.innerHTML = held.map(id => {
+    const p = CONFIG.POWERUPS[id];
+    return `<span class="powerup-slot filled" title="${p?.desc ?? id}">${p?.label?.[0] ?? '?'}</span>`;
+  }).join('');
 }
 
 // ---------------------------------------------------------------------------
@@ -133,11 +134,14 @@ function _renderPowerupSlots(state) {
 
 /** @returns {string} */
 function _tmplStart() {
-  // TODO: title screen with game name, tagline, and Start button
   return `
-    <h1 class="menu-title">SIGNAL LOST</h1>
-    <p class="menu-sub">Usmeri signal kroz oštećenu mrežu</p>
-    <button data-action="start">START</button>
+    <div class="menu-card">
+      <div class="signal-icon">◈</div>
+      <h1 class="menu-title">SIGNAL LOST</h1>
+      <p class="menu-sub">Usmeri signal kroz oštećenu mrežu čvorova</p>
+      <p class="menu-sub dim">15 nivoa · Checkpoint sistem · Proceduralna generacija</p>
+      <button class="btn btn-primary" data-action="start">POKRENI SIGNAL</button>
+    </div>
   `;
 }
 
@@ -146,8 +150,6 @@ function _tmplStart() {
  * @returns {string}
  */
 function _tmplPowerupChoice(state) {
-  // TODO: display 3 random power-up choices from state.powerupOffer
-  // state.powerupOffer = ['SLOW_SIGNAL', 'FREEZE', 'ECHO'] (set by powerups.js)
   const offer = state?.powerupOffer ?? [];
   const cards = offer.map(id => {
     const p = CONFIG.POWERUPS[id];
@@ -161,9 +163,11 @@ function _tmplPowerupChoice(state) {
   }).join('');
 
   return `
-    <h2>POWER-UP</h2>
-    <p class="menu-sub">Izaberi jedan</p>
-    <div class="powerup-options">${cards}</div>
+    <div class="menu-card">
+      <h2 class="menu-title" style="font-size:clamp(22px,4vw,36px);letter-spacing:4px;">POWER-UP</h2>
+      <p class="menu-sub">Izaberi jedan power-up za nastavak</p>
+      <div class="powerup-options">${cards}</div>
+    </div>
   `;
 }
 
@@ -172,11 +176,14 @@ function _tmplPowerupChoice(state) {
  * @returns {string}
  */
 function _tmplCheckpoint(state) {
-  // TODO: checkpoint reached screen with "Continue" and optional "Save & Quit"
   return `
-    <h2>CHECKPOINT</h2>
-    <p class="menu-sub">Nivo ${state?.level ?? '?'} — progres sačuvan</p>
-    <button data-action="start">NASTAVI</button>
+    <div class="menu-card">
+      <div class="signal-icon checkpoint">◉</div>
+      <h2 class="menu-title" style="color:#00e5ff;font-size:clamp(22px,4vw,38px);">CHECKPOINT</h2>
+      <p class="menu-sub">Nivo ${state?.level ?? '?'} — progres automatski sačuvan</p>
+      <p class="menu-sub dim">Nastavljaš odavde čak i ako sigal bude izgubljen</p>
+      <button class="btn btn-primary" data-action="start">NASTAVI</button>
+    </div>
   `;
 }
 
@@ -185,13 +192,18 @@ function _tmplCheckpoint(state) {
  * @returns {string}
  */
 function _tmplDeath(state) {
-  // TODO: show final score, offer restart from checkpoint if one exists
   const hasCkpt = !!(state?.checkpointLevel);
   return `
-    <h2>SIGNAL LOST</h2>
-    <p class="menu-sub">Nivo: ${state?.level ?? 1} | Skor: ${state?.score ?? 0}</p>
-    <button data-action="restart">PONOVO</button>
-    ${hasCkpt ? `<button data-action="use-checkpoint">NASTAVI OD NIVOA ${state.checkpointLevel}</button>` : ''}
+    <div class="menu-card">
+      <div class="signal-icon fail">✕</div>
+      <h2 class="menu-title" style="color:#ef4444;font-size:clamp(22px,4vw,44px);">SIGNAL LOST</h2>
+      <p class="menu-sub">Nivo ${state?.level ?? 1} od ${CONFIG.MAX_LEVELS}</p>
+      <p class="stat-display">SKOR: ${state?.score ?? 0}</p>
+      <div class="btn-group">
+        <button class="btn btn-primary" data-action="restart">NOVI RUN</button>
+        ${hasCkpt ? `<button class="btn btn-secondary" data-action="use-checkpoint">NASTAVI OD NIVOA ${state.checkpointLevel}</button>` : ''}
+      </div>
+    </div>
   `;
 }
 
@@ -200,10 +212,14 @@ function _tmplDeath(state) {
  * @returns {string}
  */
 function _tmplWin(state) {
-  // TODO: victory screen with final score breakdown
   return `
-    <h2>SIGNAL RESTORED</h2>
-    <p class="menu-sub">Skor: ${state?.score ?? 0}</p>
-    <button data-action="restart">IGRAJ PONOVO</button>
+    <div class="menu-card">
+      <div class="signal-icon win">◈</div>
+      <h1 class="menu-title">SIGNAL RESTORED</h1>
+      <p class="menu-sub">Mreža je ponovo online</p>
+      <p class="stat-display">KONAČNI SKOR: ${state?.score ?? 0}</p>
+      <p class="menu-sub dim">15 od 15 nivoa završeno</p>
+      <button class="btn btn-primary" data-action="restart">IGRAJ PONOVO</button>
+    </div>
   `;
 }

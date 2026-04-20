@@ -1,6 +1,7 @@
 import { CONFIG } from './config.js';
 import { revealAll } from './grid.js';
 import { sfxPowerup } from './audio.js';
+import { initLevel } from './signal.js';
 
 /**
  * @typedef {import('./state.js').GameState} GameState
@@ -17,8 +18,8 @@ const ALL_POWERUP_IDS = Object.keys(CONFIG.POWERUPS);
  * @param {GameState} state
  */
 export function generatePowerupOffer(state) {
-  // TODO: shuffle ALL_POWERUP_IDS, take 3, set state.powerupOffer = [id1, id2, id3]
-  state.powerupOffer = [];
+  const shuffled = _shuffle(ALL_POWERUP_IDS.slice());
+  state.powerupOffer = shuffled.slice(0, 3);
 }
 
 /**
@@ -29,10 +30,20 @@ export function generatePowerupOffer(state) {
  */
 export function pickPowerup(state, powerupId) {
   if (!CONFIG.POWERUPS[powerupId]) return;
-  // TODO: push powerupId to state.heldPowerups (max 3 held; oldest dropped if over)
-  //   clear state.powerupOffer
-  //   call sfxPowerup(powerupId)
-  //   transition state.screen → 'game' and init next level
+
+  // Add to held power-ups; enforce max 3 (drop oldest if over)
+  if (state.heldPowerups.length >= 3) {
+    state.heldPowerups.shift(); // drop oldest
+  }
+  state.heldPowerups.push(powerupId);
+
+  sfxPowerup(powerupId);
+
+  state.powerupOffer = [];
+  state.screen = 'game';
+
+  // Init the next level (level was already incremented by _levelClear in signal.js)
+  initLevel(state);
 }
 
 /**
@@ -114,7 +125,6 @@ export function applyPowerupTick(state, dt) {
  * @param {GameState} state
  */
 export function onSignalStep(state) {
-  // TODO: for each active power-up with remainingNodes > 0, decrement remainingNodes
   for (const ap of state.activePowerups) {
     if (ap.remainingNodes > 0) {
       ap.remainingNodes -= 1;
@@ -158,6 +168,22 @@ export function resetPowerups(state) {
  * @param {number} durationSec
  */
 function _applyReveal(state, durationSec) {
-  // TODO: call revealAll(state.grid, state.level), schedule revert after durationSec * 1000 ms
-  //   store cleanup fn reference to cancel if level changes early
+  // Call revealAll which returns the cleanup function
+  const cleanup = revealAll(state.grid, state.level);
+  // Schedule the re-hide after the duration
+  setTimeout(cleanup, durationSec * 1000);
+}
+
+/**
+ * In-place Fisher-Yates shuffle.
+ * @template T
+ * @param {T[]} arr
+ * @returns {T[]}
+ */
+function _shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }

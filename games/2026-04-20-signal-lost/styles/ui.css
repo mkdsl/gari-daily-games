@@ -192,3 +192,128 @@ button[data-action="use-checkpoint"]:hover {
   font-weight: 400;
   text-transform: none;
 }
+
+/* --- Menu card container ------------------------------------ */
+
+.menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px 48px;
+  background: rgba(6, 8, 15, 0.92);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 6px;
+  max-width: 520px;
+  width: 90vw;
+  box-shadow:
+    0 0 40px rgba(0, 229, 255, 0.08),
+    0 24px 48px rgba(0, 0, 0, 0.6);
+}
+
+/* Signal icon (large decorative glyph above title) */
+.signal-icon {
+  font-size: 48px;
+  color: #00e5ff;
+  text-shadow:
+    0 0 14px rgba(0, 229, 255, 0.9),
+    0 0 40px rgba(0, 229, 255, 0.4);
+  line-height: 1;
+  margin-bottom: -4px;
+}
+
+.signal-icon.fail {
+  color: #ef4444;
+  text-shadow:
+    0 0 14px rgba(239, 68, 68, 0.9),
+    0 0 36px rgba(239, 68, 68, 0.4);
+}
+
+.signal-icon.win {
+  color: #ff6b2b;
+  text-shadow:
+    0 0 14px rgba(255, 107, 43, 0.9),
+    0 0 40px rgba(255, 107, 43, 0.45);
+}
+
+.signal-icon.checkpoint {
+  color: #10b981;
+  text-shadow:
+    0 0 14px rgba(16, 185, 129, 0.9),
+    0 0 36px rgba(16, 185, 129, 0.4);
+}
+
+/* Dim sub-text variant */
+.menu-sub.dim {
+  color: #4b5563;
+  font-size: 12px;
+  margin-top: -8px;
+}
+
+/* Score display line */
+.stat-display {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #ff6b2b;
+  text-shadow: 0 0 12px rgba(255, 107, 43, 0.6);
+}
+
+/* Button group (stacks vertically, centered) */
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Explicit btn classes (mirror selector already on button[data-action]) */
+.btn {
+  display: inline-block;
+  padding: 12px 32px;
+  background: transparent;
+  border-radius: 3px;
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.15s, box-shadow 0.15s, color 0.15s;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-primary {
+  color: #00e5ff;
+  border: 1px solid #00e5ff;
+}
+
+.btn-primary:hover {
+  background: rgba(0, 229, 255, 0.15);
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.4);
+}
+
+.btn-secondary {
+  color: #ff6b2b;
+  border: 1px solid #ff6b2b;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 107, 43, 0.12);
+  box-shadow: 0 0 16px rgba(255, 107, 43, 0.35);
+}
+
+/* Menu overlay must be flex so menu-card centers */
+#menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 8, 15, 0.82);
+  backdrop-filter: blur(14px);
+}
+
+#menu.hidden {
+  display: none;
+}

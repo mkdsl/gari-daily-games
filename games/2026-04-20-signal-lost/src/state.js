@@ -44,6 +44,7 @@ import { CONFIG } from './config.js';
  * @property {SignalState} signal
  * @property {ActivePowerup[]} activePowerups - Stack of currently active power-ups
  * @property {string[]} heldPowerups  - Ids of power-ups the player has but hasn't activated
+ * @property {string[]} powerupOffer  - Ids of power-ups shown on the current offer screen
  * @property {number} elapsedSec      - Total time elapsed in current run (for score calc)
  * @property {number|null} checkpointLevel - The last checkpoint reached (6 or 11), or null
  * @property {GameState|null} checkpointSnapshot - Full state snapshot at last checkpoint
@@ -76,6 +77,7 @@ export function createState() {
     },
     activePowerups: [],
     heldPowerups: [],
+    powerupOffer: [],
     elapsedSec: 0,
     checkpointLevel: null,
     checkpointSnapshot: null,

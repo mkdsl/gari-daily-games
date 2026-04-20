@@ -1,14 +1,16 @@
 import { CONFIG, signalSpeedMs } from './config.js';
-import { getNode } from './grid.js';
+import { getNode, generateGrid, applyVisibility } from './grid.js';
 import { saveCheckpoint } from './state.js';
 import { scheduleFlash } from './render.js';
 import {
   sfxSignalStep, sfxScrambler, sfxOrSplit,
   sfxLevelClear, sfxCheckpoint, sfxFail,
+  sfxGateToggle,
 } from './audio.js';
 
 /**
  * @typedef {import('./state.js').GameState} GameState
+ * @typedef {import('./state.js').NodeState} NodeState
  */
 
 /**
@@ -33,7 +35,6 @@ export function updateSignal(state, input, dt) {
   if (!state.signal.moving) return;
   if (state.paused || state.gameOver || state.won) return;
 
-  // TODO: accumulate dt, advance signal.progress, call _arriveAtNode when progress >= 1
   _stepAccMs += dt * 1000 * _getSpeedMultiplier(state);
 
   const stepMs = _getStepMs(state);
@@ -44,6 +45,7 @@ export function updateSignal(state, input, dt) {
 
   if (state.signal.progress >= 1) {
     _stepAccMs -= stepMs;
+    if (_stepAccMs < 0) _stepAccMs = 0;
     state.signal.progress = 0;
     _arriveAtNode(state);
   }
@@ -55,14 +57,32 @@ export function updateSignal(state, input, dt) {
  * @param {GameState} state
  */
 export function startSignal(state) {
-  // TODO: set signal.currentNodeId = state.startNodeId, pick nextNodeId via _pickNext
-  //   set signal.moving = true, signal.path = [startNodeId], reset _stepAccMs
   _stepAccMs = 0;
   state.signal.moving = false;
   state.signal.progress = 0;
   state.signal.path = [];
   state.signal.activeBranches = [];
-  // TODO: set currentNodeId, nextNodeId
+  state.signal.currentNodeId = state.startNodeId;
+
+  // Pick the first next node
+  const startNode = getNode(state.grid, state.startNodeId);
+  if (!startNode) return;
+
+  const goalId = state.goalNodeId;
+
+  // From the start node, pick the neighbor with smallest manhattan distance to goal
+  const candidates = startNode.connections.slice().sort(
+    (a, b) => _manhattanToGoal(a, goalId) - _manhattanToGoal(b, goalId)
+  );
+
+  if (candidates.length === 0) {
+    // No neighbors — can't move; shouldn't happen on valid grid
+    return;
+  }
+
+  state.signal.nextNodeId = candidates[0];
+  state.signal.path.push(state.startNodeId);
+  state.signal.moving = true;
 }
 
 /**
@@ -74,7 +94,8 @@ export function startSignal(state) {
 export function handleNodeClick(state, nodeId) {
   const node = getNode(state.grid, nodeId);
   if (!node || node.type !== 'gate') return;
-  // TODO: toggle node.gateOpen; call sfxGateToggle(node.gateOpen)
+  node.gateOpen = !node.gateOpen;
+  sfxGateToggle(node.gateOpen);
 }
 
 // ---------------------------------------------------------------------------
@@ -82,43 +103,168 @@ export function handleNodeClick(state, nodeId) {
 // ---------------------------------------------------------------------------
 
 /**
+ * Manhattan distance from a nodeId to the goal.
+ * @param {string} id
+ * @param {string} goalId
+ * @returns {number}
+ */
+function _manhattanToGoal(id, goalId) {
+  const a = _parseId(id);
+  const b = _parseId(goalId);
+  return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
+}
+
+/**
+ * Parse row/col from id string.
+ * @param {string} id
+ * @returns {{ row: number, col: number }}
+ */
+function _parseId(id) {
+  const [row, col] = id.split('-').map(Number);
+  return { row, col };
+}
+
+/**
  * Called when the signal finishes travelling to state.signal.nextNodeId.
  * Updates currentNodeId, runs node interaction, picks the next node.
  * @param {GameState} state
  */
 function _arriveAtNode(state) {
-  // TODO:
-  // 1. state.signal.currentNodeId = state.signal.nextNodeId
-  // 2. state.signal.path.push(currentNodeId)
-  // 3. call _interactNode(state, currentNode)
-  // 4. if not dead/won, call _pickNext(state)
+  const currentNodeId = state.signal.nextNodeId;
+  state.signal.currentNodeId = currentNodeId;
+  state.signal.path.push(currentNodeId);
+
+  const node = getNode(state.grid, currentNodeId);
+  if (!node) {
+    _fail(state);
+    return;
+  }
+
+  _interactNode(state, node);
+
+  // If the interaction caused game over or win, stop here
+  if (state.gameOver || state.won || state.screen !== 'game') return;
+
+  _pickNext(state);
 }
 
 /**
  * Process the node the signal just arrived at.
  * - relay: pass through, sfxSignalStep
  * - gate (open): pass through, sfxSignalStep
- * - gate (closed): signal STOPS → fail → sfxFail → state.gameOver
- * - scrambler: redirect signal to a random connected node, sfxScrambler
- * - or: fork signal (one branch continues, another added to activeBranches), sfxOrSplit
+ * - gate (closed): signal STOPS → fail
+ * - scrambler: toggle all adjacent gate nodes, sfxScrambler
+ * - or: pick an unvisited/passable neighbor; if both blocked → fail
  * - goal: level cleared → _levelClear(state)
  * @param {GameState} state
- * @param {import('./state.js').NodeState} node
+ * @param {NodeState} node
  */
 function _interactNode(state, node) {
-  // TODO: switch(node.type) { ... }
+  // Check if this is the goal node first
+  if (node.id === state.goalNodeId) {
+    _levelClear(state);
+    return;
+  }
+
+  switch (node.type) {
+    case 'relay':
+      sfxSignalStep(state.level);
+      break;
+
+    case 'gate':
+      if (node.gateOpen) {
+        sfxSignalStep(state.level);
+      } else {
+        _fail(state);
+      }
+      break;
+
+    case 'scrambler': {
+      sfxScrambler();
+      // Toggle all adjacent gate nodes
+      for (const neighborId of node.connections) {
+        const neighbor = getNode(state.grid, neighborId);
+        if (neighbor && neighbor.type === 'gate') {
+          neighbor.gateOpen = !neighbor.gateOpen;
+        }
+      }
+      break;
+    }
+
+    case 'or': {
+      sfxOrSplit();
+      // OR node: signal picks the best available unvisited neighbor that isn't a closed gate.
+      // "Both paths blocked" → fail
+      // The actual routing happens in _pickNext — here we just play the sound.
+      // We mark this as an OR split for _pickNext to handle specially.
+      state.signal._atOrNode = true;
+      break;
+    }
+
+    default:
+      sfxSignalStep(state.level);
+      break;
+  }
 }
 
 /**
  * Choose the next node for the signal to travel to from currentNodeId.
- * Follows the backbone path if possible; falls back to any connected unvisited node.
+ * Prefers unvisited nodes that are passable; falls back by manhattan distance to goal.
  * If no valid next node exists, triggers _fail(state).
  * @param {GameState} state
  */
 function _pickNext(state) {
-  // TODO: from current node's connections, filter out visited (signal.path)
-  //   prefer unvisited; if multiple choices, pick randomly
-  //   set state.signal.nextNodeId or call _fail
+  const current = getNode(state.grid, state.signal.currentNodeId);
+  if (!current) {
+    _fail(state);
+    return;
+  }
+
+  const goalId = state.goalNodeId;
+  const visited = new Set(state.signal.path);
+
+  // All connections that haven't been visited
+  let candidates = current.connections.filter(id => !visited.has(id));
+
+  // Filter: closed gates are impassable (unless this is an OR node with special handling)
+  candidates = candidates.filter(id => {
+    const n = getNode(state.grid, id);
+    if (!n) return false;
+    // Closed gate blocks passage
+    if (n.type === 'gate' && !n.gateOpen) return false;
+    return true;
+  });
+
+  if (candidates.length === 0) {
+    // Check if we've already won (reached goal in _interactNode)
+    if (!state.won && !state.gameOver) {
+      _fail(state);
+    }
+    return;
+  }
+
+  // For OR nodes: if there's >1 candidate, prefer the one that's highest (lower row index)
+  // or leftmost (lower col index) — "upper/left first" rule from the spec.
+  if (state.signal._atOrNode && candidates.length >= 2) {
+    candidates.sort((a, b) => {
+      const pa = _parseId(a);
+      const pb = _parseId(b);
+      if (pa.row !== pb.row) return pa.row - pb.row; // prefer upper (smaller row)
+      return pa.col - pb.col; // prefer left (smaller col)
+    });
+    state.signal._atOrNode = false;
+    state.signal.nextNodeId = candidates[0];
+    return;
+  }
+
+  state.signal._atOrNode = false;
+
+  // Among candidates, prefer the one closest to the goal (smallest manhattan)
+  candidates.sort(
+    (a, b) => _manhattanToGoal(a, goalId) - _manhattanToGoal(b, goalId)
+  );
+
+  state.signal.nextNodeId = candidates[0];
 }
 
 /**
@@ -130,9 +276,11 @@ function _levelClear(state) {
   sfxLevelClear();
   scheduleFlash('success');
 
+  const justCleared = state.level;
   const nextLevel = state.level + 1;
 
-  // TODO: calc score for this level, add to state.score
+  // Add score for this level
+  state.score += CONFIG.SCORE_PER_LEVEL;
 
   if (nextLevel > CONFIG.MAX_LEVELS) {
     state.won = true;
@@ -152,7 +300,14 @@ function _levelClear(state) {
   }
 
   // Power-up offer after clearing levels 3, 6, 9, 12
-  if (CONFIG.POWERUP_OFFER_AFTER.includes(state.level - 1)) {
+  if (CONFIG.POWERUP_OFFER_AFTER.includes(justCleared)) {
+    // Generate a random offer of 3 distinct power-up ids
+    const allIds = Object.keys(CONFIG.POWERUPS);
+    for (let i = allIds.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allIds[i], allIds[j]] = [allIds[j], allIds[i]];
+    }
+    state.powerupOffer = allIds.slice(0, 3);
     state.screen = 'powerup';
     return;
   }
@@ -176,21 +331,37 @@ function _fail(state) {
 /**
  * Initialise grid and signal for state.level.
  * Called at level start (including after checkpoints / power-up screens).
+ * Exported so powerups.js can call it after a power-up pick.
  * @param {GameState} state
  */
 export function initLevel(state) {
-  // TODO: call generateGrid(state.level), applyVisibility, startSignal
   _initLevel(state);
 }
 
 /** @param {GameState} state */
 function _initLevel(state) {
-  // TODO: import generateGrid + applyVisibility, build new grid, reset signal
-  state.signal.moving = false;
-  state.signal.progress = 0;
-  state.signal.path = [];
+  // Generate fresh grid
+  const { grid, startNodeId, goalNodeId } = generateGrid(state.level);
+  applyVisibility(grid, state.level);
+
+  state.grid         = grid;
+  state.startNodeId  = startNodeId;
+  state.goalNodeId   = goalNodeId;
+  state.gameOver     = false;
+  state.won          = false;
+
+  // Reset signal state
+  state.signal.moving        = false;
+  state.signal.progress      = 0;
+  state.signal.path          = [];
   state.signal.activeBranches = [];
+  state.signal.currentNodeId  = null;
+  state.signal.nextNodeId     = null;
+  state.signal._atOrNode      = false;
   _stepAccMs = 0;
+
+  state.screen = 'game';
+  startSignal(state);
 }
 
 /**
