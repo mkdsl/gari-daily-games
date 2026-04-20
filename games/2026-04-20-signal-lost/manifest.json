@@ -1,0 +1,28 @@
+{
+  "name": "Signal Lost",
+  "genre": "puzzle-roguelike",
+  "date": "2026-04-20",
+  "description": "Usmeri signal kroz oštećenu mrežu čvorova — puzzle-roguelike sa proceduralnom generacijom i checkpoint sistemom.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-04-20-signal-lost/",
+  "modules": {
+    "src/main.js": "Bootstrap, canvas resize, game loop (requestAnimationFrame), wires sve module, save timer",
+    "src/config.js": "Sve konstante — grid dimenzije po nivoima, signal brzine, boje (blueprint paleta), power-up trajanja, score formula",
+    "src/state.js": "Game state shape (level, signal, grid, power-ups, checkpoint), save/load/reset u localStorage",
+    "src/input.js": "Mouse/touch click handlers; mapira klik koordinate na grid čvor, buffered pressed/released snapshot",
+    "src/render.js": "Canvas rendering — pozadina, grid linije, čvorovi sa ikonama, signal animacija (glow dot), flash efekti",
+    "src/audio.js": "Web Audio API — bip, swoosh, clunk, level-clear melodija, fail ton, ambijentni hum; sve synthesizirano",
+    "src/ui.js": "HUD (nivo, skor, power-up slotovi), menije (start, power-up izbor, death, win, checkpoint) kao DOM overlay-i",
+    "src/grid.js": "Proceduralna generacija grida — garantovano solvabilni layout, random walk backbone, distribucija čvor tipova, validacija",
+    "src/signal.js": "Signal movement logic — path traversal čvor po čvor, Scrambler trigger, OR-Splitter grananje, fail/win detection",
+    "src/powerups.js": "Power-up sistem — pool generacija, aktivacija (Slow/Reveal/Freeze/TimeBubble/Echo), stanje trajanja, checkpoint pravila",
+    "styles/base.css": "Layout, full-screen canvas, reset, monospace font, touch-action none",
+    "styles/ui.css": "HUD stilizacija, menu overlay-i, power-up slotovi, dugmad (blueprint tema — cyan akcenti)",
+    "styles/game.css": "Canvas animacije — glow efekti, ripple, green/red flash keyframes, checkpoint puls, signal fade"
+  },
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "status": "in_progress"
+}
