@@ -7,6 +7,16 @@ import { CONFIG } from './config.js';
 // Flash effect state (managed internally, mutated by scheduleFlash)
 const _flash = { color: null, alpha: 0, timerMs: 0 };
 
+// Last computed layout — cached so main.js can call pixelToGrid without recalculating
+let _lastLayout = { cellSize: 40, originX: 0, originY: 0, size: 5 };
+
+/**
+ * Returns the layout object computed during the most recent render() call.
+ * Use this to convert pointer coordinates → grid coords outside render().
+ * @returns {{ cellSize: number, originX: number, originY: number, size: number }}
+ */
+export function getLastLayout() { return _lastLayout; }
+
 // Accumulated time for goal pulse animation
 let _pulseT = 0;
 
@@ -41,6 +51,7 @@ export function render(ctx, state, dt = 0) {
   if (!state.grid || state.grid.length === 0) return;
 
   const layout = _calcLayout(state.grid, w, h);
+  _lastLayout = layout;
 
   _drawGridLines(ctx, state.grid, layout);
   _drawNodes(ctx, state, layout);

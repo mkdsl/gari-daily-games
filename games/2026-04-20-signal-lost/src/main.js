@@ -1,12 +1,11 @@
 import { CONFIG } from './config.js';
 import { createState, loadState, saveState, loadCheckpointState, resetState } from './state.js';
 import { initInput, readInput } from './input.js';
-import { render } from './render.js';
+import { render, pixelToGrid, getLastLayout } from './render.js';
 import { initUI, updateHUD, showScreen } from './ui.js';
 import { initAudio, resumeAudio } from './audio.js';
 import { updateSignal, startSignal, handleNodeClick, initLevel } from './signal.js';
 import { applyPowerupTick, generatePowerupOffer, pickPowerup, resetPowerups } from './powerups.js';
-import { pixelToGrid } from './render.js';
 
 const canvas = document.getElementById('game-canvas');
 const ctx    = canvas.getContext('2d');
@@ -84,6 +83,13 @@ function onPowerupPick(id) {
   // pickPowerup transitions screen and inits next level internally
 }
 
+/** Called when player clicks NASTAVI on the checkpoint screen */
+function onContinue() {
+  state.screen = 'game';
+  initLevel(state);
+  showScreen('game');
+}
+
 // ---------------------------------------------------------------------------
 // Init
 // ---------------------------------------------------------------------------
@@ -93,6 +99,7 @@ initUI(state, {
   onRestart,
   onCheckpointUse,
   onPowerupPick,
+  onContinue,
 });
 
 initAudio();
@@ -127,7 +134,7 @@ function loop(now) {
 
     // Handle player click → gate toggle
     if (input.pointer.pressed) {
-      const gridCoords = pixelToGrid(input.pointer.x, input.pointer.y, state.grid, null);
+      const gridCoords = pixelToGrid(input.pointer.x, input.pointer.y, state.grid, getLastLayout());
       if (gridCoords) {
         const { row, col } = gridCoords;
         handleNodeClick(state, `${row}-${col}`);

@@ -85,7 +85,7 @@ export const CONFIG = {
       id: 'ECHO',
       label: 'Echo',
       desc: 'Duplicira efekat sledećeg aktiviranog power-up-a',
-      durationNodes: 1,
+      // Nema durationNodes — ECHO traje dok se ne potroši u activatePowerup
     },
   },
 

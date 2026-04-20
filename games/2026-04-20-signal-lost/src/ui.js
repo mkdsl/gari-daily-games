@@ -12,6 +12,7 @@ let _onStart         = () => {};
 let _onRestart       = () => {};
 let _onCheckpointUse = () => {};
 let _onPowerupPick   = (_id) => {};
+let _onContinue      = () => {};
 
 /**
  * Initialise UI — build HUD skeleton and attach menu-level event delegation.
@@ -21,7 +22,8 @@ let _onPowerupPick   = (_id) => {};
  *   onStart: Function,
  *   onRestart: Function,
  *   onCheckpointUse: Function,
- *   onPowerupPick: (id: string) => void
+ *   onPowerupPick: (id: string) => void,
+ *   onContinue: Function
  * }} callbacks
  */
 export function initUI(state, callbacks = {}) {
@@ -29,6 +31,7 @@ export function initUI(state, callbacks = {}) {
   _onRestart       = callbacks.onRestart       ?? _onRestart;
   _onCheckpointUse = callbacks.onCheckpointUse ?? _onCheckpointUse;
   _onPowerupPick   = callbacks.onPowerupPick   ?? _onPowerupPick;
+  _onContinue      = callbacks.onContinue      ?? _onContinue;
 
   hud.innerHTML = `
     <div class="stat" id="stat-level">LVL 1</div>
@@ -111,6 +114,7 @@ function _handleMenuClick(e) {
     case 'restart':        _onRestart();            break;
     case 'use-checkpoint': _onCheckpointUse();      break;
     case 'pick-powerup':   _onPowerupPick(powerupId); break;
+    case 'continue':       _onContinue();           break;
   }
 }
 
@@ -182,7 +186,7 @@ function _tmplCheckpoint(state) {
       <h2 class="menu-title" style="color:#00e5ff;font-size:clamp(22px,4vw,38px);">CHECKPOINT</h2>
       <p class="menu-sub">Nivo ${state?.level ?? '?'} — progres automatski sačuvan</p>
       <p class="menu-sub dim">Nastavljaš odavde čak i ako sigal bude izgubljen</p>
-      <button class="btn btn-primary" data-action="start">NASTAVI</button>
+      <button class="btn btn-primary" data-action="continue">NASTAVI</button>
     </div>
   `;
 }

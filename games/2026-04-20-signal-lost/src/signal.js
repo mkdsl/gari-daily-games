@@ -53,7 +53,7 @@ export function updateSignal(state, input, dt) {
 
 /**
  * Start signal movement from the beginning of a new level.
- * Picks the first step from startNodeId toward the next connected node.
+ * Uses the pre-computed plannedPath for first step; falls back to first neighbor.
  * @param {GameState} state
  */
 export function startSignal(state) {
@@ -64,25 +64,17 @@ export function startSignal(state) {
   state.signal.activeBranches = [];
   state.signal.currentNodeId = state.startNodeId;
 
-  // Pick the first next node
-  const startNode = getNode(state.grid, state.startNodeId);
-  if (!startNode) return;
-
-  const goalId = state.goalNodeId;
-
-  // From the start node, pick the neighbor with smallest manhattan distance to goal
-  const candidates = startNode.connections.slice().sort(
-    (a, b) => _manhattanToGoal(a, goalId) - _manhattanToGoal(b, goalId)
-  );
-
-  if (candidates.length === 0) {
-    // No neighbors — can't move; shouldn't happen on valid grid
-    return;
+  const planned = state.signal.plannedPath;
+  if (planned && planned.length >= 2) {
+    state.signal.nextNodeId = planned[1];
+  } else {
+    // Fallback: pick first neighbor
+    const startNode = getNode(state.grid, state.startNodeId);
+    state.signal.nextNodeId = startNode?.connections?.[0] ?? null;
   }
 
-  state.signal.nextNodeId = candidates[0];
   state.signal.path.push(state.startNodeId);
-  state.signal.moving = true;
+  state.signal.moving = state.signal.nextNodeId !== null;
 }
 
 /**
@@ -208,62 +200,62 @@ function _interactNode(state, node) {
 }
 
 /**
+ * BFS od startId do goalId — ignoriše gateOpen (pretpostavlja da igrač otvori prave gate-ove).
+ * @param {import('./state.js').NodeState[][]} grid
+ * @param {string} startId
+ * @param {string} goalId
+ * @returns {string[]} niz node id-ova od start do goal (uključujući oba), ili []
+ */
+function _computePlannedPath(grid, startId, goalId) {
+  const queue = [[startId]];
+  const seen = new Set([startId]);
+  while (queue.length > 0) {
+    const path = queue.shift();
+    const last = path[path.length - 1];
+    if (last === goalId) return path;
+    const node = getNode(grid, last);
+    if (!node) continue;
+    for (const nid of node.connections) {
+      if (!seen.has(nid)) {
+        seen.add(nid);
+        queue.push([...path, nid]);
+      }
+    }
+  }
+  return [startId, goalId]; // fallback
+}
+
+/**
  * Choose the next node for the signal to travel to from currentNodeId.
- * Prefers unvisited nodes that are passable; falls back by manhattan distance to goal.
+ * Uses the pre-planned BFS path as primary routing; falls back to greedy manhattan.
  * If no valid next node exists, triggers _fail(state).
  * @param {GameState} state
  */
 function _pickNext(state) {
+  const planned = state.signal.plannedPath;
+  const idx = planned ? planned.indexOf(state.signal.currentNodeId) : -1;
+
+  if (planned && idx >= 0 && idx + 1 < planned.length) {
+    state.signal.nextNodeId = planned[idx + 1];
+    return;
+  }
+
+  // Fallback: greedy manhattan
   const current = getNode(state.grid, state.signal.currentNodeId);
-  if (!current) {
-    _fail(state);
-    return;
-  }
-
-  const goalId = state.goalNodeId;
+  if (!current) { _fail(state); return; }
   const visited = new Set(state.signal.path);
-
-  // All connections that haven't been visited
-  let candidates = current.connections.filter(id => !visited.has(id));
-
-  // Filter: closed gates are impassable (unless this is an OR node with special handling)
-  candidates = candidates.filter(id => {
-    const n = getNode(state.grid, id);
-    if (!n) return false;
-    // Closed gate blocks passage
-    if (n.type === 'gate' && !n.gateOpen) return false;
-    return true;
-  });
-
-  if (candidates.length === 0) {
-    // Check if we've already won (reached goal in _interactNode)
-    if (!state.won && !state.gameOver) {
-      _fail(state);
-    }
-    return;
-  }
-
-  // For OR nodes: if there's >1 candidate, prefer the one that's highest (lower row index)
-  // or leftmost (lower col index) — "upper/left first" rule from the spec.
-  if (state.signal._atOrNode && candidates.length >= 2) {
-    candidates.sort((a, b) => {
-      const pa = _parseId(a);
-      const pb = _parseId(b);
-      if (pa.row !== pb.row) return pa.row - pb.row; // prefer upper (smaller row)
-      return pa.col - pb.col; // prefer left (smaller col)
+  let candidates = current.connections
+    .filter(id => !visited.has(id))
+    .filter(id => {
+      const n = getNode(state.grid, id);
+      return n && !(n.type === 'gate' && !n.gateOpen);
     });
-    state.signal._atOrNode = false;
-    state.signal.nextNodeId = candidates[0];
+  if (candidates.length === 0) {
+    if (!state.won && !state.gameOver) _fail(state);
     return;
   }
-
-  state.signal._atOrNode = false;
-
-  // Among candidates, prefer the one closest to the goal (smallest manhattan)
-  candidates.sort(
-    (a, b) => _manhattanToGoal(a, goalId) - _manhattanToGoal(b, goalId)
-  );
-
+  const goalId = state.goalNodeId;
+  candidates.sort((a, b) => _manhattanToGoal(a, goalId) - _manhattanToGoal(b, goalId));
   state.signal.nextNodeId = candidates[0];
 }
 
@@ -349,6 +341,10 @@ function _initLevel(state) {
   state.goalNodeId   = goalNodeId;
   state.gameOver     = false;
   state.won          = false;
+
+  // Pre-compute BFS path so signal routing is deterministic and always solvable
+  state.signal.plannedPath    = _computePlannedPath(grid, startNodeId, goalNodeId);
+  state.signal.plannedPathIdx = 0;
 
   // Reset signal state
   state.signal.moving        = false;
