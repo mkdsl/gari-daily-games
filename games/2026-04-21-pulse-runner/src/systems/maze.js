@@ -34,27 +34,32 @@ import { CONFIG } from '../config.js';
  * @param {GameState} state
  */
 export function generateMaze(state) {
-  // TODO: implementiraj
-  // const size = CONFIG.gridSize(state.level);
-  // state.gridSize = size;
-  // let density = CONFIG.wallDensity(state.level);
-  //
-  // // Pokušaji generisanja
-  // for (let attempt = 0; attempt < CONFIG.MAZE_MAX_RETRIES; attempt++) {
-  //   const result = _tryGenerate(size, density, state.level);
-  //   if (result) { _applyToState(state, result); return; }
-  // }
-  //
-  // // Fallback: smanji gustinu
-  // density -= CONFIG.MAZE_DENSITY_FALLBACK_REDUCTION;
-  // for (let attempt = 0; attempt < CONFIG.MAZE_FALLBACK_RETRIES; attempt++) {
-  //   const result = _tryGenerate(size, density, state.level);
-  //   if (result) { _applyToState(state, result); return; }
-  // }
-  //
-  // // Poslednji fallback: generisi bez zidova (uvek solvable)
-  // const result = _tryGenerate(size, 0, state.level);
-  // _applyToState(state, result);
+  const size = CONFIG.gridSize(state.level);
+  state.gridSize = size;
+  let density = CONFIG.wallDensity(state.level);
+
+  // Pokušaji generisanja sa originalnom gustinom
+  for (let attempt = 0; attempt < CONFIG.MAZE_MAX_RETRIES; attempt++) {
+    const result = _tryGenerate(size, density, state.level);
+    if (result) {
+      _applyToState(state, result);
+      return;
+    }
+  }
+
+  // Fallback: smanji gustinu
+  density -= CONFIG.MAZE_DENSITY_FALLBACK_REDUCTION;
+  for (let attempt = 0; attempt < CONFIG.MAZE_FALLBACK_RETRIES; attempt++) {
+    const result = _tryGenerate(size, density, state.level);
+    if (result) {
+      _applyToState(state, result);
+      return;
+    }
+  }
+
+  // Poslednji fallback: generisi bez zidova (uvek solvable)
+  const result = _tryGenerate(size, 0, state.level);
+  _applyToState(state, result);
 }
 
 /**
@@ -66,16 +71,75 @@ export function generateMaze(state) {
  * @returns {{ grid: GridCell[][], playerPos: Position, exitPos: Position }|null}
  */
 function _tryGenerate(size, density, level) {
-  // TODO: implementiraj
   // 1. Kreira 2D array: size × size ćelija, sve 'empty'
-  // 2. Izaberi START iz {(0,0), (0,1), (1,0), (1,1)} random
-  // 3. Izaberi EXIT iz {(size-2,size-2), (size-2,size-1), (size-1,size-2), (size-1,size-1)} random
+  const grid = Array.from({ length: size }, () =>
+    Array.from({ length: size }, () => ({ type: 'empty' }))
+  );
+
+  // 2. Izaberi START iz gornjeg levog 2×2 ugla
+  const startCandidates = [
+    { row: 0, col: 0 },
+    { row: 0, col: 1 },
+    { row: 1, col: 0 },
+    { row: 1, col: 1 },
+  ];
+  const playerPos = startCandidates[Math.floor(Math.random() * startCandidates.length)];
+
+  // 3. Izaberi EXIT iz donjeg desnog 2×2 ugla
+  const exitCandidates = [
+    { row: size - 1, col: size - 1 },
+    { row: size - 1, col: size - 2 },
+    { row: size - 2, col: size - 1 },
+    { row: size - 2, col: size - 2 },
+  ];
+  const exitPos = exitCandidates[Math.floor(Math.random() * exitCandidates.length)];
+
+  // Označi EXIT ćeliju u gridu
+  grid[exitPos.row][exitPos.col] = { type: 'exit' };
+
+  // Set za brzu proveru start/exit pozicija
+  const isStart = (r, c) => r === playerPos.row && c === playerPos.col;
+  const isExit = (r, c) => r === exitPos.row && c === exitPos.col;
+
   // 4. Postavi zidove random — preskoci START i EXIT
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (isStart(r, c) || isExit(r, c)) continue;
+      if (Math.random() < density) {
+        grid[r][c] = { type: 'wall' };
+      }
+    }
+  }
+
   // 5. BFS od START do EXIT
-  // 6. Ako nije solvable — vrati null
-  // 7. Postavi collectibles (CONFIG.collectibleCount(level)) na random empty ćelije
-  // 8. Vrati { grid, playerPos: START, exitPos: EXIT }
-  return null;
+  if (!bfsSolvable(grid, playerPos, exitPos, size)) {
+    return null;
+  }
+
+  // 7. Postavi collectibles na random empty ćelije (ne START, ne EXIT)
+  const emptyCells = [];
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (grid[r][c].type === 'empty' && !isStart(r, c) && !isExit(r, c)) {
+        emptyCells.push({ row: r, col: c });
+      }
+    }
+  }
+
+  // Shuffle i uzmi prvih collectibleCount
+  const count = CONFIG.collectibleCount(level);
+  for (let i = emptyCells.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [emptyCells[i], emptyCells[j]] = [emptyCells[j], emptyCells[i]];
+  }
+  const toPlace = Math.min(count, emptyCells.length);
+  for (let i = 0; i < toPlace; i++) {
+    const { row, col } = emptyCells[i];
+    grid[row][col] = { type: 'collectible' };
+  }
+
+  // 8. Vrati { grid, playerPos, exitPos }
+  return { grid, playerPos, exitPos };
 }
 
 /**
@@ -89,25 +153,31 @@ function _tryGenerate(size, density, level) {
  * @returns {boolean} true ako postoji put
  */
 export function bfsSolvable(grid, start, exit, size) {
-  // TODO: implementiraj BFS
-  // const visited = Array.from({ length: size }, () => new Array(size).fill(false));
-  // const queue = [start];
-  // visited[start.row][start.col] = true;
-  // const dirs = [{ row: -1, col: 0 }, { row: 1, col: 0 }, { row: 0, col: -1 }, { row: 0, col: 1 }];
-  // while (queue.length) {
-  //   const { row, col } = queue.shift();
-  //   if (row === exit.row && col === exit.col) return true;
-  //   for (const d of dirs) {
-  //     const nr = row + d.row, nc = col + d.col;
-  //     if (nr >= 0 && nr < size && nc >= 0 && nc < size
-  //         && !visited[nr][nc] && grid[nr][nc].type !== 'wall') {
-  //       visited[nr][nc] = true;
-  //       queue.push({ row: nr, col: nc });
-  //     }
-  //   }
-  // }
-  // return false;
-  return true;
+  const visited = Array.from({ length: size }, () => new Array(size).fill(false));
+  const queue = [{ row: start.row, col: start.col }];
+  visited[start.row][start.col] = true;
+  const dirs = [
+    { row: -1, col:  0 },
+    { row:  1, col:  0 },
+    { row:  0, col: -1 },
+    { row:  0, col:  1 },
+  ];
+
+  while (queue.length) {
+    const { row, col } = queue.shift();
+    if (row === exit.row && col === exit.col) return true;
+    for (const d of dirs) {
+      const nr = row + d.row;
+      const nc = col + d.col;
+      if (nr >= 0 && nr < size && nc >= 0 && nc < size
+          && !visited[nr][nc]
+          && grid[nr][nc].type !== 'wall') {
+        visited[nr][nc] = true;
+        queue.push({ row: nr, col: nc });
+      }
+    }
+  }
+  return false;
 }
 
 /**
@@ -117,10 +187,9 @@ export function bfsSolvable(grid, start, exit, size) {
  * @param {{ grid: GridCell[][], playerPos: Position, exitPos: Position }} result
  */
 function _applyToState(state, result) {
-  // TODO: implementiraj
-  // state.grid = result.grid;
-  // state.playerPos = result.playerPos;
-  // state.exitPos = result.exitPos;
+  state.grid = result.grid;
+  state.playerPos = result.playerPos;
+  state.exitPos = result.exitPos;
 }
 
 /**
@@ -132,7 +201,6 @@ function _applyToState(state, result) {
  * @param {Position} exitPos
  */
 export function debugPrintGrid(grid, playerPos, exitPos) {
-  // TODO: implementiraj (samo za development)
   // const lines = grid.map((row, r) =>
   //   row.map((cell, c) => {
   //     if (r === playerPos.row && c === playerPos.col) return 'P';

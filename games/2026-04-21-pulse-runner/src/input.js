@@ -30,12 +30,9 @@ let _touchStart = { x: 0, y: 0 };
  * @param {HTMLCanvasElement} canvas
  */
 export function initInput(canvas) {
-  // TODO: implementiraj keyboard listener
-  // window.addEventListener('keydown', _onKeyDown);
-
-  // TODO: implementiraj touch listener-e za swipe
-  // canvas.addEventListener('touchstart', _onTouchStart, { passive: true });
-  // canvas.addEventListener('touchend', _onTouchEnd, { passive: true });
+  window.addEventListener('keydown', _onKeyDown);
+  canvas.addEventListener('touchstart', _onTouchStart, { passive: true });
+  canvas.addEventListener('touchend', _onTouchEnd, { passive: true });
 }
 
 /**
@@ -45,15 +42,25 @@ export function initInput(canvas) {
  * @param {KeyboardEvent} e
  */
 function _onKeyDown(e) {
-  // TODO: implementiraj
-  // const dirMap = {
-  //   'ArrowUp': { row: -1, col: 0 }, 'w': { row: -1, col: 0 },
-  //   'ArrowDown': { row: 1, col: 0 }, 's': { row: 1, col: 0 },
-  //   'ArrowLeft': { row: 0, col: -1 }, 'a': { row: 0, col: -1 },
-  //   'ArrowRight': { row: 0, col: 1 }, 'd': { row: 0, col: 1 },
-  // };
-  // const dir = dirMap[e.key];
-  // if (dir) { _queuedDirection = dir; e.preventDefault(); }
+  const dirMap = {
+    'ArrowUp':    { row: -1, col:  0 },
+    'w':          { row: -1, col:  0 },
+    'W':          { row: -1, col:  0 },
+    'ArrowDown':  { row:  1, col:  0 },
+    's':          { row:  1, col:  0 },
+    'S':          { row:  1, col:  0 },
+    'ArrowLeft':  { row:  0, col: -1 },
+    'a':          { row:  0, col: -1 },
+    'A':          { row:  0, col: -1 },
+    'ArrowRight': { row:  0, col:  1 },
+    'd':          { row:  0, col:  1 },
+    'D':          { row:  0, col:  1 },
+  };
+  const dir = dirMap[e.key];
+  if (dir) {
+    _queuedDirection = dir;
+    e.preventDefault();
+  }
 }
 
 /**
@@ -62,9 +69,8 @@ function _onKeyDown(e) {
  * @param {TouchEvent} e
  */
 function _onTouchStart(e) {
-  // TODO: implementiraj
-  // const t = e.touches[0];
-  // _touchStart = { x: t.clientX, y: t.clientY };
+  const t = e.touches[0];
+  _touchStart = { x: t.clientX, y: t.clientY };
 }
 
 /**
@@ -75,16 +81,15 @@ function _onTouchStart(e) {
  * @param {TouchEvent} e
  */
 function _onTouchEnd(e) {
-  // TODO: implementiraj
-  // const t = e.changedTouches[0];
-  // const dx = t.clientX - _touchStart.x;
-  // const dy = t.clientY - _touchStart.y;
-  // if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return;
-  // if (Math.abs(dx) > Math.abs(dy)) {
-  //   _queuedDirection = dx > 0 ? { row: 0, col: 1 } : { row: 0, col: -1 };
-  // } else {
-  //   _queuedDirection = dy > 0 ? { row: 1, col: 0 } : { row: -1, col: 0 };
-  // }
+  const t = e.changedTouches[0];
+  const dx = t.clientX - _touchStart.x;
+  const dy = t.clientY - _touchStart.y;
+  if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return;
+  if (Math.abs(dx) > Math.abs(dy)) {
+    _queuedDirection = dx > 0 ? { row: 0, col: 1 } : { row: 0, col: -1 };
+  } else {
+    _queuedDirection = dy > 0 ? { row: 1, col: 0 } : { row: -1, col: 0 };
+  }
 }
 
 /**
@@ -94,11 +99,9 @@ function _onTouchEnd(e) {
  * @returns {Direction|null} Queued smer ili null ako nema input-a
  */
 export function readQueuedDirection() {
-  // TODO: implementiraj
-  // const dir = _queuedDirection;
-  // _queuedDirection = null;
-  // return dir;
-  return null;
+  const dir = _queuedDirection;
+  _queuedDirection = null;
+  return dir;
 }
 
 /**
@@ -107,7 +110,6 @@ export function readQueuedDirection() {
  * @returns {Direction|null}
  */
 export function peekQueuedDirection() {
-  // TODO: implementiraj
   return _queuedDirection;
 }
 
