@@ -7,6 +7,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | Datum | Naziv | Žanr | Status | Link |
 |-------|-------|------|--------|------|
 | — | — | — | — | — |
+| 2026-04-20 | Signal Lost | Puzzle / Roguelike mini | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-04-20-signal-lost/) |
 
 ## Statusi
 
