@@ -17,9 +17,9 @@
     "src/systems/collision.js": "Kretanje igrača kroz grid — proveri da li target ćelija nije zid/van grida, pomeri ili ignoriši; proveri collectible pickup (+1 HP, reset missCount); proveri exit (next level)"
   },
   "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+    "total_js": 1604,
+    "total_css": 388
   },
-  "beta_score": null,
-  "status": "in_progress"
+  "beta_score": 7,
+  "status": "released"
 }

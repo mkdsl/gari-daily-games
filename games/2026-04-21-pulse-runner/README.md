@@ -1,27 +1,43 @@
-# Standard Game Template
+# Pulse Runner
 
-Ova skela je startna tačka svake dnevne igre. Jova (dev) kopira ovaj folder, preimenuje ga u `games/YYYY-MM-DD-naziv-igre/`, pa popunjava modul po modul.
+**Datum:** 2026-04-21 | **Žanr:** Roguelike mini + Rhythm/Reflex | **Beta ocena:** 7/10
 
-## Šta radi van kutije
+> Električni signal putuje kroz proceduralnu neuronsku mrežu. Kreći se samo na kucaj srca.
 
-- ES6 moduli (import/export)
-- responsive full-screen canvas
-- game loop sa delta time
-- save/load u localStorage (ključ `gari-daily-game`, versioned)
-- input handling (kbd + mouse + touch, sa pressed/released detekcijom)
-- HUD + menu overlay sa CSS-om
-- ima mesto za audio, systems, entities, levels
+## Kako se igra
 
-## Šta Jova MORA da uradi
+- Čekaj **puls** (beli bljesak + screen shake) — to je signal da smeš da se pomeriš
+- Pritisni **↑ ↓ ← →** ili **WASD** u smeru koji želiš (ili **swipe** na mobitelu)
+- Dođi do **tirkiznog izlaza** da pređeš na sledeći nivo
+- Sakupi **žute collectible-e** za HP i reset miss counter-a
+- 3 uzastopna propuštena pulsa bez pomaka = **game over**
 
-1. Kopira folder, preimenuje u `games/YYYY-MM-DD-slug/`
-2. Preimenuje `manifest.json.template` u `manifest.json` i popuni vrednosti
-3. Ažurira `index.html` title + meta
-4. Popunjava config konstante iz Miletovog GDD-a
-5. Proširi `state.js` shape po GDD-u
-6. Implementira systems, entities, render po konceptu
-7. Brend-ira UI preko Perinog CSS-a
+## Ciljevi
 
-## Pravilo
+- Preživeti što više nivoa (svaki nivo: brži puls, veći grid, više zidova)
+- Bezbrojni runi — **high score** se čuva u localStorage
+- Prosečan run: 3-6 minuta
 
-Ako modul nije potreban za ovaj konkretan žanr igre — **obriši ga**. Manifest.json mora da reflektuje šta STVARNO postoji u folderu.
+## Tim
+
+| Uloga | Ko |
+|-------|----|
+| Koncept i narativ | Sine Scenario |
+| Game design & balans | Mile Mehanika |
+| Premortem kritika | Nega Negovanović |
+| Implementacija (JS) | Jova jQuery |
+| CSS & vizual | Pera Piksel |
+| Beta test | Beta Trio (Zora + Raša + Lela) |
+| Orkestrator | Gari |
+
+## Tehnički detalji
+
+- Vanilla JS ES6 moduli, HTML5 Canvas
+- Bez framework-a, bez npm, bez build stepa
+- Proceduralani labirinti sa BFS solvability garancijom
+- Queued input model (swipe latency fix za mobile)
+- 1604 linija JS, 388 linija CSS
+
+## Igraj
+
+[https://mkdsl.github.io/gari-daily-games/games/2026-04-21-pulse-runner/](https://mkdsl.github.io/gari-daily-games/games/2026-04-21-pulse-runner/)

@@ -201,6 +201,17 @@ export function render(ctx, state) {
       }
     }
 
+    // Input window indikacija — blagi border oko canvas-a
+    if (state.inInputWindow) {
+      const logW = ctx.canvas.width / dpr;
+      const logH = ctx.canvas.height / dpr;
+      ctx.save();
+      ctx.strokeStyle = 'rgba(233, 69, 96, 0.4)'; // crvena, providno
+      ctx.lineWidth = 3;
+      ctx.strokeRect(2, 2, logW - 4, logH - 4);
+      ctx.restore();
+    }
+
     // 3. Igrač — crta se na centru ćelije iznad grida
     const { x: px, y: py } = cellToCanvas(state.playerPos.row, state.playerPos.col, layout);
     drawPlayer(

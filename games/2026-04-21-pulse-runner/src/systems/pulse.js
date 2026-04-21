@@ -104,6 +104,7 @@ function _onPulse(state, callbacks) {
  * @param {{ endRun: function }} callbacks
  */
 function _onMiss(state, callbacks) {
+  if (state.screen !== 'playing') return;
   state.missCount++;
   if (state.missCount >= CONFIG.MISS_LIMIT) {
     callbacks.endRun(state);
