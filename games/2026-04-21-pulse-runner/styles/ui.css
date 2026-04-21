@@ -1,22 +1,84 @@
+/*
+ * ui.css — HUD, menu overlay i game over ekran stilovi za Pulse Runner.
+ *
+ * Komponente:
+ * - #hud: traka na vrhu ekrana (HP srca, score, level, miss counter)
+ *   - .hud-block: jedan segment HUD-a (semi-transparent pozadina + blur)
+ *   - #hud-hp: HP prikaz srčicama (♥ full, ♡ empty), boja CONFIG.COLORS.HP_FULL
+ *   - #hud-miss: miss counter (✕ ikone), boja CONFIG.COLORS.MISS_COLOR; .danger klasa = blink
+ * - .menu-overlay (#menu): full-screen overlay za main menu i game over
+ *   - .game-title: PULSE RUNNER naslov, električno crvena, letter-spacing
+ *   - .subtitle: opis jednom rečenicom
+ *   - .pb: personal best display
+ *   - .btn-primary: crveno dugme za PLAY/RESTART
+ *   - .game-over-title: GAME OVER naslov
+ *   - .new-record: zlatni ★ NEW RECORD! prikaz
+ *   - .stats-grid: 2-column grid za depth/score/pb vrednosti
+ *   - .controls-hint: mali tekst za kontrole
+ * - .hidden: display:none utility
+ *
+ * Boje iz concept.md: crvena #e94560, žuta #f5a623, tirkizna #00d4aa, pozadina #0a0a12
+ */
+
+/* ─── HUD ─────────────────────────────────────────────────────────────────── */
+
 #hud {
   position: absolute;
   top: 16px;
   left: 16px;
   right: 16px;
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 12px;
   z-index: 10;
   pointer-events: none;
 }
 
-.stat {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 8px 12px;
+.hud-block {
+  background: rgba(10, 10, 18, 0.75);
+  padding: 6px 12px;
   border-radius: 4px;
   font-size: 14px;
   letter-spacing: 0.5px;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
+
+#hud-hp {
+  color: #e94560;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+#hud-score {
+  color: #e5e5e5;
+  flex: 1; /* zauzima slobodan prostor u centru */
+  text-align: center;
+}
+
+#hud-level {
+  color: #00d4aa;
+}
+
+#hud-miss {
+  color: #e94560;
+  letter-spacing: 3px;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* 2 miss = opasna zona — blink efekt */
+#hud-miss.danger {
+  animation: danger-blink 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes danger-blink {
+  from { opacity: 1; }
+  to { opacity: 0.3; }
+}
+
+/* ─── Menu Overlay ────────────────────────────────────────────────────────── */
 
 .menu-overlay {
   position: absolute;
@@ -26,30 +88,111 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  background: rgba(10, 10, 15, 0.85);
-  backdrop-filter: blur(12px);
+  background: rgba(10, 10, 18, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 20;
 }
 
-.menu-overlay.hidden { display: none; }
-
-.menu-overlay h2 {
-  font-size: 48px;
-  color: #ff4d6d;
-  letter-spacing: 4px;
+.menu-overlay.hidden {
+  display: none;
 }
 
-.menu-overlay button {
-  padding: 12px 24px;
-  background: #ff4d6d;
-  color: #0a0a0f;
+/* ─── Main Menu ───────────────────────────────────────────────────────────── */
+
+.game-title {
+  font-size: clamp(32px, 8vw, 64px);
+  color: #e94560;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  /* TODO: Pera — dodaj text glow animaciju */
+}
+
+.subtitle {
+  font-size: 13px;
+  color: rgba(229, 229, 229, 0.5);
+  letter-spacing: 1px;
+  text-align: center;
+  max-width: 280px;
+}
+
+.pb {
+  font-size: 13px;
+  color: #f5a623;
+  letter-spacing: 1px;
+}
+
+.controls-hint {
+  font-size: 11px;
+  color: rgba(229, 229, 229, 0.3);
+  letter-spacing: 2px;
+  margin-top: 8px;
+}
+
+/* ─── Game Over ───────────────────────────────────────────────────────────── */
+
+.game-over-title {
+  font-size: clamp(28px, 6vw, 48px);
+  color: #e94560;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+.new-record {
+  font-size: 16px;
+  color: #f5a623;
+  letter-spacing: 2px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 6px 24px;
+  font-size: 14px;
+  text-align: left;
+}
+
+.stats-grid span:nth-child(odd) {
+  color: rgba(229, 229, 229, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+}
+
+.stats-grid span:nth-child(even) {
+  color: #e5e5e5;
+  text-align: right;
+  font-size: 16px;
+}
+
+/* ─── Dugmad ──────────────────────────────────────────────────────────────── */
+
+.btn-primary {
+  padding: 14px 32px;
+  background: #e94560;
+  color: #0a0a12;
   border: none;
   border-radius: 4px;
   font-size: 16px;
   font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
   cursor: pointer;
-  font-weight: bold;
-  letter-spacing: 1px;
+  transition: background 0.15s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.menu-overlay button:hover { background: #fff; }
+.btn-primary:hover {
+  background: #ff6b85;
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+}
+
+/* ─── Utility ─────────────────────────────────────────────────────────────── */
+
+.hidden {
+  display: none !important;
+}

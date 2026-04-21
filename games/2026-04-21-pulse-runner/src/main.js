@@ -15,7 +15,7 @@
 
 import { CONFIG } from './config.js';
 import { createState, saveHighScore } from './state.js';
-import { initInput, readInput } from './input.js';
+import { initInput, clearInput } from './input.js';
 import { initAudio } from './audio.js';
 import { render } from './render.js';
 import { initUI, updateHUD, showMainMenu } from './ui.js';
@@ -113,10 +113,9 @@ function loop(now) {
   lastTime = now;
 
   if (state.screen === 'playing') {
-    const input = readInput();
-
     // Pulse sistem: akumulira dt, emituje puls, detektuje miss
-    updatePulse(state, input, dt, { nextLevel, endRun });
+    // Input se čita direktno iz input.js unutar pulse.js (readQueuedDirection)
+    updatePulse(state, dt, { nextLevel, endRun });
 
     // Collision: izvršava queuedInput na pulsu, proverava pickup/exit
     // (poziva se iz updatePulse na puls event-u, ne svaki frame)

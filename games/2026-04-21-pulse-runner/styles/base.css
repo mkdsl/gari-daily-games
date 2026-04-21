@@ -1,19 +1,38 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/*
+ * base.css — Layout i osnovna tipografija za Pulse Runner.
+ *
+ * Odgovornosti:
+ * - Reset (box-sizing, margin, padding)
+ * - Full-screen canvas setup (bez scrollbars)
+ * - Pozadina: #0a0a12 (skoro crna, tamno-plavi tint iz concept.md)
+ * - Font: monospace (geometrijski minimalizam)
+ * - #game-root kao fixed container
+ * - #game-canvas: position absolute, inset 0, touch-action: none
+ * - Responsive: canvas uvek full-screen, grid je centriran u render.js logički
+ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #0a0a0f;
+  background: #0a0a12;
   color: #e5e5e5;
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+  -webkit-user-select: none;
 }
 
 #game-root {
   position: fixed;
   inset: 0;
+  /* screen shake animacija se dodaje JS-om (.shake klasa iz game.css) */
 }
 
 #game-canvas {
@@ -22,5 +41,6 @@ html, body {
   width: 100%;
   height: 100%;
   display: block;
+  /* Sprečava default touch scroll/zoom na canvas-u */
   touch-action: none;
 }

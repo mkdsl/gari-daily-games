@@ -1,10 +1,23 @@
-// Jova: ovaj fajl wire-uje sve systeme. Importuj iz ./physics.js, ./collision.js itd.
-// i zovi ih po redu u updateSystems.
+/**
+ * systems/index.js — Agregator svih sistema za Pulse Runner.
+ *
+ * Ovaj fajl se VIŠE NE KORISTI direktno iz main.js —
+ * main.js importuje sisteme direktno (updatePulse, generateMaze, tryMove).
+ *
+ * Ostaje kao barrel export za slučaj da neki agent želi da importuje
+ * više sistema odjednom.
+ *
+ * Glavni tok igre:
+ *   main.js loop → updatePulse(state, dt, callbacks)
+ *     → pulse.js: akumulira timer, na pulsu:
+ *       → readQueuedDirection() (input.js)
+ *       → tryMove(state, dir, callbacks) (collision.js)
+ *         → _onCollectible ili _onExit
+ *       → ili _onMiss()
+ *     → callbacks.nextLevel → generateMaze (maze.js)
+ *     → callbacks.endRun → endRun (main.js)
+ */
 
-export function updateSystems(state, input, dt) {
-  if (state.paused || state.gameOver) return;
-  // updatePhysics(state, dt);
-  // updateCollisions(state);
-  // updateAI(state, dt);
-  // updateProgression(state, dt);
-}
+export { generateMaze, bfsSolvable, debugPrintGrid } from './maze.js';
+export { updatePulse, resetMissCounter, isInInputWindow } from './pulse.js';
+export { tryMove, isPassable } from './collision.js';

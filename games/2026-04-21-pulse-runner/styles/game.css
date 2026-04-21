@@ -1,17 +1,71 @@
-/* Pera: dodaj particle animacije, screen shake, damage flash ovde */
+/*
+ * game.css — Igračke animacije za Pulse Runner.
+ *
+ * Komponente:
+ * - .shake: screen shake na #game-root — triggeruje se JS-om na svaki puls
+ *   (triggerScreenShake() u ui.js). Kratka, brza tresnja (0.25s).
+ * - .pulse-ready: vizuelna indikacija da je input window otvoren
+ *   (opciono — grid ćelije mogu da posvetle tokom input window-a)
+ *
+ * Canvas efekti (puls flash, collectible glow, exit animacija) se crtaju
+ * direktno u render.js — ovde su samo DOM animacije.
+ *
+ * Boje iz concept.md: crvena #e94560, žuta #f5a623, tirkizna #00d4aa
+ */
 
-@keyframes shake {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(-2px, 1px); }
-  50% { transform: translate(2px, -1px); }
-  75% { transform: translate(-1px, 2px); }
+/* ─── Screen Shake ────────────────────────────────────────────────────────── */
+
+/*
+ * Kratki screen shake na puls event.
+ * Dodaje se na #game-root JS-om i uklanja na animationend.
+ * Amplituda: ±3px — dovoljno da se oseti, ne previše za distraction.
+ */
+@keyframes screen-shake {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-3px, 1px); }
+  40%  { transform: translate(3px, -2px); }
+  60%  { transform: translate(-2px, 3px); }
+  80%  { transform: translate(1px, -1px); }
+  100% { transform: translate(0, 0); }
 }
 
-.shake { animation: shake 0.3s ease-in-out; }
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+.shake {
+  animation: screen-shake 0.25s ease-in-out;
 }
 
-.pulse { animation: pulse 1.2s ease-in-out infinite; }
+/* ─── Player Pulse (fallback CSS za non-canvas render) ────────────────────── */
+
+/*
+ * Pulsiranje igrača na canvas-u se radi u render.js (sin funkcija).
+ * Ova CSS klasa je rezerva ako se ikad prebaci na DOM render.
+ */
+@keyframes player-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.12); opacity: 0.85; }
+}
+
+.player-pulse {
+  animation: player-pulse 1.2s ease-in-out infinite;
+}
+
+/* ─── Exit Glow (fallback CSS) ───────────────────────────────────────────── */
+
+@keyframes exit-glow {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(0, 212, 170, 0.6); }
+  50%       { box-shadow: 0 0 16px 6px rgba(0, 212, 170, 0.9); }
+}
+
+.exit-glow {
+  animation: exit-glow 1s ease-in-out infinite;
+}
+
+/* ─── Collectible Glow (fallback CSS) ────────────────────────────────────── */
+
+@keyframes collectible-glow {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(245, 166, 35, 0.5); }
+  50%       { box-shadow: 0 0 14px 5px rgba(245, 166, 35, 0.85); }
+}
+
+.collectible-glow {
+  animation: collectible-glow 1.5s ease-in-out infinite;
+}
