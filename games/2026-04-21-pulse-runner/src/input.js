@@ -1,35 +1,119 @@
-const keys = new Set();
-const pointer = { x: 0, y: 0, down: false, pressed: false, released: false };
-let _pressedBuffer = false;
-let _releasedBuffer = false;
+/**
+ * input.js — Keyboard i touch input handler za Pulse Runner.
+ *
+ * Odgovornosti:
+ * - Keyboard: arrow keys + WASD → smer kretanja (gore/dole/levo/desno)
+ * - Touch: swipe detection (min threshold da se ne pomeri slučajno)
+ * - Queued input buffer: max 1 na čekanju, novi overwrite-uje stari
+ * - readQueuedDirection() vraća i briše queued smer
+ * - NE izvršava kretanje — to radi collision.js na puls eventu
+ *
+ * Queued input je delta pozicija: { row: -1|0|1, col: -1|0|1 }
+ * Npr. gore = { row: -1, col: 0 }, desno = { row: 0, col: 1 }
+ */
 
+/** @typedef {{ row: -1|0|1, col: -1|0|1 }} Direction */
+
+/** Minimalni piksel pomak za swipe detekciju */
+const SWIPE_THRESHOLD = 30;
+
+/** @type {Direction|null} Queued input, max 1 — novi overwrite-uje stari */
+let _queuedDirection = null;
+
+/** Touch tracking za swipe detection */
+let _touchStart = { x: 0, y: 0 };
+
+/**
+ * Inicijalizuje keyboard i touch event listener-e.
+ * Poziva se jednom iz main.js na startu.
+ *
+ * @param {HTMLCanvasElement} canvas
+ */
 export function initInput(canvas) {
-  window.addEventListener('keydown', e => keys.add(e.key.toLowerCase()));
-  window.addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
+  // TODO: implementiraj keyboard listener
+  // window.addEventListener('keydown', _onKeyDown);
 
-  const setPointer = (e, down) => {
-    const rect = canvas.getBoundingClientRect();
-    const t = e.touches?.[0] ?? e;
-    pointer.x = (t.clientX - rect.left);
-    pointer.y = (t.clientY - rect.top);
-    if (down === true) { pointer.down = true; _pressedBuffer = true; }
-    if (down === false) { pointer.down = false; _releasedBuffer = true; }
-  };
-
-  canvas.addEventListener('mousedown', e => setPointer(e, true));
-  canvas.addEventListener('mousemove', e => setPointer(e));
-  canvas.addEventListener('mouseup', e => setPointer(e, false));
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); setPointer(e, true); }, { passive: false });
-  canvas.addEventListener('touchmove', e => { e.preventDefault(); setPointer(e); }, { passive: false });
-  canvas.addEventListener('touchend', e => { setPointer(e, false); });
+  // TODO: implementiraj touch listener-e za swipe
+  // canvas.addEventListener('touchstart', _onTouchStart, { passive: true });
+  // canvas.addEventListener('touchend', _onTouchEnd, { passive: true });
 }
 
-export function readInput() {
-  const snapshot = {
-    keys: new Set(keys),
-    pointer: { ...pointer, pressed: _pressedBuffer, released: _releasedBuffer }
-  };
-  _pressedBuffer = false;
-  _releasedBuffer = false;
-  return snapshot;
+/**
+ * Obrađuje keydown event i postavi queuedDirection.
+ * ArrowUp/W → gore, ArrowDown/S → dole, ArrowLeft/A → levo, ArrowRight/D → desno.
+ *
+ * @param {KeyboardEvent} e
+ */
+function _onKeyDown(e) {
+  // TODO: implementiraj
+  // const dirMap = {
+  //   'ArrowUp': { row: -1, col: 0 }, 'w': { row: -1, col: 0 },
+  //   'ArrowDown': { row: 1, col: 0 }, 's': { row: 1, col: 0 },
+  //   'ArrowLeft': { row: 0, col: -1 }, 'a': { row: 0, col: -1 },
+  //   'ArrowRight': { row: 0, col: 1 }, 'd': { row: 0, col: 1 },
+  // };
+  // const dir = dirMap[e.key];
+  // if (dir) { _queuedDirection = dir; e.preventDefault(); }
+}
+
+/**
+ * Pamti početak touch-a za swipe tracking.
+ *
+ * @param {TouchEvent} e
+ */
+function _onTouchStart(e) {
+  // TODO: implementiraj
+  // const t = e.touches[0];
+  // _touchStart = { x: t.clientX, y: t.clientY };
+}
+
+/**
+ * Izračunava swipe smer na kraju touch-a.
+ * Samo dominantna osa (horizontalna ili vertikalna) se uzima.
+ * Ignoriše swipe-ove ispod SWIPE_THRESHOLD.
+ *
+ * @param {TouchEvent} e
+ */
+function _onTouchEnd(e) {
+  // TODO: implementiraj
+  // const t = e.changedTouches[0];
+  // const dx = t.clientX - _touchStart.x;
+  // const dy = t.clientY - _touchStart.y;
+  // if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return;
+  // if (Math.abs(dx) > Math.abs(dy)) {
+  //   _queuedDirection = dx > 0 ? { row: 0, col: 1 } : { row: 0, col: -1 };
+  // } else {
+  //   _queuedDirection = dy > 0 ? { row: 1, col: 0 } : { row: -1, col: 0 };
+  // }
+}
+
+/**
+ * Vraća i briše queued direction.
+ * Poziva se iz pulse.js na puls eventu da bi izvršio kretanje.
+ *
+ * @returns {Direction|null} Queued smer ili null ako nema input-a
+ */
+export function readQueuedDirection() {
+  // TODO: implementiraj
+  // const dir = _queuedDirection;
+  // _queuedDirection = null;
+  // return dir;
+  return null;
+}
+
+/**
+ * Vraća queued direction BEZ brisanja (za debugging / UI prikaz).
+ *
+ * @returns {Direction|null}
+ */
+export function peekQueuedDirection() {
+  // TODO: implementiraj
+  return _queuedDirection;
+}
+
+/**
+ * Briše queued direction (npr. na game over ili menu).
+ */
+export function clearInput() {
+  _queuedDirection = null;
 }
