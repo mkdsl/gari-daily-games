@@ -28,14 +28,12 @@ import { CONFIG } from './config.js';
  * @returns {{ cellSize: number, offsetX: number, offsetY: number }}
  */
 export function calcGridLayout(canvasW, canvasH, gridSize) {
-  // TODO: implementiraj
-  // const available = Math.min(canvasW, canvasH) - CONFIG.GRID_PADDING * 2;
-  // const cellSize = Math.floor((available - CONFIG.CELL_GAP * (gridSize - 1)) / gridSize);
-  // const totalSize = cellSize * gridSize + CONFIG.CELL_GAP * (gridSize - 1);
-  // const offsetX = Math.floor((canvasW - totalSize) / 2);
-  // const offsetY = Math.floor((canvasH - totalSize) / 2);
-  // return { cellSize, offsetX, offsetY };
-  return { cellSize: 40, offsetX: 0, offsetY: 0 };
+  const available = Math.min(canvasW, canvasH) - CONFIG.GRID_PADDING * 2;
+  const cellSize = Math.floor((available - CONFIG.CELL_GAP * (gridSize - 1)) / gridSize);
+  const totalSize = cellSize * gridSize + CONFIG.CELL_GAP * (gridSize - 1);
+  const offsetX = Math.floor((canvasW - totalSize) / 2);
+  const offsetY = Math.floor((canvasH - totalSize) / 2);
+  return { cellSize, offsetX, offsetY };
 }
 
 /**
@@ -47,11 +45,9 @@ export function calcGridLayout(canvasW, canvasH, gridSize) {
  * @returns {{ x: number, y: number }}
  */
 export function cellToCanvas(row, col, layout) {
-  // TODO: implementiraj
-  // const x = layout.offsetX + col * (layout.cellSize + CONFIG.CELL_GAP);
-  // const y = layout.offsetY + row * (layout.cellSize + CONFIG.CELL_GAP);
-  // return { x, y };
-  return { x: 0, y: 0 };
+  const x = layout.offsetX + col * (layout.cellSize + CONFIG.CELL_GAP);
+  const y = layout.offsetY + row * (layout.cellSize + CONFIG.CELL_GAP);
+  return { x, y };
 }
 
 /**
@@ -65,16 +61,16 @@ export function cellToCanvas(row, col, layout) {
  * @param {number} [radius] - Border radius (default: CONFIG.CELL_BORDER_RADIUS)
  */
 export function drawCell(ctx, x, y, size, color, radius) {
-  // TODO: implementiraj rounded rect
-  // ctx.fillStyle = color;
-  // ctx.beginPath();
-  // ctx.roundRect(x, y, size, size, radius ?? CONFIG.CELL_BORDER_RADIUS);
-  // ctx.fill();
+  const r = radius ?? CONFIG.CELL_BORDER_RADIUS;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.roundRect(x, y, size, size, r);
+  ctx.fill();
 }
 
 /**
  * Crta igrača — crveni kvadrat koji pulsira u veličini po playerPulsePhase.
- * Pulsiranje: sin(playerPulsePhase) mapiran na ±10% veličine ćelije.
+ * Pulsiranje: sin(playerPulsePhase) mapiran na 0.7–0.9 scale faktora.
  *
  * @param {CanvasRenderingContext2D} ctx
  * @param {number} x - Canvas X centar igrača
@@ -83,18 +79,20 @@ export function drawCell(ctx, x, y, size, color, radius) {
  * @param {number} pulsePhase - Faza oscilacije (0–2π)
  */
 export function drawPlayer(ctx, x, y, size, pulsePhase) {
-  // TODO: implementiraj
-  // const scale = 1 + 0.1 * Math.sin(pulsePhase);
-  // const s = size * scale * 0.75; // igrač je 75% veličine ćelije
-  // ctx.fillStyle = CONFIG.COLORS.PLAYER;
-  // ctx.beginPath();
-  // ctx.roundRect(x - s/2, y - s/2, s, s, CONFIG.CELL_BORDER_RADIUS);
-  // ctx.fill();
-  // // Glow efekat
-  // ctx.shadowBlur = 12;
-  // ctx.shadowColor = CONFIG.COLORS.PLAYER;
-  // ctx.fill();
-  // ctx.shadowBlur = 0;
+  const scale = 0.7 + 0.2 * Math.sin(pulsePhase);
+  const s = size * scale;
+  const halfS = s / 2;
+
+  // Glow efekat ispod kvadrata
+  ctx.shadowBlur = 14;
+  ctx.shadowColor = CONFIG.COLORS.PLAYER;
+
+  ctx.fillStyle = CONFIG.COLORS.PLAYER;
+  ctx.beginPath();
+  ctx.roundRect(x - halfS, y - halfS, s, s, CONFIG.CELL_BORDER_RADIUS);
+  ctx.fill();
+
+  ctx.shadowBlur = 0;
 }
 
 /**
@@ -106,11 +104,10 @@ export function drawPlayer(ctx, x, y, size, pulsePhase) {
  * @param {number} size
  */
 export function drawCollectible(ctx, x, y, size) {
-  // TODO: implementiraj
-  // ctx.shadowBlur = 16;
-  // ctx.shadowColor = CONFIG.COLORS.COLLECTIBLE;
-  // drawCell(ctx, x, y, size, CONFIG.COLORS.COLLECTIBLE);
-  // ctx.shadowBlur = 0;
+  ctx.shadowBlur = 16;
+  ctx.shadowColor = CONFIG.COLORS.COLLECTIBLE;
+  drawCell(ctx, x, y, size, CONFIG.COLORS.COLLECTIBLE);
+  ctx.shadowBlur = 0;
 }
 
 /**
@@ -123,12 +120,11 @@ export function drawCollectible(ctx, x, y, size) {
  * @param {number} timestamp - performance.now() za animaciju
  */
 export function drawExit(ctx, x, y, size, timestamp) {
-  // TODO: implementiraj
-  // const glow = 8 + 8 * Math.sin(timestamp / 400); // oscilira 8–16px glow
-  // ctx.shadowBlur = glow;
-  // ctx.shadowColor = CONFIG.COLORS.EXIT;
-  // drawCell(ctx, x, y, size, CONFIG.COLORS.EXIT);
-  // ctx.shadowBlur = 0;
+  const glow = 8 + 8 * Math.sin(timestamp / 400); // oscilira 8–16px glow
+  ctx.shadowBlur = glow;
+  ctx.shadowColor = CONFIG.COLORS.EXIT;
+  drawCell(ctx, x, y, size, CONFIG.COLORS.EXIT);
+  ctx.shadowBlur = 0;
 }
 
 /**
@@ -141,11 +137,10 @@ export function drawExit(ctx, x, y, size, timestamp) {
  * @param {number} pulseFlashTimer - Preostalo vreme flash-a (sekunde)
  */
 export function drawPulseFlash(ctx, w, h, pulseFlashTimer) {
-  // TODO: implementiraj
-  // if (pulseFlashTimer <= 0) return;
-  // const alpha = pulseFlashTimer / CONFIG.PULSE_FLASH_DURATION * 0.35;
-  // ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-  // ctx.fillRect(0, 0, w, h);
+  if (pulseFlashTimer <= 0) return;
+  const alpha = (pulseFlashTimer / CONFIG.PULSE_FLASH_DURATION) * 0.35;
+  ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+  ctx.fillRect(0, 0, w, h);
 }
 
 /**
@@ -158,11 +153,10 @@ export function drawPulseFlash(ctx, w, h, pulseFlashTimer) {
  * @param {number} levelFlashTimer - Preostalo vreme flash-a (sekunde)
  */
 export function drawLevelFlash(ctx, w, h, levelFlashTimer) {
-  // TODO: implementiraj
-  // if (levelFlashTimer <= 0) return;
-  // const alpha = levelFlashTimer / CONFIG.LEVEL_FLASH_DURATION * 0.5;
-  // ctx.fillStyle = `rgba(0,212,170,${alpha})`; // EXIT boja
-  // ctx.fillRect(0, 0, w, h);
+  if (levelFlashTimer <= 0) return;
+  const alpha = (levelFlashTimer / CONFIG.LEVEL_FLASH_DURATION) * 0.5;
+  ctx.fillStyle = `rgba(0,212,170,${alpha})`;
+  ctx.fillRect(0, 0, w, h);
 }
 
 /**
@@ -173,40 +167,56 @@ export function drawLevelFlash(ctx, w, h, levelFlashTimer) {
  * @param {import('./state.js').GameState} state
  */
 export function render(ctx, state) {
-  const w = ctx.canvas.width / devicePixelRatio;
-  const h = ctx.canvas.height / devicePixelRatio;
+  const dpr = devicePixelRatio || 1;
+  const w = ctx.canvas.width / dpr;
+  const h = ctx.canvas.height / dpr;
 
-  // TODO: implementiraj kompletan render
   // 1. Pozadina
-  // ctx.fillStyle = CONFIG.COLORS.BG;
-  // ctx.fillRect(0, 0, w, h);
-
-  // 2. Grid ćelije (samo dok smo u 'playing' ekranu)
-  // if (state.screen === 'playing' && state.grid.length) {
-  //   const layout = calcGridLayout(w, h, state.gridSize);
-  //   for (let r = 0; r < state.gridSize; r++) {
-  //     for (let c = 0; c < state.gridSize; c++) {
-  //       const cell = state.grid[r][c];
-  //       const { x, y } = cellToCanvas(r, c, layout);
-  //       if (cell.type === 'wall') drawCell(ctx, x, y, layout.cellSize, CONFIG.COLORS.CELL_WALL);
-  //       else if (cell.type === 'empty' || cell.type === 'exit') drawCell(ctx, x, y, layout.cellSize, CONFIG.COLORS.CELL_EMPTY);
-  //       if (cell.type === 'collectible') drawCollectible(ctx, x, y, layout.cellSize);
-  //       if (cell.type === 'exit') drawExit(ctx, x, y, layout.cellSize, performance.now());
-  //     }
-  //   }
-  //   // 3. Igrač
-  //   const { x, y } = cellToCanvas(state.playerPos.row, state.playerPos.col, layout);
-  //   drawPlayer(ctx, x + layout.cellSize/2, y + layout.cellSize/2, layout.cellSize, state.playerPulsePhase);
-  // }
-
-  // 4. Overlay efekti
-  // drawPulseFlash(ctx, w, h, state.pulseFlashTimer);
-  // drawLevelFlash(ctx, w, h, state.levelFlashTimer);
-
-  // Privremeni placeholder render
   ctx.fillStyle = CONFIG.COLORS.BG;
   ctx.fillRect(0, 0, w, h);
-  ctx.fillStyle = CONFIG.COLORS.HUD_TEXT;
-  ctx.font = '14px monospace';
-  ctx.fillText('Pulse Runner — stub render', 20, 40);
+
+  // 2. Grid ćelije (samo dok smo u 'playing' ekranu)
+  if (state.screen === 'playing' && state.grid.length) {
+    const layout = calcGridLayout(w, h, state.gridSize);
+    const now = performance.now();
+
+    for (let r = 0; r < state.gridSize; r++) {
+      for (let c = 0; c < state.gridSize; c++) {
+        const cell = state.grid[r][c];
+        const { x, y } = cellToCanvas(r, c, layout);
+
+        if (cell.type === 'wall') {
+          drawCell(ctx, x, y, layout.cellSize, CONFIG.COLORS.CELL_WALL);
+        } else if (cell.type === 'empty') {
+          drawCell(ctx, x, y, layout.cellSize, CONFIG.COLORS.CELL_EMPTY);
+        } else if (cell.type === 'collectible') {
+          // Nacrtaj praznu ćeliju ispod, pa collectible
+          drawCell(ctx, x, y, layout.cellSize, CONFIG.COLORS.CELL_EMPTY);
+          drawCollectible(ctx, x, y, layout.cellSize);
+        } else if (cell.type === 'exit') {
+          // Nacrtaj praznu ćeliju ispod, pa exit
+          drawCell(ctx, x, y, layout.cellSize, CONFIG.COLORS.CELL_EMPTY);
+          drawExit(ctx, x, y, layout.cellSize, now);
+        }
+      }
+    }
+
+    // 3. Igrač — crta se na centru ćelije iznad grida
+    const { x: px, y: py } = cellToCanvas(state.playerPos.row, state.playerPos.col, layout);
+    drawPlayer(
+      ctx,
+      px + layout.cellSize / 2,
+      py + layout.cellSize / 2,
+      layout.cellSize,
+      state.playerPulsePhase
+    );
+  }
+
+  // 4. Overlay efekti (crtaju se na vrhu, iznad svega)
+  if (state.pulseFlash && state.pulseFlashTimer > 0) {
+    drawPulseFlash(ctx, w, h, state.pulseFlashTimer);
+  }
+  if (state.levelFlash && state.levelFlashTimer > 0) {
+    drawLevelFlash(ctx, w, h, state.levelFlashTimer);
+  }
 }

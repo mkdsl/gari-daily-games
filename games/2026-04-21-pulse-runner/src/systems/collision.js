@@ -11,10 +11,12 @@
  * - Vraća tip rezultata: 'moved' | 'wall' | 'out_of_bounds' | 'collectible' | 'exit'
  *
  * Poziva se iz pulse.js na puls eventu (ne svaki frame).
+ *
+ * NAPOMENA: resetMissCounter se NE importuje iz pulse.js (cirkularna zavisnost).
+ * Umesto toga, state.missCount = 0 se radi inline.
  */
 
 import { CONFIG } from '../config.js';
-import { resetMissCounter } from './pulse.js';
 import { playCollectible } from '../audio.js';
 
 /**
@@ -33,36 +35,35 @@ import { playCollectible } from '../audio.js';
  * @returns {MoveResult}
  */
 export function tryMove(state, dir, callbacks) {
-  // TODO: implementiraj
   const newRow = state.playerPos.row + dir.row;
   const newCol = state.playerPos.col + dir.col;
 
   // 1. Provera granica grida
-  // if (newRow < 0 || newRow >= state.gridSize || newCol < 0 || newCol >= state.gridSize) {
-  //   return 'out_of_bounds';
-  // }
+  if (newRow < 0 || newRow >= state.gridSize || newCol < 0 || newCol >= state.gridSize) {
+    return 'out_of_bounds';
+  }
 
   // 2. Provera zida
-  // const cell = state.grid[newRow][newCol];
-  // if (cell.type === 'wall') return 'wall';
+  const cell = state.grid[newRow][newCol];
+  if (cell.type === 'wall') return 'wall';
 
   // 3. Pomeri igrača
-  // state.playerPos = { row: newRow, col: newCol };
+  state.playerPos = { row: newRow, col: newCol };
 
   // 4. Provjeri tip ćelije na novoj poziciji
-  // if (cell.type === 'collectible') {
-  //   return _onCollectible(state, newRow, newCol);
-  // }
-  // if (cell.type === 'exit') {
-  //   return _onExit(state, callbacks);
-  // }
+  if (cell.type === 'collectible') {
+    return _onCollectible(state, newRow, newCol);
+  }
+  if (cell.type === 'exit') {
+    return _onExit(state, callbacks);
+  }
 
   return 'moved';
 }
 
 /**
  * Obrađuje collectible pickup.
- * +1 HP (do max), reset miss counter, označi ćeliju kao 'empty'.
+ * +1 HP (do max), reset miss counter (inline), označi ćeliju kao 'empty'.
  *
  * @param {GameState} state
  * @param {number} row
@@ -70,12 +71,11 @@ export function tryMove(state, dir, callbacks) {
  * @returns {'collectible'}
  */
 function _onCollectible(state, row, col) {
-  // TODO: implementiraj
-  // state.grid[row][col] = { type: 'empty' };
-  // state.hp = Math.min(state.hp + CONFIG.HP_PER_COLLECTIBLE, CONFIG.HP_MAX);
-  // state.totalCollected++;
-  // resetMissCounter(state); // miss counter resetuje se na pickup
-  // playCollectible();
+  state.grid[row][col] = { type: 'empty' };
+  state.hp = Math.min(state.hp + CONFIG.HP_PER_COLLECTIBLE, CONFIG.HP_MAX);
+  state.totalCollected++;
+  state.missCount = 0; // inline reset — ne importujemo iz pulse.js (cirkularna zavisnost)
+  playCollectible();
   return 'collectible';
 }
 
@@ -88,8 +88,7 @@ function _onCollectible(state, row, col) {
  * @returns {'exit'}
  */
 function _onExit(state, callbacks) {
-  // TODO: implementiraj
-  // callbacks.nextLevel(state);
+  callbacks.nextLevel(state);
   return 'exit';
 }
 
@@ -103,8 +102,6 @@ function _onExit(state, callbacks) {
  * @returns {boolean}
  */
 export function isPassable(state, row, col) {
-  // TODO: implementiraj
-  // if (row < 0 || row >= state.gridSize || col < 0 || col >= state.gridSize) return false;
-  // return state.grid[row][col].type !== 'wall';
-  return false;
+  if (row < 0 || row >= state.gridSize || col < 0 || col >= state.gridSize) return false;
+  return state.grid[row][col].type !== 'wall';
 }

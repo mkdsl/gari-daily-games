@@ -23,24 +23,29 @@ let _ctx = null;
 /**
  * Inicijalizuje AudioContext (lazy, na prvu interakciju).
  * Poziva se iz main.js, ali AudioContext se ne kreira dok korisnik ne klikne.
- * Dodaje listener koji kreira context na prvi click/touch.
+ * Dodaje listener koji kreira context na prvi click/touch/keydown.
  */
 export function initAudio() {
-  // TODO: implementiraj
-  // const resume = () => {
-  //   if (!_ctx) _ctx = new AudioContext();
-  //   if (_ctx.state === 'suspended') _ctx.resume();
-  //   window.removeEventListener('click', resume);
-  //   window.removeEventListener('keydown', resume);
-  //   window.removeEventListener('touchstart', resume);
-  // };
-  // window.addEventListener('click', resume, { once: true });
-  // window.addEventListener('keydown', resume, { once: true });
-  // window.addEventListener('touchstart', resume, { once: true });
+  const resume = () => {
+    if (!_ctx) {
+      try {
+        _ctx = new AudioContext();
+      } catch (e) {
+        // AudioContext nije podržan u ovom browseru
+        return;
+      }
+    }
+    if (_ctx.state === 'suspended') {
+      _ctx.resume();
+    }
+  };
+  window.addEventListener('click', resume, { once: true });
+  window.addEventListener('keydown', resume, { once: true });
+  window.addEventListener('touchstart', resume, { once: true });
 }
 
 /**
- * Vraća AudioContext ako je inicijalizovan, null ako nije.
+ * Vraća AudioContext ako je inicijalizovan i nije zatvoren, null ako nije.
  * Interne funkcije za playback koriste ovo da skippuju ako nema context-a.
  *
  * @returns {AudioContext|null}
@@ -59,29 +64,44 @@ function _getCtx() {
  * @param {'sine'|'square'|'sawtooth'|'triangle'} [type] - Tip oscilatorа (default: 'sine')
  */
 function _playTone(freqStart, freqEnd, duration, peakGain, type = 'sine') {
-  // TODO: implementiraj
-  // const ctx = _getCtx();
-  // if (!ctx) return;
-  //
-  // const osc = ctx.createOscillator();
-  // const gain = ctx.createGain();
-  // osc.connect(gain);
-  // gain.connect(ctx.destination);
-  //
-  // osc.type = type;
-  // const now = ctx.currentTime;
-  //
-  // // Frequency sweep
-  // osc.frequency.setValueAtTime(freqStart, now);
-  // osc.frequency.linearRampToValueAtTime(freqEnd, now + duration);
-  //
-  // // Envelope: kratki attack (1ms), decay do 0 na kraju
-  // gain.gain.setValueAtTime(0, now);
-  // gain.gain.linearRampToValueAtTime(peakGain, now + 0.001); // 1ms attack
-  // gain.gain.linearRampToValueAtTime(0, now + duration);
-  //
-  // osc.start(now);
-  // osc.stop(now + duration + 0.01);
+  const ctx = _getCtx();
+  if (!ctx) return;
+
+  try {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.type = type;
+    const now = ctx.currentTime;
+
+    // Frequency sweep (od freqStart do freqEnd)
+    osc.frequency.setValueAtTime(freqStart, now);
+    if (freqStart !== freqEnd) {
+      osc.frequency.linearRampToValueAtTime(freqEnd, now + duration);
+    }
+
+    // Envelope: kratki attack (1ms), decay do 0 na kraju
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(peakGain, now + 0.001); // 1ms attack
+    gain.gain.linearRampToValueAtTime(0, now + duration);
+
+    osc.start(now);
+    osc.stop(now + duration + 0.01);
+
+    // Cleanup posle završetka
+    osc.addEventListener('ended', () => {
+      try {
+        osc.disconnect();
+        gain.disconnect();
+      } catch (_) {
+        // ignore
+      }
+    });
+  } catch (e) {
+    // Tiho ignoriši audio greške (ne prekidaj igru)
+  }
 }
 
 /**
@@ -90,13 +110,12 @@ function _playTone(freqStart, freqEnd, duration, peakGain, type = 'sine') {
  * Poziva se iz pulse.js na svakom puls eventu.
  */
 export function playPulse() {
-  // TODO: implementiraj
-  // _playTone(
-  //   CONFIG.AUDIO_PULSE_FREQ,
-  //   CONFIG.AUDIO_PULSE_FREQ,
-  //   CONFIG.AUDIO_PULSE_DURATION,
-  //   0.3
-  // );
+  _playTone(
+    CONFIG.AUDIO_PULSE_FREQ,
+    CONFIG.AUDIO_PULSE_FREQ,
+    CONFIG.AUDIO_PULSE_DURATION,
+    0.3
+  );
 }
 
 /**
@@ -105,13 +124,12 @@ export function playPulse() {
  * Poziva se iz collision.js na pickup-u.
  */
 export function playCollectible() {
-  // TODO: implementiraj
-  // _playTone(
-  //   CONFIG.AUDIO_COLLECT_FREQ_START,
-  //   CONFIG.AUDIO_COLLECT_FREQ_END,
-  //   CONFIG.AUDIO_COLLECT_DURATION,
-  //   0.25
-  // );
+  _playTone(
+    CONFIG.AUDIO_COLLECT_FREQ_START,
+    CONFIG.AUDIO_COLLECT_FREQ_END,
+    CONFIG.AUDIO_COLLECT_DURATION,
+    0.25
+  );
 }
 
 /**
@@ -120,13 +138,12 @@ export function playCollectible() {
  * Poziva se iz main.js na endRun().
  */
 export function playGameOver() {
-  // TODO: implementiraj
-  // _playTone(
-  //   CONFIG.AUDIO_GAMEOVER_FREQ_START,
-  //   CONFIG.AUDIO_GAMEOVER_FREQ_END,
-  //   CONFIG.AUDIO_GAMEOVER_DURATION,
-  //   0.35
-  // );
+  _playTone(
+    CONFIG.AUDIO_GAMEOVER_FREQ_START,
+    CONFIG.AUDIO_GAMEOVER_FREQ_END,
+    CONFIG.AUDIO_GAMEOVER_DURATION,
+    0.35
+  );
 }
 
 /**
@@ -134,11 +151,10 @@ export function playGameOver() {
  * Poziva se iz main.js na nextLevel() — tirkizni flash + ovaj zvuk.
  */
 export function playLevelTransition() {
-  // TODO: implementiraj
-  // _playTone(
-  //   CONFIG.AUDIO_LEVEL_FREQ,
-  //   CONFIG.AUDIO_LEVEL_FREQ,
-  //   CONFIG.AUDIO_LEVEL_DURATION,
-  //   0.2
-  // );
+  _playTone(
+    CONFIG.AUDIO_LEVEL_FREQ,
+    CONFIG.AUDIO_LEVEL_FREQ,
+    CONFIG.AUDIO_LEVEL_DURATION,
+    0.2
+  );
 }

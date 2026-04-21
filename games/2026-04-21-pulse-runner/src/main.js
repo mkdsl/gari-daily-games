@@ -14,11 +14,11 @@
  */
 
 import { CONFIG } from './config.js';
-import { createState, saveHighScore } from './state.js';
+import { createState, saveHighScore, loadHighScore, calcScore } from './state.js';
 import { initInput, clearInput } from './input.js';
-import { initAudio } from './audio.js';
+import { initAudio, playGameOver, playLevelTransition } from './audio.js';
 import { render } from './render.js';
-import { initUI, updateHUD, showMainMenu } from './ui.js';
+import { initUI, updateHUD, showMainMenu, showGameOver, hideOverlay } from './ui.js';
 import { generateMaze } from './systems/maze.js';
 import { updatePulse } from './systems/pulse.js';
 import { tryMove } from './systems/collision.js';
@@ -34,12 +34,12 @@ const ctx = canvas.getContext('2d');
  * Poziva se na init i na svaki window resize.
  */
 function resize() {
-  // TODO: implementiraj DPI-aware canvas resize
-  // canvas.width = window.innerWidth * devicePixelRatio;
-  // canvas.height = window.innerHeight * devicePixelRatio;
-  // canvas.style.width = window.innerWidth + 'px';
-  // canvas.style.height = window.innerHeight + 'px';
-  // ctx.scale(devicePixelRatio, devicePixelRatio);
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  canvas.style.width = window.innerWidth + 'px';
+  canvas.style.height = window.innerHeight + 'px';
+  ctx.scale(dpr, dpr);
 }
 
 /**
@@ -48,9 +48,25 @@ function resize() {
  * @param {import('./state.js').GameState} state
  */
 export function startRun(state) {
-  // TODO: implementiraj
-  // state.screen = 'playing';
-  // generateMaze(state);
+  state.screen = 'playing';
+  state.level = 1;
+  state.depth = 0;
+  state.hp = CONFIG.HP_START;
+  state.missCount = 0;
+  state.score = 0;
+  state.totalCollected = 0;
+  state.pulseTimer = 0;
+  state.pulseInterval = CONFIG.pulseInterval(1);
+  state.playerPulsePhase = 0;
+  state.pulseFlash = false;
+  state.pulseFlashTimer = 0;
+  state.levelFlash = false;
+  state.levelFlashTimer = 0;
+  state.inInputWindow = false;
+  state.gridSize = CONFIG.gridSize(1);
+  clearInput();
+  generateMaze(state);
+  hideOverlay();
 }
 
 /**
@@ -60,15 +76,16 @@ export function startRun(state) {
  * @param {import('./state.js').GameState} state
  */
 export function nextLevel(state) {
-  // TODO: implementiraj
-  // state.depth++;
-  // state.level++;
-  // state.missCount = 0;
-  // state.score = calcScore(state.depth, state.totalCollected);
-  // state.levelFlash = true;
-  // state.levelFlashTimer = CONFIG.LEVEL_FLASH_DURATION;
-  // state.pulseInterval = CONFIG.pulseInterval(state.level);
-  // generateMaze(state);
+  state.depth++;
+  state.level++;
+  state.missCount = 0;
+  state.score = calcScore(state.depth, state.totalCollected);
+  state.levelFlash = true;
+  state.levelFlashTimer = CONFIG.LEVEL_FLASH_DURATION;
+  state.pulseInterval = CONFIG.pulseInterval(state.level);
+  state.gridSize = CONFIG.gridSize(state.level);
+  generateMaze(state);
+  playLevelTransition();
 }
 
 /**
@@ -77,11 +94,14 @@ export function nextLevel(state) {
  * @param {import('./state.js').GameState} state
  */
 export function endRun(state) {
-  // TODO: implementiraj
-  // state.screen = 'gameover';
-  // const isNewPB = saveHighScore(state.score);
-  // state.highScore = loadHighScore();
-  // playGameOver(); (iz audio.js)
+  state.screen = 'gameover';
+  saveHighScore(state.score);
+  state.highScore = loadHighScore();
+  clearInput();
+  playGameOver();
+  showGameOver(state, () => {
+    startRun(state);
+  });
 }
 
 // ─── Inicijalizacija ────────────────────────────────────────────────────────
@@ -96,7 +116,9 @@ initInput(canvas);
 initAudio();
 initUI(state, startRun);
 
-showMainMenu(state);
+showMainMenu(state, () => {
+  startRun(state);
+});
 
 // ─── Game Loop ──────────────────────────────────────────────────────────────
 

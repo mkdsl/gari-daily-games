@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#000">
+  <meta name="theme-color" content="#0a0a12">
+  <meta name="description" content="Pulse Runner — Električni signal putuje kroz proceduralnu neuronsku mrežu. Kreći se samo na kucaj srca.">
   <title>Pulse Runner — Gari Daily Games</title>
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/ui.css">
@@ -11,10 +12,30 @@
 </head>
 <body>
   <div id="game-root">
-    <canvas id="game-canvas"></canvas>
-    <div id="hud"></div>
-    <div id="menu" class="menu-overlay"></div>
+    <!-- Canvas: render.js crta ovde -->
+    <canvas id="game-canvas" aria-label="Pulse Runner game canvas"></canvas>
+
+    <!-- HUD: uvek vidljiv tokom igre (HP, score, level, miss) -->
+    <!-- Sadržaj kreira ui.js initUI() -->
+    <div id="hud" aria-live="polite" aria-label="Game HUD">
+      <div id="hud-hp" class="hud-block" aria-label="Health points"></div>
+      <div id="hud-score" class="hud-block" aria-label="Score">Score: 0</div>
+      <div id="hud-level" class="hud-block" aria-label="Level">Lvl 1</div>
+      <div id="hud-miss" class="hud-block" aria-label="Missed pulses"></div>
+    </div>
+
+    <!-- Menu overlay: main menu i game over ekran -->
+    <!-- Sadržaj popunjava ui.js showMainMenu() / showGameOver() -->
+    <div id="menu" class="menu-overlay" role="dialog" aria-modal="true">
+      <!-- Inicijalni sadržaj — JS će ga zameniti -->
+      <h1 class="game-title">PULSE RUNNER</h1>
+      <p class="subtitle">Kreći se samo na kucaj srca</p>
+      <p class="pb" id="menu-highscore"></p>
+      <button id="start-btn" class="btn-primary">PLAY</button>
+      <p class="controls-hint">← → ↑ ↓ ili swipe</p>
+    </div>
   </div>
+
   <script type="module" src="src/main.js"></script>
 </body>
 </html>

@@ -27,7 +27,7 @@ import { CONFIG } from '../config.js';
 import { readQueuedDirection } from '../input.js';
 import { tryMove } from './collision.js';
 import { triggerScreenShake } from '../ui.js';
-import { playPulse, playGameOver } from '../audio.js';
+import { playPulse } from '../audio.js';
 
 /**
  * Ažurira puls sistem za jedan frame.
@@ -38,33 +38,33 @@ import { playPulse, playGameOver } from '../audio.js';
  * @param {{ nextLevel: function, endRun: function }} callbacks
  */
 export function updatePulse(state, dt, callbacks) {
-  // TODO: implementiraj
-
-  // 1. Ažuriraj playerPulsePhase (kontinualna animacija igrača)
-  // state.playerPulsePhase = (state.playerPulsePhase + dt * (2 * Math.PI / CONFIG.PLAYER_PULSE_PERIOD)) % (2 * Math.PI);
+  // 1. Ažuriraj playerPulsePhase (kontinualna animacija igrača, nezavisna od pulsa)
+  state.playerPulsePhase = (state.playerPulsePhase + dt * (2 * Math.PI / CONFIG.PLAYER_PULSE_PERIOD)) % (2 * Math.PI);
 
   // 2. Ažuriraj flash timer-e
-  // if (state.pulseFlashTimer > 0) {
-  //   state.pulseFlashTimer = Math.max(0, state.pulseFlashTimer - dt);
-  //   if (state.pulseFlashTimer === 0) state.pulseFlash = false;
-  // }
-  // if (state.levelFlashTimer > 0) {
-  //   state.levelFlashTimer = Math.max(0, state.levelFlashTimer - dt);
-  //   if (state.levelFlashTimer === 0) state.levelFlash = false;
-  // }
+  if (state.pulseFlashTimer > 0) {
+    state.pulseFlashTimer = Math.max(0, state.pulseFlashTimer - dt);
+    if (state.pulseFlashTimer === 0) state.pulseFlash = false;
+  }
+  if (state.levelFlashTimer > 0) {
+    state.levelFlashTimer = Math.max(0, state.levelFlashTimer - dt);
+    if (state.levelFlashTimer === 0) state.levelFlash = false;
+  }
 
   // 3. Akumuliraj pulse timer
-  // state.pulseTimer += dt;
+  state.pulseTimer += dt;
 
-  // 4. Ažuriraj input window flag
-  // const windowDuration = state.pulseInterval * CONFIG.INPUT_WINDOW_RATIO;
-  // if (state.pulseTimer >= windowDuration) state.inInputWindow = false;
+  // 4. Ažuriraj input window flag — zatvori ga posle 80% intervala
+  const windowDuration = state.pulseInterval * CONFIG.INPUT_WINDOW_RATIO;
+  if (state.pulseTimer >= windowDuration) {
+    state.inInputWindow = false;
+  }
 
-  // 5. Puls event
-  // if (state.pulseTimer >= state.pulseInterval) {
-  //   _onPulse(state, callbacks);
-  //   state.pulseTimer -= state.pulseInterval; // ne resetuje na 0, subtracts
-  // }
+  // 5. Puls event — okini kad timer pređe interval
+  if (state.pulseTimer >= state.pulseInterval) {
+    _onPulse(state, callbacks);
+    state.pulseTimer -= state.pulseInterval; // ne resetuje na 0, oduzima interval
+  }
 }
 
 /**
@@ -75,28 +75,26 @@ export function updatePulse(state, dt, callbacks) {
  * @param {{ nextLevel: function, endRun: function }} callbacks
  */
 function _onPulse(state, callbacks) {
-  // TODO: implementiraj
-
   // 1. Vizuelni + audio feedback
-  // state.pulseFlash = true;
-  // state.pulseFlashTimer = CONFIG.PULSE_FLASH_DURATION;
-  // state.inInputWindow = true;
-  // playPulse();
-  // triggerScreenShake();
+  state.pulseFlash = true;
+  state.pulseFlashTimer = CONFIG.PULSE_FLASH_DURATION;
+  state.inInputWindow = true;
+  playPulse();
+  triggerScreenShake();
 
   // 2. Čitaj queued input
-  // const dir = readQueuedDirection();
+  const dir = readQueuedDirection();
 
   // 3a. Ako ima input: pokušaj kretanje
-  // if (dir) {
-  //   const result = tryMove(state, dir);
-  //   // tryMove vraća: 'moved', 'wall', 'collectible', 'exit'
-  //   // 'collectible' i 'exit' se obrađuju u tryMove/collision.js
-  //   // 'exit' triggeruje callbacks.nextLevel(state)
-  // } else {
-  //   // 3b. Miss — prošao puls bez input-a
-  //   _onMiss(state, callbacks);
-  // }
+  if (dir) {
+    tryMove(state, dir, callbacks);
+    // tryMove vraća: 'moved', 'wall', 'out_of_bounds', 'collectible', 'exit'
+    // 'collectible' i 'exit' se obrađuju unutar tryMove/collision.js
+    // 'exit' triggeruje callbacks.nextLevel(state) direktno iz collision.js
+  } else {
+    // 3b. Miss — prošao puls bez input-a
+    _onMiss(state, callbacks);
+  }
 }
 
 /**
@@ -106,22 +104,20 @@ function _onPulse(state, callbacks) {
  * @param {{ endRun: function }} callbacks
  */
 function _onMiss(state, callbacks) {
-  // TODO: implementiraj
-  // state.missCount++;
-  // if (state.missCount >= CONFIG.MISS_LIMIT) {
-  //   callbacks.endRun(state);
-  // }
+  state.missCount++;
+  if (state.missCount >= CONFIG.MISS_LIMIT) {
+    callbacks.endRun(state);
+  }
 }
 
 /**
- * Resetuje miss counter — poziva se iz collision.js na collectible pickup
- * ili level transition. Izloženo za testabilnost.
+ * Resetuje miss counter — izloženo za testabilnost.
+ * Napomena: collision.js ga NE importuje (cirkularna zavisnost) — radi inline.
  *
  * @param {import('../state.js').GameState} state
  */
 export function resetMissCounter(state) {
-  // TODO: implementiraj
-  // state.missCount = 0;
+  state.missCount = 0;
 }
 
 /**
