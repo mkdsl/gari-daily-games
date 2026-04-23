@@ -39,6 +39,8 @@ export function createState() {
     metaWin: false,
     showPrestigeScreen: false,
     showRoomMenu: null,
+    _pendingRoom: null,
+    resourceCap: CONFIG.RESOURCE_CAP_BASE,
 
     grid: [],                          // popunjava grid.generateGrid() u main.js
     resources: { food: 30, minerals: 10 },
