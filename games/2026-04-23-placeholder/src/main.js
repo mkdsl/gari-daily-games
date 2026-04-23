@@ -5,7 +5,8 @@ import { createState, loadState, saveState } from './state.js';
 import { initInput, readInput } from './input.js';
 import { updateSystems } from './systems/index.js';
 import { render } from './render.js';
-import { initUI, updateHUD } from './ui.js';
+import { initUI, updateHUD, showRoomMenu, closeRoomMenu } from './ui.js';
+import { initAudio } from './audio.js';
 
 import { generateGrid } from './systems/grid.js';
 import { createWorkerState } from './systems/workers.js';
@@ -43,9 +44,11 @@ if (!state) {
 
 initInput(canvas);
 initUI(state);
+initAudio();
 
 let lastTime = performance.now();
 let saveTimer = 0;
+let prevShowRoomMenu = null;
 
 function loop(now) {
   const dt = Math.min(0.05, (now - lastTime) / 1000);
@@ -56,6 +59,14 @@ function loop(now) {
   if (!state.paused && !state.gameOver && !state.metaWin) {
     updateSystems(state, input, dt);
   }
+
+  // Otvori/zatvori room meni na osnovu state.showRoomMenu
+  if (state.showRoomMenu && !prevShowRoomMenu) {
+    showRoomMenu(state.showRoomMenu.col, state.showRoomMenu.row, state);
+  } else if (!state.showRoomMenu && prevShowRoomMenu) {
+    closeRoomMenu();
+  }
+  prevShowRoomMenu = state.showRoomMenu;
 
   render(ctx, state);
   updateHUD(state);
