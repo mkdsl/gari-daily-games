@@ -1,0 +1,30 @@
+{
+  "name": "Kolonija 7",
+  "genre": "Simulation / Idle",
+  "date": "2026-04-23",
+  "description": "Upravljaj poslednjom mravljom kolonijom na planeti — kopaj tunele, gradi sobe, preživljavaj peskane bure i traži Drevni Kristal.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-04-23-kolonija-7/",
+  "modules": {
+    "src/main.js": "Entry point, game loop (requestAnimationFrame), wire svih modula",
+    "src/config.js": "Sve konstante: grid dimenzije, resource rate-ovi, bura timing, prestige config",
+    "src/state.js": "Game state shape, save/load localStorage, prestige counter",
+    "src/input.js": "Click/touch handler za grid ćelije (kopanje, sobe meni), keyboard shortcuts",
+    "src/render.js": "Canvas rendering: grid, ćelije, sobe, particle efekti, screen shake",
+    "src/ui.js": "HUD (resursi, radnice, bura timer), overlay-i (game over, prestige, meta win)",
+    "src/systems/grid.js": "Grid generacija, kopanje, susednost, sadržaj ćelija, kristal placement",
+    "src/systems/workers.js": "Radnice kao apstrakcija: auto-collect tick, rate formula, damage od bure",
+    "src/systems/rooms.js": "Sobe: gradnja, upgrade, cost validation, efekti na state",
+    "src/systems/storm.js": "Peskana bura: timer, telegraph sekvenca, damage, Zid interakcija",
+    "src/systems/prestige.js": "Prestige trigger, reset, bonus selekcija, meta win check",
+    "src/systems/particles.js": "Particle sistem: worker tačkice, resource pickup efekti",
+    "styles/base.css": "Layout, canvas full-screen, responsive setup",
+    "styles/ui.css": "HUD, overlays, bura telegraph trake, dugmad",
+    "styles/game.css": "Screen shake animacija, particle CSS, room vizuali, kristal glow"
+  },
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "status": "in_progress"
+}
