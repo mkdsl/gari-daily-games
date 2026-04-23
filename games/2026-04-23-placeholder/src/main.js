@@ -1,3 +1,5 @@
+// src/main.js — Entry point, game loop (requestAnimationFrame), wire svih modula
+
 import { CONFIG } from './config.js';
 import { createState, loadState, saveState } from './state.js';
 import { initInput, readInput } from './input.js';
@@ -5,6 +7,12 @@ import { updateSystems } from './systems/index.js';
 import { render } from './render.js';
 import { initUI, updateHUD } from './ui.js';
 
+import { generateGrid } from './systems/grid.js';
+import { createWorkerState } from './systems/workers.js';
+import { createStormState } from './systems/storm.js';
+import { createPrestigeState } from './systems/prestige.js';
+
+/** @type {HTMLCanvasElement} */
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
@@ -18,9 +26,23 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
-const state = loadState() ?? createState();
+// Učitaj ili napravi svež state
+let state = loadState();
+if (!state) {
+  state = createState();
+  state.grid = generateGrid(CONFIG.GRID_COLS, CONFIG.GRID_ROWS);
+  state.workers = createWorkerState();
+  state.storm = createStormState();
+  state.prestige = createPrestigeState();
+} else {
+  // Osiguraj da ne nedostaju polja posle verzija promene
+  if (!state.particles) state.particles = [];
+  if (!state.screenShake) state.screenShake = { timer: 0, intensity: 0 };
+  if (!state.camera) state.camera = { x: 0, y: 0 };
+}
+
 initInput(canvas);
-initUI();
+initUI(state);
 
 let lastTime = performance.now();
 let saveTimer = 0;
@@ -30,7 +52,11 @@ function loop(now) {
   lastTime = now;
 
   const input = readInput();
-  updateSystems(state, input, dt);
+
+  if (!state.paused && !state.gameOver && !state.metaWin) {
+    updateSystems(state, input, dt);
+  }
+
   render(ctx, state);
   updateHUD(state);
 
