@@ -1,55 +1,180 @@
+/* ui.css — HUD, overlays, bura telegraph trake, dugmad */
+
+/* --- HUD stat blokovi --- */
 #hud {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  right: 16px;
   display: flex;
-  gap: 16px;
-  z-index: 10;
-  pointer-events: none;
+  gap: 8px;
+  padding: 10px 14px;
+  flex-wrap: wrap;
 }
 
 .stat {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 8px 12px;
+  background: rgba(10, 6, 2, 0.75);
+  padding: 6px 10px;
   border-radius: 4px;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  backdrop-filter: blur(8px);
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  border: 1px solid rgba(232, 220, 200, 0.12);
+  backdrop-filter: blur(6px);
+  color: #e8dcc8;
+  white-space: nowrap;
 }
 
+/* Storm timer normalno stanje */
+.storm-timer {
+  color: #c2a57a;
+}
+
+/* Storm warning — trepeće crveno */
+.storm-timer.storm-warning {
+  color: #ff6b35;
+  border-color: #ff6b35;
+  animation: storm-pulse 0.6s ease-in-out infinite;
+}
+
+/* Prestige brojač — zlatni */
+.prestige-count {
+  color: #d4a832;
+  border-color: rgba(212, 168, 50, 0.3);
+}
+
+/* --- Menu overlay --- */
 .menu-overlay {
-  position: absolute;
-  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  background: rgba(10, 10, 15, 0.85);
-  backdrop-filter: blur(12px);
-  z-index: 20;
+  gap: 20px;
+  background: rgba(10, 6, 2, 0.88);
+  backdrop-filter: blur(14px);
+  padding: 40px;
 }
 
 .menu-overlay.hidden { display: none; }
 
 .menu-overlay h2 {
-  font-size: 48px;
-  color: #ff4d6d;
-  letter-spacing: 4px;
+  font-size: 36px;
+  color: #ff6b35;
+  letter-spacing: 3px;
+  text-align: center;
+  text-transform: uppercase;
 }
 
-.menu-overlay button {
-  padding: 12px 24px;
-  background: #ff4d6d;
-  color: #0a0a0f;
+.menu-overlay p {
+  font-size: 15px;
+  color: #c2a57a;
+  text-align: center;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* --- Dugmad --- */
+.menu-overlay button,
+.room-menu button {
+  padding: 10px 22px;
+  background: #ff6b35;
+  color: #1a1208;
   border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  border-radius: 3px;
+  font-size: 14px;
   font-family: inherit;
   cursor: pointer;
   font-weight: bold;
   letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: background 0.15s;
 }
 
-.menu-overlay button:hover { background: #fff; }
+.menu-overlay button:hover,
+.room-menu button:hover {
+  background: #e8dcc8;
+}
+
+/* --- Prestige opcije --- */
+#prestige-options {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.prestige-option {
+  background: rgba(40, 28, 12, 0.9);
+  border: 1px solid #c2a57a;
+  border-radius: 6px;
+  padding: 16px 20px;
+  cursor: pointer;
+  text-align: center;
+  max-width: 160px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.prestige-option:hover {
+  border-color: #d4a832;
+  background: rgba(60, 44, 20, 0.9);
+}
+
+.prestige-option .bonus-title {
+  font-size: 13px;
+  color: #d4a832;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.prestige-option .bonus-desc {
+  font-size: 11px;
+  color: #8b7355;
+  line-height: 1.5;
+}
+
+/* --- Room meni (floating) --- */
+.room-menu {
+  position: absolute;
+  background: rgba(15, 10, 4, 0.95);
+  border: 1px solid #5c4a33;
+  border-radius: 6px;
+  padding: 10px;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 140px;
+  backdrop-filter: blur(8px);
+}
+
+.room-menu .room-option {
+  font-size: 12px;
+  color: #c2a57a;
+  padding: 6px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: border-color 0.1s;
+}
+
+.room-menu .room-option:hover {
+  border-color: #8b6914;
+  background: rgba(40, 28, 10, 0.7);
+}
+
+.room-menu .room-option.disabled {
+  color: #5c4a33;
+  cursor: not-allowed;
+}
+
+/* --- Bura telegraph trake (gornja i donja ivica ekrana) --- */
+.storm-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #c8a45a, transparent);
+  z-index: 18;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.storm-bar.top    { top: 0; }
+.storm-bar.bottom { bottom: 0; }
+
+.storm-bar.active { opacity: 1; animation: storm-bar-pulse 0.5s ease-in-out infinite; }

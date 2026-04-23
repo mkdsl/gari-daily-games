@@ -1,17 +1,137 @@
-/* Pera: dodaj particle animacije, screen shake, damage flash ovde */
+/* game.css — Screen shake animacija, particle CSS, room vizuali, kristal glow */
 
+/* --- Screen shake --- */
 @keyframes shake {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(-2px, 1px); }
-  50% { transform: translate(2px, -1px); }
-  75% { transform: translate(-1px, 2px); }
+  0%,  100% { transform: translate(0, 0) rotate(0deg); }
+  20%        { transform: translate(-3px, 2px) rotate(-0.3deg); }
+  40%        { transform: translate(3px, -1px) rotate(0.2deg); }
+  60%        { transform: translate(-2px, 3px) rotate(-0.1deg); }
+  80%        { transform: translate(2px, -2px) rotate(0.3deg); }
 }
 
-.shake { animation: shake 0.3s ease-in-out; }
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+.shake {
+  animation: shake 0.35s ease-in-out;
 }
 
-.pulse { animation: pulse 1.2s ease-in-out infinite; }
+/* Jača verzija za direktan bura udar */
+@keyframes shake-hard {
+  0%,  100% { transform: translate(0, 0); }
+  15%        { transform: translate(-6px, 4px); }
+  30%        { transform: translate(6px, -3px); }
+  45%        { transform: translate(-4px, 5px); }
+  60%        { transform: translate(5px, -4px); }
+  75%        { transform: translate(-3px, 3px); }
+}
+
+.shake-hard {
+  animation: shake-hard 0.5s ease-in-out;
+}
+
+/* --- Kristal glow pulsiranje --- */
+@keyframes crystal-glow {
+  0%,  100% { box-shadow: 0 0 8px  2px rgba(0, 255, 221, 0.4); }
+  50%        { box-shadow: 0 0 20px 6px rgba(0, 255, 221, 0.8); }
+}
+
+.crystal-glow {
+  animation: crystal-glow 1.8s ease-in-out infinite;
+}
+
+/* --- Bura telegraph pulsiranje --- */
+@keyframes storm-pulse {
+  0%,  100% { opacity: 1; }
+  50%        { opacity: 0.4; }
+}
+
+@keyframes storm-bar-pulse {
+  0%,  100% { opacity: 1;   height: 4px; }
+  50%        { opacity: 0.6; height: 6px; }
+}
+
+/* --- Resource pickup flash --- */
+@keyframes pickup-flash {
+  0%   { opacity: 1; transform: translateY(0)   scale(1); }
+  100% { opacity: 0; transform: translateY(-24px) scale(0.8); }
+}
+
+.pickup-label {
+  position: absolute;
+  pointer-events: none;
+  font-size: 11px;
+  font-weight: bold;
+  animation: pickup-flash 0.8s ease-out forwards;
+  z-index: 12;
+}
+
+.pickup-label.food    { color: #d4a832; }
+.pickup-label.mineral { color: #7eb8c9; }
+
+/* --- Room vizuali (CSS ikone iznad ćelija ako koristimo DOM overlay) --- */
+.room-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  pointer-events: none;
+  border-radius: 2px;
+  border: 1px solid rgba(200, 180, 130, 0.2);
+}
+
+.room-icon.MAGACIN  { background: rgba(139, 105, 20,  0.6); }
+.room-icon.LEGLO    { background: rgba(90,  62,  40,  0.6); }
+.room-icon.ZID      { background: rgba(96,  112, 128, 0.6); }
+.room-icon.LAB      { background: rgba(46,  74,  92,  0.6); }
+
+/* --- Worker dot (CSS particle ako ne koristimo canvas za sitne efekte) --- */
+@keyframes worker-march {
+  0%   { transform: translateX(0); }
+  50%  { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.worker-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ff9933;
+  pointer-events: none;
+  animation: worker-march 0.4s linear infinite;
+}
+
+/* --- Sand dust overlay (CSS verzija, canvas je primarna) --- */
+@keyframes sand-drift {
+  from { transform: translateX(-10%) skewX(-5deg); opacity: 0; }
+  50%  { opacity: 0.3; }
+  to   { transform: translateX(110%) skewX(-5deg); opacity: 0; }
+}
+
+.sand-particle {
+  position: fixed;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c8a45a, transparent);
+  pointer-events: none;
+  animation: sand-drift linear infinite;
+  z-index: 16;
+}
+
+/* --- Dig animation flash --- */
+@keyframes dig-flash {
+  0%   { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+.dig-flash {
+  position: absolute;
+  background: rgba(200, 164, 90, 0.5);
+  border-radius: 2px;
+  pointer-events: none;
+  animation: dig-flash 0.3s ease-out forwards;
+}
+
+/* --- Smooth-scroll za grid panning --- */
+.panning {
+  cursor: grabbing !important;
+}
