@@ -22,9 +22,9 @@
     "styles/game.css": "Screen shake animacija, particle CSS, room vizuali, kristal glow"
   },
   "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+    "total_js": 2025,
+    "total_css": 363
   },
-  "beta_score": null,
-  "status": "in_progress"
+  "beta_score": 5,
+  "status": "released"
 }

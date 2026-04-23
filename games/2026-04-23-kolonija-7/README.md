@@ -1,27 +1,38 @@
-# Standard Game Template
+# Kolonija 7
 
-Ova skela je startna tačka svake dnevne igre. Jova (dev) kopira ovaj folder, preimenuje ga u `games/YYYY-MM-DD-naziv-igre/`, pa popunjava modul po modul.
+**Žanr:** Simulation / Idle — ant colony resource management
 
-## Šta radi van kutije
+**Datum:** 2026-04-23
 
-- ES6 moduli (import/export)
-- responsive full-screen canvas
-- game loop sa delta time
-- save/load u localStorage (ključ `gari-daily-game`, versioned)
-- input handling (kbd + mouse + touch, sa pressed/released detekcijom)
-- HUD + menu overlay sa CSS-om
-- ima mesto za audio, systems, entities, levels
+## Opis
 
-## Šta Jova MORA da uradi
+Poslednja kolonija mrava na planeti pokušava da preživi ispod pustinjske površine. Ti si Kraljica. Kopi tunele, skupljaj hranu i minerale, gradi sobe i preživljavaj peskane bure — sve dok ne pronađeš Drevni Kristal duboko u zemlji.
 
-1. Kopira folder, preimenuje u `games/YYYY-MM-DD-slug/`
-2. Preimenuje `manifest.json.template` u `manifest.json` i popuni vrednosti
-3. Ažurira `index.html` title + meta
-4. Popunjava config konstante iz Miletovog GDD-a
-5. Proširi `state.js` shape po GDD-u
-6. Implementira systems, entities, render po konceptu
-7. Brend-ira UI preko Perinog CSS-a
+## Kako se igra
 
-## Pravilo
+- **Klikni** na ćeliju susednu iskopanome tunelu da je iskoplješ
+- **Klikni na iskopanu ćeliju** da otvoriš meni za gradnju sobe (Leglo, Magacin, Zid)
+- Radnice **automatski skupljaju** resurse — ti odlučuješ gde se kopa i šta se gradi
+- Svakih 90 sekundi dolazi **peskana bura** — Odbrambeni Zid štiti radnice
+- Iskopaj **Drevni Kristal** (dubina 16–19) za prestige — biraš trajni bonus i krećeš ponovo
 
-Ako modul nije potreban za ovaj konkretan žanr igre — **obriši ga**. Manifest.json mora da reflektuje šta STVARNO postoji u folderu.
+## Cilj
+
+3 prestige ciklusa → **"Kolonija Besmrtna"** meta ending
+
+## Tim
+
+- **Sine Scenario** — koncept i narativ
+- **Mile Mehanika** — GDD i ekonomski balans
+- **Jova jQuery** — implementacija (Canvas, Vanilla JS ES6)
+- **Pera Piksel** — CSS animacije i pustinjska estetika
+- **Ceca Čujka** — Web Audio zvuci (drone, dig, bura, kristal)
+- **Nega Negovanović** — premortem analiza
+- **Beta Trio** — QA i bug report
+
+## Tehničke napomene
+
+- Vanilla JS ES6 moduli, bez npm
+- Canvas rendering, responsive
+- LocalStorage save/load
+- Mobile touch + desktop mouse/keyboard
