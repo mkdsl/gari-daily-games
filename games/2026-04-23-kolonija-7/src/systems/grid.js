@@ -245,6 +245,12 @@ export function handleGridInput(state, input) {
   if (canDig(state.grid, col, row)) {
     const found = digCell(state.grid, col, row);
 
+    // Primeni BRZE_KOPANJE prestige bonus (čitamo direktno iz state da izbegnemo circular import)
+    if (state.prestige?.bonuses?.includes('BRZE_KOPANJE')) {
+      found.food     = Math.floor(found.food     * 1.5);
+      found.minerals = Math.floor(found.minerals * 1.5);
+    }
+
     // Dodaj resurse
     state.resources.food += found.food;
     state.resources.minerals += found.minerals;

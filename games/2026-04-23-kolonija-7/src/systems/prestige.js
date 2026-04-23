@@ -44,7 +44,9 @@ export function canPrestige(state) {
  */
 export function doPrestige(state, chosenBonus) {
   // 1. Dodaj bonus i inkrementiraj brojač
-  state.prestige.bonuses.push(chosenBonus);
+  if (chosenBonus !== null && chosenBonus !== undefined) {
+    state.prestige.bonuses.push(chosenBonus);
+  }
   state.prestige.count++;
 
   // 2. Reset grid/resources/workers/rooms/storm/particles

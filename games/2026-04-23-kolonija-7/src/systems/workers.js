@@ -73,10 +73,10 @@ function getMineralRate(state) {
  * @returns {{ workerSpeedMult: number, resourceMult: number }}
  */
 function getPrestigeBonuses(state) {
-  const count = state.prestige?.count ?? 0;
+  const bonuses = state.prestige?.bonuses ?? [];
   return {
-    workerSpeedMult: 1.0 + count * 0.1,  // +10% brzina po prestige-u
-    resourceMult: 1.0
+    workerSpeedMult: bonuses.includes('BRZE_RADNICE') ? 1.5 : 1.0,
+    resourceMult:    bonuses.includes('VISE_RESURSA') ? 1.2 : 1.0
   };
 }
 

@@ -7,7 +7,7 @@ export const CONFIG = {
   // --- Grid ---
   GRID_COLS: 16,
   GRID_ROWS: 20,
-  CELL_SIZE: 40,           // px, prilagodi u render-u za ekran
+  CELL_SIZE: 32,           // bio 40 — smanjeno da grid stane na 768px ekrane (20×32=640px + 30px HUD = 670px)
 
   // --- Resursi ---
   FOOD_BASE_RATE: 0.5,     // hrane/sec po radnici (base, bez soba)

@@ -32,7 +32,7 @@ export function initInput(canvas) {
 
   const setPointer = (e, down) => {
     const rect = canvas.getBoundingClientRect();
-    const t = e.touches?.[0] ?? e;
+    const t = e.changedTouches?.[0] ?? e.touches?.[0] ?? e;
     pointer.x = (t.clientX - rect.left);
     pointer.y = (t.clientY - rect.top);
     if (down === true)  { pointer.down = true;  _pressedBuffer = true; }
