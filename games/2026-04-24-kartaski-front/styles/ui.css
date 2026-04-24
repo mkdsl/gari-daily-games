@@ -452,6 +452,26 @@
 
 .danger-text { color: #e74c3c !important; }
 
+/* ── Aliases i varijante ──────────────────────────────────────────────────── */
+
+/* btn-restart i btn-victory su isti kao btn-primary ali sa specifičnim veličinom */
+.btn-restart,
+.btn-victory {
+  padding: 12px 28px;
+  font-size: 14px;
+  letter-spacing: 0.8px;
+}
+
+/* gameover-panel i victory-panel — varijante overlay-panel sa color akcentom */
+.gameover-panel {
+  border-color: rgba(231, 76, 60, 0.4);
+}
+
+.victory-panel {
+  border-color: rgba(226, 185, 111, 0.5);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 30px rgba(226,185,111,0.12);
+}
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 380px) {
