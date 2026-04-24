@@ -4,39 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#1a1a2e">
+  <meta name="description" content="Kartaški Front — solo PvE deckbuilder. 4 borbe, permadeath, gradi špil po pobedi.">
   <title>Kartaški Front — Gari Daily Games</title>
+
+  <!-- Stilovi (redosled bitan: base → ui → game animacije) -->
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/ui.css">
   <link rel="stylesheet" href="styles/game.css">
 </head>
 <body>
+
   <div id="game-root">
 
-    <!-- Toolbar: čvor info, energija, kraj runde dugme -->
+    <!-- ── Toolbar: čvor info, energija, deck count, Kraj runde dugme ──── -->
     <div id="toolbar">
-      <span id="node-info">Čvor: 1/4</span>
+      <span id="node-info">Čvor: 0/4</span>
       <span id="energy-info">Energija: 3/3</span>
       <span id="deck-info">Špil: 10 | Odbačeno: 0</span>
-      <button id="btn-end-turn" class="btn-primary">Kraj runde</button>
+      <button id="btn-end-turn" class="btn-primary" disabled>Kraj runde</button>
     </div>
 
-    <!-- Battlefield: Canvas za likove, HP trake, intent -->
+    <!-- ── Battlefield: Canvas za likove, HP trake, intent ikone ─────── -->
     <div id="battlefield-wrap">
       <canvas id="battlefield"></canvas>
     </div>
 
-    <!-- Hand zone: DOM karte -->
+    <!-- ── Hand zone: DOM karte (ubacuju se dinamički iz ui.js) ─────── -->
     <div id="hand-zone">
-      <!-- .card div-ovi ubacuju se dinamički iz ui.js -->
+      <!-- .card div-ovi -->
     </div>
 
-    <!-- Overlay ekrani (reward, map, game over, victory) -->
+    <!-- ── Overlay: reward, map, game over, victory ──────────────────── -->
     <div id="overlay" class="hidden">
-      <!-- Sadržaj se ubacuje dinamički iz ui.js -->
+      <!-- Sadržaj se ubacuje dinamički iz ui.js (showMapScreen, showRewardScreen, itd.) -->
     </div>
 
   </div>
 
+  <!-- Entry point — sve module imports su u main.js -->
   <script type="module" src="src/main.js"></script>
+
 </body>
 </html>

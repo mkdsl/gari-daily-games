@@ -1,6 +1,16 @@
 /**
  * config.js — Sve tuning konstante za Kartaški Front.
  * Svi magic brojevi žive ovde. Implementacioni fajlovi importuju samo CONFIG.
+ *
+ * @typedef {{ id: string, name: string, type: 'attack'|'block'|'effect', cost: number,
+ *             damage?: number, shield?: number, hits?: number, lifesteal?: number,
+ *             effect?: string, value?: number, duration?: number, target?: 'player'|'enemy' }} CardDef
+ *
+ * @typedef {{ type: 'attack'|'block'|'buff', value?: number,
+ *             effectName?: string, effectValue?: number, effectDuration?: number,
+ *             target?: 'player'|'enemy' }} IntentStep
+ *
+ * @typedef {{ id: string, name: string, hp: number, color: string, intentPattern: IntentStep[] }} EnemyDef
  */
 
 export const CONFIG = {
@@ -26,7 +36,7 @@ export const CONFIG = {
     HP_ENEMY:      '#e74c3c',
     SHIELD:        '#3498db',
     TEXT:          '#e5e5e5',
-    TEXT_DIM:      '#888',
+    TEXT_DIM:      '#888888',
     ENEMY_GREMLIN: '#8888aa',
     ENEMY_RATNIK:  '#aa8844',
     ENEMY_CUVAR:   '#44aa88',
@@ -46,7 +56,7 @@ export const CONFIG = {
   },
 
   // ── Starter Deck definicije (10 karata) ────────────────────────────────────
-  // Svaka karta: { id, name, type, cost, ...efekti }
+  /** @type {CardDef[]} */
   STARTER_DECK: [
     { id: 'samar',      name: 'Šamar',      type: 'attack', cost: 1, damage: 6 },
     { id: 'blok',       name: 'Blok',       type: 'block',  cost: 1, shield: 5 },
@@ -61,20 +71,22 @@ export const CONFIG = {
   ],
 
   // ── Reward karte biblioteka ─────────────────────────────────────────────────
+  /** @type {Record<string, CardDef>} */
   REWARD_CARDS: {
-    'dvojni_udar':   { id: 'dvojni_udar',   name: 'Dvojni Udar',   type: 'attack', cost: 2, damage: 7, hits: 2 },
-    'bled':          { id: 'bled',          name: 'Bled',          type: 'effect', cost: 1, effect: 'poison',  value: 2, duration: 3, target: 'enemy' },
-    'regen_touch':   { id: 'regen_touch',   name: 'Regen Touch',   type: 'effect', cost: 1, effect: 'regen',   value: 2, duration: 2, target: 'player' },
+    'dvojni_udar':   { id: 'dvojni_udar',   name: 'Dvojni Udar',   type: 'attack', cost: 2, damage: 7,  hits: 2 },
+    'bled':          { id: 'bled',          name: 'Bled',          type: 'effect', cost: 1, effect: 'poison',           value: 2, duration: 3, target: 'enemy'  },
+    'regen_touch':   { id: 'regen_touch',   name: 'Regen Touch',   type: 'effect', cost: 1, effect: 'regen',            value: 2, duration: 2, target: 'player' },
     'gvozdeni_zid':  { id: 'gvozdeni_zid',  name: 'Gvozdeni Zid',  type: 'block',  cost: 2, shield: 12 },
-    'burn_touch':    { id: 'burn_touch',    name: 'Burn Touch',    type: 'effect', cost: 1, effect: 'burn',    value: 2, duration: 3, target: 'enemy' },
-    'slabost':       { id: 'slabost',       name: 'Slabost',       type: 'effect', cost: 1, effect: 'weak',    value: 0, duration: 2, target: 'enemy' },
+    'burn_touch':    { id: 'burn_touch',    name: 'Burn Touch',    type: 'effect', cost: 1, effect: 'burn',             value: 2, duration: 3, target: 'enemy'  },
+    'slabost':       { id: 'slabost',       name: 'Slabost',       type: 'effect', cost: 1, effect: 'weak',             value: 0, duration: 2, target: 'enemy'  },
     'oluja':         { id: 'oluja',         name: 'Oluja',         type: 'attack', cost: 3, damage: 25 },
     'celicni_oklop': { id: 'celicni_oklop', name: 'Čelični Oklop', type: 'block',  cost: 3, shield: 20 },
-    'lancani_burn':  { id: 'lancani_burn',  name: 'Lančani Burn',  type: 'effect', cost: 2, effect: 'burn',    value: 3, duration: 4, target: 'enemy' },
+    'lancani_burn':  { id: 'lancani_burn',  name: 'Lančani Burn',  type: 'effect', cost: 2, effect: 'burn',             value: 3, duration: 4, target: 'enemy'  },
     'vampirizam':    { id: 'vampirizam',    name: 'Vampirizam',    type: 'attack', cost: 2, damage: 10, lifesteal: 5 },
   },
 
   // ── Reward pool po čvoru (1-indexed) ───────────────────────────────────────
+  // getRewardPool() u progression.js bira 3 random iz ovog lista
   REWARD_POOLS: {
     1: ['bled', 'regen_touch', 'dvojni_udar'],
     2: ['gvozdeni_zid', 'burn_touch', 'slabost', 'dvojni_udar'],
@@ -83,8 +95,7 @@ export const CONFIG = {
   },
 
   // ── Neprijatelji ────────────────────────────────────────────────────────────
-  // intentPattern: niz objekata { type: 'attack'|'block'|'buff', value, effectName?, duration? }
-  // Svaki čvor koristi neprijatelja po indeksu (1→Gremlin, 2→Ratnik, 3→Čuvar, 4→Boss)
+  /** @type {Record<string, EnemyDef>} */
   ENEMIES: {
     gremlin: {
       id: 'gremlin',
@@ -126,18 +137,18 @@ export const CONFIG = {
       color: '#cc3333',
       intentPattern: [
         { type: 'attack', value: 12 },
-        { type: 'attack', value: 8, effectName: 'burn', effectValue: 2, effectDuration: 2, target: 'player' },
+        { type: 'attack', value: 8,  effectName: 'burn', effectValue: 2, effectDuration: 2, target: 'player' },
         { type: 'block',  value: 10 },
-        { type: 'attack', value: 18 }, // finali u rundi 4
+        { type: 'attack', value: 18 }, // finali runda 4
       ],
     },
   },
 
-  // ── Redosled neprijatelja po čvoru ─────────────────────────────────────────
+  // ── Redosled neprijatelja po čvoru (0-indexed, node 1 = indeks 0) ──────────
   NODE_ENEMIES: ['gremlin', 'ratnik', 'cuvar', 'boss'],
 
-  // ── UI dimenzije (relativne) ────────────────────────────────────────────────
-  TOOLBAR_HEIGHT_VH: 10,
+  // ── UI dimenzije (relativne, za CSS layout) ────────────────────────────────
+  TOOLBAR_HEIGHT_VH:    10,
   BATTLEFIELD_HEIGHT_VH: 50,
-  HAND_HEIGHT_VH: 40,
+  HAND_HEIGHT_VH:        40,
 };
