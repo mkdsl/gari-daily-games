@@ -20,9 +20,9 @@
     "styles/game.css": "Animacije: card hover lift, .card-played fadeOut, .damage-number pop-up float, .flash-red/.flash-green screen flash, .intent-pulse"
   },
   "line_counts": {
-    "total_js": 2122,
-    "total_css": 792
+    "total_js": 2166,
+    "total_css": 812
   },
-  "beta_score": null,
-  "status": "in_progress"
+  "beta_score": 6.5,
+  "status": "done"
 }

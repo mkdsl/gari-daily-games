@@ -1,27 +1,40 @@
-# Standard Game Template
+# Kartaški Front
 
-Ova skela je startna tačka svake dnevne igre. Jova (dev) kopira ovaj folder, preimenuje ga u `games/YYYY-MM-DD-naziv-igre/`, pa popunjava modul po modul.
+**Datum:** 2026-04-24 | **Žanr:** Card / Deckbuilder | **Beta:** 6.5/10
 
-## Šta radi van kutije
+Solo PvE deckbuilder inspirisan Slay the Spire. Kreni sa 10-kartnim starter špirom, pobedi 4 protivnika i osvoji novo oružje posle svake borbe. Permadeath — kad padneš, kreće ispočetka.
 
-- ES6 moduli (import/export)
-- responsive full-screen canvas
-- game loop sa delta time
-- save/load u localStorage (ključ `gari-daily-game`, versioned)
-- input handling (kbd + mouse + touch, sa pressed/released detekcijom)
-- HUD + menu overlay sa CSS-om
-- ima mesto za audio, systems, entities, levels
+## Kako se igra
 
-## Šta Jova MORA da uradi
+1. Otvori igru → vidi **Kartu sveta** sa 4 čvora
+2. Klikni na aktivan čvor (zlatni) da pokreneš borbu
+3. U borbi:
+   - Imaš **3 energije** po rundi i **5 karata** u ruci
+   - Klikni kartu da je odigraš (pazi na cenu u uglu)
+   - Klikni **Kraj runde** kad završiš — neprijatelj igra svoj potez
+4. Pobedi protivnika → izberi jednu od 3 nagrade za špil
+5. Preživi sve 4 borbe → POBEDA
 
-1. Kopira folder, preimenuje u `games/YYYY-MM-DD-slug/`
-2. Preimenuje `manifest.json.template` u `manifest.json` i popuni vrednosti
-3. Ažurira `index.html` title + meta
-4. Popunjava config konstante iz Miletovog GDD-a
-5. Proširi `state.js` shape po GDD-u
-6. Implementira systems, entities, render po konceptu
-7. Brend-ira UI preko Perinog CSS-a
+## Protivnici
 
-## Pravilo
+| Čvor | Protivnik | HP | Posebnost |
+|------|-----------|-----|-----------|
+| 1 | Gremlin | 20 | Stalno napada |
+| 2 | Ratnik | 35 | Blokira svaku drugu rundu |
+| 3 | Čuvar | 50 | Primenjuje Weak na igrača |
+| 4 (Boss) | Nekromajer | 70 | Burn + heavy attacks |
 
-Ako modul nije potreban za ovaj konkretan žanr igre — **obriši ga**. Manifest.json mora da reflektuje šta STVARNO postoji u folderu.
+## Tim
+
+- **Sine Scenario** — koncept
+- **Gari** — GDD (Mile timed out), beta report (Beta Trio timed out)
+- **Jova jQuery** — implementacija (JS moduli, combat/deck/progression sistemi)
+- **Pera Piksel** — CSS animacije, paleta, vizuelni dizajn
+
+## Tehničke napomene
+
+- Vanilla JS ES6 moduli, bez frameworka
+- Canvas za battlefield (silhuete, HP trake, intent ikone)
+- DOM `<div>` karte sa event delegation
+- LocalStorage save — nastavlja se posle refresh-a tokom run-a
+- Mobile + desktop (touch + klik)

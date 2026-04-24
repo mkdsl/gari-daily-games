@@ -19,7 +19,7 @@
  */
 
 import { CONFIG } from '../config.js';
-import { addEffect, applyDoT, tickEffects, getEffectValue } from './effects.js';
+import { addEffect, applyDoT, tickEffects, getEffectValue, getEffectDuration } from './effects.js';
 
 // ─── Interni helper-i ────────────────────────────────────────────────────────
 
@@ -63,7 +63,7 @@ export function applyCard(state, card) {
   switch (card.type) {
     case 'attack': {
       // Weak debuff na napadača: napadač nanosi 25% manje
-      const weakMult = getEffectValue(state.player, 'weak') > 0
+      const weakMult = getEffectDuration(state.player, 'weak') > 0
         ? 0.75
         : 1.0;
 
@@ -202,7 +202,7 @@ export function applyEnemyIntent(state) {
   switch (intent.type) {
     case 'attack': {
       // Weak debuff na neprijatelju: 25% manje damage
-      const weakMult = getEffectValue(enemy, 'weak') > 0 ? 0.75 : 1.0;
+      const weakMult = getEffectDuration(enemy, 'weak') > 0 ? 0.75 : 1.0;
       const dmg = Math.floor((intent.value || 0) * weakMult);
       dealDamage(state.player, dmg);
 
