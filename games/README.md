@@ -11,6 +11,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-04-21 | Pulse Runner | Roguelike mini / Rhythm-Reflex | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-04-21-pulse-runner/) |
 | 2026-04-23 | Kolonija 7 | Simulation / Idle | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-04-23-kolonija-7/) |
 | 2026-04-24 | Kartaški Front | Card / Deckbuilder | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-04-24-kartaski-front/) |
+| 2026-04-25 | Graviton | Platformer / Arkada | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-04-25-graviton/) |
 
 ## Statusi
 
