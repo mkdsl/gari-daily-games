@@ -1,0 +1,29 @@
+{
+  "name": "Graviton",
+  "genre": "Platformer / Arkada",
+  "date": "2026-04-25",
+  "description": "Auto-scroll survival: kontroliši gravitaciju jednim pritiskom i izbegavaj prepreke beskonačno dugo.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-04-25-graviton/",
+  "modules": {
+    "src/main.js": "Entry point — inicijalizuje canvas, pokreće requestAnimationFrame loop, wire-uje update/render, periodično save-uje state",
+    "src/config.js": "Sve tuning konstante iz GDD-a: GRAVITY, VELOCITY_MAX, SCROLL_BASE/MAX, G_OVERLOAD, canvas dimenzije, boje, hitbox radijusi",
+    "src/state.js": "Game state shape (gamePhase enum, brod, zones, g_overload_timer, survival_time, speed_level, zone_index), createState/resetState/loadBest/saveBest",
+    "src/input.js": "Keyboard (Space, ArrowUp, ArrowDown) + mouse click + touch tap handlers; emituje flipPressed boolean per frame, konzumira se jednom",
+    "src/render.js": "Canvas rendering: pozadina sa zvezdom/nebulom, pod/plafon sa neon ivicom, brod (pixel-art trokut sa G-overload bojom), prepreke (blokovi/šiljci/buzzsaw), HUD overlay",
+    "src/audio.js": "Web Audio API: flip whoosh (oscillator sweep), G-overload beep (ubrzavajući interval), death chord (minor cluster fadeout 300ms), milestone arpeggio (chiptune)",
+    "src/ui.js": "Start screen (IDLE), end screen (HIGH_SCORE_CHECK) sa CRASHED AT / BEST TIME / zvezda oznakama, RESTART dugme — sve crtano na canvas-u",
+    "src/entities/player.js": "Brod: pozicija, velocity_y, gravity_direction, G-overload timer/ratio, flip logika sa cooldown-om, boja interpolacija, vizuelna rotacija animacija",
+    "src/systems/physics.js": "Scroll update (pomera zone levo), gravity update (velocity_y += gravity * dt, clamp, brod.y += velocity_y * dt), delta time utils",
+    "src/systems/collision.js": "AABB circle-rect za blokove i šiljke, circle-circle za buzzsaw, pod/plafon line check — vraca death trigger boolean",
+    "src/systems/generator.js": "Proceduralni generator zona: 100 zona na startu (3 tutorial + 97 gameplay), šabloni T0–T9, parametarska varijacija, difficulty scaling, CALM_OPEN injekcija",
+    "styles/base.css": "Responsive full-screen canvas layout, body background, touch-action none, font-family",
+    "styles/ui.css": "HUD pozicioniranje (survival time gore-levo, speed level gore-desno), start/end screen overlay stilovi, dugme stilovi",
+    "styles/game.css": "Brod flip rotacija (@keyframes 150ms), G-overload color transition, speed level HUD flash animacija"
+  },
+  "line_counts": {
+    "total_js": 2348,
+    "total_css": 112
+  },
+  "beta_score": 6.5,
+  "status": "released"
+}

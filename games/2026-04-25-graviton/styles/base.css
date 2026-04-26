@@ -1,0 +1,47 @@
+/* base.css — Responsive canvas layout za Graviton */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0D0D2B; /* Odgovara CONFIG.COLORS.BG */
+  color: #E5E5E5;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Centering kontejner — puni viewport */
+#game-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+/* Canvas drži logičkih 800×450, CSS ga skalira uz čuvanje 16:9 aspekta */
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: calc(100vh * 16 / 9);
+  max-height: calc(100vw * 9 / 16);
+  touch-action: none;
+  cursor: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* DOM #hud i #menu se ne koriste — sve je canvas-based */
+#hud, #menu {
+  display: none;
+}

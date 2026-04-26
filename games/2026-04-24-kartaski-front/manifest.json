@@ -1,0 +1,28 @@
+{
+  "name": "Kartaški Front",
+  "genre": "card/deckbuilder",
+  "date": "2026-04-24",
+  "description": "Solo PvE deckbuilder — 4 borbe, permadeath, gradi špil po pobedi",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-04-24-kartaski-front/",
+  "modules": {
+    "src/main.js": "Entry point — inicijalizuje Canvas, wire-uje sve module, pokreće state-machine petlju (turn-based, UI-driven, bez rAF loop-a)",
+    "src/config.js": "Sve konstante: PLAYER_MAX_HP, energija, HAND_SIZE, starter deck definicije, reward karte, neprijatelji sa intent patternima, boje, reward pool po čvoru",
+    "src/state.js": "createState() — kompletan state shape (phase, node, deck/hand/discard, player, enemy, stats); saveState(), loadState(), resetState()",
+    "src/input.js": "Mouse/touch event handleri za karte (.card click), 'Kraj runde' dugme, reward izbor (overlay), game over/victory restart",
+    "src/render.js": "Canvas rendering: battlefield pozadina, neprijatelj silhueta levo, igrač silhueta desno, HP trake, intent ikona (sword/shield/skull), shield i efekt indikatori",
+    "src/ui.js": "DOM menadžment: renderHand() kreira .card div-ove, showRewardScreen(), showGameOver(), showVictory(), showMapScreen(), updateToolbar(), showDamageNumber()",
+    "src/systems/combat.js": "applyCard(state, card) — primeni kartu na state; endPlayerTurn(state); applyEnemyIntent(state) — neprijatelj izvršava intent; checkCombatEnd(state) → 'player_dead'|'enemy_dead'|null",
+    "src/systems/effects.js": "applyDoT(entity, effectType) — tik efekta; applyEndOfTurnEffects(state, whose) — 'player'|'enemy'; addEffect(entity, name, value, duration); getEffectValue(entity, name) → number",
+    "src/systems/deck.js": "drawHand(state) — vuče do 5 karata (refill discard→deck ako prazan); shuffleDeck(deck) — Fisher-Yates in-place; addCardToDeck(state, card); discardHand(state)",
+    "src/systems/progression.js": "nextNode(state) — inkrement node, postavi novog neprijatelja iz CONFIG; getRewardPool(nodeIndex) → array card definicija; calculateScore(state) → hp*10 + dmg/5 + node*50",
+    "styles/base.css": "Layout: #toolbar (10vh), #battlefield-wrap + canvas (50vh), #hand-zone (40vh) — flexbox kolona, dark paleta #1a1a2e, responsive",
+    "styles/ui.css": "Karte: .card, .card-attack, .card-block, .card-effect, .card-disabled; reward overlay; game over/victory overlay; toolbar HUD stilovi; dugmad",
+    "styles/game.css": "Animacije: card hover lift, .card-played fadeOut, .damage-number pop-up float, .flash-red/.flash-green screen flash, .intent-pulse"
+  },
+  "line_counts": {
+    "total_js": 2166,
+    "total_css": 812
+  },
+  "beta_score": 6.5,
+  "status": "done"
+}

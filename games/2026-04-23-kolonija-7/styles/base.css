@@ -1,0 +1,46 @@
+/* base.css — Layout, canvas full-screen, responsive setup */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #1a1208;
+  color: #e8dcc8;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+#game-root {
+  position: fixed;
+  inset: 0;
+}
+
+#game-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* HUD je nad canvasom */
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Overlay menji su iznad svega */
+#menu {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+}

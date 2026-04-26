@@ -1,0 +1,40 @@
+/* game.css — Gameplay animacije za Graviton
+ * Brod flip i G-overload su canvas-based (render.js).
+ * Ovaj fajl pokriva body/root-level efekte koji se triggeruju iz JS-a.
+ */
+
+/* Screen shake pri death — dodaj klasu .death-shake na #game-root */
+@keyframes death-shake {
+  0%   { transform: translate(0,    0)    rotate(0deg);    }
+  20%  { transform: translate(-4px, 2px)  rotate(-0.5deg); }
+  40%  { transform: translate(4px,  -2px) rotate(0.5deg);  }
+  60%  { transform: translate(-3px, 1px)  rotate(-0.3deg); }
+  80%  { transform: translate(3px,  -1px) rotate(0.3deg);  }
+  100% { transform: translate(0,    0)    rotate(0deg);    }
+}
+
+.death-shake {
+  animation: death-shake 300ms ease-out;
+}
+
+/* G-overload puls — dodaj .g-overload-warning na #game-root kad ratio >= 0.75 */
+@keyframes overload-pulse {
+  0%, 100% { box-shadow: none; }
+  50%       { box-shadow: inset 0 0 60px 10px rgba(255, 69, 0, 0.2); }
+}
+
+.g-overload-warning {
+  animation: overload-pulse 400ms ease-in-out infinite;
+}
+
+/* Flip animacija — referenca za FLIP_ANIM_DURATION = 150ms
+ * Stvarna animacija je canvas lerp (render.js), ova je DOM fallback rezerva */
+@keyframes flip-rotate {
+  from { transform: scaleY(1);  }
+  50%  { transform: scaleY(0);  }
+  to   { transform: scaleY(-1); }
+}
+
+.player-flipping {
+  animation: flip-rotate 150ms ease-in-out;
+}

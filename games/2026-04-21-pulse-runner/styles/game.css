@@ -1,0 +1,100 @@
+/*
+ * game.css — Igračke animacije za Pulse Runner.
+ *
+ * Komponente:
+ * - .shake: screen shake na #game-root — triggeruje se JS-om na svaki puls
+ *   (triggerScreenShake() u ui.js). Kratka, brza tresnja (0.25s).
+ * - .pulse-ready: vizuelna indikacija da je input window otvoren
+ *   (opciono — grid ćelije mogu da posvetle tokom input window-a)
+ *
+ * Canvas efekti (puls flash, collectible glow, exit animacija) se crtaju
+ * direktno u render.js — ovde su samo DOM animacije.
+ *
+ * Boje iz concept.md: crvena #e94560, žuta #f5a623, tirkizna #00d4aa
+ */
+
+/* ─── Screen Shake ────────────────────────────────────────────────────────── */
+
+/*
+ * Kratki screen shake na puls event.
+ * Dodaje se na #game-root JS-om i uklanja na animationend.
+ * Amplituda: ±3px — dovoljno da se oseti, ne previše za distraction.
+ */
+@keyframes screen-shake {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-3px, 1px); }
+  40%  { transform: translate(3px, -2px); }
+  60%  { transform: translate(-2px, 3px); }
+  80%  { transform: translate(1px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.shake {
+  animation: screen-shake 0.25s ease-in-out;
+}
+
+/* ─── Player Pulse (fallback CSS za non-canvas render) ────────────────────── */
+
+/*
+ * Pulsiranje igrača na canvas-u se radi u render.js (sin funkcija).
+ * Ova CSS klasa je rezerva ako se ikad prebaci na DOM render.
+ */
+@keyframes player-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.12); opacity: 0.85; }
+}
+
+.player-pulse {
+  animation: player-pulse 1.2s ease-in-out infinite;
+}
+
+/* ─── Exit Glow (fallback CSS) ───────────────────────────────────────────── */
+
+@keyframes exit-glow {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(0, 212, 170, 0.6); }
+  50%       { box-shadow: 0 0 16px 6px rgba(0, 212, 170, 0.9); }
+}
+
+.exit-glow {
+  animation: exit-glow 1s ease-in-out infinite;
+}
+
+/* ─── Collectible Glow (fallback CSS) ────────────────────────────────────── */
+
+@keyframes collectible-glow {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(245, 166, 35, 0.5); }
+  50%       { box-shadow: 0 0 14px 5px rgba(245, 166, 35, 0.85); }
+}
+
+.collectible-glow {
+  animation: collectible-glow 1.5s ease-in-out infinite;
+}
+
+/* ─── Input Window Indikator ─────────────────────────────────────────────── */
+
+/*
+ * Vizuelna indikacija da je input window aktivan.
+ * Može se dodati na canvas wrapper ili HUD element.
+ */
+@keyframes input-window-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+.input-window-active {
+  animation: input-window-pulse 0.3s ease-in-out;
+}
+
+/* ─── Canvas Wrapper Fade-in ─────────────────────────────────────────────── */
+
+/*
+ * Blagi fade-in na startu igre.
+ */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+#game-canvas {
+  animation: fade-in 0.4s ease-in-out;
+}

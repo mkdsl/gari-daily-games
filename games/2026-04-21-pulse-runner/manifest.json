@@ -1,0 +1,25 @@
+{
+  "name": "Pulse Runner",
+  "genre": "roguelike-mini + rhythm-reflex",
+  "date": "2026-04-21",
+  "description": "Električni signal putuje kroz proceduralnu neuronsku mrežu — kreći se samo na kucaj srca.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-04-21-pulse-runner/",
+  "modules": {
+    "src/main.js": "Entry point — wires sve module, pokreće requestAnimationFrame loop, drži ctx i poziva updateSystems/render/updateHUD svaki frame",
+    "src/config.js": "Sve tuning konstante iz GDD: grid dimenzije po nivoima, puls formula, HP pravila, score formula, palete boja, SAVE_KEY",
+    "src/state.js": "Game state shape (grid, playerPos, hp, missCount, level, score, pulsePhase, queuedInput) + save/load samo highScore u localStorage",
+    "src/input.js": "Keyboard (arrow keys + WASD) i touch (swipe detection) — queued input buffer (max 1), novi input overwrite-uje stari",
+    "src/render.js": "Canvas rendering: pozadina, grid ćelije (zidovi/prazno), igrač (crveni kvadrat koji pulsira), collectibles (žuta glow), exit (tirkizna), puls flash overlay",
+    "src/ui.js": "DOM HUD (HP srca, score, level, miss counter), main menu overlay, game over ekran sa depth/score/PB i Restart dugmetom",
+    "src/audio.js": "Web Audio API: puls zvuk (sine 60Hz, kratki attack/decay kao EKG), collectible tone (440→880Hz, 80ms), game over glide (880→110Hz, 600ms), level transition flash zvuk",
+    "src/systems/maze.js": "Proceduralni grid generator: random postavi zidove, BFS solvability validacija (start→exit), do 10 retry-a pa smanji zidove 5% (još 5x), vrati Grid objekat",
+    "src/systems/pulse.js": "Puls timer — akumulira dt, na svakom intervalu emituje pulse event, prati input window (80% intervala), detektuje miss (prošao puls bez input-a), drži missCount",
+    "src/systems/collision.js": "Kretanje igrača kroz grid — proveri da li target ćelija nije zid/van grida, pomeri ili ignoriši; proveri collectible pickup (+1 HP, reset missCount); proveri exit (next level)"
+  },
+  "line_counts": {
+    "total_js": 1604,
+    "total_css": 388
+  },
+  "beta_score": 7,
+  "status": "released"
+}

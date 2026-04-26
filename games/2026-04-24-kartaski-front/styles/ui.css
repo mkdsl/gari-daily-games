@@ -1,0 +1,488 @@
+/* ui.css — Karte, overlay ekrani, toolbar dugmad, HUD stilizacija
+ *
+ * Paleta:
+ *   Karta bg:      #16213e
+ *   Karta border:  #e2b96f (zlatna)
+ *   Attack:        #c0392b (crvena)
+ *   Block:         #2980b9 (plava)
+ *   Effect:        #8e44ad (ljubičasta)
+ */
+
+/* ── Dugmad (generička) ─────────────────────────────────────────────────── */
+
+.btn-primary {
+  padding: 8px 18px;
+  background: transparent;
+  color: #e2b96f;
+  border: 1px solid #e2b96f;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: #e2b96f;
+  color: #0f0f1f;
+  outline: none;
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-primary.btn-disabled,
+.btn-primary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Karte ──────────────────────────────────────────────────────────────── */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 80px;
+  min-width: 72px;
+  height: 110px;
+  padding: 8px 6px 6px;
+  background: #16213e;
+  border: 2px solid #e2b96f;
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-align: center;
+  transition: transform 0.12s, box-shadow 0.12s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 10px 24px rgba(226, 185, 111, 0.25);
+  z-index: 5;
+}
+
+.card:active {
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* Tip-specifične boje gornje ivice */
+.card-attack { border-top-color: #c0392b; }
+.card-block  { border-top-color: #2980b9; }
+.card-effect { border-top-color: #8e44ad; }
+
+/* Cost oznaka (top-right) */
+.card-cost {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #e2b96f;
+  background: rgba(0,0,0,0.5);
+  border-radius: 3px;
+  padding: 1px 4px;
+  line-height: 1.2;
+}
+
+/* Ikona (centar) */
+.card-icon {
+  font-size: 22px;
+  line-height: 1;
+  margin-top: 4px;
+}
+
+.card-attack .card-icon { color: #e74c3c; }
+.card-block  .card-icon { color: #3498db; }
+.card-effect .card-icon { color: #9b59b6; }
+
+/* Naziv */
+.card-name {
+  font-size: 9px;
+  font-weight: bold;
+  color: #e5e5e5;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+  word-break: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+
+/* Opis */
+.card-desc {
+  font-size: 8px;
+  color: #aaa;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+/* Nedovoljno energije */
+.card-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Overlay panel (zajednički kontejner) ────────────────────────────────── */
+
+.overlay-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 560px;
+  width: 100%;
+  padding: 24px 20px;
+  background: rgba(22, 33, 62, 0.96);
+  border: 1px solid rgba(226, 185, 111, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+}
+
+.overlay-title {
+  font-size: clamp(18px, 5vw, 28px);
+  color: #e2b96f;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.overlay-sub {
+  font-size: 13px;
+  color: #aaa;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ── Reward ekran ────────────────────────────────────────────────────────── */
+
+.reward-options {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.reward-card {
+  width: 100px;
+  height: 140px;
+  cursor: pointer;
+  pointer-events: all; /* nije disabled */
+}
+
+.reward-card:hover {
+  transform: translateY(-10px) scale(1.06);
+  box-shadow: 0 14px 30px rgba(226, 185, 111, 0.3);
+}
+
+/* ── Map ekran ───────────────────────────────────────────────────────────── */
+
+.map-path {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.node-connector {
+  color: #e2b96f;
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.map-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 10px;
+  min-width: 80px;
+  background: rgba(15, 15, 31, 0.9);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.map-node:disabled {
+  cursor: not-allowed;
+}
+
+.map-node.node-active {
+  border-color: #e2b96f;
+  color: #e2b96f;
+  box-shadow: 0 0 12px rgba(226, 185, 111, 0.3);
+}
+
+.map-node.node-active:hover {
+  background: rgba(226, 185, 111, 0.1);
+}
+
+.map-node.node-past {
+  border-color: #2d4a2d;
+  color: #5a7a5a;
+  opacity: 0.6;
+}
+
+.map-node.node-future {
+  border-color: #333;
+  color: #555;
+}
+
+.node-label { font-size: 13px; font-weight: bold; }
+.node-hp    { font-size: 10px; opacity: 0.75; }
+.node-num   { font-size: 10px; opacity: 0.55; }
+
+/* ── Game Over overlay ───────────────────────────────────────────────────── */
+
+.overlay-gameover .overlay-title,
+.gameover-title {
+  color: #e74c3c;
+}
+
+/* ── Victory overlay ─────────────────────────────────────────────────────── */
+
+.overlay-victory .overlay-title,
+.victory-title {
+  color: #e2b96f;
+  text-shadow: 0 0 20px rgba(226, 185, 111, 0.6);
+}
+
+/* ── Statistike lista ─────────────────────────────────────────────────────── */
+
+.stats-list {
+  list-style: none;
+  font-size: 13px;
+  color: #ccc;
+  line-height: 2;
+  text-align: center;
+}
+
+.stats-list strong {
+  color: #e2b96f;
+}
+
+/* ── Damage number (floating) — prikazan na <body> ───────────────────────── */
+
+.damage-number {
+  position: fixed;
+  pointer-events: none;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: inherit;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  z-index: 200;
+  transform: translateX(-50%);
+}
+
+/* Animacijska klasa se dodaje JS-om posle force reflow */
+.damage-number-fly {
+  animation: damage-float 0.85s ease-out forwards;
+}
+
+/* ── Node boss tag ────────────────────────────────────────────────────────── */
+
+.node-boss-tag {
+  font-size: 9px;
+  color: #e74c3c;
+  background: rgba(231,76,60,0.15);
+  border: 1px solid rgba(231,76,60,0.4);
+  border-radius: 3px;
+  padding: 1px 4px;
+  letter-spacing: 0.5px;
+}
+
+/* ── Stat grid (game over / victory) ─────────────────────────────────────── */
+
+.stats-grid {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+}
+
+.stat-l { color: #888; }
+.stat-v { color: #e5e5e5; font-weight: bold; }
+.hp-green { color: #27ae60 !important; }
+
+/* ── Score display ────────────────────────────────────────────────────────── */
+
+.score-display {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.score-num {
+  font-size: 40px;
+  font-weight: bold;
+  color: #e2b96f;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 14px;
+  color: #888;
+}
+
+/* ── Icon bages u overlay-u ───────────────────────────────────────────────── */
+
+.reward-trophy,
+.go-icon,
+.victory-icon {
+  font-size: 44px;
+  line-height: 1;
+}
+
+/* ── Game over / Victory specifični naslovi ───────────────────────────────── */
+
+.go-title    { color: #e74c3c !important; font-size: clamp(22px, 6vw, 32px) !important; }
+.go-sub      { color: #aa7766; }
+.victory-title { color: #e2b96f !important; font-size: clamp(22px, 6vw, 32px) !important; }
+.victory-sub   { color: #b8a870; }
+
+/* ── Reward panel varijanta ───────────────────────────────────────────────── */
+
+.reward-panel  { max-width: min(520px, 96vw); }
+.reward-row    { display: flex; flex-direction: row; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+/* ── Map panel specifično ─────────────────────────────────────────────────── */
+
+.map-panel     { max-width: min(580px, 96vw); }
+.map-hp-hint   { font-size: 12px; color: #666; text-align: center; }
+
+/* ── Boss stilovi na map ekranu ───────────────────────────────────────────── */
+
+.boss-title    { color: #e74c3c !important; text-shadow: 0 0 20px rgba(231,76,60,0.3); }
+.boss-warning  { font-size: 12px; color: #e74c3c; text-align: center; }
+
+/* ── Intent preview na map ekranu ─────────────────────────────────────────── */
+
+.intent-preview {
+  width: 100%;
+  max-width: 280px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.intent-preview-label {
+  font-size: 10px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+}
+
+.intent-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.intent-row:last-child { border-bottom: none; }
+
+.intent-round { color: #555; font-size: 10px; min-width: 18px; }
+.intent-icon  { font-size: 14px; }
+.intent-info  { color: #aaa; }
+
+/* ── Player status na map ekranu ─────────────────────────────────────────── */
+
+.player-status {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #888;
+}
+
+.player-status strong {
+  color: #e5e5e5;
+}
+
+/* ── Btn inactive ─────────────────────────────────────────────────────────── */
+
+.btn-inactive {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+/* ── btn-battle ───────────────────────────────────────────────────────────── */
+
+.btn-battle {
+  font-size: 15px;
+  padding: 12px 28px;
+  letter-spacing: 1px;
+  background: #e2b96f;
+  color: #0f0f1e;
+  border: none;
+}
+
+.btn-battle:hover {
+  background: #f0cc8a;
+}
+
+/* ── Danger text ──────────────────────────────────────────────────────────── */
+
+.danger-text { color: #e74c3c !important; }
+
+/* ── Aliases i varijante ──────────────────────────────────────────────────── */
+
+/* btn-restart i btn-victory su isti kao btn-primary ali sa specifičnim veličinom */
+.btn-restart,
+.btn-victory {
+  padding: 12px 28px;
+  font-size: 14px;
+  letter-spacing: 0.8px;
+}
+
+/* gameover-panel i victory-panel — varijante overlay-panel sa color akcentom */
+.gameover-panel {
+  border-color: rgba(231, 76, 60, 0.4);
+}
+
+.victory-panel {
+  border-color: rgba(226, 185, 111, 0.5);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 30px rgba(226,185,111,0.12);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 380px) {
+  .card { width: 68px; height: 96px; padding: 6px 4px 4px; }
+  .card-icon { font-size: 18px; }
+  .card-name { font-size: 8px; }
+}
+
+@media (min-width: 600px) {
+  .card       { width: 90px; height: 124px; }
+  .card-icon  { font-size: 26px; }
+  .card-name  { font-size: 10px; }
+  .card-cost  { font-size: 12px; }
+}
