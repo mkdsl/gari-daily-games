@@ -1,0 +1,29 @@
+{
+  "name": "Rovovi i Ruševine",
+  "genre": "Strategy mini / turn-based grid",
+  "date": "2026-04-26",
+  "description": "Taktička igra na ratnoj mreži — probij 3 linije rovova sa odredom vojnika, 20 poteza, WWI 1917.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-04-26-rovovi-i-rusevine/",
+  "modules": {
+    "src/main.js": "Bootstrap, input loop, turn dispatch, game states (MENU/PLAYING/ANIMATING/GAMEOVER)",
+    "src/config.js": "Grid dims, unit stats, ammo costs, scoring thresholds, colors",
+    "src/state.js": "Game state shape, createState, save/load localStorage",
+    "src/input.js": "Mouse/touch cell selection, action toolbar clicks",
+    "src/render.js": "Canvas: grid, units, animations, highlights",
+    "src/ui.js": "DOM HUD (ammo, turn count, unit HP), score screen, action toolbar",
+    "src/entities/player.js": "Player unit factory and logic",
+    "src/entities/enemy.js": "Enemy unit factory",
+    "src/systems/grid.js": "Grid matrix state, cell helpers, line-clear check",
+    "src/systems/ai.js": "Deterministic FSM: HOLD/RETREAT/ATTACK/REINFORCE/ARTILLERY",
+    "src/systems/turn.js": "Turn resolution pipeline (10 phases), animation event generation",
+    "styles/base.css": "Layout, full-screen canvas, responsive",
+    "styles/ui.css": "HUD, toolbar, score screen, buttons",
+    "styles/game.css": "Highlight animations, flash effects"
+  },
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "status": "in_progress"
+}
