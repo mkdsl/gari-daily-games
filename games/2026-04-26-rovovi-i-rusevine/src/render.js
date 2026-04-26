@@ -20,7 +20,7 @@ export function render(ctx, state, animState) {
   const gridW = cellSize * cols;
   const gridH = cellSize * rows;
   const offsetX = Math.floor((w - gridW) / 2);
-  const offsetY = isMobile ? Math.floor(h * 0.05) : Math.floor((h - gridH) / 2 - 20);
+  const offsetY = isMobile ? Math.floor(h * 0.05) : Math.max(40, Math.floor((h - gridH) / 2 - 20));
 
   _layout = { cols, rows, cellSize, offsetX, offsetY };
   setGridLayout(offsetX, offsetY, cellSize);

@@ -138,6 +138,11 @@ function getUnitAtCell(x, y) {
 }
 
 function queueAction(action) {
+  const existing = state.pendingActions.find(a => a.unitId === action.unitId);
+  if (existing) {
+    if (existing.type === 'SHOOT') state.ammo += CONFIG.AMMO_SHOOT;
+    else if (existing.type === 'SMOKE') state.ammo += CONFIG.AMMO_SMOKE;
+  }
   state.pendingActions = state.pendingActions.filter(a => a.unitId !== action.unitId);
   state.pendingActions.push(action);
 }

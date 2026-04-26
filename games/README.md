@@ -12,6 +12,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-04-23 | Kolonija 7 | Simulation / Idle | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-04-23-kolonija-7/) |
 | 2026-04-24 | Kartaški Front | Card / Deckbuilder | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-04-24-kartaski-front/) |
 | 2026-04-25 | Graviton | Platformer / Arkada | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-04-25-graviton/) |
+| 2026-04-26 | Rovovi i Ruševine | Strategy mini / turn-based grid | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-04-26-rovovi-i-rusevine/) |
 
 ## Statusi
 

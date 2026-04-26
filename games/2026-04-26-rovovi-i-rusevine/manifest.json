@@ -21,9 +21,9 @@
     "styles/game.css": "Highlight animations, flash effects"
   },
   "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+    "total_js": 1328,
+    "total_css": 221
   },
-  "beta_score": null,
-  "status": "in_progress"
+  "beta_score": 6,
+  "status": "released"
 }

@@ -22,7 +22,7 @@ export function spawnLineEnemies(grid, lineIndex, startId) {
     // Line 3: 2 riflemen + 1 officer + 1 artillery
     [2, 8].forEach(x => units.push(makeEnemy(id++, 'RIFLEMAN', x, lineY, grid)));
     units.push(makeEnemy(id++, 'OFFICER', 5, lineY, grid));
-    units.push(makeEnemy(id++, 'ARTILLERY', 10, lineY, grid));
+    units.push(makeEnemy(id++, 'ARTILLERY', 8, lineY, grid));
   }
   return units;
 }
