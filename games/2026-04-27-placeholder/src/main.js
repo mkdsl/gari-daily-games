@@ -64,6 +64,7 @@ initInput(canvas, (lane) => {
     transitionToNextSong();
   } else if (state.gamePhase === 'game_over') {
     restartGame();
+    startGame();
   }
 });
 
@@ -165,8 +166,9 @@ function handlePrestige() {
  * @returns {void}
  */
 function restartGame() {
-  // TODO: implementirati
-  // Object.assign(state, createState())
+  stopBassLoop();
+  stopArpeggio();
+  Object.assign(state, createState());
 }
 
 // ─── Game loop ────────────────────────────────────────────────────────────────
@@ -190,6 +192,13 @@ function gameLoop(now) {
     const song = getSong(state.currentClub, state.currentNight, state.currentSong);
     if (song) {
       updateSystems(state, audioCtx, song, pendingHits);
+      // End-of-song check: all beats scheduled and none active
+      const songElapsed = audioCtx.currentTime - state.songStartTime;
+      const allScheduled = songElapsed > song.duration;
+      const noneActive = state.activeBeats.every(b => b.state !== 'active');
+      if (allScheduled && noneActive && state.gamePhase === 'playing') {
+        transitionToNextSong();
+      }
     }
     pendingHits.length = 0;
   }
