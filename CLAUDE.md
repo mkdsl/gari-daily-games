@@ -157,8 +157,24 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 **Output:** Ažurirani fajlovi + `docs/fix_log.md` (šta je popravljeno)
 **Pravilo:** Rešava SAMO TOP 3 kritična buga. "Nice to have" se ignoriše — sutra je nov dan.
 
+**fix_log.md format (obavezan):** Svaki bug mora imati severity tag u naslovu:
+```
+## Bug 1 — CRITICAL: [naziv]   ← game-breaking, core mechanic, mobile neigrivost
+## Bug 2 — MEDIUM: [naziv]     ← UX problem, vizuelna greška, zaobilazno
+## Bug 3 — LOW: [naziv]        ← sitnica, ne utiče na igrivost
+```
+Bez severity taga — post_fix_score se ne može izračunati automatski.
+
 ### KORAK 7 — FINALE (Gari direktno)
 - Ažuriraj `manifest.json` sa line counts, beta_score, status: "released"
+- Ako `docs/fix_log.md` postoji i nije prazan — izračunaj i dodaj `post_fix_score`:
+  ```
+  CRITICAL_count = broj bugova sa tagom "CRITICAL" u fix_log.md
+  MEDIUM_count   = broj bugova sa tagom "MEDIUM" u fix_log.md
+  post_fix_score = beta_score + (CRITICAL_count × 1.0) + (MEDIUM_count × 0.5)
+  post_fix_score = min(post_fix_score, 9.0)
+  ```
+  Dodati u manifest.json: `"post_fix_score": X.X` (odmah posle beta_score)
 - Napiši `games/YYYY-MM-DD-naziv/README.md` (kratak opis + kako se igra + tim)
 - Dodaj red u `games/README.md` index
 - `git add games/YYYY-MM-DD-naziv/ games/README.md`
