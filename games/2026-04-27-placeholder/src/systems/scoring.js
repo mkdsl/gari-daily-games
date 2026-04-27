@@ -96,10 +96,31 @@ export function processHit(state, lane, audioNow) {
  * @returns {void}
  */
 function _applyScoring(state, result) {
-  // TODO: implementirati
-  // PERFECT: score += SCORE_PERFECT * multiplier; combo++
-  // GOOD:    score += SCORE_GOOD    * multiplier; combo++
-  // MISS:    combo = 0; multiplier = 1; nightSummary.missCount++
-  // multiplier = Math.min(MULTIPLIER_MAX, 1 + Math.floor(combo / COMBO_PER_MULTIPLIER))
-  // nightSummary update
+  if (result === 'PERFECT') {
+    state.score += CONFIG.SCORE_PERFECT * state.multiplier;
+    state.combo++;
+    state.nightSummary.perfectCount++;
+    state.nightSummary.scoreGained += CONFIG.SCORE_PERFECT * state.multiplier;
+  } else if (result === 'GOOD') {
+    state.score += CONFIG.SCORE_GOOD * state.multiplier;
+    state.combo++;
+    state.nightSummary.goodCount++;
+    state.nightSummary.scoreGained += CONFIG.SCORE_GOOD * state.multiplier;
+  } else {
+    state.combo = 0;
+    state.multiplier = 1;
+    state.nightSummary.missCount++;
+    return;
+  }
+
+  // Recompute multiplier after combo increment
+  state.multiplier = Math.min(
+    CONFIG.MULTIPLIER_MAX,
+    1 + Math.floor(state.combo / CONFIG.COMBO_PER_MULTIPLIER)
+  );
+
+  // Track max combo
+  if (state.combo > state.nightSummary.maxCombo) {
+    state.nightSummary.maxCombo = state.combo;
+  }
 }

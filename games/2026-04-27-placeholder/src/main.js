@@ -74,10 +74,10 @@ initInput(canvas, (lane) => {
  * @returns {Promise<void>}
  */
 async function startGame() {
-  // TODO: implementirati
-  // await initAudio() — mora iz user gesture
-  // audioCtx = new AudioContext()
-  // startNight()
+  audioCtx = new AudioContext();
+  await initAudio(audioCtx);
+  Object.assign(state, loadState() ?? createState());
+  startNight();
 }
 
 /**
@@ -86,14 +86,13 @@ async function startGame() {
  * @returns {void}
  */
 function startNight() {
-  // TODO: implementirati
-  // state.gamePhase = 'playing'
-  // state.currentSong = 0
-  // state.energy = CONFIG.ENERGY_START
-  // state.activeBeats = []
-  // state.schedulerHead = 0
-  // state.nightSummary = { perfectCount: 0, goodCount: 0, missCount: 0, scoreGained: 0, maxCombo: 0 }
-  // startSong()
+  state.gamePhase = 'playing';
+  state.currentSong = 0;
+  state.energy = CONFIG.ENERGY_START;
+  state.activeBeats = [];
+  state.schedulerHead = 0;
+  state.nightSummary = { perfectCount: 0, goodCount: 0, missCount: 0, scoreGained: 0, maxCombo: 0 };
+  startSong();
 }
 
 /**
@@ -102,12 +101,13 @@ function startNight() {
  * @returns {void}
  */
 function startSong() {
-  // TODO: implementirati
-  // const song = getSong(state.currentClub, state.currentNight, state.currentSong)
-  // state.songStartTime = audioCtx.currentTime + 1.0  // 1s priprema
-  // state.schedulerHead = state.songStartTime
-  // playBassLoop(song.bpm)
-  // playArpeggio(song.bpm)
+  const song = getSong(state.currentClub, state.currentNight, state.currentSong);
+  if (!song) { endNight(); return; }
+  state.songStartTime = audioCtx.currentTime + 1.0;
+  state.schedulerHead = state.songStartTime - CONFIG.BEAT_TRAVEL_TIME;
+  state.activeBeats = [];
+  playBassLoop(audioCtx, song.bpm);
+  playArpeggio(audioCtx, song.bpm);
 }
 
 /**
@@ -115,12 +115,12 @@ function startSong() {
  * @returns {void}
  */
 function endNight() {
-  // TODO: implementirati
-  // stopBassLoop(); stopArpeggio(); playNightEnd()
-  // state.totalNightsPlayed++
-  // state.gamePhase = 'night_summary'
-  // if (state.totalNightsPlayed >= CONFIG.PRESTIGE_AFTER_NIGHTS) handlePrestige()
-  // saveState(state)
+  stopBassLoop();
+  stopArpeggio();
+  playNightEnd(audioCtx);
+  state.totalNightsPlayed++;
+  state.gamePhase = 'night_summary';
+  saveState(state);
 }
 
 /**
@@ -130,17 +130,21 @@ function endNight() {
  * @returns {void}
  */
 function transitionToNextSong() {
-  // TODO: implementirati
-  // state.currentSong++
-  // if (state.currentSong >= CONFIG.SONGS_PER_NIGHT) {
-  //   state.currentNight++
-  //   if (state.currentNight >= CONFIG.NIGHTS_PER_CLUB) {
-  //     state.currentClub++; state.currentNight = 0
-  //   }
-  //   startNight()
-  // } else {
-  //   startSong()
-  // }
+  state.currentSong++;
+  if (state.currentSong >= CONFIG.SONGS_PER_NIGHT) {
+    state.currentNight++;
+    if (state.currentNight >= CONFIG.NIGHTS_PER_CLUB) {
+      state.currentClub = Math.min(state.currentClub + 1, 3);
+      state.currentNight = 0;
+    }
+    if (state.totalNightsPlayed >= CONFIG.PRESTIGE_AFTER_NIGHTS) {
+      handlePrestige();
+    }
+    endNight();
+  } else {
+    startSong();
+    state.gamePhase = 'playing';
+  }
 }
 
 /**
@@ -149,9 +153,11 @@ function transitionToNextSong() {
  * @returns {void}
  */
 function handlePrestige() {
-  // TODO: implementirati
-  // state.prestigeLevel++
-  // state.currentClub = 0; state.currentNight = 0; state.currentSong = 0
+  state.prestigeLevel++;
+  state.currentClub = 0;
+  state.currentNight = 0;
+  state.currentSong = 0;
+  state.totalNightsPlayed = 0;
 }
 
 /**

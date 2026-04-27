@@ -30,29 +30,47 @@ import { CONFIG } from '../config.js';
  * @returns {void}
  */
 export function updateSystems(state, audioCtx, currentSong, pendingHits) {
-  // TODO: implementirati
-  // if (state.gamePhase !== 'playing') return;
-  //
-  // 1. scheduleBeatLookahead(state, audioCtx, currentSong.beats)
-  //
-  // 2. const audioNow = audioCtx.currentTime;
-  //    for (const beat of state.activeBeats) {
-  //      updateBeatProgress(beat, audioNow, CONFIG.BEAT_TRAVEL_TIME);
-  //      if (beat.hitRingAge >= 0) beat.hitRingAge += dt;
-  //    }
-  //
-  // 3. for (const beat of state.activeBeats) {
-  //      if (beat.state === 'active') checkMissed(beat, audioNow, CONFIG.TIMING_GOOD);
-  //    }
-  //    Missovi koji su tek postali 'missed' → applyEnergyDelta(state, 'MISS')
-  //
-  // 4. while (pendingHits.length > 0) {
-  //      const lane = pendingHits.shift();
-  //      const result = processHit(state, lane, audioNow);
-  //      applyEnergyDelta(state, result);
-  //    }
-  //
-  // 5. checkGameOver(state)
-  //
-  // 6. pruneDeadBeats(state)
+  if (state.gamePhase !== 'playing') return;
+
+  const audioNow = audioCtx.currentTime;
+
+  // 1. Schedule new beats from lookahead window
+  scheduleBeatLookahead(state, audioCtx, currentSong.beats);
+
+  // 2. Update visual progress and hit ring age for all beats
+  for (const beat of state.activeBeats) {
+    updateBeatProgress(beat, audioNow, CONFIG.BEAT_TRAVEL_TIME);
+    if (beat.hitRingAge >= 0) {
+      beat.hitRingAge += 0.016; // ~60fps delta approximation
+    }
+  }
+
+  // 3. Check for misses (beats that passed timing window without being hit)
+  const newMisses = [];
+  for (const beat of state.activeBeats) {
+    if (beat.state === 'active') {
+      const wasMissed = checkMissed(beat, audioNow, CONFIG.TIMING_GOOD);
+      if (wasMissed) newMisses.push(beat);
+    }
+  }
+
+  // 4. Process player-input hits
+  while (pendingHits.length > 0) {
+    const lane = pendingHits.shift();
+    const result = processHit(state, lane, audioNow);
+    state.lastHitResult = result;
+    state.lastHitTime = performance.now();
+    applyEnergyDelta(state, result);
+  }
+
+  // 5. Apply energy penalty for auto-misses
+  for (const _ of newMisses) {
+    applyEnergyDelta(state, 'MISS');
+  }
+
+  // 6. Check game over
+  checkGameOver(state);
+
+  // 7. Remove dead beats from active list
+  pruneDeadBeats(state);
 }

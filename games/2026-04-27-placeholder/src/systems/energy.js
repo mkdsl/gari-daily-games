@@ -21,11 +21,10 @@ import { CONFIG } from '../config.js';
  * @returns {void}
  */
 export function applyEnergyDelta(state, result) {
-  // TODO: implementirati
-  // const delta = result === 'PERFECT' ? CONFIG.ENERGY_DELTA_PERFECT
-  //             : result === 'GOOD'    ? CONFIG.ENERGY_DELTA_GOOD
-  //             :                        CONFIG.ENERGY_DELTA_MISS;
-  // state.energy = Math.max(0, Math.min(CONFIG.ENERGY_MAX, state.energy + delta));
+  const delta = result === 'PERFECT' ? CONFIG.ENERGY_DELTA_PERFECT
+              : result === 'GOOD'    ? CONFIG.ENERGY_DELTA_GOOD
+              :                        CONFIG.ENERGY_DELTA_MISS;
+  state.energy = Math.max(0, Math.min(CONFIG.ENERGY_MAX, state.energy + delta));
 }
 
 /**
@@ -36,11 +35,10 @@ export function applyEnergyDelta(state, result) {
  * @returns {boolean} true ako je game over upravo nastao
  */
 export function checkGameOver(state) {
-  // TODO: implementirati
-  // if (state.energy <= 0 && state.gamePhase === 'playing') {
-  //   state.gamePhase = 'game_over';
-  //   return true;
-  // }
+  if (state.energy <= 0 && state.gamePhase === 'playing') {
+    state.gamePhase = 'game_over';
+    return true;
+  }
   return false;
 }
 
@@ -51,6 +49,5 @@ export function checkGameOver(state) {
  * @returns {void}
  */
 export function resetEnergy(state) {
-  // TODO: implementirati
-  // state.energy = CONFIG.ENERGY_START;
+  state.energy = CONFIG.ENERGY_START;
 }
