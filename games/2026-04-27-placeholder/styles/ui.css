@@ -1,23 +1,36 @@
-#hud {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  right: 16px;
-  display: flex;
-  gap: 16px;
-  z-index: 10;
-  pointer-events: none;
+/* ─── ui.css ─────────────────────────────────────────────────────────────────
+   Stilovi za HTML overlay elemente.
+   Napomena: Sav gameplay HUD se crta direktno na Canvas (render.js / ui.js).
+   Ovo je fallback / HTML sloj za elemente van Canvasa ako se dodaju.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Tipografija ─────────────────────────────────────────────────────────── */
+:root {
+  --color-bg:           #0D0D1A;
+  --color-lane-0:       #E040FB;
+  --color-lane-1:       #00E5FF;
+  --color-lane-2:       #FFD740;
+  --color-text-primary: #FFFFFF;
+  --color-text-dim:     #666688;
+  --color-energy-fill:  #E040FB;
+  --color-energy-bg:    #1A1A33;
+  --font-mono:          ui-monospace, 'SF Mono', Menlo, 'Consolas', monospace;
 }
 
+/* ─── Stat badge (pokriveni HTML prikaz — fallback) ─────────────────────── */
 .stat {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 8px 12px;
+  background: rgba(13, 13, 26, 0.75);
+  border: 1px solid rgba(224, 64, 251, 0.25);
+  padding: 6px 12px;
   border-radius: 4px;
+  font-family: var(--font-mono);
   font-size: 14px;
   letter-spacing: 0.5px;
+  color: var(--color-text-primary);
   backdrop-filter: blur(8px);
 }
 
+/* ─── Menu overlay (HTML fallback — obično nije aktivan) ─────────────────── */
 .menu-overlay {
   position: absolute;
   inset: 0;
@@ -25,31 +38,124 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  background: rgba(10, 10, 15, 0.85);
-  backdrop-filter: blur(12px);
+  gap: 20px;
+  background: rgba(13, 13, 26, 0.9);
+  backdrop-filter: blur(16px);
   z-index: 20;
+  font-family: var(--font-mono);
 }
 
-.menu-overlay.hidden { display: none; }
+.menu-overlay.hidden {
+  display: none;
+}
+
+.menu-overlay h1 {
+  font-size: clamp(28px, 6vw, 56px);
+  color: var(--color-lane-0);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  /* Neon text-shadow efekt */
+  text-shadow:
+    0 0 10px var(--color-lane-0),
+    0 0 30px var(--color-lane-0),
+    0 0 60px var(--color-lane-0);
+}
 
 .menu-overlay h2 {
-  font-size: 48px;
-  color: #ff4d6d;
+  font-size: clamp(18px, 3vw, 28px);
+  color: var(--color-lane-0);
   letter-spacing: 4px;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 8px var(--color-lane-0),
+    0 0 20px var(--color-lane-0);
 }
 
-.menu-overlay button {
-  padding: 12px 24px;
-  background: #ff4d6d;
-  color: #0a0a0f;
-  border: none;
-  border-radius: 4px;
+.menu-overlay p {
   font-size: 16px;
-  font-family: inherit;
-  cursor: pointer;
-  font-weight: bold;
+  color: var(--color-text-dim);
   letter-spacing: 1px;
 }
 
-.menu-overlay button:hover { background: #fff; }
+.menu-overlay button {
+  padding: 12px 32px;
+  background: transparent;
+  color: var(--color-lane-0);
+  border: 2px solid var(--color-lane-0);
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: var(--font-mono);
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 10px var(--color-lane-0),
+    inset 0 0 10px rgba(224, 64, 251, 0.1);
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.menu-overlay button:hover,
+.menu-overlay button:focus {
+  background: var(--color-lane-0);
+  color: var(--color-bg);
+  box-shadow:
+    0 0 20px var(--color-lane-0),
+    0 0 40px var(--color-lane-0);
+}
+
+/* ─── Energy bar (HTML fallback — nije aktivan kad canvas radi sve) ────── */
+.energy-bar-container {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: var(--color-energy-bg);
+  pointer-events: none;
+}
+
+.energy-bar-fill {
+  height: 100%;
+  background: var(--color-energy-fill);
+  box-shadow: 0 0 8px var(--color-energy-fill);
+  transition: width 0.1s linear;
+}
+
+.energy-bar-fill.pulse {
+  animation: energy-pulse 0.4s ease-in-out infinite;
+}
+
+/* ─── Score display (HTML fallback) ─────────────────────────────────────── */
+.score-display {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--color-text-primary);
+  letter-spacing: 2px;
+  pointer-events: none;
+  text-shadow: 0 0 6px rgba(255,255,255,0.4);
+}
+
+/* ─── Combo badge (HTML fallback) ───────────────────────────────────────── */
+.combo-badge {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--color-lane-1);
+  letter-spacing: 1px;
+  pointer-events: none;
+  text-shadow:
+    0 0 10px var(--color-lane-1),
+    0 0 25px var(--color-lane-1);
+}
+
+.combo-badge.max-mult {
+  animation: combo-max-pulse 0.3s ease-in-out infinite alternate;
+}
