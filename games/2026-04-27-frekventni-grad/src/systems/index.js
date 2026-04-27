@@ -60,7 +60,10 @@ export function updateSystems(state, audioCtx, currentSong, pendingHits) {
     const result = processHit(state, lane, audioNow);
     state.lastHitResult = result;
     state.lastHitTime = performance.now();
-    applyEnergyDelta(state, result);
+    // Only reward PERFECT/GOOD — MISS energy penalty comes from auto-misses only
+    if (result !== 'MISS') {
+      applyEnergyDelta(state, result);
+    }
   }
 
   // 5. Apply energy penalty for auto-misses

@@ -76,6 +76,7 @@ initInput(canvas, (lane) => {
  */
 async function startGame() {
   audioCtx = new AudioContext();
+  if (audioCtx.state === 'suspended') await audioCtx.resume();
   await initAudio(audioCtx);
   Object.assign(state, loadState() ?? createState());
   startNight();
@@ -120,6 +121,9 @@ function endNight() {
   stopArpeggio();
   playNightEnd(audioCtx);
   state.totalNightsPlayed++;
+  if (state.totalNightsPlayed >= CONFIG.PRESTIGE_AFTER_NIGHTS) {
+    handlePrestige();
+  }
   state.gamePhase = 'night_summary';
   saveState(state);
 }
@@ -127,7 +131,7 @@ function endNight() {
 /**
  * Prelaz na sledeću pesmu ili završetak noći.
  * Ako je currentSong === SONGS_PER_NIGHT - 1, poziva endNight().
- * Inače prikazuje setlist kartice (TODO) i pokreće sledeću pesmu.
+ * Inače pokreće sledeću pesmu.
  * @returns {void}
  */
 function transitionToNextSong() {
@@ -137,9 +141,6 @@ function transitionToNextSong() {
     if (state.currentNight >= CONFIG.NIGHTS_PER_CLUB) {
       state.currentClub = Math.min(state.currentClub + 1, 3);
       state.currentNight = 0;
-    }
-    if (state.totalNightsPlayed >= CONFIG.PRESTIGE_AFTER_NIGHTS) {
-      handlePrestige();
     }
     endNight();
   } else {

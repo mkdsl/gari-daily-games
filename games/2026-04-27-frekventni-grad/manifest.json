@@ -11,7 +11,7 @@
     "src/input.js": "keydown za A/S/D i Space, touch handlers za 3 horizontalne zone ekrana. Poziva scoring.processHit(lane) na svaki event",
     "src/render.js": "renderFrame(state, ctx, canvas): pozadina, 3 lane-a, timing linija, beat krugovi koji putuju, hit efekti (sonar ring), neon glow",
     "src/ui.js": "renderHUD(state): score, combo×multiplier badge, energy bar. renderMenu, renderNightSummary, renderGameOver, renderSetlistCards",
-    "src/audio.js": "Web Audio API stub: initAudio, playBassLoop(bpm), stopBassLoop, playArpeggio(bpm), stopArpeggio, playHitSound(result), playNightEnd — Ceca popunjava",
+    "src/audio.js": "Web Audio API: initAudio, playBassLoop(bpm) sa lookahead scheduler pattern, stopBassLoop, playArpeggio(bpm) arpeggio loop, stopArpeggio, playHitSound(result) PERFECT/GOOD/MISS zvukovi, playNightEnd crescendo",
     "src/systems/beatScheduler.js": "Schedules beatove iz pattern-a u lookahead prozoru koristeći AudioContext.currentTime. Kreira BeatCircle objekte i dodaje ih u state.activeBeats",
     "src/systems/scoring.js": "processHit(lane, hitTime): poredi sa scheduledTime najbližeg aktivnog beata u toj lani, vraća PERFECT/GOOD/MISS, ažurira score/combo/multiplier/energy",
     "src/systems/energy.js": "updateEnergy(state, result): primenjuje energy deltu po rezultatu, stezanje na [0,100], vraca true ako je game over (energy <= 0)",
@@ -19,9 +19,9 @@
     "src/levels/patterns.js": "Setlist: 4 kluba × 5 noći × 3 pesme. Podrum (klub 0) ima prave beat podatke (110 BPM, ~16 beatova/pesmi). Krov/Metro/Orbita su TODO stubs"
   },
   "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+    "total_js": 2667,
+    "total_css": 378
   },
-  "beta_score": null,
-  "status": "in_progress"
+  "beta_score": 6,
+  "status": "released"
 }
