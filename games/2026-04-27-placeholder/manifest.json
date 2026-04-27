@@ -1,0 +1,27 @@
+{
+  "name": "Frekventni Grad",
+  "genre": "Rhythm/Reflex",
+  "date": "2026-04-27",
+  "description": "DJ ritam igra: tapuj beat krugove, drži combo, preživi noć u neonskom podzemnom klubu.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-04-27-frekventni-grad/",
+  "modules": {
+    "src/main.js": "Entry point: initGame, gameLoop (rAF), handleInput, startNight, endNight, transitionToNextSong — wire-uje sve module",
+    "src/config.js": "Sve tuning konstante: BPM po klubu, timing windows (PERFECT ±40ms / GOOD ±80ms), scoring, neon boje, energy deltasi, combo caps, prestige faktor",
+    "src/state.js": "Game state shape: currentClub, currentNight, currentSong, score, combo, multiplier, energy, activeBeats[], gamePhase. Save/load localStorage key 'frekventni-grad-save'",
+    "src/input.js": "keydown za A/S/D i Space, touch handlers za 3 horizontalne zone ekrana. Poziva scoring.processHit(lane) na svaki event",
+    "src/render.js": "renderFrame(state, ctx, canvas): pozadina, 3 lane-a, timing linija, beat krugovi koji putuju, hit efekti (sonar ring), neon glow",
+    "src/ui.js": "renderHUD(state): score, combo×multiplier badge, energy bar. renderMenu, renderNightSummary, renderGameOver, renderSetlistCards",
+    "src/audio.js": "Web Audio API stub: initAudio, playBassLoop(bpm), stopBassLoop, playArpeggio(bpm), stopArpeggio, playHitSound(result), playNightEnd — Ceca popunjava",
+    "src/systems/beatScheduler.js": "Schedules beatove iz pattern-a u lookahead prozoru koristeći AudioContext.currentTime. Kreira BeatCircle objekte i dodaje ih u state.activeBeats",
+    "src/systems/scoring.js": "processHit(lane, hitTime): poredi sa scheduledTime najbližeg aktivnog beata u toj lani, vraća PERFECT/GOOD/MISS, ažurira score/combo/multiplier/energy",
+    "src/systems/energy.js": "updateEnergy(state, result): primenjuje energy deltu po rezultatu, stezanje na [0,100], vraca true ako je game over (energy <= 0)",
+    "src/entities/beatCircle.js": "BeatCircle entitet: {lane, scheduledTime, state, hitResult, visualProgress}. visualProgress 0→1 gde 1 = timing linija",
+    "src/levels/patterns.js": "Setlist: 4 kluba × 5 noći × 3 pesme. Podrum (klub 0) ima prave beat podatke (110 BPM, ~16 beatova/pesmi). Krov/Metro/Orbita su TODO stubs"
+  },
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "status": "in_progress"
+}

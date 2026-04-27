@@ -1,35 +1,96 @@
-const keys = new Set();
-const pointer = { x: 0, y: 0, down: false, pressed: false, released: false };
-let _pressedBuffer = false;
-let _releasedBuffer = false;
+/**
+ * @file input.js
+ * @description Keyboard (A/S/D + Space) i touch (3 horizontalne zone) input handler.
+ *              Emituje lane hit events ka scoring sistemu.
+ *
+ * Lane mapiranje:
+ *   0 = levo  → tipka A     | touch leva trećina
+ *   1 = centar→ tipka S ili Space | touch centralna trećina
+ *   2 = desno → tipka D     | touch desna trećina
+ *
+ * Koristi: main.js poziva initInput(canvas, onHit) pri startu.
+ *          onHit(lane: number) callback wire-uje ka scoring.processHit.
+ */
 
-export function initInput(canvas) {
-  window.addEventListener('keydown', e => keys.add(e.key.toLowerCase()));
-  window.addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
+import { CONFIG } from './config.js';
 
-  const setPointer = (e, down) => {
-    const rect = canvas.getBoundingClientRect();
-    const t = e.touches?.[0] ?? e;
-    pointer.x = (t.clientX - rect.left);
-    pointer.y = (t.clientY - rect.top);
-    if (down === true) { pointer.down = true; _pressedBuffer = true; }
-    if (down === false) { pointer.down = false; _releasedBuffer = true; }
-  };
+/** @type {((lane: number) => void)|null} */
+let _onHit = null;
 
-  canvas.addEventListener('mousedown', e => setPointer(e, true));
-  canvas.addEventListener('mousemove', e => setPointer(e));
-  canvas.addEventListener('mouseup', e => setPointer(e, false));
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); setPointer(e, true); }, { passive: false });
-  canvas.addEventListener('touchmove', e => { e.preventDefault(); setPointer(e); }, { passive: false });
-  canvas.addEventListener('touchend', e => { setPointer(e, false); });
+/** @type {HTMLCanvasElement|null} */
+let _canvas = null;
+
+/**
+ * Inicijalizuje input handlere.
+ * @param {HTMLCanvasElement} canvas
+ * @param {(lane: number) => void} onHit - callback pri svakom tapnutom lane-u
+ */
+export function initInput(canvas, onHit) {
+  _canvas = canvas;
+  _onHit = onHit;
+  _attachKeyboard();
+  _attachTouch();
 }
 
-export function readInput() {
-  const snapshot = {
-    keys: new Set(keys),
-    pointer: { ...pointer, pressed: _pressedBuffer, released: _releasedBuffer }
-  };
-  _pressedBuffer = false;
-  _releasedBuffer = false;
-  return snapshot;
+/**
+ * Uklanja sve event listenere (koristi pri restart-u).
+ */
+export function destroyInput() {
+  // TODO: implementirati cleanup sa AbortController signalom
+}
+
+// ─── Private ─────────────────────────────────────────────────────────────────
+
+/**
+ * Mapira KeyboardEvent.key na lane index.
+ * @param {string} key - lowercase key string
+ * @returns {number|null} lane 0–2 ili null ako nije relevantan
+ */
+function _keyToLane(key) {
+  const map = { a: 0, s: 1, d: 2, ' ': 1 };
+  return map[key] ?? null;
+}
+
+function _attachKeyboard() {
+  window.addEventListener('keydown', e => {
+    const lane = _keyToLane(e.key.toLowerCase());
+    if (lane !== null) {
+      e.preventDefault();
+      _fireHit(lane);
+    }
+  });
+}
+
+function _attachTouch() {
+  if (!_canvas) return;
+
+  _canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    for (const touch of e.changedTouches) {
+      const lane = _touchToLane(touch);
+      _fireHit(lane);
+    }
+  }, { passive: false });
+}
+
+/**
+ * Pretvara touch koordinatu u lane index na osnovu trećina canvas-a.
+ * @param {Touch} touch
+ * @returns {number} 0 | 1 | 2
+ */
+function _touchToLane(touch) {
+  if (!_canvas) return 1;
+  const rect = _canvas.getBoundingClientRect();
+  const relX = touch.clientX - rect.left;
+  const third = rect.width / CONFIG.LANE_COUNT;
+  const lane = Math.floor(relX / third);
+  return Math.max(0, Math.min(CONFIG.LANE_COUNT - 1, lane));
+}
+
+/**
+ * Poziva onHit callback ako je registrovan.
+ * @param {number} lane
+ */
+function _fireHit(lane) {
+  if (_onHit) _onHit(lane);
 }
