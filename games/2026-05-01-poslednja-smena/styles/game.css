@@ -1,0 +1,165 @@
+/* ─── game.css — canvas ilustracija, terminal estetika, mobile breakpoints ───
+   Poslednja Smena — Pera Piksel
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Canvas ilustracija ──────────────────────────────────────────────────── */
+
+#illustration-canvas {
+  display: block;
+  width: 200px;
+  height: 200px;
+  max-width: 200px;
+  margin: 0 auto 1.25rem;
+  /* Pixel-crisp rendering — važno za ASCII crteže */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  /* Blaga ivica za dubinu */
+  outline: 1px solid rgba(138, 122, 106, 0.2);
+  outline-offset: 2px;
+}
+
+/* ─── Terminal cursor efekat na naslovu ───────────────────────────────────── */
+
+#scene-title::after {
+  content: '_';
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--dim);
+  animation: blink 1.1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ─── Tranzicija između scena (fade) ─────────────────────────────────────── */
+
+/*
+  Klasa .fading se dodaje na #game-root u showTransition().
+  Opacity tranzicija je definisana u base.css (transition: opacity 600ms ease).
+  Ovde dodajemo pointer-events blokadu tokom fada.
+*/
+#game-root.fading {
+  pointer-events: none;
+}
+
+/* ─── Scena ulazna animacija ──────────────────────────────────────────────── */
+
+#scene-container {
+  animation: sceneEnter 0.35s ease both;
+}
+
+@keyframes sceneEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Canvas "scan-lines" efekat (terminal TV osećaj) ────────────────────── */
+
+#illustration-canvas::after {
+  /* ::after ne radi na canvas — koristimo pseudo-element na wrapperu ako postoji,
+     ili ostavljamo samo canvas styling */
+  content: none;
+}
+
+/* ─── Naslov igre (ako se doda u index.html) ──────────────────────────────── */
+
+.game-header {
+  width: 100%;
+  max-width: var(--max-text-width);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.game-header h1 {
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+/* ─── Loading state ───────────────────────────────────────────────────────── */
+
+.loading-indicator {
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-align: center;
+  letter-spacing: 0.1em;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ─── Canvas wrapper za scan-lines (ako se koristi) ──────────────────────── */
+
+.illustration-wrapper {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+/* Scan-lines overlay — blaga CRT tekstura */
+.illustration-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.08) 3px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+}
+
+/* ─── Mobile breakpoints ──────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  #illustration-canvas {
+    width: 160px;
+    height: 160px;
+    max-width: 160px;
+    margin-bottom: 1rem;
+  }
+
+  .game-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .game-header h1 {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+  }
+}
+
+/* ─── Veoma mali ekrani (pod 360px) ───────────────────────────────────────── */
+
+@media (max-width: 360px) {
+  #illustration-canvas {
+    width: 130px;
+    height: 130px;
+    max-width: 130px;
+  }
+}
+
+/* ─── Landscape mobile ────────────────────────────────────────────────────── */
+
+@media (max-height: 500px) and (orientation: landscape) {
+  #illustration-canvas {
+    width: 120px;
+    height: 120px;
+    max-width: 120px;
+    margin-bottom: 0.75rem;
+  }
+}

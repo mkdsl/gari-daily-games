@@ -1,0 +1,116 @@
+/* ─── base.css — layout, tipografija, CSS varijable ──────────────────────────
+   Poslednja Smena — terminal estetika, topla paleta
+   ──────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --bg:           #1a1a2e;
+  --text:         #e8d5b7;
+  --accent-red:   #c0392b;
+  --accent-green: #27ae60;
+  --dim:          #8a7a6a;
+  --font:         "Courier New", Courier, monospace;
+  --max-text-width: 65ch;
+  --transition-ms: 600ms;
+}
+
+/* ─── Reset ───────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+
+html {
+  height: 100%;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100%;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.7;
+  -webkit-tap-highlight-color: transparent;
+  /* topla pozadina: lagana tekstura simulirana radijalnim gradijentom */
+  background-image: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(232, 213, 183, 0.03) 0%,
+    transparent 70%
+  );
+}
+
+/* ─── Game root ───────────────────────────────────────────────────────────── */
+
+#game-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1.5rem 1rem 3rem;
+  /* Tranzicija se primenjuje ovde — fade in/out */
+  transition: opacity var(--transition-ms) ease;
+}
+
+#game-root.fading {
+  opacity: 0;
+}
+
+/* ─── Tipografija ─────────────────────────────────────────────────────────── */
+
+h1, h2, h3 {
+  font-family: var(--font);
+  font-weight: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+p {
+  max-width: var(--max-text-width);
+  line-height: 1.7;
+  margin-bottom: 0.75rem;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── Utilities ───────────────────────────────────────────────────────────── */
+
+.hidden {
+  display: none !important;
+}
+
+/* ─── Scrollbar — terminal stil ───────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dim);
+  border-radius: 0;
+}
+
+/* ─── Mobile: baza ────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  html {
+    font-size: 18px;
+  }
+
+  #game-root {
+    padding: 1rem 0.75rem 2.5rem;
+  }
+}

@@ -1,0 +1,273 @@
+/* ─── ui.css — scene display, opcije, epilog kartica ─────────────────────────
+   Poslednja Smena
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Scene kontejner ─────────────────────────────────────────────────────── */
+
+#scene-container {
+  width: 100%;
+  max-width: var(--max-text-width);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ─── Naslov scene ────────────────────────────────────────────────────────── */
+
+#scene-title {
+  font-family: var(--font);
+  font-size: 0.7rem;
+  font-weight: normal;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(138, 122, 106, 0.3);
+}
+
+/* ─── Tekst scene ─────────────────────────────────────────────────────────── */
+
+#scene-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text);
+  /* Lagani indent za terminal osećaj */
+  padding-left: 0;
+}
+
+#scene-text p {
+  max-width: var(--max-text-width);
+  margin-bottom: 0.75rem;
+}
+
+#scene-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── Lista opcija ────────────────────────────────────────────────────────── */
+
+#options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* ─── Opciono dugme ───────────────────────────────────────────────────────── */
+
+.option-btn {
+  display: block;
+  width: 100%;
+  min-height: 44px;          /* Mobile touch target */
+  padding: 0.65rem 1rem;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: left;
+  border: 1px solid var(--dim);
+  border-radius: 0;
+  cursor: pointer;
+  outline: none;
+  /* Plynulý prechod pri hoveru */
+  transition:
+    border-color 180ms ease,
+    color 180ms ease,
+    background-color 180ms ease;
+
+  /* Lagana indikacija — leva ivica */
+  border-left-width: 3px;
+  border-left-color: transparent;
+}
+
+.option-btn::before {
+  content: '› ';
+  color: var(--dim);
+  transition: color 180ms ease;
+}
+
+/* Hover */
+.option-btn:hover,
+.option-btn:focus-visible {
+  border-color: var(--text);
+  border-left-color: var(--accent-green);
+  color: var(--text);
+  background-color: rgba(232, 213, 183, 0.05);
+  outline: none;
+}
+
+.option-btn:hover::before,
+.option-btn:focus-visible::before {
+  color: var(--accent-green);
+}
+
+/* Active (pritisnut) */
+.option-btn:active {
+  background-color: rgba(232, 213, 183, 0.10);
+}
+
+/* Disabled posle odabira */
+.option-btn.disabled,
+.option-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ─── Epilog kontejner ────────────────────────────────────────────────────── */
+
+#epilog-container {
+  width: 100%;
+  max-width: var(--max-text-width);
+  overflow-y: auto;
+  padding: 0;
+}
+
+/* ─── Epilog kartica ──────────────────────────────────────────────────────── */
+
+.epilog-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 2rem 0 1.5rem;
+  border-top: 2px solid var(--accent-green);
+  animation: fadeInUp 0.5s ease both;
+}
+
+/* ─── Epilog naslov ───────────────────────────────────────────────────────── */
+
+.epilog-title {
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-green);
+  font-weight: normal;
+}
+
+/* ─── Epilog separator ────────────────────────────────────────────────────── */
+
+.epilog-sep {
+  width: 2.5rem;
+  height: 1px;
+  background: var(--dim);
+  opacity: 0.5;
+}
+
+/* ─── Epilog tekst (epitaf) ───────────────────────────────────────────────── */
+
+.epilog-text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text);
+  font-style: italic;
+  max-width: var(--max-text-width);
+}
+
+/* ─── Stat opisi ──────────────────────────────────────────────────────────── */
+
+.epilog-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(138, 122, 106, 0.25);
+}
+
+.epilog-stat-line {
+  font-size: 0.85rem;
+  color: var(--dim);
+  letter-spacing: 0.03em;
+  max-width: var(--max-text-width);
+}
+
+.epilog-stat-line::before {
+  content: '— ';
+}
+
+.epilog-stat-default {
+  font-style: italic;
+}
+
+/* ─── Epilog restart dugme ────────────────────────────────────────────────── */
+
+.epilog-restart-btn {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.65rem 1.25rem;
+  min-height: 44px;
+  background: transparent;
+  color: var(--dim);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  border: 1px solid var(--dim);
+  border-radius: 0;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition:
+    border-color 180ms ease,
+    color 180ms ease;
+  outline: none;
+  align-self: flex-start;
+}
+
+.epilog-restart-btn:hover,
+.epilog-restart-btn:focus-visible {
+  border-color: var(--text);
+  color: var(--text);
+  outline: none;
+}
+
+/* ─── Tranzicije ──────────────────────────────────────────────────────────── */
+
+/* Fade in animacija za epilog karticu */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Audio toggle dugme ──────────────────────────────────────────────────── */
+
+.audio-toggle-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: 1px solid var(--dim);
+  color: var(--dim);
+  font-size: 1rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 100;
+  opacity: 0.6;
+}
+.audio-toggle-btn:hover { opacity: 1; border-color: var(--text); }
+
+/* ─── Mobile adjustments ──────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  #scene-text {
+    font-size: 1rem; /* ostaje 1rem — html font-size je povećan na 18px u base.css */
+  }
+
+  .option-btn {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .epilog-card {
+    padding: 1.5rem 0 1rem;
+    gap: 1rem;
+  }
+
+  .epilog-title {
+    font-size: 1.1rem;
+  }
+}

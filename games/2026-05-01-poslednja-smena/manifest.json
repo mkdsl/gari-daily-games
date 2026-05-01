@@ -1,0 +1,27 @@
+{
+  "name": "Poslednja Smena",
+  "genre": "Text/Narrative",
+  "date": "2026-05-01",
+  "description": "Radnik dobija otkaz dan pre penzije — poslednja smena, sedam susreta, četiri kraja.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-01-poslednja-smena/",
+  "modules": {
+    "src/main.js": "Entry point — inicijalizacija igre, event binding, start scena",
+    "src/config.js": "Konstante: STAT_START=50, STAT_MIN/MAX, ENDING_PRIORITY, boje",
+    "src/state.js": "Game state: stats (ponos/umor/solidarnost/gorčina), currentSceneIndex, history, ending",
+    "src/input.js": "Click/touch handler za opcije dugmad",
+    "src/render.js": "Canvas renderer za ASCII/CSS ilustracije po scenama",
+    "src/ui.js": "DOM rendering: scene tekst, opcije dugmad, epitaf kartica na kraju",
+    "src/levels/scenes.js": "Sav narativni sadržaj: 7 scena + finale, opcije sa efektima na state",
+    "src/systems/narrative.js": "getScene(), applyChoice(), determineEnding(), getEpilog()",
+    "styles/base.css": "Layout, full-screen, responsive tipografija, CSS varijable za boje",
+    "styles/ui.css": "Scena prikaz, opcije dugmad, tranzicije između scena, epitaf kartica",
+    "styles/game.css": "Canvas element, ASCII ilustracije, terminal estetika, mobile breakpoints"
+  },
+  "line_counts": {
+    "total_js": 1435,
+    "total_css": 554
+  },
+  "beta_score": 7.5,
+  "post_fix_score": 9.0,
+  "status": "released"
+}
