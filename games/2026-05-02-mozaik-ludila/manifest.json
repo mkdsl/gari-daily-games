@@ -1,0 +1,29 @@
+{
+  "name": "Mozaik Ludila",
+  "genre": "Puzzle (logic grid + color matching)",
+  "date": "2026-05-02",
+  "description": "Postavljaj oblikovane fragmente pločica na 8×8 rešetku i briši redove, kolone i 2×2 kvadrante iste boje da dostigneš 2500 poena.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-02-mozaik-ludila/",
+  "modules": {
+    "src/main.js": "Bootstrap, requestAnimationFrame petlja, canvas resize sa devicePixelRatio, layout kalkukacija (cellSize, gridOffsetX/Y), state init, save timer",
+    "src/config.js": "Sve tuning konstante — grid dimenzije, TILE_COLORS (5 boja), BG_COLOR, GROUT_COLOR, SCORE_WIN=2500, combo multiplieri, particle parametri, animacioni tajmeri, PHASE_POOLS za weighted shape selection",
+    "src/state.js": "GameState shape (grid 8×8, score, combo, fragmentQueue, particles, animations, stats), save/load/reset u localStorage, saveHighScore/loadHighScore odvojeno",
+    "src/input.js": "Mouse + touch + keyboard handleri, klik-za-selekciju model, ghost hover update, postavljanje fragmenta + match evaluacija + score u jednom handler-u, R=rotacija, Escape=deselect",
+    "src/render.js": "Sve canvas draw pozivi — grid background, popunjene ćelije sa highlight, ghost preview (validna/nevalidna boja), match flash treperanje, fragment zona (aktivan+peek), partikle, HUD progress bar, combo pulse overlay, win/gameover overlay",
+    "src/ui.js": "initUI (skloni legacy DOM), handleRestartClick, isRestartButtonClick helper za overlay dugmad",
+    "src/entities/fragments.js": "SHAPES const sa kompletnim rotacijama za 10 oblika (Single, I2, I3, I4, L, J, T, S, Z, O), pickRandomShape(score) sa weighted pool po fazama, pickRandomColor(), createFragment(), initFragmentQueue(), enqueueNewFragment()",
+    "src/systems/matching.js": "evaluateMatches(grid) — SET logika za redove, kolone i 2×2 kvadrante; matchedSetToArray(), clearMatchedCells(); vraća {matched: Set, perfects: {rows,cols,quads}}",
+    "src/systems/scoring.js": "applyScore(state, matchedCount, perfects, placedTileCount) — placement_bonus + (base_match + perfect_bonuses) × combo_multiplier; combo management; win trigger; getWinProgress()",
+    "src/systems/placement.js": "isValidPlacement(grid, shapeId, rotIndex, row, col), placeFragment() koja muta grid, checkGameOver(grid, activeFragment) O(rotations×64×cells), getFragmentCells() za ghost render",
+    "src/systems/index.js": "Re-eksportuje sve sisteme za lak import; placeholder za buduće sisteme u update petlji",
+    "src/audio.js": "Web Audio API zvučni efekti — placement klik (keramika), match ding akord, combo fanfare, invalid bump, win crescendo; initAudio() aktivira AudioContext na prvi user gesture",
+    "src/particles.js": "spawnParticles(particles, cx, cy, color, count) — generiše čestice sa random uglom+brzinom; drawParticles(ctx, particles) — linear fade opacity",
+    "styles/base.css": "Layout, full-screen canvas, touch-action: none, font-family serif, body background",
+    "styles/ui.css": "HUD dizajn — score bar, combo badge, fragment zona stilovi",
+    "styles/game.css": "Animacione klase — shake, match flash, combo pulse overlay"
+  },
+  "line_counts": { "total_js": 2238, "total_css": 145 },
+  "beta_score": 7.0,
+  "post_fix_score": 8.5,
+  "status": "released"
+}
