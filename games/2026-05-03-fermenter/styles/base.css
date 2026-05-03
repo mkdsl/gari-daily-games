@@ -1,0 +1,266 @@
+/* ═══════════════════════════════════════════════════
+   base.css — Fermenter: Varenički Bunt
+   Layout, tipografija, full-screen container
+   ═══════════════════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #1a0f07;
+  color: #f5f0e8;
+  font-family: ui-monospace, 'SF Mono', 'Courier New', monospace;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Game root ────────────────────────────────────── */
+
+#game-root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Canvas overlay — pune ekrana, ispod HUD-a, pointer-events: none */
+#game-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── HUD (gornja traka) ───────────────────────────── */
+
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* ── Game container (layout ispod canvas-a) ─────── */
+
+#game-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 72px; /* Prostora za HUD */
+  z-index: 10;
+  overflow-y: auto;
+  overflow-x: hidden;
+  pointer-events: none; /* Deca imaju pointer-events vraćen */
+}
+
+/* ── Barrel area ─────────────────────────────────── */
+
+#barrel-area {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  pointer-events: all;
+}
+
+/* Bure — krug, jantarna boja, klikabilan */
+#barrel {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #f0be40, #d4a017 55%, #9a7010 100%);
+  border: 4px solid #c8910e;
+  box-shadow:
+    0 0 24px rgba(212, 160, 23, 0.45),
+    inset 0 4px 16px rgba(255, 255, 255, 0.15),
+    inset 0 -4px 12px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: filter 1s ease;
+  outline: none;
+}
+
+#barrel:hover {
+  box-shadow:
+    0 0 36px rgba(212, 160, 23, 0.65),
+    inset 0 4px 16px rgba(255, 255, 255, 0.2),
+    inset 0 -4px 12px rgba(0, 0, 0, 0.4);
+}
+
+#barrel:focus-visible {
+  outline: 3px solid #f5f0e8;
+  outline-offset: 4px;
+}
+
+/* Emoji na bureu */
+#barrel-label {
+  font-size: 56px;
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* Pena na vrhu bureta */
+#barrel-foam {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 18px;
+  background: rgba(245, 240, 232, 0.55);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+#barrel-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Degradovano bure — zasićenost opada */
+#barrel.degraded {
+  filter: saturate(0.3) brightness(0.7);
+}
+
+/* ── Pressure bar ────────────────────────────────── */
+
+#pressure-container {
+  width: 100%;
+  max-width: 440px;
+  padding: 0 16px;
+  margin-bottom: 12px;
+  pointer-events: none;
+}
+
+#pressure-bar-wrap {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #3a2808;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#pressure-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #a06800, #d4a017 60%, #ffd700);
+  box-shadow: 0 0 8px rgba(212, 160, 23, 0.6);
+  transition: width 0.3s ease;
+  border-radius: 4px 0 0 4px;
+}
+
+#pressure-fill-label {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: rgba(245, 240, 232, 0.7);
+  pointer-events: none;
+  font-family: inherit;
+}
+
+/* ── Mutation badges area ────────────────────────── */
+
+#mutation-badges-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  min-height: 36px;
+  margin-bottom: 8px;
+  pointer-events: all;
+}
+
+/* ── Upgrade panel ───────────────────────────────── */
+
+#upgrade-panel {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(10, 6, 2, 0.75);
+  border: 1px solid #2a1804;
+  border-radius: 6px;
+  padding: 12px;
+  pointer-events: all;
+  flex-shrink: 0;
+  margin-bottom: 80px; /* Prostora za prestiže dugme */
+}
+
+.panel-title {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgba(245, 240, 232, 0.4);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#upgrade-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+
+@media (max-width: 480px) {
+  #barrel {
+    width: 140px;
+    height: 140px;
+  }
+
+  #barrel-label {
+    font-size: 42px;
+  }
+
+  #barrel-foam {
+    top: 6px;
+    height: 14px;
+  }
+
+  #game-container {
+    padding-top: 64px;
+  }
+
+  #upgrade-panel {
+    padding: 8px;
+  }
+}
+
+@media (min-height: 700px) {
+  #barrel {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+/* ── Hidden utility ──────────────────────────────── */
+.hidden { display: none !important; }

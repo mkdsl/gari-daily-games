@@ -1,0 +1,99 @@
+/* ═══════════════════════════════════════════════════
+   game.css — Fermenter: Varenički Bunt
+   Animacije: barrel pulse, pressure pulsiranje,
+   degradacija, slide-in, fade-in, win glow
+   ═══════════════════════════════════════════════════ */
+
+/* ── Barrel pulse (na klik) ──────────────────────── */
+
+@keyframes barrelPulse {
+  0%   { transform: scale(1.0); }
+  40%  { transform: scale(1.04); }
+  100% { transform: scale(1.0); }
+}
+
+#barrel.pulsing-barrel {
+  animation: barrelPulse 0.15s ease-out forwards;
+}
+
+/* ── Pressure bar pulsiranje (kada >= 80%) ───────── */
+
+@keyframes pressurePulse {
+  0%, 100% { opacity: 1.0; box-shadow: 0 0 8px rgba(212, 160, 23, 0.6); }
+  50%       { opacity: 0.7; box-shadow: 0 0 16px rgba(255, 215, 0, 1.0); }
+}
+
+#pressure-bar.pulsing {
+  animation: pressurePulse 800ms ease-in-out infinite;
+}
+
+/* ── Barrel degradacija ──────────────────────────── */
+/* Definisana u base.css:
+   #barrel.degraded { filter: saturate(0.3) brightness(0.7); transition: filter 1s; }
+*/
+
+/* ── Prestiže dugme slide-in animacija ──────────── */
+
+@keyframes slideFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-50% + 40px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Win screen fade-in ──────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1.0); }
+}
+
+/* ── Win title glow pulsiranje ───────────────────── */
+
+@keyframes winGlow {
+  from {
+    text-shadow:
+      0 0 16px rgba(212, 160, 23, 0.7),
+      0 0 32px rgba(212, 160, 23, 0.3);
+  }
+  to {
+    text-shadow:
+      0 0 32px rgba(212, 160, 23, 1.0),
+      0 0 64px rgba(212, 160, 23, 0.5),
+      0 0 96px rgba(255, 215, 0, 0.2);
+  }
+}
+
+/* ── Generalna screen shake klasa (za buduće bug) ─ */
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  20%       { transform: translate(-3px, 1px); }
+  40%       { transform: translate(3px, -2px); }
+  60%       { transform: translate(-2px, 2px); }
+  80%       { transform: translate(2px, -1px); }
+}
+
+.shake {
+  animation: shake 0.3s ease-in-out;
+}
+
+/* ── Legacy pulse (iz template-a, zadržano) ──────── */
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.pulse {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+/* ── Bubble CSS klase (canvas crta bubbles u JS) ─── */
+/* Canvas bubble animacije su implementirane u render.js
+   (bezierPath, arc, stroke — bez CSS klasa).
+   Ova sekcija je placeholder za buduću CSS fallback varijantu. */

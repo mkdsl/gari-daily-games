@@ -1,0 +1,490 @@
+/* ═══════════════════════════════════════════════════
+   ui.css — Fermenter: Varenički Bunt
+   LCD HUD, upgrade panel, prestiže dugme,
+   hexagon badges, mutation modal, win screen
+   ═══════════════════════════════════════════════════ */
+
+/* ── LCD HUD stats ───────────────────────────────── */
+
+.hud-stat {
+  background: #000;
+  border: 1px solid #1a3a0a;
+  border-radius: 3px;
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 70px;
+  backdrop-filter: blur(4px);
+}
+
+.hud-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: rgba(57, 255, 20, 0.55);
+  text-shadow: 0 0 4px rgba(57, 255, 20, 0.4);
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.hud-value {
+  font-size: 13px;
+  font-weight: bold;
+  color: #39ff14;
+  text-shadow:
+    0 0 8px rgba(57, 255, 20, 0.7),
+    0 0 2px rgba(57, 255, 20, 0.9);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-prestige .hud-value {
+  color: #d4a017;
+  text-shadow:
+    0 0 8px rgba(212, 160, 23, 0.7),
+    0 0 2px rgba(212, 160, 23, 0.9);
+}
+
+/* ── Upgrade items ───────────────────────────────── */
+
+.upgrade-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(20, 10, 2, 0.8);
+  border: 1px solid #2a1804;
+  border-radius: 5px;
+  padding: 8px 10px;
+  transition: border-color 0.2s ease;
+}
+
+.upgrade-item:hover {
+  border-color: #4a3010;
+}
+
+.upgrade-maxed {
+  opacity: 0.5;
+}
+
+.upgrade-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.upgrade-name {
+  font-size: 12px;
+  font-weight: bold;
+  color: #f5f0e8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.upgrade-desc {
+  font-size: 10px;
+  color: rgba(245, 240, 232, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.m6-tag {
+  color: #d4a017;
+  font-weight: bold;
+}
+
+.upgrade-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.upgrade-level {
+  font-size: 11px;
+  color: #39ff14;
+  text-shadow: 0 0 6px rgba(57, 255, 20, 0.6);
+  font-variant-numeric: tabular-nums;
+}
+
+.upgrade-max {
+  color: rgba(57, 255, 20, 0.4);
+}
+
+/* Upgrade dugme */
+.upgrade-btn {
+  background: #d4a017;
+  color: #000;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.upgrade-btn:hover:not([disabled]) {
+  background: #f0be40;
+  box-shadow: 0 0 8px rgba(212, 160, 23, 0.6);
+}
+
+.upgrade-btn.disabled,
+.upgrade-btn[disabled] {
+  background: #2a2010;
+  color: rgba(245, 240, 232, 0.25);
+  cursor: not-allowed;
+  opacity: 1;
+  box-shadow: none;
+}
+
+.upgrade-btn.maxed {
+  background: #1a3a0a;
+  color: rgba(57, 255, 20, 0.5);
+  cursor: default;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+/* ── Prestiže dugme ──────────────────────────────── */
+
+#prestige-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  background: transparent;
+  color: #d4a017;
+  border: 2px solid #d4a017;
+  border-radius: 4px;
+  padding: 12px 28px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
+  text-shadow: 0 0 8px rgba(212, 160, 23, 0.6);
+  box-shadow:
+    0 0 16px rgba(212, 160, 23, 0.3),
+    inset 0 0 8px rgba(212, 160, 23, 0.08);
+  animation: slideFromRight 0.3s ease-out forwards;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+#prestige-btn:hover {
+  background: rgba(212, 160, 23, 0.15);
+  box-shadow:
+    0 0 24px rgba(212, 160, 23, 0.5),
+    inset 0 0 12px rgba(212, 160, 23, 0.15);
+}
+
+/* ── Mutation badges (mali, u badges area) ──────── */
+
+.mutation-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  background: #d4a017;
+  color: #000;
+  font-size: 14px;
+  cursor: default;
+  transition: transform 0.15s ease;
+}
+
+.mutation-badge:hover {
+  transform: scale(1.15);
+}
+
+/* ── Mutation modal ──────────────────────────────── */
+
+#mutation-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.modal-inner {
+  width: 100%;
+  max-width: 680px;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 24px;
+  color: #d4a017;
+  letter-spacing: 4px;
+  text-shadow: 0 0 16px rgba(212, 160, 23, 0.6);
+  margin-bottom: 6px;
+}
+
+.modal-subtitle {
+  font-size: 12px;
+  color: rgba(245, 240, 232, 0.5);
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+
+.mutation-cards {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mutation-card {
+  background: rgba(10, 6, 2, 0.95);
+  border: 1px solid #3a2808;
+  border-radius: 8px;
+  padding: 20px 16px;
+  flex: 1;
+  min-width: 160px;
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: default;
+}
+
+.mutation-card:hover {
+  border-color: #d4a017;
+  box-shadow: 0 0 16px rgba(212, 160, 23, 0.2);
+}
+
+/* Veliki hexagon badge u kartici */
+.mutation-badge-large {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  background: #d4a017;
+  color: #000;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.mutation-card-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #f5f0e8;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.mutation-card-desc {
+  font-size: 11px;
+  color: rgba(245, 240, 232, 0.55);
+  text-align: center;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.mutation-select-btn {
+  background: #d4a017;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+}
+
+.mutation-select-btn:hover {
+  background: #f0be40;
+  box-shadow: 0 0 10px rgba(212, 160, 23, 0.5);
+}
+
+/* ── Win screen ──────────────────────────────────── */
+
+#win-screen {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.win-inner {
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+}
+
+.win-title {
+  font-size: 32px;
+  color: #d4a017;
+  letter-spacing: 5px;
+  text-shadow:
+    0 0 24px rgba(212, 160, 23, 0.8),
+    0 0 48px rgba(212, 160, 23, 0.4);
+  margin-bottom: 8px;
+  animation: winGlow 2s ease-in-out infinite alternate;
+}
+
+.win-subtitle {
+  font-size: 13px;
+  color: rgba(245, 240, 232, 0.55);
+  letter-spacing: 2px;
+  margin-bottom: 28px;
+}
+
+.win-stats {
+  background: rgba(10, 6, 2, 0.8);
+  border: 1px solid #2a1804;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.win-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.win-stat-row:last-child { border-bottom: none; }
+
+.win-stat-label {
+  font-size: 12px;
+  color: rgba(245, 240, 232, 0.5);
+  letter-spacing: 1px;
+}
+
+.win-stat-value {
+  font-size: 14px;
+  color: #39ff14;
+  text-shadow: 0 0 6px rgba(57, 255, 20, 0.6);
+  font-variant-numeric: tabular-nums;
+}
+
+.win-mutations {
+  margin-bottom: 24px;
+}
+
+.win-mut-label {
+  font-size: 10px;
+  color: rgba(245, 240, 232, 0.4);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.win-mut-item {
+  font-size: 13px;
+  color: #d4a017;
+  margin-bottom: 4px;
+}
+
+.win-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  background: #d4a017;
+  color: #000;
+  font-size: 11px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.win-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.win-btn {
+  padding: 12px 28px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.win-btn-primary {
+  background: #d4a017;
+  color: #000;
+}
+
+.win-btn-primary:hover {
+  background: #f0be40;
+  box-shadow: 0 0 12px rgba(212, 160, 23, 0.5);
+}
+
+.win-btn-secondary {
+  background: transparent;
+  color: rgba(245, 240, 232, 0.5);
+  border: 1px solid rgba(245, 240, 232, 0.2);
+}
+
+.win-btn-secondary:hover {
+  color: #f5f0e8;
+  border-color: rgba(245, 240, 232, 0.5);
+}
+
+/* ── Responsive modal ────────────────────────────── */
+
+@media (max-width: 480px) {
+  .mutation-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mutation-card {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .modal-title {
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+
+  .win-title {
+    font-size: 22px;
+    letter-spacing: 3px;
+  }
+}

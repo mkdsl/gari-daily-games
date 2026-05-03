@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a0f07">
+  <meta name="description" content="Idle pivarska igra gde svaki prestiže donosi trajnu genetsku mutaciju kvasca koja menja pravila igre.">
+  <title>Fermenter — Varenički Bunt</title>
+
+  <!-- CSS — redosled bitan: base → ui → game -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+</head>
+<body>
+  <div id="game-root">
+    <!-- Canvas overlay za bubble animacije i prestiže particle explosion -->
+    <canvas id="game-canvas"></canvas>
+    <!-- HUD — initUI() iz ui.js gradi innerHTML ovde -->
+    <div id="hud"></div>
+    <!-- Menu overlay — ui.js ga sakriva odmah na init -->
+    <div id="menu" class="menu-overlay"></div>
+  </div>
+
+  <!-- ES6 module entry point — main.js sam importuje sve ostale module -->
+  <!-- main.js ima sopstveni DOMContentLoaded handler — nema potrebe za wrapperom -->
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

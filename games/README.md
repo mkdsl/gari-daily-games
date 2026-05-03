@@ -16,6 +16,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-04-27 | Frekventni Grad | Rhythm/Reflex | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-04-27-frekventni-grad/) |
 | 2026-05-01 | Poslednja Smena | Text/Narrative | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-01-poslednja-smena/) |
 | 2026-05-02 | Mozaik Ludila | Puzzle (logic grid + color matching) | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-02-mozaik-ludila/) |
+| 2026-05-03 | Fermenter — Varenički Bunt | Idle/Incremental | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-03-fermenter/) |
 
 ## Statusi
 

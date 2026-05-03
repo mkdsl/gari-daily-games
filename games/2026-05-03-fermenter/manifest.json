@@ -1,0 +1,29 @@
+{
+  "name": "Fermenter — Varenički Bunt",
+  "genre": "Idle/Incremental",
+  "date": "2026-05-03",
+  "description": "Idle pivarska igra gde svaki prestiže donosi trajnu genetsku mutaciju kvasca koja menja pravila igre.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-03-fermenter/",
+  "modules": {
+    "src/config.js": "Sve tuning konstante — upgrade cene, growth faktori, mutacije pool, prestiže konstante",
+    "src/state.js": "Game state shape, save/load localStorage, prestiže tracking, mutacije lista",
+    "src/main.js": "Game loop (requestAnimationFrame), delta time, tick sistemi, bootstrap",
+    "src/input.js": "Klik na bure handler, upgrade button handlers, touch events",
+    "src/render.js": "Canvas bubble animacije, prestiže particle explosion (40 čestica max), bure puls",
+    "src/ui.js": "HUD update (SJ, FJ/s, pressure bar), upgrade panel, prestiže dugme, mutacija modal, win screen",
+    "src/systems/upgrades.js": "Upgrade kupovina logika, formula rasta cene, apply effect na state",
+    "src/systems/fermentation.js": "Fermentacija tick, pressure akumulacija, degradacija mehanika",
+    "src/systems/prestige.js": "Prestiže trigger, reset state, mutacija random selekcija, win state check",
+    "src/entities/mutations.js": "Pool od 8 mutacija sa efektima, apply mutacija na state",
+    "styles/base.css": "Responsive layout, dark background #1a0f07, full-height container",
+    "styles/ui.css": "LCD HUD stil (zeleni tekst #39ff14), upgrade panel, prestiže dugme, hexagon badges, modal",
+    "styles/game.css": "CSS bubble keyframe animacije (max 8 simultanih), bure puls, pressure bar pulsiranje, saturate degradacija"
+  },
+  "line_counts": {
+    "total_js": 2165,
+    "total_css": 855
+  },
+  "beta_score": 5.5,
+  "post_fix_score": 7.5,
+  "status": "released"
+}
