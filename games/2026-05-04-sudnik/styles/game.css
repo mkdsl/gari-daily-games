@@ -1,0 +1,176 @@
+/* game.css — Animacije karata, phase tranzicije, typewriter, gameover lampa */
+
+/* ── Karta animacija: ulaz ── */
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) rotate(-2deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.card-enter {
+  animation: cardEnter 0.25s ease forwards;
+}
+
+/* Staggered delay za karte u ruci (koristi se inline style ili nth-child) */
+.card:nth-child(1) { animation-delay: 0.00s; }
+.card:nth-child(2) { animation-delay: 0.05s; }
+.card:nth-child(3) { animation-delay: 0.10s; }
+.card:nth-child(4) { animation-delay: 0.15s; }
+.card:nth-child(5) { animation-delay: 0.20s; }
+
+/* ── Karta animacija: odigrana ── */
+
+@keyframes cardPlay {
+  0%   { opacity: 1; transform: scale(1); }
+  50%  { opacity: 0.6; transform: scale(1.1); }
+  100% { opacity: 0; transform: scale(0.8) translateY(-20px); }
+}
+
+.card-played {
+  animation: cardPlay 0.2s ease forwards;
+  pointer-events: none;
+}
+
+/* ── Phase fade tranzicija ── */
+
+@keyframes phaseFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.phase:not(.hidden) {
+  animation: phaseFadeIn 0.3s ease forwards;
+}
+
+/* ── Vaga tranzicija ── */
+
+/* Definiše se inline (width: X%) + CSS transition u ui.css */
+/* Extra: pulse na ekstremnim vrednostima */
+
+@keyframes balancePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(192, 57, 43, 0); }
+}
+
+.balance-track.extreme-guilty {
+  animation: balancePulse 1s ease infinite;
+}
+
+@keyframes balancePulseBlue {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(41, 128, 185, 0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(41, 128, 185, 0); }
+}
+
+.balance-track.extreme-free {
+  animation: balancePulseBlue 1s ease infinite;
+}
+
+/* ── Verdict flash animacija ── */
+
+@keyframes verdictAppear {
+  0%   { opacity: 0; transform: scale(0.5); }
+  60%  { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.verdict-flash span {
+  display: inline-block;
+  animation: verdictAppear 0.4s ease forwards;
+}
+
+/* ── Profil sudnika — typewriter ── */
+
+/* Kursor koji treperi tokom typewriter animacije */
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.typewriter-cursor::after {
+  content: '|';
+  display: inline-block;
+  animation: blink 0.7s step-end infinite;
+  margin-left: 2px;
+  color: #0D0D0D;
+}
+
+/* ── Game Over — lampa se gasi ── */
+
+@keyframes lampOff {
+  0%   {
+    background: #E8E0D0;
+    box-shadow: 0 0 20px 8px rgba(232, 224, 208, 0.6);
+    opacity: 1;
+  }
+  60%  {
+    background: #888;
+    box-shadow: 0 0 6px 2px rgba(136, 136, 136, 0.3);
+    opacity: 0.7;
+  }
+  100% {
+    background: #111;
+    box-shadow: none;
+    opacity: 0.2;
+  }
+}
+
+.gameover-lamp.animating {
+  animation: lampOff var(--lamp-duration, 1.5s) ease forwards;
+}
+
+/* ── Resource delta animacija (reputation faza) ── */
+
+@keyframes deltaPopIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.delta-row {
+  animation: deltaPopIn 0.3s ease forwards;
+}
+
+.delta-row:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+/* ── Presedant karta highlight ── */
+
+@keyframes precedentGlow {
+  0%, 100% { border-color: #6B4C11; }
+  50%       { border-color: #C8960A; }
+}
+
+.precedent-gained {
+  animation: precedentGlow 1.5s ease infinite;
+}
+
+/* ── Screen shake (za game over trigger) ── */
+
+@keyframes screenShake {
+  0%, 100% { transform: translate(0, 0); }
+  20%  { transform: translate(-3px, 1px); }
+  40%  { transform: translate(3px, -1px); }
+  60%  { transform: translate(-2px, 2px); }
+  80%  { transform: translate(2px, -2px); }
+}
+
+.game-shake {
+  animation: screenShake 0.4s ease;
+}
+
+/* ── Hover state za verdict zone (drag feedback) ── */
+
+.verdict-zone.drag-over {
+  border-style: solid;
+  opacity: 1;
+}
+
+.zone-free.drag-over   { background: rgba(41, 128, 185, 0.15); border-color: #2980B9; }
+.zone-guilty.drag-over { background: rgba(139, 0, 0, 0.15);   border-color: #C0392B; }

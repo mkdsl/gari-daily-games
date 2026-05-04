@@ -1,0 +1,28 @@
+{
+  "name": "Sudnik — Tribunal of Cards",
+  "genre": "Card / Deckbuilder + Strategy mini",
+  "date": "2026-05-04",
+  "description": "Distopijski sudija koji gradi deck od sopstvenih presuda i balansira između Mase i Vlasti.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-04-sudnik/",
+  "modules": {
+    "src/main.js": "Flow controller i phase manager: bootstrap, fazni prelazi (draw→play→verdict→reputation→gameover/summary), event dispatching",
+    "src/config.js": "Sve CONFIG konstante iz GDD Appendix-a: TOTAL_CASES, resursi, HAND_SIZE, PRECEDENT_DURATION, animacioni timing-i, WEALTH_MODIFIERS, pragovi vage",
+    "src/state.js": "State shape iz GDD §1: createState, loadState, saveState, resetState; inicijalni starter deck, session/resources/deck/hand/precedents/currentCase/stats",
+    "src/cases.js": "Case generation (§4): pool crimeType/wealth/age atributa, template opisi (intro/suspect/witness), proceduralna generacija, pacing pravila za slučaj 1 i 10",
+    "src/deck.js": "Deck management (§2, §7): starter deck definicija, shuffle, drawCards, discardCards, reshuffle discard pile; odbaci-i-povuci mehanika",
+    "src/precedents.js": "Presedant sistem (§3): PRECEDENT_EFFECTS lista (p01-p15), generatePrecedent po presudi+crimeType, applyPrecedentEffects, tickPrecedents (countdown), modifyCardValue",
+    "src/reputation.js": "Masa/Vlast deltas (§6): VERDICT_DELTAS tabele za KRIV/SLOBODAN po crimeType, wealth modifier primena, game over detekcija, clamp 0-100",
+    "src/profile.js": "Profil sudnika (§8): PROFILE_TEMPLATES niz (25 rečenica), calcStrogostCategory, calcKlasniCategory, calcStarosniCategory, calcRecidivCategory, selectProfileTemplate closest-match algoritam",
+    "src/ui.js": "Sav DOM rendering: renderPhase (switcher), renderHand, renderCase, renderBalance (vaga traka), renderResources (Masa/Vlast trake), renderPrecedents, renderSummary, renderGameOver; event binding na dugmad",
+    "styles/base.css": "Reset, layout, pozadina #0D0D0D, font Georgia/serif, scrollable game-root, responsive container, utility klase",
+    "styles/ui.css": "Vaga (balance bar), karte (card element), dugmad (verdict/discard), resursi (Masa=crvena, Vlast=plava), HUD trake, presedant lista, case opis",
+    "styles/game.css": "Animacije karata (fade-in, slide, play), vaga tranzicija, profil tekst typewriter, game-over lampa gašenje, phase transition fades"
+  },
+  "line_counts": {
+    "total_js": 2081,
+    "total_css": 1007
+  },
+  "beta_score": 7.5,
+  "post_fix_score": 9.0,
+  "status": "released"
+}

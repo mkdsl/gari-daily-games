@@ -1,0 +1,201 @@
+/* base.css — Reset, layout, dark dystopian theme */
+/* Paleta: #0D0D0D pozadina, #E8E0D0 tekst, Georgia/serif font */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: #0D0D0D;
+  color: #E8E0D0;
+  font-family: Georgia, 'Times New Roman', serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+#game-root {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 16px 32px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Utilities ── */
+
+.hidden {
+  display: none !important;
+}
+
+.phase {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+/* ── Typography ── */
+
+h1 {
+  font-size: 1.8rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #E8E0D0;
+}
+
+h2 {
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+h3 {
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #888;
+}
+
+p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #C8C0B0;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 16px 0;
+}
+
+/* ── Buttons ── */
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 2px;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #E8E0D0;
+  color: #0D0D0D;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #888;
+  border: 1px solid #444;
+}
+
+.btn-guilty {
+  background: #8B0000;
+  color: #E8E0D0;
+}
+
+.btn-free {
+  background: #00008B;
+  color: #E8E0D0;
+}
+
+/* ── Panel ── */
+
+.panel-title {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+/* ── Resource row ── */
+
+.resource-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+/* ── Scrollable ── */
+
+@media (max-width: 480px) {
+  #game-root {
+    padding: 0 12px 24px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  /* Karte u ruci: 2-kolona grid na mobilnom */
+  .hand-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  /* Verdict dugmad: puna širina na mobilnom */
+  .verdict-buttons {
+    width: 100%;
+  }
+
+  .verdict-buttons .btn {
+    flex: 1;
+    min-height: 48px;
+  }
+
+  /* Discard dugme: puna širina */
+  .play-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #btn-discard {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Summary akcije vertikalno */
+  .summary-actions {
+    flex-direction: column;
+  }
+
+  .summary-actions .btn {
+    width: 100%;
+    min-height: 48px;
+    text-align: center;
+  }
+}

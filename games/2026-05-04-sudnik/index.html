@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0D0D0D">
+  <title>Sudnik — Tribunal of Cards</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+</head>
+<body>
+  <div id="game-root">
+
+    <!-- HUD — uvek vidljiv tokom igre (sakriven na gameover/summary) -->
+    <header id="hud" class="hidden">
+      <div id="hud-progress" class="hud-item">Slučaj 1/10</div>
+
+      <div class="hud-resource">
+        <span class="hud-label masa-label">MASA</span>
+        <div class="resource-bar-wrap">
+          <div id="hud-masa-bar" class="resource-bar masa-bar" style="width:50%"></div>
+        </div>
+        <span id="hud-masa-value" class="hud-value">50</span>
+      </div>
+
+      <div class="hud-resource">
+        <span class="hud-label vlast-label">VLAST</span>
+        <div class="resource-bar-wrap">
+          <div id="hud-vlast-bar" class="resource-bar vlast-bar" style="width:50%"></div>
+        </div>
+        <span id="hud-vlast-value" class="hud-value">50</span>
+      </div>
+    </header>
+
+    <!-- ── FAZA: draw ── prikazana na početku svakog slučaja -->
+    <section id="phase-draw" class="phase hidden">
+      <div class="case-header">
+        <h2 id="case-crime" class="case-crime"></h2>
+        <div id="case-tags" class="case-tags"></div>
+      </div>
+      <p id="case-description" class="case-description"></p>
+
+      <div id="precedents-draw" class="precedents-panel">
+        <h3 class="panel-title">Aktivni presedanti</h3>
+        <ul id="precedents-list" class="precedents-list"></ul>
+      </div>
+    </section>
+
+    <!-- ── FAZA: play ── igrač igra karte -->
+    <section id="phase-play" class="phase hidden">
+
+      <!-- Vaga -->
+      <div id="balance-widget" class="balance-widget">
+        <div class="balance-label-left">SLOBODAN</div>
+        <div class="balance-track-wrap">
+          <div id="balance-track" class="balance-track">
+            <div id="balance-fill-neg" class="balance-fill balance-fill-neg"></div>
+            <div id="balance-fill-pos" class="balance-fill balance-fill-pos"></div>
+            <div id="balance-center" class="balance-center-mark"></div>
+          </div>
+        </div>
+        <div class="balance-label-right">KRIV</div>
+        <div id="balance-value" class="balance-value">0</div>
+      </div>
+
+      <!-- Zone za odigrane karte -->
+      <div class="verdict-zones">
+        <div id="zone-free" class="verdict-zone zone-free">
+          <div class="zone-label">SLOBODAN</div>
+        </div>
+        <div id="zone-guilty" class="verdict-zone zone-guilty">
+          <div class="zone-label">KRIV</div>
+        </div>
+      </div>
+
+      <!-- Ruka igrača -->
+      <div id="hand-container" class="hand-container"></div>
+
+      <!-- Kontrole -->
+      <div class="play-controls">
+        <button id="btn-discard" class="btn btn-secondary">Odbaci i Povuci</button>
+        <div class="verdict-buttons">
+          <button id="btn-verdict-free"   class="btn btn-free">SLOBODAN</button>
+          <button id="btn-verdict-guilty" class="btn btn-guilty">KRIV</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAZA: verdict ── kratka animacija -->
+    <section id="phase-verdict" class="phase hidden">
+      <div id="verdict-flash" class="verdict-flash">
+        <span id="verdict-text"></span>
+      </div>
+    </section>
+
+    <!-- ── FAZA: reputation ── prikaz promene resursa -->
+    <section id="phase-reputation" class="phase hidden">
+      <div class="reputation-summary">
+        <h2 id="reputation-title" class="reputation-title"></h2>
+        <div id="reputation-deltas" class="reputation-deltas"></div>
+        <div id="precedent-gained" class="precedent-gained hidden"></div>
+        <button id="btn-next-case" class="btn btn-primary">Sledeći slučaj</button>
+      </div>
+    </section>
+
+    <!-- ── FAZA: gameover ── -->
+    <section id="phase-gameover" class="phase hidden">
+      <div class="gameover-content">
+        <div id="gameover-lamp" class="gameover-lamp"></div>
+        <h1 class="gameover-title">SMENJEN SA FUNKCIJE</h1>
+        <p id="gameover-cause" class="gameover-cause"></p>
+
+        <div class="gameover-stats">
+          <p id="gameover-cases"></p>
+          <div class="resource-row">
+            <span>Masa: </span><span id="gameover-masa"></span>
+          </div>
+          <div class="resource-row">
+            <span>Vlast: </span><span id="gameover-vlast"></span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-restart">NOVI SLUČAJ</button>
+      </div>
+    </section>
+
+    <!-- ── FAZA: summary ── Profil sudnika -->
+    <section id="phase-summary" class="phase phase-summary hidden">
+      <div class="summary-content">
+        <h1 class="summary-title">PROFIL SUDNIKA</h1>
+        <blockquote id="summary-profile-text" class="summary-quote"></blockquote>
+        <hr class="summary-divider">
+
+        <div class="summary-stats">
+          <h3>STATISTIKA</h3>
+          <p id="summary-cases-total"></p>
+          <p id="summary-verdicts"></p>
+          <div class="resource-row">
+            <span class="masa-label">Masa: </span><span id="summary-masa"></span>
+          </div>
+          <div class="resource-row">
+            <span class="vlast-label">Vlast: </span><span id="summary-vlast"></span>
+          </div>
+          <p id="summary-top-crime"></p>
+          <p id="summary-precedents"></p>
+        </div>
+
+        <div class="summary-actions">
+          <button class="btn btn-secondary btn-restart">IGRAJ PONOVO</button>
+          <button id="btn-share" class="btn btn-primary">PODELI</button>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- #game-root -->
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

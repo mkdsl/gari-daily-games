@@ -1,0 +1,630 @@
+/* ui.css — HUD, vaga, karte, dugmad, resursi, presedanti */
+/* Masa = crvena (#C0392B), Vlast = plava (#2980B9) */
+
+/* ── HUD ── */
+
+#hud {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #222;
+  flex-wrap: wrap;
+}
+
+.hud-item {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  color: #888;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hud-resource {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.hud-label {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  width: 44px;
+  flex-shrink: 0;
+}
+
+.masa-label  { color: #C0392B; }
+.vlast-label { color: #2980B9; }
+
+.resource-bar-wrap {
+  flex: 1;
+  height: 6px;
+  background: #222;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.resource-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.masa-bar  { background: #C0392B; }
+.vlast-bar { background: #2980B9; }
+
+.hud-value {
+  font-size: 0.8rem;
+  color: #888;
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── Case header ── */
+
+.case-header {
+  padding: 16px 0 8px;
+  border-bottom: 1px solid #222;
+}
+
+.case-crime {
+  color: #E8E0D0;
+  font-size: 1rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.case-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: #1A1A1A;
+  border: 1px solid #333;
+  color: #888;
+}
+
+.tag-recidivist {
+  border-color: #8B0000;
+  color: #C0392B;
+}
+
+.tag-witness {
+  border-color: #2980B9;
+  color: #6aaccc;
+}
+
+.case-description {
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #C8C0B0;
+  padding: 12px 0;
+}
+
+/* ── Presedanti lista ── */
+
+.precedents-panel {
+  background: #111;
+  border: 1px solid #2A2010;
+  border-radius: 2px;
+  padding: 12px;
+}
+
+.precedents-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.precedent-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: #A08040;
+  padding: 4px 0;
+  border-bottom: 1px solid #1A1505;
+}
+
+.precedent-item:last-child {
+  border-bottom: none;
+}
+
+.precedent-name {
+  font-style: italic;
+}
+
+.precedent-countdown {
+  font-size: 0.72rem;
+  color: #666;
+  letter-spacing: 1px;
+}
+
+.precedent-item.precedent-expiring .precedent-countdown {
+  color: #C0392B;
+}
+
+/* ── Vaga (Balance widget) ── */
+
+.balance-widget {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+}
+
+.balance-label-left,
+.balance-label-right {
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  width: 64px;
+  flex-shrink: 0;
+}
+
+.balance-label-left  { color: #2980B9; text-align: right; }
+.balance-label-right { color: #C0392B; text-align: left; }
+
+.balance-track-wrap {
+  flex: 1;
+  position: relative;
+}
+
+.balance-track {
+  height: 10px;
+  background: #1A1A1A;
+  border-radius: 5px;
+  border: 1px solid #333;
+  overflow: hidden;
+  position: relative;
+}
+
+.balance-fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: width 0.2s ease;
+}
+
+.balance-fill-neg {
+  left: 0;
+  background: #2980B9;
+  width: 0%;
+  transform-origin: right;
+}
+
+.balance-fill-pos {
+  right: 0;
+  background: #8B0000;
+  width: 0%;
+  transform-origin: left;
+}
+
+.balance-center-mark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: #444;
+  transform: translateX(-50%);
+}
+
+.balance-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  width: 36px;
+  text-align: center;
+  flex-shrink: 0;
+  color: #E8E0D0;
+}
+
+/* ── Verdict zones ── */
+
+.verdict-zones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  min-height: 80px;
+}
+
+.verdict-zone {
+  border: 1px dashed #333;
+  border-radius: 2px;
+  padding: 8px;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.zone-free   { border-color: #1A3A5C; background: rgba(41, 128, 185, 0.05); }
+.zone-guilty { border-color: #5C1A1A; background: rgba(139, 0, 0, 0.05); }
+
+.zone-label {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+.zone-free .zone-label   { color: #2980B9; }
+.zone-guilty .zone-label { color: #C0392B; }
+
+/* ── Karte (Hand) ── */
+
+.hand-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.card {
+  background: #1A1A1A;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 10px 8px;
+  width: 110px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #666;
+}
+
+.card-dokaz    { border-top: 3px solid #8B6914; }
+.card-svedok   { border-top: 3px solid #2980B9; }
+.card-zakon    { border-top: 3px solid #888; }
+.card-karakter { border-top: 3px solid #6B3A6B; }
+
+.card-name {
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: #E8E0D0;
+  font-style: italic;
+}
+
+.card-type {
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.card-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.card-value.positive { color: #C0392B; }
+.card-value.negative { color: #2980B9; }
+.card-value.zero     { color: #888; }
+
+.card-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.card-actions .btn-guilty,
+.card-actions .btn-free {
+  padding: 10px 8px;     /* povećano sa 4px 2px — min 48px touch area */
+  font-size: 0.72rem;    /* povećano sa 0.6rem */
+  min-height: 44px;      /* eksplicitni minimum za mobilni */
+  flex: 1;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Karta tipa presedant (dodata tokom igre) */
+.card-precedent {
+  border: 1px solid #6B4C11;
+  background: #0F0C02;
+}
+
+.card-precedent-label {
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #8B6914;
+}
+
+/* ── Play controls ── */
+
+.play-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid #222;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.verdict-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── Reputation summary ── */
+
+.reputation-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 0;
+  text-align: center;
+}
+
+.reputation-title {
+  font-size: 1.4rem;
+  letter-spacing: 4px;
+}
+
+.reputation-deltas {
+  display: flex;
+  gap: 24px;
+  font-size: 1rem;
+}
+
+.delta-row {
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.masa-delta  { color: #C0392B; }
+.vlast-delta { color: #2980B9; }
+
+.delta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.delta-label {
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.delta-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.delta-value.positive { color: #C0392B; }
+.delta-value.negative { color: #2980B9; }
+
+.precedent-gained {
+  font-size: 0.85rem;
+  color: #A08040;
+  font-style: italic;
+  border: 1px solid #2A2010;
+  padding: 8px 16px;
+  border-radius: 2px;
+  background: #111;
+}
+
+/* ── Game Over ── */
+
+.gameover-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 32px 0;
+  text-align: center;
+}
+
+.gameover-lamp {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #E8E0D0;
+  margin-bottom: 8px;
+}
+
+.gameover-lamp.off {
+  background: #111;
+  box-shadow: none;
+}
+
+.gameover-title {
+  font-size: 1.5rem;
+  letter-spacing: 6px;
+  color: #C0392B;
+}
+
+.gameover-cause {
+  font-size: 1rem;
+  font-style: italic;
+  color: #888;
+  max-width: 320px;
+}
+
+.gameover-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+/* ── Summary ── */
+
+.phase-summary {
+  background: #F8F4EC;
+  color: #0D0D0D;
+  min-height: 100vh;
+}
+
+.summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px 0;
+}
+
+.summary-title {
+  font-size: 1.5rem;
+  letter-spacing: 6px;
+  color: #0D0D0D;
+  text-align: center;
+}
+
+.summary-quote {
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: #1A1A1A;
+  padding: 0 8px;
+  border-left: 3px solid #0D0D0D;
+  min-height: 2.4em;
+}
+
+.summary-divider {
+  border-top: 2px solid #0D0D0D;
+}
+
+.summary-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.summary-stats h3 {
+  color: #0D0D0D;
+  margin-bottom: 4px;
+}
+
+.summary-stats .masa-label  { color: #8B0000; }
+.summary-stats .vlast-label { color: #00008B; }
+
+.summary-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.phase-summary .btn-restart {
+  background: transparent;
+  color: #0D0D0D;
+  border: 1px solid #0D0D0D;
+}
+
+.phase-summary .btn-primary {
+  background: #0D0D0D;
+  color: #F8F4EC;
+}
+
+/* ── Karta: efekat opis ── */
+
+.card-effect {
+  font-size: 0.65rem;
+  color: #A08040;
+  font-style: italic;
+  padding-top: 2px;
+  border-top: 1px solid #2A1A00;
+}
+
+/* ── Karta: selection state (Odbaci i Povuci) ── */
+
+.card.selection-mode {
+  opacity: 0.75;
+  border-style: dashed;
+}
+
+.card.selection-mode:hover {
+  opacity: 1;
+}
+
+.card.selected {
+  opacity: 1;
+  border-color: #E8DFC8 !important;
+  box-shadow: 0 0 0 2px #E8DFC8, 0 0 12px 2px rgba(232, 223, 200, 0.25);
+  transform: translateY(-4px);
+}
+
+/* ── Odigrane karte (mini) u zonama ── */
+
+.played-card-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 6px;
+  border-radius: 2px;
+  background: #111;
+  border: 1px solid #2A2A2A;
+  gap: 4px;
+  width: 100%;
+}
+
+.played-card-name {
+  font-size: 0.65rem;
+  color: #A09080;
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.played-card-val {
+  font-size: 0.72rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.played-card-val.positive { color: #C0392B; }
+.played-card-val.negative { color: #2980B9; }
+.played-card-val.zero     { color: #888; }
+
+/* ── Verdict flash ── */
+
+.verdict-flash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  font-size: 3rem;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.verdict-guilty { color: #C0392B; }
+.verdict-free   { color: #2980B9; }
