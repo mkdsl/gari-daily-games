@@ -77,22 +77,71 @@ export function drawBackground(ctx, state, canvasW, canvasH) {
   ctx.fillRect(0, groundY, canvasW, 2);
 }
 
+let partyPhase = 0;
+
 function drawAvalaSilhouette(ctx, offset, canvasW, groundY) {
+  partyPhase += 0.02;
   const tileW = canvasW * 1.5;
   const off = offset % tileW;
+
   for (let tx = -off; tx < canvasW + tileW; tx += tileW) {
+    // Planina — veća i izraženija
     ctx.fillStyle = '#0d1020';
     ctx.beginPath();
     ctx.moveTo(tx, groundY);
-    ctx.lineTo(tx + tileW * 0.1,  groundY - 60);
-    ctx.lineTo(tx + tileW * 0.25, groundY - 110);
-    ctx.lineTo(tx + tileW * 0.4,  groundY - 90);
-    ctx.lineTo(tx + tileW * 0.55, groundY - 130);
-    ctx.lineTo(tx + tileW * 0.7,  groundY - 100);
-    ctx.lineTo(tx + tileW * 0.85, groundY - 75);
-    ctx.lineTo(tx + tileW,        groundY);
+    ctx.lineTo(tx + tileW * 0.08,  groundY - 70);
+    ctx.lineTo(tx + tileW * 0.2,   groundY - 130);
+    ctx.lineTo(tx + tileW * 0.35,  groundY - 160);
+    ctx.lineTo(tx + tileW * 0.5,   groundY - 190); // vrh Avale
+    ctx.lineTo(tx + tileW * 0.65,  groundY - 155);
+    ctx.lineTo(tx + tileW * 0.8,   groundY - 120);
+    ctx.lineTo(tx + tileW * 0.92,  groundY - 65);
+    ctx.lineTo(tx + tileW,         groundY);
     ctx.closePath();
     ctx.fill();
+
+    // Toranj na vrhu
+    const towerX = tx + tileW * 0.5;
+    const towerBase = groundY - 190;
+    const towerH = 40;
+    ctx.fillStyle = '#1a1a30';
+    ctx.fillRect(towerX - 2, towerBase - towerH, 4, towerH);
+    // Antena vrh
+    ctx.fillRect(towerX - 1, towerBase - towerH - 8, 2, 8);
+
+    // Party svetla oko tornja (pulsiraju)
+    const colors = ['#ff2266', '#ffaa00', '#00ccff', '#ff44ff', '#44ff88'];
+    for (let i = 0; i < 7; i++) {
+      const angle = (i / 7) * Math.PI * 2 + partyPhase;
+      const radius = 12 + Math.sin(partyPhase * 2 + i) * 4;
+      const lx = towerX + Math.cos(angle) * radius;
+      const ly = towerBase - towerH - 4 + Math.sin(angle) * radius * 0.5;
+      const alpha = 0.5 + Math.sin(partyPhase * 3 + i * 1.3) * 0.3;
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.beginPath();
+      ctx.arc(lx, ly, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // Glow na vrhu tornja (crveno svetlo)
+    const glowAlpha = 0.6 + Math.sin(partyPhase * 4) * 0.3;
+    ctx.globalAlpha = glowAlpha;
+    ctx.fillStyle = '#ff2244';
+    ctx.beginPath();
+    ctx.arc(towerX, towerBase - towerH - 10, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Topla svetla na horizontu (festival hint)
+    ctx.globalAlpha = 0.3;
+    const grad = ctx.createRadialGradient(towerX, towerBase - towerH, 5, towerX, towerBase - towerH, 50);
+    grad.addColorStop(0, '#ff6622');
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.fillRect(towerX - 50, towerBase - towerH - 50, 100, 80);
+    ctx.globalAlpha = 1;
   }
 }
 

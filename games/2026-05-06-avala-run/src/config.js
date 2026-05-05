@@ -38,7 +38,7 @@ export const CONFIG = {
 
   // Objects — format: { w, h, groundOffset } (groundOffset = koliko je od groundY gore, 0 = stoji na tlu)
   OBSTACLES: {
-    bor:    { w: 28, h: 64, groundOffset: 64, hitW: 20, hitH: 60, reqJump: true  },
+    bor:    { w: 28, h: 64, groundOffset: 64, hitW: 20, hitH: 36, reqJump: false },
     kamen:  { w: 36, h: 22, groundOffset: 22, hitW: 34, hitH: 20, reqJump: true  },
     kamion: { w: 80, h: 44, groundOffset: 44, hitW: 76, hitH: 42, reqJump: true  },
     dron:   { w: 36, h: 16, groundOffset: 52, hitW: 34, hitH: 14, reqJump: false }
