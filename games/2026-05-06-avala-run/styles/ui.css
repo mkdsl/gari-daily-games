@@ -1,60 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Outfit:wght@300;400;600;800&display=swap');
+
 #hud {
-  position: absolute; top: 12px; left: 0; right: 0;
-  display: flex; justify-content: space-between; padding: 0 16px;
-  pointer-events: none; font-family: 'Courier New', monospace;
-  font-size: 16px; color: #fff; text-shadow: 0 1px 4px #000;
-  letter-spacing: 2px;
+  position: absolute; top: 0; left: 0; right: 0;
+  display: flex; justify-content: space-between; padding: 10px 14px;
+  pointer-events: none; font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 13px; color: rgba(255,255,255,0.85);
+  background: linear-gradient(to bottom, rgba(5,5,20,0.6) 0%, transparent 100%);
+  letter-spacing: 1px;
 }
-#hud-left { display: flex; flex-direction: column; gap: 2px; }
-#score-display { color: #FFD700; font-size: 20px; font-weight: bold; }
-#card-display { color: #FFD700; font-size: 13px; }
-#trash-display { color: #aabbcc; font-size: 16px; }
+#hud-left { display: flex; flex-direction: column; gap: 1px; }
+#score-display {
+  color: #FFD700; font-size: 18px; font-weight: 700;
+  text-shadow: 0 0 12px rgba(255,215,0,0.4);
+}
+#card-display { color: rgba(255,215,0,0.7); font-size: 12px; }
+#trash-display { color: rgba(170,187,204,0.8); font-size: 13px; }
 
 .overlay {
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(5, 5, 20, 0.88);
-  font-family: 'Courier New', monospace;
+  background: rgba(5, 5, 20, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: 'Outfit', system-ui, sans-serif;
 }
 .overlay.hidden { display: none; }
 
 /* Menu */
-.menu-inner { text-align: center; color: #fff; padding: 24px; max-width: 360px; }
-.menu-inner h1 { font-size: 32px; color: #FFD700; letter-spacing: 4px; margin-bottom: 8px; }
-.menu-inner .subtitle { font-size: 13px; color: #aaa; margin-bottom: 20px; letter-spacing: 1px; }
-.menu-inner .controls { font-size: 12px; color: #778; margin-bottom: 24px; line-height: 1.8; }
+.menu-inner {
+  text-align: center; color: #fff; padding: 32px 24px; max-width: 380px;
+}
+.menu-inner h1 {
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 48px; font-weight: 800;
+  color: #fff;
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+  text-shadow: 0 0 40px rgba(204,34,68,0.6), 0 0 80px rgba(204,34,68,0.3);
+  line-height: 1;
+}
+.menu-inner .subtitle {
+  font-size: 12px; color: rgba(255,215,0,0.7); margin-bottom: 28px;
+  letter-spacing: 3px; text-transform: uppercase; font-weight: 300;
+}
+.menu-inner .controls {
+  font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 24px;
+  line-height: 2; letter-spacing: 0.5px;
+}
 .menu-goal {
-  font-size: 14px; color: #FFD700; margin-bottom: 20px; padding: 8px 12px;
-  border: 1px solid rgba(255,215,0,0.3); border-radius: 4px;
-  background: rgba(255,215,0,0.05);
+  font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 28px; padding: 14px 16px;
+  border: 1px solid rgba(255,215,0,0.15); border-radius: 8px;
+  background: rgba(255,215,0,0.03);
+  line-height: 1.7;
 }
 .btn-start {
-  background: #cc2244; color: #fff; border: none; padding: 14px 40px;
-  font-family: 'Courier New', monospace; font-size: 18px; letter-spacing: 3px;
-  cursor: pointer; border-radius: 4px;
+  background: linear-gradient(135deg, #cc2244 0%, #e63366 100%);
+  color: #fff; border: none; padding: 16px 48px;
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 16px; font-weight: 600; letter-spacing: 2px;
+  cursor: pointer; border-radius: 40px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 24px rgba(204,34,68,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.btn-start:active { background: #ff3366; }
+.btn-start:active {
+  background: linear-gradient(135deg, #e63366 0%, #ff4488 100%);
+  transform: scale(0.97);
+  box-shadow: 0 2px 12px rgba(204,34,68,0.5);
+}
 
 /* Game Over */
 .go-inner {
-  text-align: center; color: #fff; padding: 20px; max-width: 380px; width: 100%;
+  text-align: center; color: #fff; padding: 24px; max-width: 380px; width: 100%;
   overflow-y: auto; max-height: 95vh;
 }
-.go-title { font-size: 28px; color: #ff4466; letter-spacing: 4px; margin-bottom: 12px; }
-.go-stats { font-size: 13px; color: #FFD700; margin-bottom: 16px; letter-spacing: 1px; }
-.go-aforizm { font-size: 14px; color: #ccddee; line-height: 1.6; font-style: italic; margin-bottom: 16px; }
-hr { border: none; border-top: 1px solid #334; margin: 12px 0; }
+.go-title {
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 32px; font-weight: 800; color: #ff4466;
+  letter-spacing: -0.5px; margin-bottom: 12px;
+  text-shadow: 0 0 30px rgba(255,68,102,0.4);
+}
+.go-stats {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 14px; color: #FFD700; margin-bottom: 16px;
+  letter-spacing: 1px; font-weight: 600;
+}
+.go-aforizm {
+  font-size: 16px; color: rgba(220,230,240,0.9); line-height: 1.7;
+  font-style: italic; margin-bottom: 20px;
+  padding: 16px 20px;
+  border-left: 2px solid rgba(255,215,0,0.3);
+  background: rgba(255,215,0,0.02);
+  border-radius: 0 8px 8px 0;
+  font-weight: 300;
+}
+hr { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 16px 0; }
 .go-ticket {
-  display: block; color: #FFD700; font-size: 15px; text-decoration: none;
-  letter-spacing: 1px; padding: 10px; border: 1px solid #FFD700;
-  border-radius: 4px; margin-bottom: 10px;
+  display: block; color: #fff; font-size: 14px; text-decoration: none;
+  letter-spacing: 1px; padding: 14px 20px;
+  background: linear-gradient(135deg, rgba(255,215,0,0.15) 0%, rgba(255,215,0,0.05) 100%);
+  border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 8px; margin-bottom: 12px;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
-.go-ticket:hover { background: rgba(255,215,0,0.1); }
-.go-rules { font-size: 10px; color: #668; margin-bottom: 12px; }
-.go-highscore { font-size: 12px; color: #99aacc; line-height: 1.8; margin-bottom: 16px; letter-spacing: 1px; }
+.go-ticket:hover {
+  background: linear-gradient(135deg, rgba(255,215,0,0.25) 0%, rgba(255,215,0,0.1) 100%);
+  transform: translateY(-1px);
+}
+.go-rules { font-size: 10px; color: rgba(255,255,255,0.3); margin-bottom: 14px; }
+.go-highscore {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 12px; color: rgba(170,190,220,0.7); line-height: 2;
+  margin-bottom: 20px; letter-spacing: 0.5px;
+}
 .go-restart {
-  background: #cc2244; color: #fff; border: none; padding: 12px 32px;
-  font-family: 'Courier New', monospace; font-size: 16px; letter-spacing: 2px;
-  cursor: pointer; border-radius: 4px; width: 100%;
+  background: linear-gradient(135deg, #cc2244 0%, #e63366 100%);
+  color: #fff; border: none; padding: 14px 32px;
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 15px; font-weight: 600; letter-spacing: 2px;
+  cursor: pointer; border-radius: 40px; width: 100%;
+  text-transform: uppercase;
+  box-shadow: 0 4px 24px rgba(204,34,68,0.35);
+  transition: transform 0.15s ease;
 }
-.go-restart:active { background: #ff3366; }
+.go-restart:active {
+  background: linear-gradient(135deg, #e63366 0%, #ff4488 100%);
+  transform: scale(0.97);
+}
