@@ -1,0 +1,31 @@
+{
+  "name": "Avala Run",
+  "genre": "Endless Runner / Arkada / Eko",
+  "date": "2026-05-06",
+  "description": "Penjaš se Avalom pre zore kao DJ koji kasni. Skupljaj smeće i karte, izbegavaj prepreke, gledaj daily highscore — pobednici dobijaju kartu za pravu Avalu, 20. juna.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-06-avala-run/",
+  "kluboslavija_branded": true,
+  "share_hook_url": "https://app.bilet.rs/show/261",
+  "modules": {
+    "src/main.js": "Entry point, game loop, state machine orchestrator",
+    "src/config.js": "Sve konstante — brzine, hitboxovi, boje, aforizmi, save key",
+    "src/state.js": "GameState shape, createState(), daily highscore localStorage",
+    "src/input.js": "Keyboard + touch handlers, jump/duck detection",
+    "src/audio.js": "Web Audio API — bass beat, card ding, trash klank, game over",
+    "src/render.js": "Glavni canvas renderer — background, player, obstacles, collectibles, HUD canvas elems",
+    "src/ui.js": "DOM HUD update, menu overlay, game over screen sa aforizmi i linkovima",
+    "src/entities/player.js": "Player state, physics (jump/duck/run), pixel art draw funkcija",
+    "src/systems/world.js": "Parallax background slojevi, ground, scrollOffset tracking",
+    "src/systems/spawner.js": "Obstacle i collectible spawning logika, gap management",
+    "src/systems/collision.js": "AABB collision detection za player vs obstacles/collectibles",
+    "styles/base.css": "Full-screen canvas, mobile-first layout",
+    "styles/ui.css": "HUD, overlay, menu, game over screen stilovi",
+    "styles/game.css": "Pixel rendering, canvas image-rendering"
+  },
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "status": "in_progress"
+}
