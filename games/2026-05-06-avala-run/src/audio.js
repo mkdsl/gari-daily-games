@@ -2,16 +2,20 @@ let audioCtx = null;
 let beatTimer = 0;
 
 export function initAudio() {
-  // AudioContext kreira se na prvoj interakciji
-  if (!audioCtx) {
-    try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    } catch {}
-  }
+  // Ne kreiraj AudioContext ovde — Safari blokira ako nije user gesture
 }
 
 export function resumeAudio() {
-  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  // Kreiraj AudioContext TEK na prvi user gesture (klik na KRETANJE)
+  if (!audioCtx) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioCtx();
+    } catch { return; }
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
 }
 
 export function updateAudio(dt, isPlaying) {

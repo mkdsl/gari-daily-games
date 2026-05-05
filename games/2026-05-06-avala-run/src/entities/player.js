@@ -110,12 +110,12 @@ export function drawPlayer(ctx, player, groundY) {
     const ph = ducking ? CONFIG.PLAYER_H_DUCK + 8 : CONFIG.PLAYER_H_RUN + 8;
     const drawn = drawSprite(ctx, 'player', frameName, x - 6, y - 4, pw, ph);
     if (drawn) {
-      // Still draw face overlay if available
+      // Face overlay on sprite head area
       const face = getFaceImage();
       if (face && face.complete) {
-        const headY = y - (ducking ? 10 : 14);
+        const faceY = y - 4 + (ducking ? 2 : 0); // align with sprite head
         ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(face, x + 1, headY, 14, 12);
+        ctx.drawImage(face, x, faceY, 14, 14);
         ctx.imageSmoothingEnabled = true;
       }
       return;
@@ -210,7 +210,7 @@ export function drawPlayer(ctx, player, groundY) {
   const face = getFaceImage();
   if (face && face.complete) {
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(face, x + 1, headY, headW, headH);
+    ctx.drawImage(face, x + 1, headY + 1, headW - 1, headH - 1);
     ctx.imageSmoothingEnabled = true;
   } else {
     const headGrad = ctx.createLinearGradient(x + 1, headY, x + headW, headY + headH);

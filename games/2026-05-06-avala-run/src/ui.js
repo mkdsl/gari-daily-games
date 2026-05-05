@@ -1,4 +1,5 @@
 import { CONFIG } from './config.js';
+import { refreshFace } from './entities/player.js';
 
 export function initFaceUpload() {
   const btn = document.getElementById('btn-face');
@@ -22,12 +23,13 @@ export function initFaceUpload() {
         const size = Math.min(img.width, img.height);
         const sx = (img.width - size) / 2;
         const sy = (img.height - size) / 2;
-        // Downscale to 12x12
+        // Downscale to 24x24
         const c = document.createElement('canvas');
-        c.width = 12; c.height = 12;
+        c.width = 24; c.height = 24;
         const ctx = c.getContext('2d');
-        ctx.drawImage(img, sx, sy, size, size, 0, 0, 12, 12);
+        ctx.drawImage(img, sx, sy, size, size, 0, 0, 24, 24);
         localStorage.setItem('avala-run-face', c.toDataURL());
+        refreshFace();
         btn.textContent = '✓ FACA UČITANA';
       };
       img.src = ev.target.result;
