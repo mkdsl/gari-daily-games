@@ -40,6 +40,8 @@ export function initInput(canvas) {
     e.preventDefault();
     input.jump = false;
     input.duck = false;
+    input.jumpPressed = false;
+    input.duckPressed = false;
   }, { passive: false });
 }
 

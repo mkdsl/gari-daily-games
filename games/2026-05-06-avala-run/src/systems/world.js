@@ -79,7 +79,7 @@ export function drawBackground(ctx, state, canvasW, canvasH) {
 
 function drawAvalaSilhouette(ctx, offset, canvasW, groundY) {
   const tileW = canvasW * 1.5;
-  const off = (offset * 0.15) % tileW;
+  const off = offset % tileW;
   for (let tx = -off; tx < canvasW + tileW; tx += tileW) {
     ctx.fillStyle = '#0d1020';
     ctx.beginPath();

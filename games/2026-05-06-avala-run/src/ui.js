@@ -54,7 +54,7 @@ export function showGameOver(state, onRestart) {
       </div>
       <div class="go-aforizm">"${aforizm}"<br><em>— Pera</em></div>
       <hr>
-      <a href="${CONFIG.TICKET_URL}" target="_blank" rel="noopener" class="go-ticket">\u{1F3AB} Uzmi kartu — bilet.rs/show/261</a>
+      <a href="${CONFIG.TICKET_URL}" target="_blank" rel="noopener" class="go-ticket">\u{1F3AB} Uzmi kartu — app.bilet.rs/show/261</a>
       <div class="go-rules">Učešćem prihvataš Pravila — Kluboslavija IG bio</div>
       <hr>
       <div class="go-highscore">
