@@ -1,0 +1,136 @@
+{
+  "player": {
+    "image": "sprites/player.png",
+    "frameWidth": 32,
+    "frameHeight": 32,
+    "frames": {
+      "run_0": {
+        "x": 0,
+        "y": 0
+      },
+      "run_1": {
+        "x": 32,
+        "y": 0
+      },
+      "run_2": {
+        "x": 64,
+        "y": 0
+      },
+      "run_3": {
+        "x": 96,
+        "y": 0
+      },
+      "jump": {
+        "x": 0,
+        "y": 32
+      },
+      "duck": {
+        "x": 32,
+        "y": 32
+      },
+      "idle": {
+        "x": 64,
+        "y": 32
+      },
+      "dead": {
+        "x": 96,
+        "y": 32
+      }
+    }
+  },
+  "obstacles": {
+    "image": "sprites/obstacles.png",
+    "frameWidth": 48,
+    "frameHeight": 64,
+    "frames": {
+      "bor": {
+        "x": 0,
+        "y": 0
+      },
+      "kamen": {
+        "x": 48,
+        "y": 0
+      },
+      "kamion": {
+        "x": 96,
+        "y": 0
+      },
+      "dron": {
+        "x": 144,
+        "y": 0
+      }
+    }
+  },
+  "collectibles": {
+    "image": "sprites/collectibles.png",
+    "frameWidth": 24,
+    "frameHeight": 24,
+    "frames": {
+      "karta": {
+        "x": 0,
+        "y": 0
+      },
+      "limenka_high": {
+        "x": 24,
+        "y": 0
+      },
+      "limenka_low": {
+        "x": 48,
+        "y": 0
+      },
+      "flasa_high": {
+        "x": 72,
+        "y": 0
+      },
+      "flasa_low": {
+        "x": 96,
+        "y": 0
+      },
+      "papir_high": {
+        "x": 120,
+        "y": 0
+      },
+      "papir_low": {
+        "x": 144,
+        "y": 0
+      }
+    }
+  },
+  "background": {
+    "image": "sprites/background.png",
+    "width": 256,
+    "height": 128,
+    "sections": {
+      "skyline": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 64
+      },
+      "tree_0": {
+        "x": 0,
+        "y": 64,
+        "w": 64,
+        "h": 64
+      },
+      "tree_1": {
+        "x": 64,
+        "y": 64,
+        "w": 64,
+        "h": 64
+      },
+      "tree_2": {
+        "x": 128,
+        "y": 64,
+        "w": 64,
+        "h": 64
+      },
+      "tree_3": {
+        "x": 192,
+        "y": 64,
+        "w": 64,
+        "h": 64
+      }
+    }
+  }
+}

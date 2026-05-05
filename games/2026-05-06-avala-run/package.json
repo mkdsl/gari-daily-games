@@ -1,0 +1,19 @@
+{
+  "name": "2026-05-06-avala-run",
+  "version": "1.0.0",
+  "description": "**Žanr:** Endless Runner / Arkada / Eko   **Datum:** 2026-05-06   **Projekat:** Kluboslavija — branded asset za festival Avala, 20. jun 2026.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "canvas": "^3.2.3"
+  }
+}
