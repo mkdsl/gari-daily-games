@@ -5,7 +5,7 @@ const PARALLAX_SPEEDS = [0.05, 0.15, 0.35, 0.60]; // stars, avala, farPines, mid
 export function initWorld(state, canvasW, canvasH) {
   const groundY = canvasH * CONFIG.GROUND_RATIO;
   // Generiši zvezde
-  state.world.stars = Array.from({ length: 40 }, () => ({
+  state.world.stars = Array.from({ length: 20 }, () => ({
     x: Math.random() * canvasW,
     y: Math.random() * groundY * 0.7
   }));

@@ -3,18 +3,7 @@ import { CONFIG } from './config.js';
 export function showMenu(onStart) {
   const el = document.getElementById('menu');
   el.classList.remove('hidden');
-  el.innerHTML = `
-    <div class="menu-inner">
-      <h1>AVALA RUN</h1>
-      <div class="subtitle">Kluboslavija · Avala · 20. jun 2026.</div>
-      <div class="controls">
-        <div>⬆ ArrowUp / Space / W — Skok</div>
-        <div>⬇ ArrowDown / S — Duck</div>
-        <div>📱 Tap gore — Skok &nbsp; Tap dole — Duck</div>
-      </div>
-      <button class="btn-start" id="btn-menu-start">KRETANJE!</button>
-    </div>
-  `;
+  // Menu content is pre-rendered in HTML for instant visibility
   document.getElementById('btn-menu-start').addEventListener('click', () => {
     onStart();
   });
