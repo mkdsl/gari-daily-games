@@ -133,8 +133,6 @@ export function initChunks(run) {
     spawnCrystalsForChunk(chunk, run.pickups);
   }
 
-  // Initialize scroll speed
-  run.scrollSpeed = CONFIG.SCROLL_SPEED_BASE;
 }
 
 /**

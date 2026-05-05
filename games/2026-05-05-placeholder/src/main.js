@@ -6,7 +6,7 @@
 import { CONFIG } from './config.js';
 import { createState, resetRun, loadMeta, saveMeta } from './state.js';
 import { initInput, readInput } from './input.js';
-import { updateSystems } from './systems/index.js';
+import { updateSystems, selectCheckpointPowerup } from './systems/index.js';
 import { render } from './render.js';
 import { initUI, updateUI } from './ui.js';
 import { createPlayer } from './entities/player.js';
@@ -28,7 +28,9 @@ resize();
 const meta = loadMeta();
 const state = createState(meta);
 initInput(canvas);
-initUI(state);
+initUI(state, {
+  onPowerupSelect: (id) => selectCheckpointPowerup(state.run, state, id),
+});
 
 /** Inicijalizuj igrača i postavi run parametre na osnovu meta upgrade-ova */
 function initPlayer(state) {
@@ -45,7 +47,7 @@ function initPlayer(state) {
 function startGame() {
   resetRun(state);
   initPlayer(state);
-  initChunks(state);
+  initChunks(state.run);
   state.screen = 'RUNNING';
 }
 
