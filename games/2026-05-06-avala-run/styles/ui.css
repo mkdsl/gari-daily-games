@@ -68,6 +68,13 @@
   transform: scale(0.97);
   box-shadow: 0 2px 12px rgba(204,34,68,0.5);
 }
+.btn-face {
+  background: transparent; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.2);
+  padding: 10px 24px; font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 12px; letter-spacing: 1px; cursor: pointer; border-radius: 20px;
+  margin-top: 12px; transition: all 0.2s ease;
+}
+.btn-face:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
 
 /* Game Over */
 .go-inner {

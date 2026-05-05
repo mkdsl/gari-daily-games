@@ -1,5 +1,41 @@
 import { CONFIG } from './config.js';
 
+export function initFaceUpload() {
+  const btn = document.getElementById('btn-face');
+  const input = document.getElementById('face-input');
+  if (!btn || !input) return;
+
+  // If face already saved, show confirmation
+  if (localStorage.getItem('avala-run-face')) {
+    btn.textContent = '✓ FACA UČITANA';
+  }
+
+  btn.addEventListener('click', () => input.click());
+  input.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        // Crop center square
+        const size = Math.min(img.width, img.height);
+        const sx = (img.width - size) / 2;
+        const sy = (img.height - size) / 2;
+        // Downscale to 12x12
+        const c = document.createElement('canvas');
+        c.width = 12; c.height = 12;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, sx, sy, size, size, 0, 0, 12, 12);
+        localStorage.setItem('avala-run-face', c.toDataURL());
+        btn.textContent = '✓ FACA UČITANA';
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 export function showMenu(onStart) {
   const el = document.getElementById('menu');
   el.classList.remove('hidden');
@@ -7,6 +43,7 @@ export function showMenu(onStart) {
   document.getElementById('btn-menu-start').addEventListener('click', () => {
     onStart();
   });
+  initFaceUpload();
 }
 
 export function hideMenu() {

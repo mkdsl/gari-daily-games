@@ -1,4 +1,5 @@
 import { CONFIG } from './config.js';
+import { loadSprites } from './sprites.js';
 import { createState, saveDailyHighscore } from './state.js';
 import { initInput } from './input.js';
 import {
@@ -61,6 +62,9 @@ function endRun() {
   saveDailyHighscore(state);
   showGameOver(state, startRun);
 }
+
+// Try to load sprites (graceful — if missing, engine uses programmatic drawing)
+loadSprites('sprites/atlas.json').catch(() => {});
 
 showMenu(startRun);
 

@@ -1,6 +1,26 @@
 import { CONFIG } from '../config.js';
 import { consumeJump, consumeDuck } from '../input.js';
 
+let _faceImg = null;
+let _faceLoaded = false;
+
+function getFaceImage() {
+  if (_faceLoaded) return _faceImg;
+  _faceLoaded = true;
+  const data = localStorage.getItem('avala-run-face');
+  if (data) {
+    _faceImg = new Image();
+    _faceImg.src = data;
+  }
+  return _faceImg;
+}
+
+// Reset face cache so new uploads are picked up on next run
+export function refreshFace() {
+  _faceLoaded = false;
+  _faceImg = null;
+}
+
 export function initPlayer(state, groundY) {
   const p = state.player;
   p.y = groundY - CONFIG.PLAYER_H_RUN;
@@ -149,17 +169,24 @@ export function drawPlayer(ctx, player, groundY) {
   }
 
   // Head
-  const headGrad = ctx.createLinearGradient(x + 1, headY, x + headW, headY + headH);
-  headGrad.addColorStop(0, '#2a2a44');
-  headGrad.addColorStop(1, '#1a1a30');
-  ctx.fillStyle = headGrad;
-  ctx.fillRect(x + 1, headY, headW, headH);
-  // Face detail - visor/shades
-  ctx.fillStyle = '#0a0a14';
-  ctx.fillRect(x + 3, headY + 4, 10, 3);
-  // Highlight on forehead
-  ctx.fillStyle = 'rgba(100,140,200,0.2)';
-  ctx.fillRect(x + 3, headY + 1, 8, 2);
+  const face = getFaceImage();
+  if (face && face.complete) {
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(face, x + 1, headY, headW, headH);
+    ctx.imageSmoothingEnabled = true;
+  } else {
+    const headGrad = ctx.createLinearGradient(x + 1, headY, x + headW, headY + headH);
+    headGrad.addColorStop(0, '#2a2a44');
+    headGrad.addColorStop(1, '#1a1a30');
+    ctx.fillStyle = headGrad;
+    ctx.fillRect(x + 1, headY, headW, headH);
+    // Face detail - visor/shades
+    ctx.fillStyle = '#0a0a14';
+    ctx.fillRect(x + 3, headY + 4, 10, 3);
+    // Highlight on forehead
+    ctx.fillStyle = 'rgba(100,140,200,0.2)';
+    ctx.fillRect(x + 3, headY + 1, 8, 2);
+  }
 
   // Headphones band
   ctx.strokeStyle = '#5577BB';
