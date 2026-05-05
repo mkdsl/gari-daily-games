@@ -42,9 +42,9 @@ export function updatePlayer(state, dt, groundY) {
     p.y += p.vy * dt;
   }
 
-  // Clamp to ground
+  // Clamp to ground — kad si na tlu, uvek prilepi igrača za pod
   const playerH = p.isDucking ? CONFIG.PLAYER_H_DUCK : CONFIG.PLAYER_H_RUN;
-  if (p.y >= groundY - playerH) {
+  if (!p.isJumping || p.y >= groundY - playerH) {
     p.y = groundY - playerH;
     p.vy = 0;
     p.isJumping = false;
