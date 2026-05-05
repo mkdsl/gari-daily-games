@@ -35,6 +35,7 @@ export function createRun() {
     nextCheckpoint: 0, // distanca do sljedećeg checkpoint-a
     recordY: null,     // Y pozicija igrača na rekordnom runu (ghost line)
     scrollSpeed: 0,    // trenutna brzina scrolla
+    shieldsLeft: 0,    // broj preostalih štitova na tekućem runu
     dead: false,
   };
 }
@@ -47,9 +48,9 @@ function createMeta() {
     bestDistance: 0,
     totalCrystals: 0,
     upgrades: {
-      startThrust: 0,   // 0–3
-      magnetRange: 0,   // 0–3
-      checkpointHp: 0,  // 0–3
+      speed: 0,   // 0–3 → scroll boost
+      shield: 0,  // 0–2 → auto štit
+      magnet: 0,  // 0–3 → magnet radius/auto-collect
     },
     recordRunY: null,   // ghost Y za Record Line
   };

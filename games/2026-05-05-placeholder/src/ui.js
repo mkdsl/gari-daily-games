@@ -1,15 +1,19 @@
-const hud = document.getElementById('hud');
-const menu = document.getElementById('menu');
+/**
+ * ui.js — DOM overlay UI za Bespuće
+ * HUD: score, kristali, multiplier.
+ * Ekrani: MENU, DEAD, CHECKPOINT_SELECT (izbor 2 power-upa), META_UPGRADE.
+ * Eksportuje: initUI, updateUI
+ */
 
-export function initUI() {
-  hud.innerHTML = '<div class="stat" id="stat-score">0</div>';
-  menu.classList.add('hidden');
-}
+/**
+ * Inicijalizuj DOM strukturu HUD-a i overlayeva.
+ * @param {object} state  - Početni state (za event listenere)
+ */
+export function initUI(state) {}
 
-export function updateHUD(state) {
-  document.getElementById('stat-score').textContent = state.score;
-  menu.classList.toggle('hidden', !state.gameOver && !state.paused);
-  if (state.gameOver) {
-    menu.innerHTML = `<h2>GAME OVER</h2><p>Score: ${state.score}</p><button onclick="location.reload()">Restart</button>`;
-  }
-}
+/**
+ * Ažuriraj UI na osnovu trenutnog state.screen.
+ * Prikazuje/sakriva odgovarajući overlay, osvežava HUD vrednosti.
+ * @param {object} state
+ */
+export function updateUI(state) {}
