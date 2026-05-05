@@ -35,6 +35,11 @@ export function checkCollisions(state, groundY) {
 
     const overlap = px1 < ox2 && px2 > ox1 && py1 < oy2 && py2 > oy1;
     if (overlap) {
+      // Collectibles with requireState only collect in the right pose
+      if (obj.type === 'collectible' && obj.requireState) {
+        if (obj.requireState === 'jumping' && !state.player.isJumping) continue;
+        if (obj.requireState === 'ducking' && !state.player.isDucking) continue;
+      }
       return { hit: true, obj };
     }
   }

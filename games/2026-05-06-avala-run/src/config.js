@@ -11,9 +11,9 @@ export const CONFIG = {
   PLAYER_W: 20,
   PLAYER_H_RUN: 40,
   PLAYER_H_DUCK: 22,
-  PLAYER_JUMP_VY: -420,
-  GRAVITY: 900,
-  DUCK_DURATION: 0.55,  // sekunde
+  PLAYER_JUMP_VY: -560,
+  GRAVITY: 1400,
+  DUCK_DURATION: 0.4,  // sekunde
 
   // Speed
   SPEED_BASE: 200,
@@ -44,10 +44,13 @@ export const CONFIG = {
     dron:   { w: 36, h: 16, groundOffset: 52, hitW: 34, hitH: 14, reqJump: false }
   },
   COLLECTIBLES: {
-    karta:   { w: 20, h: 28, groundOffset: 56, scoreType: 'card',  trashVal: 0  },
-    limenka: { w: 16, h: 24, groundOffset: 24, scoreType: 'trash', trashVal: 1  },
-    flasa:   { w: 12, h: 28, groundOffset: 28, scoreType: 'trash', trashVal: 1  },
-    papir:   { w: 22, h: 16, groundOffset: 34, scoreType: 'trash', trashVal: 1  }
+    karta:        { w: 20, h: 28, groundOffset: 56, scoreType: 'card',  trashVal: 0  },
+    limenka_high: { w: 16, h: 24, groundOffset: 56, scoreType: 'trash', trashVal: 1, requireState: 'jumping' },
+    limenka_low:  { w: 16, h: 24, groundOffset: 12, scoreType: 'trash', trashVal: 1, requireState: 'ducking' },
+    flasa_high:   { w: 12, h: 28, groundOffset: 60, scoreType: 'trash', trashVal: 1, requireState: 'jumping' },
+    flasa_low:    { w: 12, h: 28, groundOffset: 10, scoreType: 'trash', trashVal: 1, requireState: 'ducking' },
+    papir_high:   { w: 22, h: 16, groundOffset: 50, scoreType: 'trash', trashVal: 1, requireState: 'jumping' },
+    papir_low:    { w: 22, h: 16, groundOffset: 8,  scoreType: 'trash', trashVal: 1, requireState: 'ducking' }
   },
 
   // Colors

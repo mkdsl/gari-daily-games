@@ -314,13 +314,57 @@ function drawDron(ctx, x, y, w, h) {
 function drawCollectible(ctx, obj, sx, groundY) {
   const sy = groundY - obj.groundOffset;
   ctx.save();
-  switch (obj.kind) {
+
+  // Determine base kind (strip _high/_low suffix)
+  const baseKind = obj.kind.replace(/_high|_low/, '');
+  switch (baseKind) {
     case 'karta':   drawKarta(ctx, sx, sy, obj.w, obj.h); break;
     case 'limenka': drawLimenka(ctx, sx, sy, obj.w, obj.h); break;
     case 'flasa':   drawFlasa(ctx, sx, sy, obj.w, obj.h); break;
     case 'papir':   drawPapir(ctx, sx, sy, obj.w, obj.h); break;
   }
+
+  // Draw directional arrow hint for pose-based collectibles
+  if (obj.requireState) {
+    drawPoseHint(ctx, sx, sy, obj.w, obj.h, obj.requireState, baseKind);
+  }
+
   ctx.restore();
+}
+
+function drawPoseHint(ctx, sx, sy, w, h, requireState, baseKind) {
+  const colorMap = {
+    limenka: CONFIG.COLORS.LIMENKA,
+    flasa:   CONFIG.COLORS.FLASA,
+    papir:   CONFIG.COLORS.PAPIR
+  };
+  const color = colorMap[baseKind] || '#FFFFFF';
+  ctx.globalAlpha = 0.45;
+  ctx.fillStyle = color;
+
+  const arrowX = sx + w + 4;
+  const arrowCY = sy + h / 2;
+
+  if (requireState === 'jumping') {
+    // Up arrow
+    ctx.beginPath();
+    ctx.moveTo(arrowX + 4, arrowCY - 6);
+    ctx.lineTo(arrowX, arrowCY);
+    ctx.lineTo(arrowX + 8, arrowCY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillRect(arrowX + 2, arrowCY, 4, 5);
+  } else {
+    // Down arrow
+    ctx.fillRect(arrowX + 2, arrowCY - 5, 4, 5);
+    ctx.beginPath();
+    ctx.moveTo(arrowX + 4, arrowCY + 6);
+    ctx.lineTo(arrowX, arrowCY);
+    ctx.lineTo(arrowX + 8, arrowCY);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
 }
 
 function drawKarta(ctx, x, y, w, h) {
