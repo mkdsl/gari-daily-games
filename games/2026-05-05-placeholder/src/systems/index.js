@@ -140,12 +140,12 @@ export function updateSystems(state, input, dt) {
     );
   }
 
-  // ── Score (distance-based; kristali dodaju direktno u checkCollisions) ───
-  // Kristali su već dodati kao flat bonus u collision.js, ovde samo distance score
+  // ── Score (distance + kristali, sve podložno multiplier i score2x) ──────
   const score2x = (run.player && run.player.powerups.score2x > 0) ? 2 : 1;
   run.score = Math.floor(
-    (run.distance / CONFIG.SCORE_DIVISOR) * score2x * run.multiplier,
-  ) + run.crystals * CONFIG.CRYSTAL_SCORE;
+    ((run.distance / CONFIG.SCORE_DIVISOR) + run.crystals * CONFIG.CRYSTAL_SCORE)
+    * score2x * run.multiplier,
+  );
 
   // ── Player powerup tajmeri i Record Line uzorkovanje ─────────────────────
   if (run.player && run.player.alive) {

@@ -7,7 +7,7 @@
  */
 import { CONFIG } from '../config.js';
 import { spawnObstaclesForChunk } from '../entities/obstacle.js';
-import { createCrystal } from '../entities/pickup.js';
+import { createCrystal, createCheckpoint } from '../entities/pickup.js';
 
 /**
  * Lerp helper.
@@ -170,6 +170,13 @@ export function updateChunks(run, scrollSpeed, dt) {
 
     // Spawn kristala za novi chunk
     spawnCrystalsForChunk(newChunk, run.pickups);
+
+    // Spawn checkpoint markera ako chunk ima definisan checkpointLocalX
+    if (newChunk.checkpointLocalX >= 0) {
+      run.pickups.push(
+        createCheckpoint(newChunk.worldX + newChunk.checkpointLocalX)
+      );
+    }
   }
 }
 

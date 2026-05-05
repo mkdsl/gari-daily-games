@@ -481,6 +481,23 @@ function drawTouchZones(ctx, w, h) {
   };
 
   ctx.save();
+
+  // Gornja thrust zona hint
+  ctx.globalAlpha = 0.12;
+  ctx.strokeStyle = CONFIG.COLORS.WALL_STROKE;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([8, 12]);
+  ctx.strokeRect(4, 4, w - 8, h * 0.5 - 8);
+  ctx.setLineDash([]);
+  ctx.globalAlpha = 0.25;
+  ctx.fillStyle = CONFIG.COLORS.HUD_TEXT;
+  ctx.font = `13px "Courier New", monospace`;
+  ctx.textAlign = 'center';
+  ctx.fillText('▲ TAP — THRUST', w / 2, h * 0.25);
+
+  ctx.restore();
+
+  ctx.save();
   ctx.globalAlpha = 0.22;
 
   // Levo dugme (◀ GORE/DOLE LEVO)

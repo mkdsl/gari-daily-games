@@ -20,6 +20,7 @@ function resize() {
   canvas.height = window.innerHeight * devicePixelRatio;
   canvas.style.width = window.innerWidth + 'px';
   canvas.style.height = window.innerHeight + 'px';
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(devicePixelRatio, devicePixelRatio);
 }
 window.addEventListener('resize', resize);

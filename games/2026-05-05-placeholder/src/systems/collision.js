@@ -91,7 +91,6 @@ export function checkCollisions(run, state) {
     if (dx * dx + dy * dy < collectR2) {
       pu.collected = true;
       run.crystals++;
-      run.score += CONFIG.CRYSTAL_SCORE * run.multiplier;
       state.meta.totalCrystals++;
     }
   }
