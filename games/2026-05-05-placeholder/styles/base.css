@@ -39,7 +39,15 @@ html, body {
   justify-content: center;
 }
 
+/* Each screen div gets pointer events and centering */
 #ui-root > div {
   pointer-events: all;
   text-align: center;
+}
+
+/* Hidden by default — JS toggles display */
+#ui-dead,
+#ui-meta,
+#ui-checkpoint {
+  display: none;
 }
