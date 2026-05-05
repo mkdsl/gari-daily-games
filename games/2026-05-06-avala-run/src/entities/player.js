@@ -1,5 +1,5 @@
 import { CONFIG } from '../config.js';
-import { consumeJump, consumeDuck } from '../input.js';
+import { consumeJump, consumeDuck, getInput } from '../input.js';
 import { drawSprite, hasSprites } from '../sprites.js';
 
 let _faceImg = null;
@@ -35,15 +35,20 @@ export function initPlayer(state, groundY) {
 
 export function updatePlayer(state, dt, groundY) {
   const p = state.player;
+  const input = getInput();
+
+  // Consume one-shot inputs once
+  const wantsJump = consumeJump();
+  const wantsDuck = consumeDuck();
 
   // Jump input
-  if (consumeJump() && !p.isJumping && !p.isDucking) {
+  if (wantsJump && !p.isJumping && !p.isDucking) {
     p.vy = CONFIG.PLAYER_JUMP_VY;
     p.isJumping = true;
   }
 
-  // Duck input
-  if (consumeDuck() && !p.isJumping) {
+  // Duck input (only on ground)
+  if (wantsDuck && !p.isJumping) {
     p.isDucking = true;
     p.duckTimer = CONFIG.DUCK_DURATION;
   }
@@ -57,10 +62,20 @@ export function updatePlayer(state, dt, groundY) {
     }
   }
 
+  // Left/right movement
+  if (input.left) p.x -= CONFIG.PLAYER_MOVE_SPEED * dt;
+  if (input.right) p.x += CONFIG.PLAYER_MOVE_SPEED * dt;
+  p.x = Math.max(CONFIG.PLAYER_MIN_X, Math.min(CONFIG.PLAYER_MAX_X, p.x));
+
   // Physics
   if (p.isJumping || p.y < groundY - CONFIG.PLAYER_H_RUN) {
     p.vy += CONFIG.GRAVITY * dt;
     p.y += p.vy * dt;
+  }
+
+  // Fast fall — pressing duck while in air increases gravity
+  if (p.isJumping && (wantsDuck || input.duck)) {
+    p.vy += CONFIG.FAST_FALL_BOOST * dt;
   }
 
   // Clamp to ground — kad si na tlu, uvek prilepi igrača za pod

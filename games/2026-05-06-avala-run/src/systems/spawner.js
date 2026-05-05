@@ -10,7 +10,14 @@ export function initSpawner(state, canvasW) {
   state.antiAbuseDelay = 0;
 }
 
-export function updateSpawner(state, canvasW) {
+export function updateSpawner(state, canvasW, dt) {
+  // Move obstacles that have moveSpeed
+  for (const obj of state.objects) {
+    if (obj.moveSpeed) {
+      obj.worldX += obj.moveSpeed * dt;
+    }
+  }
+
   // Ukloni objekte koji su izašli van ekrana levo
   state.objects = state.objects.filter(o => objScreenX(o, state.world.scrollX) + o.w > -50);
 
@@ -46,7 +53,8 @@ function spawnObject(state, canvasW) {
     hitW: def.hitW || def.w,
     hitH: def.hitH || def.h,
     requireState: def.requireState || null,
-    collected: false
+    collected: false,
+    moveSpeed: def.moveSpeed || 0
   });
 }
 

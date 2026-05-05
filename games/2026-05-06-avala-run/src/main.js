@@ -109,7 +109,7 @@ function loop(now) {
     updatePlayer(state, dt, gY);
 
     // Update spawner
-    updateSpawner(state, W);
+    updateSpawner(state, W, dt);
 
     // Collision
     const { hit, obj } = checkCollisions(state, gY);

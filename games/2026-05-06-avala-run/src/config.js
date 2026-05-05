@@ -8,12 +8,16 @@ export const CONFIG = {
 
   // Player
   PLAYER_X: 80,
+  PLAYER_MOVE_SPEED: 180,
+  PLAYER_MIN_X: 30,
+  PLAYER_MAX_X: 300,
   PLAYER_W: 20,
   PLAYER_H_RUN: 40,
   PLAYER_H_DUCK: 22,
   PLAYER_JUMP_VY: -560,
   GRAVITY: 1400,
   DUCK_DURATION: 0.4,  // sekunde
+  FAST_FALL_BOOST: 2000,
 
   // Speed
   SPEED_BASE: 200,
@@ -38,10 +42,10 @@ export const CONFIG = {
 
   // Objects — format: { w, h, groundOffset } (groundOffset = koliko je od groundY gore, 0 = stoji na tlu)
   OBSTACLES: {
-    bor:    { w: 28, h: 64, groundOffset: 64, hitW: 20, hitH: 36, reqJump: false },
-    kamen:  { w: 36, h: 22, groundOffset: 22, hitW: 34, hitH: 20, reqJump: true  },
-    kamion: { w: 80, h: 44, groundOffset: 44, hitW: 76, hitH: 42, reqJump: true  },
-    dron:   { w: 36, h: 16, groundOffset: 52, hitW: 34, hitH: 14, reqJump: false }
+    bor:    { w: 28, h: 64, groundOffset: 64, hitW: 20, hitH: 36, reqJump: false, moveSpeed: 0 },
+    kamen:  { w: 36, h: 22, groundOffset: 22, hitW: 34, hitH: 20, reqJump: true,  moveSpeed: 0 },
+    kamion: { w: 80, h: 44, groundOffset: 44, hitW: 76, hitH: 42, reqJump: true,  moveSpeed: -150 },
+    dron:   { w: 36, h: 16, groundOffset: 52, hitW: 34, hitH: 14, reqJump: false, moveSpeed: -100 }
   },
   COLLECTIBLES: {
     karta:        { w: 20, h: 28, groundOffset: 56, scoreType: 'card',  trashVal: 0  },
