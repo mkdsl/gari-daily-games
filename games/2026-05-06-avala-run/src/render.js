@@ -1,4 +1,5 @@
 import { CONFIG } from './config.js';
+import { drawSprite, hasSprites } from './sprites.js';
 import { drawBackground, drawBranding } from './systems/world.js';
 import { objScreenX } from './systems/spawner.js';
 import { drawPlayer } from './entities/player.js';
@@ -39,6 +40,12 @@ export function render(ctx, state, canvasW, canvasH) {
 
 function drawObstacle(ctx, obj, sx, groundY) {
   const sy = groundY - obj.groundOffset;
+  // Try sprite first
+  if (hasSprites('obstacles')) {
+    const drawn = drawSprite(ctx, 'obstacles', obj.kind, sx, sy, obj.w, obj.h);
+    if (drawn) return;
+  }
+  // Fallback to programmatic
   ctx.save();
   switch (obj.kind) {
     case 'bor':    drawBor(ctx, sx, sy, obj.w, obj.h); break;
@@ -313,8 +320,14 @@ function drawDron(ctx, x, y, w, h) {
 
 function drawCollectible(ctx, obj, sx, groundY) {
   const sy = groundY - obj.groundOffset;
-  ctx.save();
 
+  // Try sprite first
+  if (hasSprites('collectibles')) {
+    const drawn = drawSprite(ctx, 'collectibles', obj.kind, sx, sy, obj.w, obj.h);
+    if (drawn) return;
+  }
+
+  ctx.save();
   // Determine base kind (strip _high/_low suffix)
   const baseKind = obj.kind.replace(/_high|_low/, '');
   switch (baseKind) {

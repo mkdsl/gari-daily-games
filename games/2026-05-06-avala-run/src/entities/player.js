@@ -1,5 +1,6 @@
 import { CONFIG } from '../config.js';
 import { consumeJump, consumeDuck } from '../input.js';
+import { drawSprite, hasSprites } from '../sprites.js';
 
 let _faceImg = null;
 let _faceLoaded = false;
@@ -83,6 +84,28 @@ export function drawPlayer(ctx, player, groundY) {
   const x = p.x - CONFIG.PLAYER_W / 2;
   const y = p.y;
   const ducking = p.isDucking;
+
+  // Try sprite first
+  if (hasSprites('player')) {
+    let frameName;
+    if (ducking) frameName = 'duck';
+    else if (p.isJumping) frameName = 'jump';
+    else frameName = 'run_' + p.animFrame;
+    const pw = CONFIG.PLAYER_W + 12; // sprite is wider than hitbox
+    const ph = ducking ? CONFIG.PLAYER_H_DUCK + 8 : CONFIG.PLAYER_H_RUN + 8;
+    const drawn = drawSprite(ctx, 'player', frameName, x - 6, y - 4, pw, ph);
+    if (drawn) {
+      // Still draw face overlay if available
+      const face = getFaceImage();
+      if (face && face.complete) {
+        const headY = y - (ducking ? 10 : 14);
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(face, x + 1, headY, 14, 12);
+        ctx.imageSmoothingEnabled = true;
+      }
+      return;
+    }
+  }
 
   ctx.save();
 
