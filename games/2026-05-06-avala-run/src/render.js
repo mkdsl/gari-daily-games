@@ -50,83 +50,262 @@ function drawObstacle(ctx, obj, sx, groundY) {
 }
 
 function drawBor(ctx, x, baseY, w, h) {
-  const col = '#0d2210';
-  const hl  = '#1a4020';
-  const pine_w = h * 0.5;
-  const layers = 3;
+  const cx = x + w / 2;
+
+  // Trunk with bark texture
+  const trunkW = 8;
+  const trunkH = h * 0.3;
+  ctx.fillStyle = '#2a1508';
+  ctx.fillRect(cx - trunkW / 2, baseY - trunkH, trunkW, trunkH);
+  // Bark highlights
+  ctx.fillStyle = '#3a2510';
+  ctx.fillRect(cx - 2, baseY - trunkH + 4, 2, 6);
+  ctx.fillRect(cx + 1, baseY - trunkH + 12, 2, 5);
+  // Bark dark lines
+  ctx.fillStyle = '#1a0a04';
+  ctx.fillRect(cx - 1, baseY - trunkH + 2, 1, trunkH - 4);
+
+  // Foliage — 4 layered triangles with depth
+  const layers = 4;
+  const colors = ['#0a2210', '#0d2a14', '#0f3318', '#0a2210'];
+  const hlColors = ['#1a4020', '#1d4a26', '#20552c', '#1a4020'];
+  const pine_w = h * 0.55;
+
   for (let i = 0; i < layers; i++) {
-    const layerH = h * 0.45;
-    const layerW = pine_w * (1 - i * 0.2);
-    const layerY = baseY - h * 0.3 * i - layerH;
-    ctx.fillStyle = col;
+    const layerH = h * 0.38;
+    const layerW = pine_w * (1 - i * 0.15);
+    const layerY = baseY - h * 0.22 * i - layerH - h * 0.1;
+
+    // Main dark triangle
+    ctx.fillStyle = colors[i];
     ctx.beginPath();
-    ctx.moveTo(x + w / 2, layerY);
-    ctx.lineTo(x + w / 2 - layerW / 2, layerY + layerH);
-    ctx.lineTo(x + w / 2 + layerW / 2, layerY + layerH);
+    ctx.moveTo(cx, layerY);
+    ctx.lineTo(cx - layerW / 2, layerY + layerH);
+    ctx.lineTo(cx + layerW / 2, layerY + layerH);
     ctx.closePath();
     ctx.fill();
-    // Highlight linija
-    ctx.strokeStyle = hl;
-    ctx.lineWidth = 1;
+
+    // Left highlight edge (moonlight)
+    ctx.fillStyle = hlColors[i];
     ctx.beginPath();
-    ctx.moveTo(x + w / 2, layerY + 2);
-    ctx.lineTo(x + w / 2 - layerW / 4, layerY + layerH / 2);
-    ctx.stroke();
+    ctx.moveTo(cx, layerY);
+    ctx.lineTo(cx - layerW / 2, layerY + layerH);
+    ctx.lineTo(cx - layerW / 3, layerY + layerH * 0.6);
+    ctx.closePath();
+    ctx.fill();
+
+    // Snow/frost on tips
+    if (i >= 2) {
+      ctx.fillStyle = 'rgba(100,130,160,0.15)';
+      ctx.fillRect(cx - 1, layerY, 2, 3);
+    }
   }
-  // Stub
-  ctx.fillStyle = '#3a2010';
-  ctx.fillRect(x + w / 2 - 3, baseY - h * 0.2, 6, h * 0.2);
+
+  // Root shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.beginPath();
+  ctx.ellipse(cx, baseY, 8, 2, 0, 0, Math.PI * 2);
+  ctx.fill();
 }
 
 function drawKamen(ctx, x, y, w, h) {
-  ctx.fillStyle = '#556677';
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+
+  // Main rock shape (irregular polygon)
+  ctx.fillStyle = '#3a4455';
   ctx.beginPath();
-  ctx.ellipse(x + w / 2, y + h / 2, w / 2, h / 2, 0, 0, Math.PI * 2);
+  ctx.moveTo(x + 4, y + h);
+  ctx.lineTo(x + 1, cy + 2);
+  ctx.lineTo(x + 3, y + 3);
+  ctx.lineTo(x + w * 0.3, y);
+  ctx.lineTo(x + w * 0.7, y + 1);
+  ctx.lineTo(x + w - 2, y + 4);
+  ctx.lineTo(x + w, cy + 1);
+  ctx.lineTo(x + w - 3, y + h);
+  ctx.closePath();
   ctx.fill();
-  ctx.fillStyle = '#778899';
+
+  // Top highlight (light source from above-left)
+  ctx.fillStyle = '#5a6a7a';
   ctx.beginPath();
-  ctx.ellipse(x + w / 2 - 3, y + h / 2 - 3, w / 4, h / 3, 0, 0, Math.PI * 2);
+  ctx.moveTo(x + 4, y + 5);
+  ctx.lineTo(x + w * 0.3, y + 1);
+  ctx.lineTo(x + w * 0.6, y + 2);
+  ctx.lineTo(x + w * 0.5, y + h * 0.5);
+  ctx.lineTo(x + 6, y + h * 0.5);
+  ctx.closePath();
+  ctx.fill();
+
+  // Cracks/texture
+  ctx.strokeStyle = '#2a3344';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(cx - 4, cy - 2);
+  ctx.lineTo(cx + 2, cy + 3);
+  ctx.lineTo(cx + 6, cy + 1);
+  ctx.stroke();
+
+  // Small detail pebbles nearby
+  ctx.fillStyle = '#4a5566';
+  ctx.fillRect(x + w - 5, y + h - 3, 3, 2);
+  ctx.fillRect(x + 2, y + h - 2, 2, 2);
+
+  // Bottom shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  ctx.beginPath();
+  ctx.ellipse(cx, y + h + 1, w / 2 - 2, 2, 0, 0, Math.PI * 2);
   ctx.fill();
 }
 
 function drawKamion(ctx, x, y, w, h) {
-  // Telo
-  ctx.fillStyle = '#334455';
-  ctx.fillRect(x, y, w, h);
-  // Kabina
-  ctx.fillStyle = '#445566';
-  ctx.fillRect(x + 2, y + 2, Math.floor(w * 0.35), Math.floor(h * 0.6));
-  // Prozor kabine
-  ctx.fillStyle = '#223344';
-  ctx.fillRect(x + 4, y + 4, Math.floor(w * 0.2), Math.floor(h * 0.35));
-  // Točkovi
-  ctx.fillStyle = '#111122';
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
   ctx.beginPath();
-  ctx.arc(x + 12, y + h, 8, 0, Math.PI * 2);
+  ctx.ellipse(x + w / 2, y + h + 2, w / 2 - 4, 3, 0, 0, Math.PI * 2);
   ctx.fill();
-  ctx.beginPath();
-  ctx.arc(x + w - 12, y + h, 8, 0, Math.PI * 2);
-  ctx.fill();
-  // Highlight kontura
-  ctx.strokeStyle = '#445566';
+
+  // Chassis/undercarriage
+  ctx.fillStyle = '#1a1a2a';
+  ctx.fillRect(x + 8, y + h - 6, w - 16, 6);
+
+  // Main cargo body
+  const bodyGrad = ctx.createLinearGradient(x, y, x, y + h);
+  bodyGrad.addColorStop(0, '#3a4a5a');
+  bodyGrad.addColorStop(0.5, '#2a3a4a');
+  bodyGrad.addColorStop(1, '#1a2a3a');
+  ctx.fillStyle = bodyGrad;
+  ctx.fillRect(x + Math.floor(w * 0.3), y + 2, Math.floor(w * 0.68), h - 8);
+
+  // Cargo body ribs (vertical lines)
+  ctx.strokeStyle = '#4a5a6a';
   ctx.lineWidth = 1;
-  ctx.strokeRect(x, y, w, h);
+  for (let i = 1; i < 4; i++) {
+    const rx = x + Math.floor(w * 0.3) + i * Math.floor(w * 0.17);
+    ctx.beginPath();
+    ctx.moveTo(rx, y + 3);
+    ctx.lineTo(rx, y + h - 8);
+    ctx.stroke();
+  }
+
+  // Cabin
+  const cabGrad = ctx.createLinearGradient(x, y, x + w * 0.3, y + h);
+  cabGrad.addColorStop(0, '#4a5566');
+  cabGrad.addColorStop(1, '#2a3544');
+  ctx.fillStyle = cabGrad;
+  ctx.fillRect(x + 2, y + 4, Math.floor(w * 0.28), h - 10);
+
+  // Cabin windshield
+  ctx.fillStyle = '#1a2533';
+  ctx.fillRect(x + 4, y + 6, Math.floor(w * 0.18), Math.floor(h * 0.35));
+  // Windshield reflection
+  ctx.fillStyle = 'rgba(100,150,200,0.15)';
+  ctx.fillRect(x + 5, y + 7, 3, Math.floor(h * 0.25));
+
+  // Headlight
+  ctx.fillStyle = '#ffdd88';
+  ctx.fillRect(x + 2, y + h - 14, 3, 4);
+  ctx.fillStyle = 'rgba(255,220,100,0.3)';
+  ctx.fillRect(x, y + h - 15, 2, 6);
+
+  // Taillight
+  ctx.fillStyle = '#ff3344';
+  ctx.fillRect(x + w - 3, y + h - 14, 3, 4);
+
+  // Wheels with detail
+  const wheelR = 9;
+  const wheelY = y + h;
+  [x + 16, x + w - 16].forEach(wx => {
+    // Tire
+    ctx.fillStyle = '#0a0a14';
+    ctx.beginPath();
+    ctx.arc(wx, wheelY, wheelR, 0, Math.PI * 2);
+    ctx.fill();
+    // Rim
+    ctx.fillStyle = '#3a3a4a';
+    ctx.beginPath();
+    ctx.arc(wx, wheelY, wheelR - 3, 0, Math.PI * 2);
+    ctx.fill();
+    // Hub
+    ctx.fillStyle = '#5a5a6a';
+    ctx.beginPath();
+    ctx.arc(wx, wheelY, 2, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // Top edge highlight
+  ctx.strokeStyle = 'rgba(100,120,150,0.3)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x + Math.floor(w * 0.3), y + 2);
+  ctx.lineTo(x + w - 2, y + 2);
+  ctx.stroke();
 }
 
 function drawDron(ctx, x, y, w, h) {
-  // Telo
-  ctx.fillStyle = '#223344';
-  ctx.fillRect(x + Math.floor(w * 0.3), y + Math.floor(h * 0.2), Math.floor(w * 0.4), Math.floor(h * 0.6));
-  // Horizontalni krak
-  ctx.fillRect(x, y + Math.floor(h * 0.3), w, Math.floor(h * 0.15));
-  // Propeleri
-  ctx.fillStyle = '#445566';
-  ctx.fillRect(x + 1, y, 5, 6);
-  ctx.fillRect(x + w - 6, y, 5, 6);
-  // LED svetlo (crveno)
-  ctx.fillStyle = '#ff3344';
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+  const _t = Date.now() * 0.01;
+
+  // Propeller blur (animated suggestion)
+  ctx.globalAlpha = 0.3;
+  ctx.fillStyle = '#667788';
+  // Left prop disc
   ctx.beginPath();
-  ctx.arc(x + w / 2, y + h / 2, 2, 0, Math.PI * 2);
+  ctx.ellipse(x + 5, y + 2, 7, 2, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // Right prop disc
+  ctx.beginPath();
+  ctx.ellipse(x + w - 5, y + 2, 7, 2, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // Arms
+  ctx.fillStyle = '#2a3344';
+  ctx.fillRect(x + 2, cy - 2, w - 4, 4);
+
+  // Central body
+  const bodyGrad = ctx.createLinearGradient(cx - 8, cy - 5, cx + 8, cy + 5);
+  bodyGrad.addColorStop(0, '#3a4455');
+  bodyGrad.addColorStop(1, '#1a2233');
+  ctx.fillStyle = bodyGrad;
+  ctx.fillRect(cx - 8, cy - 5, 16, 10);
+
+  // Body detail
+  ctx.fillStyle = '#4a5566';
+  ctx.fillRect(cx - 6, cy - 4, 12, 2);
+
+  // Motor mounts
+  ctx.fillStyle = '#3a4455';
+  ctx.fillRect(x + 2, cy - 4, 5, 8);
+  ctx.fillRect(x + w - 7, cy - 4, 5, 8);
+
+  // Propeller blades (pixel style, alternating)
+  ctx.fillStyle = '#5a6a7a';
+  // Left props
+  ctx.fillRect(x, y, 3, 2);
+  ctx.fillRect(x + 5, y, 3, 2);
+  // Right props
+  ctx.fillRect(x + w - 8, y, 3, 2);
+  ctx.fillRect(x + w - 3, y, 3, 2);
+
+  // LED lights
+  ctx.fillStyle = '#ff3344';
+  ctx.fillRect(cx - 1, cy + 3, 2, 2);
+  // Green nav lights
+  ctx.fillStyle = '#44ff66';
+  ctx.fillRect(x + 3, cy + 2, 2, 2);
+  ctx.fillStyle = '#ff4444';
+  ctx.fillRect(x + w - 5, cy + 2, 2, 2);
+
+  // Camera lens
+  ctx.fillStyle = '#111122';
+  ctx.beginPath();
+  ctx.arc(cx, cy + 6, 2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(100,150,200,0.4)';
+  ctx.beginPath();
+  ctx.arc(cx - 0.5, cy + 5.5, 1, 0, Math.PI * 2);
   ctx.fill();
 }
 
@@ -145,55 +324,191 @@ function drawCollectible(ctx, obj, sx, groundY) {
 }
 
 function drawKarta(ctx, x, y, w, h) {
-  // Glow
-  ctx.shadowBlur = 12;
+  const _t = Date.now() * 0.003;
+
+  // Outer glow
+  ctx.shadowBlur = 14;
   ctx.shadowColor = '#FFD700';
-  ctx.fillStyle = CONFIG.COLORS.KARTA;
+
+  // Card body with golden gradient
+  const cGrad = ctx.createLinearGradient(x, y, x + w, y + h);
+  cGrad.addColorStop(0, '#FFE44D');
+  cGrad.addColorStop(0.3, '#FFD700');
+  cGrad.addColorStop(0.7, '#FFAA00');
+  cGrad.addColorStop(1, '#CC8800');
+  ctx.fillStyle = cGrad;
   ctx.fillRect(x, y, w, h);
-  // Linija detalj
-  ctx.fillStyle = '#FFA500';
-  ctx.fillRect(x + 2, y + 4, w - 4, 3);
-  ctx.fillRect(x + 2, y + h - 7, w - 4, 3);
   ctx.shadowBlur = 0;
-  // Glow particle iznad
-  ctx.fillStyle = 'rgba(255,215,0,0.6)';
-  ctx.beginPath();
-  ctx.arc(x + w / 2, y - 6, 3, 0, Math.PI * 2);
-  ctx.fill();
+
+  // Inner border
+  ctx.strokeStyle = '#CC8800';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x + 2, y + 2, w - 4, h - 4);
+
+  // Star/ticket symbol in center
+  ctx.fillStyle = '#FFFFFF';
+  ctx.globalAlpha = 0.6;
+  const starX = x + w / 2;
+  const starY = y + h / 2;
+  ctx.fillRect(starX - 1, starY - 3, 2, 6);
+  ctx.fillRect(starX - 3, starY - 1, 6, 2);
+  ctx.globalAlpha = 1;
+
+  // Top decorative line
+  ctx.fillStyle = '#FFFFFF';
+  ctx.globalAlpha = 0.4;
+  ctx.fillRect(x + 3, y + 3, w - 6, 1);
+  ctx.globalAlpha = 1;
+
+  // Bottom barcode-like detail
+  ctx.fillStyle = '#AA7700';
+  for (let i = 0; i < 4; i++) {
+    ctx.fillRect(x + 4 + i * 3, y + h - 5, 2, 3);
+  }
+
+  // Sparkle particle above (animated feel via position)
+  const sparkAlpha = 0.4 + Math.sin(_t) * 0.3;
+  ctx.globalAlpha = sparkAlpha;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(x + w / 2 - 1, y - 5, 2, 2);
+  ctx.fillRect(x + w / 2, y - 7, 1, 1);
+  ctx.globalAlpha = 1;
 }
 
 function drawLimenka(ctx, x, y, w, h) {
-  ctx.fillStyle = CONFIG.COLORS.LIMENKA;
-  ctx.fillRect(x + 2, y, w - 4, h);
-  // Gornji i donji prsten
-  ctx.fillStyle = '#AABBCC';
-  ctx.fillRect(x, y + 3, w, 2);
-  ctx.fillRect(x, y + h - 5, w, 2);
-  // Highlight
-  ctx.fillStyle = 'rgba(255,255,255,0.2)';
-  ctx.fillRect(x + 3, y + 4, 3, h - 10);
+  // Can body with metallic gradient
+  const canGrad = ctx.createLinearGradient(x, y, x + w, y);
+  canGrad.addColorStop(0, '#6a7a8a');
+  canGrad.addColorStop(0.3, '#8899AA');
+  canGrad.addColorStop(0.5, '#AABBCC');
+  canGrad.addColorStop(0.7, '#8899AA');
+  canGrad.addColorStop(1, '#5a6a7a');
+  ctx.fillStyle = canGrad;
+  ctx.fillRect(x + 1, y + 3, w - 2, h - 6);
+
+  // Top rim (lid)
+  ctx.fillStyle = '#BBCCDD';
+  ctx.fillRect(x, y, w, 3);
+  // Tab on top
+  ctx.fillStyle = '#99AABB';
+  ctx.fillRect(x + w / 2 - 2, y - 1, 4, 2);
+  ctx.fillRect(x + w / 2, y - 2, 2, 1);
+
+  // Bottom rim
+  ctx.fillStyle = '#99AABB';
+  ctx.fillRect(x, y + h - 3, w, 3);
+
+  // Label band (colored stripe)
+  ctx.fillStyle = '#cc3344';
+  ctx.fillRect(x + 2, y + 8, w - 4, 8);
+  // Label text suggestion
+  ctx.fillStyle = '#ffffff';
+  ctx.globalAlpha = 0.5;
+  ctx.fillRect(x + 4, y + 10, w - 8, 1);
+  ctx.fillRect(x + 5, y + 13, w - 10, 1);
+  ctx.globalAlpha = 1;
+
+  // Specular highlight
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.fillRect(x + 3, y + 4, 2, h - 9);
+
+  // Dent/crush detail
+  ctx.fillStyle = 'rgba(0,0,0,0.1)';
+  ctx.fillRect(x + w - 4, y + h - 10, 2, 4);
 }
 
 function drawFlasa(ctx, x, y, w, h) {
-  ctx.fillStyle = CONFIG.COLORS.FLASA;
-  // Telo
-  ctx.fillRect(x + 2, y + Math.floor(h * 0.3), w - 4, Math.floor(h * 0.7));
-  // Grlo
-  ctx.fillRect(x + 4, y, w - 8, Math.floor(h * 0.35));
-  // Highlight
-  ctx.fillStyle = 'rgba(255,255,255,0.15)';
-  ctx.fillRect(x + 3, y + Math.floor(h * 0.35), 2, Math.floor(h * 0.5));
+  const cx = x + w / 2;
+  const neckH = Math.floor(h * 0.3);
+  const bodyH = h - neckH;
+  const bodyY = y + neckH;
+
+  // Bottle body
+  const bGrad = ctx.createLinearGradient(x, y, x + w, y);
+  bGrad.addColorStop(0, '#5a4228');
+  bGrad.addColorStop(0.3, '#7A5C3A');
+  bGrad.addColorStop(0.6, '#8a6c4a');
+  bGrad.addColorStop(1, '#4a3218');
+  ctx.fillStyle = bGrad;
+  ctx.fillRect(x + 1, bodyY, w - 2, bodyH);
+
+  // Bottle neck (narrower)
+  ctx.fillStyle = '#6a4c32';
+  ctx.fillRect(cx - 2, y, 4, neckH + 2);
+
+  // Bottle cap
+  ctx.fillStyle = '#aa8844';
+  ctx.fillRect(cx - 3, y - 1, 6, 3);
+
+  // Label
+  ctx.fillStyle = '#ddccaa';
+  ctx.fillRect(x + 2, bodyY + 4, w - 4, Math.floor(bodyH * 0.4));
+  // Label text lines
+  ctx.fillStyle = '#5a4228';
+  ctx.fillRect(x + 3, bodyY + 6, w - 6, 1);
+  ctx.fillRect(x + 4, bodyY + 9, w - 8, 1);
+
+  // Specular highlight (glass reflection)
+  ctx.fillStyle = 'rgba(255,255,255,0.2)';
+  ctx.fillRect(x + 2, bodyY + 1, 2, bodyH - 2);
+  ctx.fillRect(cx - 1, y + 1, 1, neckH - 1);
+
+  // Base shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.2)';
+  ctx.fillRect(x + 1, y + h - 2, w - 2, 2);
 }
 
 function drawPapir(ctx, x, y, w, h) {
   ctx.save();
   ctx.translate(x + w / 2, y + h / 2);
-  ctx.rotate(0.15);
-  ctx.fillStyle = CONFIG.COLORS.PAPIR;
-  ctx.fillRect(-w / 2, -h / 2, w, h);
-  // Linije teksta
-  ctx.fillStyle = 'rgba(0,0,0,0.25)';
-  ctx.fillRect(-w / 2 + 2, -h / 2 + 3, w - 4, 2);
-  ctx.fillRect(-w / 2 + 2, -h / 2 + 7, w - 6, 2);
+  ctx.rotate(0.18);
+
+  // Paper sheet with crumple effect
+  const pw = w / 2;
+  const ph = h / 2;
+
+  // Shadow under
+  ctx.fillStyle = 'rgba(0,0,0,0.15)';
+  ctx.fillRect(-pw + 2, -ph + 2, w, h);
+
+  // Main paper body
+  const pGrad = ctx.createLinearGradient(-pw, -ph, pw, ph);
+  pGrad.addColorStop(0, '#E8E8D8');
+  pGrad.addColorStop(0.5, '#D0D0C0');
+  pGrad.addColorStop(1, '#B8B8A8');
+  ctx.fillStyle = pGrad;
+  ctx.beginPath();
+  ctx.moveTo(-pw, -ph);
+  ctx.lineTo(pw - 3, -ph + 1);
+  ctx.lineTo(pw, -ph + 3);
+  ctx.lineTo(pw - 1, ph);
+  ctx.lineTo(-pw + 2, ph - 1);
+  ctx.closePath();
+  ctx.fill();
+
+  // Folded corner
+  ctx.fillStyle = '#C8C8B8';
+  ctx.beginPath();
+  ctx.moveTo(pw - 3, -ph + 1);
+  ctx.lineTo(pw, -ph + 3);
+  ctx.lineTo(pw - 3, -ph + 4);
+  ctx.closePath();
+  ctx.fill();
+
+  // Text lines
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.fillRect(-pw + 2, -ph + 3, w - 6, 1);
+  ctx.fillRect(-pw + 2, -ph + 6, w - 8, 1);
+  ctx.fillRect(-pw + 2, -ph + 9, w - 5, 1);
+  ctx.fillRect(-pw + 2, -ph + 12, w - 9, 1);
+
+  // Crumple wrinkle line
+  ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(-pw + 4, -ph + 2);
+  ctx.lineTo(pw - 4, ph - 2);
+  ctx.stroke();
+
   ctx.restore();
 }

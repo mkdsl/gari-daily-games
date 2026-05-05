@@ -66,79 +66,156 @@ export function drawPlayer(ctx, player, groundY) {
 
   ctx.save();
 
-  // Body
-  ctx.fillStyle = CONFIG.COLORS.PLAYER;
   const bodyH = ducking ? 18 : 28;
   const bodyW = 16;
+  const headH = 12;
+  const headW = 14;
+  const headY = y - (ducking ? 10 : 14);
+
+  // Shadow on ground
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.beginPath();
+  ctx.ellipse(x + bodyW / 2 + 2, groundY - 1, 12, 3, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Legs (behind body)
+  if (!ducking) {
+    const legColor = '#0f0f22';
+    const shoeColor = '#2a1a3d';
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    if (p.animFrame === 0) {
+      // Left leg forward
+      ctx.strokeStyle = legColor;
+      ctx.beginPath();
+      ctx.moveTo(x + 5, y + bodyH);
+      ctx.lineTo(x + 3, y + bodyH + 6);
+      ctx.lineTo(x + 1, y + bodyH + 11);
+      ctx.stroke();
+      // shoe
+      ctx.fillStyle = shoeColor;
+      ctx.fillRect(x - 1, y + bodyH + 9, 5, 3);
+      // Right leg back
+      ctx.strokeStyle = legColor;
+      ctx.beginPath();
+      ctx.moveTo(x + 11, y + bodyH);
+      ctx.lineTo(x + 13, y + bodyH + 5);
+      ctx.lineTo(x + 14, y + bodyH + 9);
+      ctx.stroke();
+      ctx.fillStyle = shoeColor;
+      ctx.fillRect(x + 12, y + bodyH + 7, 5, 3);
+    } else {
+      // Right leg forward
+      ctx.strokeStyle = legColor;
+      ctx.beginPath();
+      ctx.moveTo(x + 11, y + bodyH);
+      ctx.lineTo(x + 14, y + bodyH + 6);
+      ctx.lineTo(x + 16, y + bodyH + 11);
+      ctx.stroke();
+      ctx.fillStyle = shoeColor;
+      ctx.fillRect(x + 14, y + bodyH + 9, 5, 3);
+      // Left leg back
+      ctx.strokeStyle = legColor;
+      ctx.beginPath();
+      ctx.moveTo(x + 5, y + bodyH);
+      ctx.lineTo(x + 3, y + bodyH + 5);
+      ctx.lineTo(x + 2, y + bodyH + 9);
+      ctx.stroke();
+      ctx.fillStyle = shoeColor;
+      ctx.fillRect(x, y + bodyH + 7, 5, 3);
+    }
+  }
+
+  // Body — hoodie with shading
+  const bodyGrad = ctx.createLinearGradient(x, y, x + bodyW, y + bodyH);
+  bodyGrad.addColorStop(0, '#1e1e38');
+  bodyGrad.addColorStop(0.5, '#14142a');
+  bodyGrad.addColorStop(1, '#0a0a1e');
+  ctx.fillStyle = bodyGrad;
   if (ctx.roundRect) {
     ctx.beginPath();
-    ctx.roundRect(x, y, bodyW, bodyH, 2);
+    ctx.roundRect(x, y, bodyW, bodyH, 3);
     ctx.fill();
   } else {
     ctx.fillRect(x, y, bodyW, bodyH);
   }
-
-  // Glava
-  const headH = 12;
-  const headW = 14;
-  const headY = y - (ducking ? 10 : 14);
-  ctx.fillStyle = CONFIG.COLORS.PLAYER;
-  ctx.fillRect(x + 1, headY, headW, headH);
-
-  // Slušalice
-  ctx.strokeStyle = CONFIG.COLORS.PLAYER_HL;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(x + headW / 2 + 1, headY + 2, 7, Math.PI, 0);
-  ctx.stroke();
-  // Levi i desni jastuk
-  ctx.fillStyle = CONFIG.COLORS.PLAYER_HL;
-  ctx.beginPath();
-  ctx.arc(x + 1, headY + 2, 3, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(x + headW, headY + 2, 3, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Torba (desna strana)
-  const bagH = ducking ? 12 : 18;
-  ctx.fillStyle = CONFIG.COLORS.PLAYER;
-  ctx.fillRect(x + 14, y + 4, 8, bagH);
-  ctx.strokeStyle = CONFIG.COLORS.PLAYER_HL;
-  ctx.lineWidth = 1;
-  ctx.strokeRect(x + 14, y + 4, 8, bagH);
-  // Strap torbe
-  ctx.beginPath();
-  ctx.moveTo(x + 14, y + 4);
-  ctx.lineTo(x + 8, y + (ducking ? 2 : 0));
-  ctx.stroke();
-
-  // Noge (2 linije, smenjuju se)
+  // Body highlight edge (left)
+  ctx.fillStyle = 'rgba(100,120,180,0.15)';
+  ctx.fillRect(x, y + 2, 2, bodyH - 4);
+  // Hoodie pocket detail
   if (!ducking) {
-    ctx.strokeStyle = CONFIG.COLORS.PLAYER;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(x + 3, y + bodyH - 8, 10, 4);
+  }
+
+  // Head
+  const headGrad = ctx.createLinearGradient(x + 1, headY, x + headW, headY + headH);
+  headGrad.addColorStop(0, '#2a2a44');
+  headGrad.addColorStop(1, '#1a1a30');
+  ctx.fillStyle = headGrad;
+  ctx.fillRect(x + 1, headY, headW, headH);
+  // Face detail - visor/shades
+  ctx.fillStyle = '#0a0a14';
+  ctx.fillRect(x + 3, headY + 4, 10, 3);
+  // Highlight on forehead
+  ctx.fillStyle = 'rgba(100,140,200,0.2)';
+  ctx.fillRect(x + 3, headY + 1, 8, 2);
+
+  // Headphones band
+  ctx.strokeStyle = '#5577BB';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(x + headW / 2 + 1, headY + 1, 8, Math.PI * 1.1, Math.PI * -0.1);
+  ctx.stroke();
+  // Left ear cup
+  ctx.fillStyle = '#5577BB';
+  ctx.fillRect(x - 1, headY + 1, 4, 6);
+  ctx.fillStyle = '#3a5599';
+  ctx.fillRect(x, headY + 2, 2, 4);
+  // Right ear cup
+  ctx.fillStyle = '#5577BB';
+  ctx.fillRect(x + headW - 1, headY + 1, 4, 6);
+  ctx.fillStyle = '#3a5599';
+  ctx.fillRect(x + headW, headY + 2, 2, 4);
+
+  // DJ Bag (right side, detailed)
+  const bagH = ducking ? 12 : 18;
+  const bagX = x + 14;
+  const bagY = y + 3;
+  // Bag body with gradient
+  const bagGrad = ctx.createLinearGradient(bagX, bagY, bagX + 9, bagY + bagH);
+  bagGrad.addColorStop(0, '#2a2a44');
+  bagGrad.addColorStop(1, '#16162a');
+  ctx.fillStyle = bagGrad;
+  ctx.fillRect(bagX, bagY, 9, bagH);
+  // Bag zipper
+  ctx.fillStyle = '#6688AA';
+  ctx.fillRect(bagX + 4, bagY + 2, 1, bagH - 4);
+  // Bag buckle
+  ctx.fillStyle = '#888888';
+  ctx.fillRect(bagX + 2, bagY + bagH - 3, 5, 2);
+  // Strap
+  ctx.strokeStyle = '#4466AA';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(bagX, bagY);
+  ctx.lineTo(x + 8, y + (ducking ? 0 : -2));
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(bagX + 9, bagY);
+  ctx.lineTo(x + 12, y + (ducking ? 0 : -2));
+  ctx.stroke();
+
+  // Arm (simple, swinging)
+  if (!ducking) {
+    ctx.strokeStyle = '#14142a';
     ctx.lineWidth = 3;
     ctx.lineCap = 'round';
-    if (p.animFrame === 0) {
-      // Leva napred
-      ctx.beginPath();
-      ctx.moveTo(x + 4, y + bodyH);
-      ctx.lineTo(x + 2, y + bodyH + 10);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(x + 12, y + bodyH);
-      ctx.lineTo(x + 14, y + bodyH + 8);
-      ctx.stroke();
-    } else {
-      // Desna napred
-      ctx.beginPath();
-      ctx.moveTo(x + 4, y + bodyH);
-      ctx.lineTo(x + 1, y + bodyH + 8);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(x + 12, y + bodyH);
-      ctx.lineTo(x + 15, y + bodyH + 10);
-      ctx.stroke();
-    }
+    const armSwing = p.animFrame === 0 ? -2 : 2;
+    ctx.beginPath();
+    ctx.moveTo(x + 2, y + 6);
+    ctx.lineTo(x - 2 + armSwing, y + 16);
+    ctx.stroke();
   }
 
   ctx.restore();
