@@ -4,7 +4,7 @@ import { createState, saveDailyHighscore } from './state.js';
 import { initInput, showTouchControls, hideTouchControls } from './input.js';
 import {
   initAudio, resumeAudio, updateAudio,
-  playTrashSound, playGameOverSound
+  playTrashSound, playGameOverSound, playLogoSound
 } from './audio.js';
 import { render } from './render.js';
 import { showMenu, hideMenu, updateHUD, showGameOver, hideGameOver } from './ui.js';
@@ -117,8 +117,13 @@ function loop(now) {
     if (hit) {
       if (obj.type === 'collectible') {
         obj.collected = true;
-        state.trashCount++;
-        playTrashSound();
+        if (obj.kind === 'logo') {
+          state.score += CONFIG.LOGO_SCORE;
+          playLogoSound();
+        } else {
+          state.trashCount++;
+          playTrashSound();
+        }
       } else {
         endRun();
         requestAnimationFrame(loop);

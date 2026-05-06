@@ -153,8 +153,8 @@ hr { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 16px 0;
   transform: scale(0.97);
 }
 
-/* Branding logos */
-.menu-logo, .go-logo {
+/* Menu logo */
+.menu-logo {
   filter: invert(1);
   width: 120px;
   margin: 0 auto 16px;

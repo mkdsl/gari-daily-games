@@ -404,12 +404,27 @@ function drawPine(ctx, x, baseY, h, color, variant, isFar) {
   }
 }
 
+const _brandingLogo = new Image();
+_brandingLogo.src = 'sprites/logo.png';
+
 export function drawBranding(ctx, canvasW, canvasH) {
   ctx.save();
   ctx.globalAlpha = 0.4;
+
+  // Small logo in bottom-right corner
+  const logoSize = 16;
+  const logoX = canvasW - 8 - 90 - logoSize - 4;
+  const logoY = canvasH - 8 - logoSize + 4;
+  if (_brandingLogo.complete && _brandingLogo.naturalWidth > 0) {
+    ctx.filter = 'invert(1)';
+    ctx.drawImage(_brandingLogo, logoX, logoY, logoSize, logoSize);
+    ctx.filter = 'none';
+  }
+
+  // Text beside logo
   ctx.fillStyle = CONFIG.COLORS.BRANDING;
   ctx.font = '10px monospace';
   ctx.textAlign = 'right';
-  ctx.fillText('K KLUBOSLAVIJA', canvasW - 8, canvasH - 8);
+  ctx.fillText('KLUBOSLAVIJA', canvasW - 8, canvasH - 8);
   ctx.restore();
 }

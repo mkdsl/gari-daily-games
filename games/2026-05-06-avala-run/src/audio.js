@@ -345,6 +345,26 @@ export function playTrashSound() {
   src.stop(audioCtx.currentTime + 0.06);
 }
 
+export function playLogoSound() {
+  if (!audioCtx) return;
+  // Triumphant ascending arpeggio — premium power-up feel
+  [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'triangle';
+    osc.frequency.value = freq;
+    const t = audioCtx.currentTime + i * 0.08;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.18, t + 0.02);
+    gain.gain.setValueAtTime(0.18, t + 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+    osc.start(t);
+    osc.stop(t + 0.25);
+  });
+}
+
 export function playGameOverSound() {
   if (!audioCtx) return;
   [440, 330, 220].forEach((freq, i) => {

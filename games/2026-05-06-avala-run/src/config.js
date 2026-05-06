@@ -50,8 +50,13 @@ export const CONFIG = {
     flasa_high:   { w: 12, h: 28, groundOffset: 92, scoreType: 'trash', trashVal: 1, requireState: 'jumping' },
     flasa_low:    { w: 12, h: 28, groundOffset: 10, scoreType: 'trash', trashVal: 1, requireState: 'ducking' },
     papir_high:   { w: 22, h: 16, groundOffset: 82, scoreType: 'trash', trashVal: 1, requireState: 'jumping' },
-    papir_low:    { w: 22, h: 16, groundOffset: 8,  scoreType: 'trash', trashVal: 1, requireState: 'ducking' }
+    papir_low:    { w: 22, h: 16, groundOffset: 8,  scoreType: 'trash', trashVal: 1, requireState: 'ducking' },
+    logo:         { w: 28, h: 28, groundOffset: 50, scoreType: 'logo',  trashVal: 0, requireState: null }
   },
+
+  // Logo power-up
+  LOGO_SCORE: 50,
+  LOGO_CHANCE: 0.08,
 
   // Colors
   COLORS: {

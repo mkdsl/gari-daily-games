@@ -4,6 +4,10 @@ import { drawBackground, drawBranding } from './systems/world.js';
 import { objScreenX } from './systems/spawner.js';
 import { drawPlayer } from './entities/player.js';
 
+// Logo image for power-up collectible
+const logoImg = new Image();
+logoImg.src = 'sprites/logo.png';
+
 export function render(ctx, state, canvasW, canvasH) {
   const groundY = canvasH * CONFIG.GROUND_RATIO;
 
@@ -322,6 +326,13 @@ function drawCollectible(ctx, obj, sx, groundY) {
   ctx.shadowBlur = 8 + Math.sin(Date.now() * 0.005) * 4;
   ctx.shadowColor = '#44ff88';
 
+  // Logo collectible gets special premium rendering
+  if (obj.kind === 'logo') {
+    drawLogo(ctx, sx, sy, obj.w, obj.h);
+    ctx.restore();
+    return;
+  }
+
   // Determine base kind (strip _high/_low suffix)
   const baseKind = obj.kind.replace(/_high|_low/, '');
   switch (baseKind) {
@@ -507,6 +518,49 @@ function drawPapir(ctx, x, y, w, h) {
   ctx.moveTo(-pw + 4, -ph + 2);
   ctx.lineTo(pw - 4, ph - 2);
   ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawLogo(ctx, x, y, w, h) {
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+  const t = Date.now() * 0.003;
+
+  // Pulsating golden glow circle behind logo
+  const pulseR = w * 0.7 + Math.sin(t) * 3;
+  ctx.save();
+  ctx.shadowBlur = 16 + Math.sin(t * 1.5) * 6;
+  ctx.shadowColor = '#FFD700';
+
+  // Golden circle background
+  const glowGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, pulseR);
+  glowGrad.addColorStop(0, 'rgba(255,215,0,0.6)');
+  glowGrad.addColorStop(0.6, 'rgba(204,34,68,0.3)');
+  glowGrad.addColorStop(1, 'rgba(204,34,68,0)');
+  ctx.fillStyle = glowGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, pulseR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Slow rotation
+  ctx.translate(cx, cy);
+  ctx.rotate(Math.sin(t * 0.5) * 0.15);
+  ctx.translate(-cx, -cy);
+
+  // Draw logo image inverted (white on dark) if loaded
+  if (logoImg.complete && logoImg.naturalWidth > 0) {
+    ctx.filter = 'invert(1) brightness(1.2)';
+    ctx.drawImage(logoImg, x, y, w, h);
+    ctx.filter = 'none';
+  } else {
+    // Fallback: golden "K" letter
+    ctx.fillStyle = '#FFD700';
+    ctx.font = `bold ${h}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('K', cx, cy);
+  }
 
   ctx.restore();
 }
