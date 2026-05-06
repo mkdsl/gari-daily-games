@@ -69,11 +69,11 @@ export function updatePlayer(state, dt, groundY) {
     p.isJumping = false;
   }
 
-  // Animation
+  // Animation — 4 frames for smoother run cycle
   p.animTimer += dt;
-  if (p.animTimer >= 0.15) {
+  if (p.animTimer >= 0.12) {
     p.animTimer = 0;
-    p.animFrame = p.animFrame === 0 ? 1 : 0;
+    p.animFrame = (p.animFrame + 1) % 4;
   }
 }
 
@@ -89,15 +89,15 @@ export function drawPlayer(ctx, player, groundY) {
     if (ducking) frameName = 'duck';
     else if (p.isJumping) frameName = 'jump';
     else frameName = 'run_' + p.animFrame;
-    const pw = CONFIG.PLAYER_W + 12; // sprite is wider than hitbox
-    const ph = ducking ? CONFIG.PLAYER_H_DUCK + 8 : CONFIG.PLAYER_H_RUN + 8;
-    const drawn = drawSprite(ctx, 'player', frameName, x - 6, y - 4, pw, ph);
+    const pw = CONFIG.PLAYER_W + 16; // sprite is wider than hitbox
+    const ph = ducking ? CONFIG.PLAYER_H_DUCK + 12 : CONFIG.PLAYER_H_RUN + 12;
+    const drawn = drawSprite(ctx, 'player', frameName, x - 8, y - 6, pw, ph);
     if (drawn) {
       // Face overlay on sprite head area — position relative to sprite draw coords
       const face = getFaceImage();
       if (face && face.complete) {
-        const spriteX = x - 6;
-        const spriteY = y - 4;
+        const spriteX = x - 8;
+        const spriteY = y - 6;
         // Head is in top portion of 32x32 sprite, scaled to pw x ph
         const scaleX = pw / 32;
         const scaleY = ph / (ducking ? 32 : 32);
@@ -121,63 +121,103 @@ export function drawPlayer(ctx, player, groundY) {
 
   ctx.save();
 
-  const bodyH = ducking ? 18 : 28;
-  const bodyW = 16;
-  const headH = 12;
-  const headW = 14;
-  const headY = y - (ducking ? 10 : 14);
+  const bodyH = ducking ? 32 : 50;
+  const bodyW = 28;
+  const headH = 22;
+  const headW = 25;
+  const headY = y - (ducking ? 18 : 25);
 
   // Shadow on ground
   ctx.fillStyle = 'rgba(0,0,0,0.3)';
   ctx.beginPath();
-  ctx.ellipse(x + bodyW / 2 + 2, groundY - 1, 12, 3, 0, 0, Math.PI * 2);
+  ctx.ellipse(x + bodyW / 2 + 4, groundY - 1, 20, 5, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Legs (behind body)
+  // Legs (behind body) — 4-frame cycle
   if (!ducking) {
     const legColor = '#0f0f22';
     const shoeColor = '#2a1a3d';
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 6;
     ctx.lineCap = 'round';
-    if (p.animFrame === 0) {
+    const frame = p.animFrame;
+    // Frame 0: left forward, right back
+    // Frame 1: both middle (transition)
+    // Frame 2: right forward, left back
+    // Frame 3: both middle (transition back)
+    if (frame === 0) {
       // Left leg forward
       ctx.strokeStyle = legColor;
       ctx.beginPath();
-      ctx.moveTo(x + 5, y + bodyH);
-      ctx.lineTo(x + 3, y + bodyH + 6);
-      ctx.lineTo(x + 1, y + bodyH + 11);
+      ctx.moveTo(x + 9, y + bodyH);
+      ctx.lineTo(x + 5, y + bodyH + 10);
+      ctx.lineTo(x + 2, y + bodyH + 20);
       ctx.stroke();
-      // shoe
       ctx.fillStyle = shoeColor;
-      ctx.fillRect(x - 1, y + bodyH + 9, 5, 3);
+      ctx.fillRect(x - 1, y + bodyH + 17, 8, 5);
       // Right leg back
       ctx.strokeStyle = legColor;
       ctx.beginPath();
-      ctx.moveTo(x + 11, y + bodyH);
-      ctx.lineTo(x + 13, y + bodyH + 5);
-      ctx.lineTo(x + 14, y + bodyH + 9);
+      ctx.moveTo(x + 19, y + bodyH);
+      ctx.lineTo(x + 23, y + bodyH + 9);
+      ctx.lineTo(x + 25, y + bodyH + 16);
       ctx.stroke();
       ctx.fillStyle = shoeColor;
-      ctx.fillRect(x + 12, y + bodyH + 7, 5, 3);
-    } else {
+      ctx.fillRect(x + 22, y + bodyH + 13, 8, 5);
+    } else if (frame === 1) {
+      // Both legs middle (passing)
+      ctx.strokeStyle = legColor;
+      ctx.beginPath();
+      ctx.moveTo(x + 9, y + bodyH);
+      ctx.lineTo(x + 8, y + bodyH + 10);
+      ctx.lineTo(x + 7, y + bodyH + 20);
+      ctx.stroke();
+      ctx.fillStyle = shoeColor;
+      ctx.fillRect(x + 4, y + bodyH + 17, 8, 5);
+      ctx.strokeStyle = legColor;
+      ctx.beginPath();
+      ctx.moveTo(x + 19, y + bodyH);
+      ctx.lineTo(x + 20, y + bodyH + 10);
+      ctx.lineTo(x + 21, y + bodyH + 20);
+      ctx.stroke();
+      ctx.fillStyle = shoeColor;
+      ctx.fillRect(x + 18, y + bodyH + 17, 8, 5);
+    } else if (frame === 2) {
       // Right leg forward
       ctx.strokeStyle = legColor;
       ctx.beginPath();
-      ctx.moveTo(x + 11, y + bodyH);
-      ctx.lineTo(x + 14, y + bodyH + 6);
-      ctx.lineTo(x + 16, y + bodyH + 11);
+      ctx.moveTo(x + 19, y + bodyH);
+      ctx.lineTo(x + 23, y + bodyH + 10);
+      ctx.lineTo(x + 27, y + bodyH + 20);
       ctx.stroke();
       ctx.fillStyle = shoeColor;
-      ctx.fillRect(x + 14, y + bodyH + 9, 5, 3);
+      ctx.fillRect(x + 24, y + bodyH + 17, 8, 5);
       // Left leg back
       ctx.strokeStyle = legColor;
       ctx.beginPath();
-      ctx.moveTo(x + 5, y + bodyH);
-      ctx.lineTo(x + 3, y + bodyH + 5);
-      ctx.lineTo(x + 2, y + bodyH + 9);
+      ctx.moveTo(x + 9, y + bodyH);
+      ctx.lineTo(x + 5, y + bodyH + 9);
+      ctx.lineTo(x + 3, y + bodyH + 16);
       ctx.stroke();
       ctx.fillStyle = shoeColor;
-      ctx.fillRect(x, y + bodyH + 7, 5, 3);
+      ctx.fillRect(x, y + bodyH + 13, 8, 5);
+    } else {
+      // Frame 3: both legs middle (passing back)
+      ctx.strokeStyle = legColor;
+      ctx.beginPath();
+      ctx.moveTo(x + 9, y + bodyH);
+      ctx.lineTo(x + 8, y + bodyH + 10);
+      ctx.lineTo(x + 7, y + bodyH + 20);
+      ctx.stroke();
+      ctx.fillStyle = shoeColor;
+      ctx.fillRect(x + 4, y + bodyH + 17, 8, 5);
+      ctx.strokeStyle = legColor;
+      ctx.beginPath();
+      ctx.moveTo(x + 19, y + bodyH);
+      ctx.lineTo(x + 20, y + bodyH + 10);
+      ctx.lineTo(x + 21, y + bodyH + 20);
+      ctx.stroke();
+      ctx.fillStyle = shoeColor;
+      ctx.fillRect(x + 18, y + bodyH + 17, 8, 5);
     }
   }
 
@@ -189,18 +229,18 @@ export function drawPlayer(ctx, player, groundY) {
   ctx.fillStyle = bodyGrad;
   if (ctx.roundRect) {
     ctx.beginPath();
-    ctx.roundRect(x, y, bodyW, bodyH, 3);
+    ctx.roundRect(x, y, bodyW, bodyH, 5);
     ctx.fill();
   } else {
     ctx.fillRect(x, y, bodyW, bodyH);
   }
   // Body highlight edge (left)
   ctx.fillStyle = 'rgba(100,120,180,0.15)';
-  ctx.fillRect(x, y + 2, 2, bodyH - 4);
+  ctx.fillRect(x, y + 3, 3, bodyH - 6);
   // Hoodie pocket detail
   if (!ducking) {
     ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.fillRect(x + 3, y + bodyH - 8, 10, 4);
+    ctx.fillRect(x + 5, y + bodyH - 14, 18, 7);
   }
 
   // Head
@@ -208,80 +248,81 @@ export function drawPlayer(ctx, player, groundY) {
   if (face && face.complete) {
     ctx.save();
     ctx.beginPath();
-    ctx.ellipse(x + 1 + headW / 2, headY + headH / 2, headW / 2, headH / 2, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + 2 + headW / 2, headY + headH / 2, headW / 2, headH / 2, 0, 0, Math.PI * 2);
     ctx.clip();
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(face, x + 1, headY, headW, headH);
+    ctx.drawImage(face, x + 2, headY, headW, headH);
     ctx.imageSmoothingEnabled = true;
     ctx.restore();
   } else {
-    const headGrad = ctx.createLinearGradient(x + 1, headY, x + headW, headY + headH);
+    const headGrad = ctx.createLinearGradient(x + 2, headY, x + headW, headY + headH);
     headGrad.addColorStop(0, '#2a2a44');
     headGrad.addColorStop(1, '#1a1a30');
     ctx.fillStyle = headGrad;
-    ctx.fillRect(x + 1, headY, headW, headH);
+    ctx.fillRect(x + 2, headY, headW, headH);
     // Face detail - visor/shades
     ctx.fillStyle = '#0a0a14';
-    ctx.fillRect(x + 3, headY + 4, 10, 3);
+    ctx.fillRect(x + 5, headY + 8, 18, 5);
     // Highlight on forehead
     ctx.fillStyle = 'rgba(100,140,200,0.2)';
-    ctx.fillRect(x + 3, headY + 1, 8, 2);
+    ctx.fillRect(x + 5, headY + 2, 14, 4);
   }
 
   // Headphones band
   ctx.strokeStyle = '#5577BB';
-  ctx.lineWidth = 2.5;
+  ctx.lineWidth = 3.5;
   ctx.beginPath();
-  ctx.arc(x + headW / 2 + 1, headY + 1, 8, Math.PI * 1.1, Math.PI * -0.1);
+  ctx.arc(x + headW / 2 + 2, headY + 2, 14, Math.PI * 1.1, Math.PI * -0.1);
   ctx.stroke();
   // Left ear cup
   ctx.fillStyle = '#5577BB';
-  ctx.fillRect(x - 1, headY + 1, 4, 6);
+  ctx.fillRect(x - 1, headY + 2, 6, 10);
   ctx.fillStyle = '#3a5599';
-  ctx.fillRect(x, headY + 2, 2, 4);
+  ctx.fillRect(x, headY + 3, 4, 8);
   // Right ear cup
   ctx.fillStyle = '#5577BB';
-  ctx.fillRect(x + headW - 1, headY + 1, 4, 6);
+  ctx.fillRect(x + headW - 1, headY + 2, 6, 10);
   ctx.fillStyle = '#3a5599';
-  ctx.fillRect(x + headW, headY + 2, 2, 4);
+  ctx.fillRect(x + headW, headY + 3, 4, 8);
 
   // DJ Bag (right side, detailed)
-  const bagH = ducking ? 12 : 18;
-  const bagX = x + 14;
-  const bagY = y + 3;
+  const bagH = ducking ? 20 : 32;
+  const bagX = x + 25;
+  const bagY = y + 5;
   // Bag body with gradient
-  const bagGrad = ctx.createLinearGradient(bagX, bagY, bagX + 9, bagY + bagH);
+  const bagGrad = ctx.createLinearGradient(bagX, bagY, bagX + 14, bagY + bagH);
   bagGrad.addColorStop(0, '#2a2a44');
   bagGrad.addColorStop(1, '#16162a');
   ctx.fillStyle = bagGrad;
-  ctx.fillRect(bagX, bagY, 9, bagH);
+  ctx.fillRect(bagX, bagY, 14, bagH);
   // Bag zipper
   ctx.fillStyle = '#6688AA';
-  ctx.fillRect(bagX + 4, bagY + 2, 1, bagH - 4);
+  ctx.fillRect(bagX + 6, bagY + 3, 2, bagH - 6);
   // Bag buckle
   ctx.fillStyle = '#888888';
-  ctx.fillRect(bagX + 2, bagY + bagH - 3, 5, 2);
+  ctx.fillRect(bagX + 3, bagY + bagH - 5, 8, 3);
   // Strap
   ctx.strokeStyle = '#4466AA';
-  ctx.lineWidth = 1.5;
+  ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(bagX, bagY);
-  ctx.lineTo(x + 8, y + (ducking ? 0 : -2));
+  ctx.lineTo(x + 14, y + (ducking ? 0 : -3));
   ctx.stroke();
   ctx.beginPath();
-  ctx.moveTo(bagX + 9, bagY);
-  ctx.lineTo(x + 12, y + (ducking ? 0 : -2));
+  ctx.moveTo(bagX + 14, bagY);
+  ctx.lineTo(x + 20, y + (ducking ? 0 : -3));
   ctx.stroke();
 
-  // Arm (simple, swinging)
+  // Arm (swinging with 4-frame animation)
   if (!ducking) {
     ctx.strokeStyle = '#14142a';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 5;
     ctx.lineCap = 'round';
-    const armSwing = p.animFrame === 0 ? -2 : 2;
+    const armOffsets = [-4, -1, 4, 1]; // swing positions for 4 frames
+    const armSwing = armOffsets[p.animFrame] || 0;
     ctx.beginPath();
-    ctx.moveTo(x + 2, y + 6);
-    ctx.lineTo(x - 2 + armSwing, y + 16);
+    ctx.moveTo(x + 3, y + 10);
+    ctx.lineTo(x - 3 + armSwing, y + 28);
     ctx.stroke();
   }
 
