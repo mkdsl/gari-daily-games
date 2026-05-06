@@ -2,6 +2,8 @@ import { CONFIG } from './config.js';
 import { refreshFace, getFaceImage } from './face.js';
 
 let _goAnimId = null;
+let _confettiParticles = [];
+let _confettiAnimId = null;
 
 export function initFaceUpload() {
   const btn = document.getElementById('btn-face');
@@ -86,7 +88,10 @@ export function showGameOver(state, onRestart) {
   const rank = scores.length ? scores.indexOf(state.score) + 1 : 0;
   const rankText = rank === 1 ? '#1 DANAS!' : rank > 0 ? `#${rank} danas` : '';
 
+  const isFirst = rank === 1;
+
   el.innerHTML = `
+    <canvas id="go-confetti-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;"></canvas>
     <div class="go-inner">
       <img src="sprites/logo.png" class="go-logo" alt="Kluboslavija">
       <div class="go-player-wrap">
@@ -265,10 +270,81 @@ export function showGameOver(state, onRestart) {
   if (_goAnimId) cancelAnimationFrame(_goAnimId);
   requestAnimationFrame(drawGameOverChar);
 
+  // Confetti explosion on end screen
+  if (_confettiAnimId) cancelAnimationFrame(_confettiAnimId);
+  _confettiParticles = [];
+  const cc = document.getElementById('go-confetti-canvas');
+  if (cc) {
+    const rect = el.getBoundingClientRect();
+    cc.width = rect.width;
+    cc.height = rect.height;
+    const cctx = cc.getContext('2d');
+    const cw = rect.width, ch = rect.height;
+    const count = isFirst ? 200 : 80;
+    const spread = isFirst ? 1.0 : 0.5; // fraction of screen covered
+    const colors = isFirst
+      ? ['#FFD700', '#ff4466', '#ff88aa', '#ffee44', '#44ff88', '#88aaff', '#fff', '#cc2244']
+      : ['#cc2244', '#ff4466', '#8899AA', '#aabbcc', '#fff'];
+    // Spawn from center of screen
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 100 + Math.random() * (isFirst ? 500 : 250);
+      _confettiParticles.push({
+        x: cw / 2 + (Math.random() - 0.5) * cw * 0.1,
+        y: ch * 0.35 + (Math.random() - 0.5) * ch * 0.1,
+        vx: Math.cos(angle) * speed * spread,
+        vy: Math.sin(angle) * speed * spread - (isFirst ? 200 : 100),
+        size: isFirst ? 4 + Math.random() * 8 : 3 + Math.random() * 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rot: Math.random() * Math.PI * 2,
+        rotV: (Math.random() - 0.5) * 14,
+        alpha: 1,
+        shape: Math.random() > 0.5 ? 'rect' : 'circle'
+      });
+    }
+    let lastT = performance.now();
+    function animConfetti(now) {
+      const dt = Math.min(0.05, (now - lastT) / 1000);
+      lastT = now;
+      cctx.clearRect(0, 0, cw, ch);
+      for (const p of _confettiParticles) {
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.vy += 300 * dt;
+        p.vx *= 0.99;
+        p.rot += p.rotV * dt;
+        p.alpha = Math.max(0, p.alpha - dt * 0.3);
+        if (p.alpha <= 0) continue;
+        cctx.save();
+        cctx.globalAlpha = p.alpha;
+        cctx.translate(p.x, p.y);
+        cctx.rotate(p.rot);
+        cctx.fillStyle = p.color;
+        if (p.shape === 'circle') {
+          cctx.beginPath();
+          cctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+          cctx.fill();
+        } else {
+          cctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        }
+        cctx.restore();
+      }
+      _confettiParticles = _confettiParticles.filter(p => p.alpha > 0.01);
+      if (_confettiParticles.length > 0) {
+        _confettiAnimId = requestAnimationFrame(animConfetti);
+      } else {
+        _confettiAnimId = null;
+      }
+    }
+    _confettiAnimId = requestAnimationFrame(animConfetti);
+  }
+
   document.getElementById('btn-restart').addEventListener('click', onRestart);
 }
 
 export function hideGameOver() {
   if (_goAnimId) { cancelAnimationFrame(_goAnimId); _goAnimId = null; }
+  if (_confettiAnimId) { cancelAnimationFrame(_confettiAnimId); _confettiAnimId = null; }
+  _confettiParticles = [];
   document.getElementById('game-over').classList.add('hidden');
 }
