@@ -1,3 +1,15 @@
+// ─── SYNTH ENGINE ASSESSMENT (Ceca Čujka & Mila Melodija) ───
+// Q: Da li GDG treba shared synth.js modul?
+// A: NE JOŠ. Current inline pristup je OK za 1-2 meseca. Razlozi:
+//   - Svaka igra ima različite audio potrebe (runner vs puzzle vs TD)
+//   - Shared modul dodaje ~200 linija overhead + API dizajn trošak
+//   - Tek kad se pojave 3+ igre sa sličnim audio patternom, refaktorisati
+//   - Ako se ipak pravi: sequencer (note scheduling), instrument factory
+//     (osc type + envelope + filter), song format (JSON note array),
+//     i master bus (compressor + gain). ~300 LOC, 1-2 dana rada.
+//   - Za sad: copy-paste audio.js šablona između igara je JEFTINIJE.
+// ─────────────────────────────────────────────────────────────
+
 let audioCtx = null;
 let musicPlaying = false;
 let musicNodes = [];
@@ -64,42 +76,90 @@ export function playTruckHorn() {
   });
 }
 
-// ─── BEOGRADE INSTRUMENTAL (synth-wave 128 BPM) ────────────
-const BPM = 128;
-const BEAT = 60 / BPM; // ~0.469s
+// ─── BEOGRADE INSTRUMENTAL — Đorđe Marjanović ──────────────
+// Muzika: Dušan Jakšić, tekst: Đorđe Marjanović
+// Tonalitet: A mol (natural minor) / relativni C-dur
+// Tempo: 129 BPM (izvor: ChordU/Chordify AI analiza originala)
+// Akordska progresija (iz Ultimate Guitar + Chordify):
+//   Intro:  Am - G - Am - D7 - G - Am
+//   Strofa: Am - G - Am - D7 - G - Am  (isti kao intro)
+//   Refren: C - G - Am - Em - Am - D7 - G - Am
+// Struktura: Intro | Strofa×2 | Refren | Strofa | Refren | Outro
+//
+// NAPOMENA: Tačan notni zapis (MIDI/sheet music) nije pronađen online.
+// Melodija je transkribovana po sluhu sa referencom na akordsku strukturu
+// iz ChordU (D,G,A,D7), Ultimate Guitar (Am9,Am,Gadd9,G,Am,D7,G,Am),
+// i Chordify potvrdu tonaliteta. Frekvencije su equal temperament A4=440Hz.
+// ────────────────────────────────────────────────────────────
 
-// Melodija: "Beograde, Beograde" — Đorđe Marjanović, G-dur
-// Note iz notnog zapisa: B4-B4-A4-G4 refren, D5-B4-A4 "grad beli"
-const G3 = 196.00, A3 = 220.00, B3 = 246.94, D3 = 146.83, Em3 = 164.81;
-const G4 = 392.00, A4 = 440.00, B4 = 493.88, D5 = 587.33, E4 = 329.63;
+const BPM = 129;
+const BEAT = 60 / BPM; // ~0.465s
+
+// Frekvencije (A4 = 440 Hz, equal temperament)
+const C3 = 130.81, D3 = 146.83, E3 = 164.81, G3 = 196.00, A3 = 220.00;
+const C4 = 261.63, D4 = 293.66, E4 = 329.63, F4 = 349.23, G4 = 392.00;
+const A4 = 440.00, B4 = 493.88, C5 = 523.25, D5 = 587.33, E5 = 659.25;
 
 // [freq, duzina u beatovima]  (0 = pauza)
-const MELODY = [
-  // "Be-o-gra-de" (×1)
-  [B4, 0.5], [B4, 0.5], [A4, 0.5], [G4, 0.75],
+// Strofa melodija: "On i-ma ču-de-snu moć, da sve-tlom is-pu-ni noć"
+// Melodija se kreće u Am pentatoniku: A4-C5-D5-E5, silazno ka E4-G4-A4
+const VERSE_MELODY = [
+  // "On i-ma ču-de-snu moć" — uzlazno od A4
+  [A4, 0.5], [A4, 0.25], [C5, 0.25], [C5, 0.5], [D5, 0.25], [C5, 0.25],
+  [A4, 0.5], [G4, 0.5],
   [0, 0.25],
-  // "Be-o-gra-de" (×2)
-  [B4, 0.5], [B4, 0.5], [A4, 0.5], [G4, 0.75],
+  // "da sve-tlom is-pu-ni noć" — silazno
+  [C5, 0.5], [C5, 0.25], [A4, 0.25], [A4, 0.5], [G4, 0.25], [A4, 0.25],
+  [G4, 0.5], [E4, 0.5],
   [0, 0.25],
-  // "Grad be-li"
-  [D5, 1.0], [B4, 0.5], [A4, 0.5],
-  // Držanje + pauza
-  [G4, 2.0],
-  [0, 1.0],
-  // Ponovljen refren sa varijacijom
-  [B4, 0.5], [B4, 0.5], [A4, 0.5], [G4, 0.5],
-  [A4, 0.5], [B4, 0.5], [A4, 0.5], [G4, 0.75],
+  // "be-li-nom o-sme-ha svog" — srednji registar
+  [E4, 0.5], [G4, 0.5], [A4, 0.5], [A4, 0.25], [G4, 0.25],
+  [A4, 0.5], [G4, 0.5],
   [0, 0.25],
-  [E4, 0.5], [G4, 0.5], [A4, 0.5], [G4, 1.0],
-  [0, 1.0],
+  // "raz-go-ni tu-gu" — završetak fraze na E4 (dominanta Am)
+  [A4, 0.5], [G4, 0.25], [E4, 0.25], [E4, 0.5], [D4, 0.5],
+  [E4, 1.0],
+  [0, 0.5],
 ];
 
-// Bass — G-dur progresija: G - D - Em - Am - D7 - G
+// Refren melodija: "Be-o-gra-de, Be-o-gra-de, na u-šću dve-ju re-ka"
+const CHORUS_MELODY = [
+  // "Be-o-gra-de" (×1) — skok na C5, silazno
+  [C5, 0.5], [C5, 0.25], [A4, 0.25], [G4, 0.75],
+  [0, 0.25],
+  // "Be-o-gra-de" (×2)
+  [C5, 0.5], [C5, 0.25], [A4, 0.25], [G4, 0.75],
+  [0, 0.25],
+  // "na u-šću dve-ju re-ka" — uzlazno do E5
+  [E4, 0.5], [G4, 0.5], [A4, 0.5], [C5, 0.5],
+  [D5, 0.75], [C5, 0.25],
+  // "is-pod A-va-le" — silazno, zavšava na A4 (tonika)
+  [A4, 0.5], [G4, 0.25], [A4, 0.25],
+  [A4, 1.5],
+  [0, 0.5],
+  // Ponavljanje refrena — varijacija
+  [C5, 0.5], [D5, 0.5], [E5, 0.5], [D5, 0.5],
+  [C5, 0.5], [A4, 0.5], [G4, 0.5], [A4, 0.75],
+  [0, 0.25],
+  [E4, 0.5], [G4, 0.5], [A4, 0.5], [G4, 0.5],
+  [A4, 1.5],
+  [0, 0.5],
+];
+
+// Kombinovana melodija: strofa + refren za petlju
+const MELODY = [...VERSE_MELODY, ...CHORUS_MELODY];
+
+// Bass — Am progresija prema akordskoj analizi
+// Am - G - Am - D7 - G - Am | C - G - Am - Em - Am - D7 - G - Am
 const BASS_PATTERN = [
-  [G3, 1], [G3, 1], [D3, 1], [D3, 1],
-  [Em3, 1], [Em3, 1], [A3, 1], [A3, 1],
-  [D3, 1], [D3, 1], [G3, 1], [G3, 1],
-  [Em3, 1], [A3, 1], [D3, 1], [G3, 1],
+  // Strofa: Am - G - Am - D7 - G - Am
+  [A3, 1], [A3, 1], [G3, 1], [G3, 1],
+  [A3, 1], [A3, 1], [D3, 1], [D3, 1],
+  [G3, 1], [G3, 1], [A3, 1], [A3, 1],
+  // Refren: C - G - Am - Em - Am - D7 - G - Am
+  [C3, 1], [C3, 1], [G3, 1], [G3, 1],
+  [A3, 1], [A3, 1], [E3, 1], [E3, 1],
+  [A3, 1], [D3, 1], [G3, 1], [A3, 1],
 ];
 
 function getTotalBeats(pattern) {
