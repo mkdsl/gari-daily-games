@@ -46,7 +46,9 @@ export function updatePlayer(state, dt, groundY) {
   // Left/right movement
   if (input.left) p.x -= CONFIG.PLAYER_MOVE_SPEED * dt;
   if (input.right) p.x += CONFIG.PLAYER_MOVE_SPEED * dt;
-  p.x = Math.max(CONFIG.PLAYER_MIN_X, Math.min(CONFIG.PLAYER_MAX_X, p.x));
+  // Clamp to canvas width dynamically (state.canvasW set by game loop)
+  const maxX = state.canvasW ? state.canvasW - CONFIG.PLAYER_MIN_X : CONFIG.PLAYER_MAX_X;
+  p.x = Math.max(CONFIG.PLAYER_MIN_X, Math.min(maxX, p.x));
 
   // Physics
   if (p.isJumping || p.y < groundY - CONFIG.PLAYER_H_RUN) {
@@ -94,9 +96,11 @@ export function drawPlayer(ctx, player, groundY) {
       // Face overlay on sprite head area
       const face = getFaceImage();
       if (face && face.complete) {
+        const faceW = 16;
+        const faceH = 14;
         const headY = y - (ducking ? 8 : 14);
         ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(face, x + 2, headY + 1, 12, 12);
+        ctx.drawImage(face, x + 1, headY, faceW, faceH);
         ctx.imageSmoothingEnabled = true;
       }
       return;
@@ -191,7 +195,7 @@ export function drawPlayer(ctx, player, groundY) {
   const face = getFaceImage();
   if (face && face.complete) {
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(face, x + 2, headY + 1, headW - 2, headH - 2);
+    ctx.drawImage(face, x + 1, headY, headW, headH);
     ctx.imageSmoothingEnabled = true;
   } else {
     const headGrad = ctx.createLinearGradient(x + 1, headY, x + headW, headY + headH);
