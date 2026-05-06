@@ -47,9 +47,10 @@ function drawObstacle(ctx, obj, sx, groundY) {
   // Try sprite first
   if (hasSprites('obstacles')) {
     if (obj.kind === 'kamion') {
-      // Kamion sprite faces right but moves left — flip horizontally
+      // Flip sprite (faces right, moves left) + engine vibration
+      const shake = Math.sin(Date.now() * 0.06) * 1.2;
       ctx.save();
-      ctx.translate(sx + obj.w / 2, 0);
+      ctx.translate(sx + obj.w / 2, shake);
       ctx.scale(-1, 1);
       ctx.translate(-(sx + obj.w / 2), 0);
       const drawn = drawSprite(ctx, 'obstacles', obj.kind, sx, sy, obj.w, obj.h);
@@ -68,7 +69,12 @@ function drawObstacle(ctx, obj, sx, groundY) {
   switch (obj.kind) {
     case 'bor':    drawBor(ctx, sx, sy, obj.w, obj.h); break;
     case 'kamen':  drawKamen(ctx, sx, sy, obj.w, obj.h); break;
-    case 'kamion': drawKamion(ctx, sx, sy, obj.w, obj.h); break;
+    case 'kamion': {
+      const shake = Math.sin(Date.now() * 0.06) * 1.2;
+      ctx.translate(0, shake);
+      drawKamion(ctx, sx, sy, obj.w, obj.h);
+      break;
+    }
     case 'dron':   drawDron(ctx, sx, sy, obj.w, obj.h); break;
   }
   ctx.restore();
