@@ -98,17 +98,20 @@ export function drawPlayer(ctx, player, groundY) {
       if (face && face.complete) {
         const spriteX = x - 8;
         const spriteY = y - 6;
-        // Head is in top portion of 32x32 sprite, scaled to pw x ph
-        const scaleX = pw / 32;
-        const scaleY = ph / (ducking ? 32 : 32);
-        // Face region in sprite: roughly x=8..24, y=0..12 (top center of 32x32)
-        const faceX = spriteX + 8 * scaleX;
-        const faceY = spriteY + (ducking ? 2 : 0) * scaleY;
-        const faceW = 16 * scaleX;
-        const faceH = 12 * scaleY;
+        // Head is in top portion of 48x64 sprite, scaled to pw x ph
+        const scaleX = pw / 48;
+        const scaleY = ph / 64;
+        // Face region in sprite: roughly x=12..36, y=2..20 (top center of 48x64)
+        const faceW = 24 * scaleX;
+        const faceH = 20 * scaleY;
+        const faceX = spriteX + 12 * scaleX;
+        const faceY = spriteY + (ducking ? 4 : 2) * scaleY;
+        // Oval clip — smaller than face area to crop to center (where actual face is in selfie)
+        const clipRx = faceW * 0.38;
+        const clipRy = faceH * 0.42;
         ctx.save();
         ctx.beginPath();
-        ctx.ellipse(faceX + faceW / 2, faceY + faceH / 2, faceW / 2, faceH / 2, 0, 0, Math.PI * 2);
+        ctx.ellipse(faceX + faceW / 2, faceY + faceH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);
         ctx.clip();
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(face, faceX, faceY, faceW, faceH);
@@ -246,12 +249,16 @@ export function drawPlayer(ctx, player, groundY) {
   // Head
   const face = getFaceImage();
   if (face && face.complete) {
+    // Draw face larger than head, oval clip smaller to crop to center of selfie
+    const faceDraw = { x: x - 1, y: headY - 3, w: headW + 6, h: headH + 6 };
+    const clipRx = headW * 0.42;
+    const clipRy = headH * 0.46;
     ctx.save();
     ctx.beginPath();
-    ctx.ellipse(x + 2 + headW / 2, headY + headH / 2, headW / 2, headH / 2, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + 2 + headW / 2, headY + headH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);
     ctx.clip();
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(face, x + 2, headY, headW, headH);
+    ctx.drawImage(face, faceDraw.x, faceDraw.y, faceDraw.w, faceDraw.h);
     ctx.imageSmoothingEnabled = true;
     ctx.restore();
   } else {
