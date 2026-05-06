@@ -58,11 +58,74 @@ function startRun() {
   initSpawner(state, logicalW());
 }
 
+// Confetti / explosion particles
+let confettiParticles = [];
+let confettiTimer = 0;
+const CONFETTI_DURATION = 1.5; // seconds before showing game over overlay
+
+function spawnConfetti(isFirst) {
+  const W = logicalW();
+  const H = logicalH();
+  const count = isFirst ? 120 : 60;
+  const colors = isFirst
+    ? ['#FFD700', '#ff4466', '#ff88aa', '#ffee44', '#44ff88', '#88aaff', '#ffffff']
+    : ['#cc2244', '#ff4466', '#8899AA', '#aabbcc', '#ffffff'];
+  const cx = state.player.x;
+  const cy = state.player.y + 30;
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 80 + Math.random() * (isFirst ? 350 : 200);
+    confettiParticles.push({
+      x: cx + (Math.random() - 0.5) * 20,
+      y: cy + (Math.random() - 0.5) * 20,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - (isFirst ? 150 : 80),
+      size: isFirst ? 3 + Math.random() * 5 : 2 + Math.random() * 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI * 2,
+      rotV: (Math.random() - 0.5) * 12,
+      alpha: 1
+    });
+  }
+}
+
+function updateConfetti(dt) {
+  for (const p of confettiParticles) {
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.vy += 400 * dt; // gravity
+    p.vx *= 0.98;
+    p.rot += p.rotV * dt;
+    p.alpha = Math.max(0, p.alpha - dt * 0.5);
+  }
+  confettiParticles = confettiParticles.filter(p => p.alpha > 0.01);
+}
+
+function drawConfetti(ctx) {
+  for (const p of confettiParticles) {
+    ctx.save();
+    ctx.globalAlpha = p.alpha;
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+    ctx.restore();
+  }
+}
+
 function endRun() {
-  state.screen = 'gameover';
+  state.screen = 'confetti';
   hideTouchControls();
   playGameOverSound();
   saveDailyHighscore(state);
+  const rank = state.daily.scores.length ? state.daily.scores.indexOf(state.score) + 1 : 0;
+  spawnConfetti(rank === 1);
+  confettiTimer = CONFETTI_DURATION;
+}
+
+function finishEndRun() {
+  state.screen = 'gameover';
+  confettiParticles = [];
   showGameOver(state, startRun);
 }
 
@@ -138,7 +201,21 @@ function loop(now) {
     updateHUD(state);
   }
 
+  // Confetti transition
+  if (state.screen === 'confetti') {
+    updateConfetti(dt);
+    confettiTimer -= dt;
+    if (confettiTimer <= 0) {
+      finishEndRun();
+    }
+  }
+
   render(ctx, state, W, H);
+
+  // Draw confetti on top of everything
+  if (state.screen === 'confetti') {
+    drawConfetti(ctx);
+  }
   requestAnimationFrame(loop);
 }
 

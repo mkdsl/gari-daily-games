@@ -46,7 +46,7 @@ export const CONFIG = {
   },
   COLLECTIBLES: {
     flasa: { w: 16, h: 24, groundOffset: 24, scoreType: 'trash', trashVal: 1, requireAction: 'grab_down' },
-    kesa:  { w: 20, h: 18, groundOffset: 110, scoreType: 'trash', trashVal: 1, requireAction: 'grab_up' },
+    kesa:  { w: 20, h: 18, groundOffset: 190, scoreType: 'trash', trashVal: 1, requireAction: 'grab_up' },
     logo:  { w: 28, h: 28, groundOffset: 50, scoreType: 'logo',  trashVal: 0, requireAction: null }
   },
 

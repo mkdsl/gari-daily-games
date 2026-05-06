@@ -93,7 +93,7 @@ export function showGameOver(state, onRestart) {
         <canvas id="go-player-canvas" width="120" height="180"></canvas>
         ${rankText ? `<div class="go-rank">${rankText}</div>` : ''}
       </div>
-      <div class="go-title">GAME OVER</div>
+      <div class="go-title">KRAJ TRKE</div>
       <div class="go-stats">
         Score: ${state.score} &nbsp; | &nbsp; ${distMeters}m &nbsp; | &nbsp; ${state.trashCount} smeća
       </div>

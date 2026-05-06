@@ -100,18 +100,14 @@ export function drawPlayer(ctx, player, groundY) {
   const y = p.y;
   const ducking = p.isDucking;
 
-  // Try sprite first
-  if (hasSprites('player')) {
+  // Try sprite first (not for ducking — programmatic has animated legs)
+  if (hasSprites('player') && !ducking) {
     let frameName;
-    if (ducking) frameName = 'duck';
-    else if (p.isJumping) frameName = 'jump';
+    if (p.isJumping) frameName = 'jump';
     else frameName = 'run_' + p.animFrame;
     const pw = CONFIG.PLAYER_W + 16;
-    // Keep sprite visual height constant — duck sprite already has crouched pose
     const ph = CONFIG.PLAYER_H_RUN + 12;
-    // When ducking, draw sprite higher so bottom aligns with ducked hitbox bottom
-    const spriteY = ducking ? y - (CONFIG.PLAYER_H_RUN - CONFIG.PLAYER_H_DUCK) - 6 : y - 6;
-    const drawn = drawSprite(ctx, 'player', frameName, x - 8, spriteY, pw, ph);
+    const drawn = drawSprite(ctx, 'player', frameName, x - 8, y - 6, pw, ph);
     if (drawn) {
       const face = getFaceImage();
       if (face && face.complete) {
@@ -121,7 +117,7 @@ export function drawPlayer(ctx, player, groundY) {
         const faceW = 37 * scaleX;
         const faceH = 32 * scaleY;
         const faceX = sprX + 8 * scaleX;
-        const faceY = spriteY + (ducking ? 2 : -2) * scaleY;
+        const faceY = y - 6 + -2 * scaleY;
         const clipRx = faceW * 0.46;
         const clipRy = faceH * 0.48;
         ctx.save();
