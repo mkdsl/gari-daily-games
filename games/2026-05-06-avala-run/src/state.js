@@ -25,6 +25,7 @@ export function createState() {
       scrollX: 0,       // ukupni scroll od starta
       parallaxOffsets: [0, 0, 0, 0, 0],  // po slojevima
       stars: [],        // { x, y } generisano jednom
+      clouds: [],       // { x, y, w, h, alpha }
       farPines: [],     // { x, h, baseY }
       midPines: []      // { x, h, baseY }
     },

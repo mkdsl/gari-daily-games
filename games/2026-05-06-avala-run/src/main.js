@@ -76,6 +76,8 @@ function loop(now) {
   const H  = logicalH();
   const gY = groundY();
 
+  state.canvasW = W;
+
   if (state.screen === 'playing') {
     // Update speed
     state.speed = Math.min(
