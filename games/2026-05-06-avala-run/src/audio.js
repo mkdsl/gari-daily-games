@@ -68,28 +68,38 @@ export function playTruckHorn() {
 const BPM = 128;
 const BEAT = 60 / BPM; // ~0.469s
 
-// Melodija: "Beograde, Beograde, moj jedini grade"
-const C4 = 261.63, D4 = 293.66, E4 = 329.63, F4 = 349.23, G4 = 392.00;
-const C3 = 130.81, E3 = 164.81, F3 = 174.61, G3 = 196.00;
+// Melodija: "Beograde, Beograde" — Đorđe Marjanović, G-dur
+// Note iz notnog zapisa: B4-B4-A4-G4 refren, D5-B4-A4 "grad beli"
+const G3 = 196.00, A3 = 220.00, B3 = 246.94, D3 = 146.83, Em3 = 164.81;
+const G4 = 392.00, A4 = 440.00, B4 = 493.88, D5 = 587.33, E4 = 329.63;
 
 // [freq, duzina u beatovima]  (0 = pauza)
 const MELODY = [
-  // "Beo-gra-de, Be-o-gra-de"
-  [C4, 0.5], [D4, 0.5], [E4, 0.75], [E4, 0.25], [D4, 0.5], [C4, 0.5],
-  [0, 0.5],
-  [C4, 0.5], [D4, 0.5], [E4, 0.75], [E4, 0.25], [D4, 0.5], [C4, 0.5],
-  [0, 0.5],
-  // "Moj jedini grade"
-  [E4, 0.5], [F4, 0.5], [G4, 0.75], [G4, 0.25], [F4, 0.5], [E4, 0.5], [D4, 1.0],
+  // "Be-o-gra-de" (×1)
+  [B4, 0.5], [B4, 0.5], [A4, 0.5], [G4, 0.75],
+  [0, 0.25],
+  // "Be-o-gra-de" (×2)
+  [B4, 0.5], [B4, 0.5], [A4, 0.5], [G4, 0.75],
+  [0, 0.25],
+  // "Grad be-li"
+  [D5, 1.0], [B4, 0.5], [A4, 0.5],
+  // Držanje + pauza
+  [G4, 2.0],
+  [0, 1.0],
+  // Ponovljen refren sa varijacijom
+  [B4, 0.5], [B4, 0.5], [A4, 0.5], [G4, 0.5],
+  [A4, 0.5], [B4, 0.5], [A4, 0.5], [G4, 0.75],
+  [0, 0.25],
+  [E4, 0.5], [G4, 0.5], [A4, 0.5], [G4, 1.0],
   [0, 1.0],
 ];
 
-// Bass — 4 na pod
+// Bass — G-dur progresija: G - D - Em - Am - D7 - G
 const BASS_PATTERN = [
-  [C3, 1], [C3, 1], [E3, 1], [E3, 1],
-  [F3, 1], [F3, 1], [G3, 1], [G3, 1],
-  [C3, 1], [C3, 1], [E3, 1], [E3, 1],
-  [F3, 1], [F3, 1], [G3, 1], [C3, 1],
+  [G3, 1], [G3, 1], [D3, 1], [D3, 1],
+  [Em3, 1], [Em3, 1], [A3, 1], [A3, 1],
+  [D3, 1], [D3, 1], [G3, 1], [G3, 1],
+  [Em3, 1], [A3, 1], [D3, 1], [G3, 1],
 ];
 
 function getTotalBeats(pattern) {
