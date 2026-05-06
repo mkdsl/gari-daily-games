@@ -147,89 +147,158 @@ export function drawPlayer(ctx, player, groundY) {
   ctx.fill();
 
   if (ducking) {
-    // Slide/crouch — compact pose, animated shuffling legs
+    // Dynamic slide/crouch — body leaning forward, legs in running slide
     const frame = p.animFrame;
-    const shuffle = [[-4, 3], [0, 0], [3, -4], [0, 0]][frame] || [0, 0];
 
-    // Legs — short bent, shuffling
-    ctx.strokeStyle = '#1a1a30';
+    // Body dimensions for slide pose
+    const bw = 34;
+    const bh = 20;
+    const bx = x - 2;
+    const by = y + 6; // body sits lower
+
+    // === LEGS — sliding stride, 4-frame animated ===
+    const legColor = '#1a1a30';
+    const shoeColor = '#2a1a3d';
     ctx.lineWidth = 5;
     ctx.lineCap = 'round';
-    // Left
-    ctx.beginPath();
-    ctx.moveTo(x + 8, y + 22);
-    ctx.lineTo(x + 4 + shuffle[0], y + 34);
-    ctx.stroke();
-    ctx.fillStyle = '#2a1a3d';
-    ctx.fillRect(x + 1 + shuffle[0], y + 32, 8, 4);
-    // Right
-    ctx.beginPath();
-    ctx.moveTo(x + 20, y + 22);
-    ctx.lineTo(x + 24 + shuffle[1], y + 34);
-    ctx.stroke();
-    ctx.fillStyle = '#2a1a3d';
-    ctx.fillRect(x + 21 + shuffle[1], y + 32, 8, 4);
 
-    // Body — wider, low, rounded
-    const bh = 24;
-    const bw = 34;
-    const bx = x - 3;
-    const bodyGrad = ctx.createLinearGradient(bx, y, bx + bw, y + bh);
-    bodyGrad.addColorStop(0, '#252542');
+    // Leg positions: [frontKneeX, frontKneeY, frontFootX, frontFootY, backKneeX, backKneeY, backFootX, backFootY]
+    const legFrames = [
+      // frame 0: wide stride — front leg far forward, back leg extended behind
+      { fk: [bx - 2, by + bh + 2], ff: [bx - 8, by + bh + 10], bk: [bx + bw - 2, by + bh + 1], bf: [bx + bw + 6, by + bh + 8] },
+      // frame 1: legs pulling in slightly
+      { fk: [bx + 2, by + bh + 3], ff: [bx - 4, by + bh + 11], bk: [bx + bw - 4, by + bh + 2], bf: [bx + bw + 2, by + bh + 10] },
+      // frame 2: mid slide — legs closer together
+      { fk: [bx + 4, by + bh + 2], ff: [bx, by + bh + 10], bk: [bx + bw - 6, by + bh + 2], bf: [bx + bw - 2, by + bh + 10] },
+      // frame 3: pushing back out
+      { fk: [bx + 1, by + bh + 3], ff: [bx - 6, by + bh + 11], bk: [bx + bw - 3, by + bh + 1], bf: [bx + bw + 4, by + bh + 9] },
+    ];
+    const lf = legFrames[frame] || legFrames[0];
+
+    // Front leg
+    ctx.strokeStyle = legColor;
+    ctx.beginPath();
+    ctx.moveTo(bx + 6, by + bh);
+    ctx.lineTo(lf.fk[0], lf.fk[1]);
+    ctx.lineTo(lf.ff[0], lf.ff[1]);
+    ctx.stroke();
+    // Front shoe
+    ctx.fillStyle = shoeColor;
+    ctx.fillRect(lf.ff[0] - 4, lf.ff[1] - 1, 9, 4);
+
+    // Back leg
+    ctx.strokeStyle = legColor;
+    ctx.beginPath();
+    ctx.moveTo(bx + bw - 6, by + bh);
+    ctx.lineTo(lf.bk[0], lf.bk[1]);
+    ctx.lineTo(lf.bf[0], lf.bf[1]);
+    ctx.stroke();
+    // Back shoe
+    ctx.fillStyle = shoeColor;
+    ctx.fillRect(lf.bf[0] - 3, lf.bf[1] - 1, 9, 4);
+
+    // === BODY — wide, low, tilted forward ===
+    const bodyGrad = ctx.createLinearGradient(bx, by, bx + bw, by + bh);
+    bodyGrad.addColorStop(0, '#2a2a4a');
+    bodyGrad.addColorStop(0.5, '#252542');
     bodyGrad.addColorStop(1, '#181830');
     ctx.fillStyle = bodyGrad;
     if (ctx.roundRect) {
       ctx.beginPath();
-      ctx.roundRect(bx, y, bw, bh, 6);
+      ctx.roundRect(bx, by, bw, bh, 5);
       ctx.fill();
     } else {
-      ctx.fillRect(bx, y, bw, bh);
+      ctx.fillRect(bx, by, bw, bh);
     }
-    // Zip highlight
-    ctx.fillStyle = 'rgba(100,120,180,0.18)';
-    ctx.fillRect(bx + bw / 2 - 1, y + 3, 2, bh - 6);
+    // Hoodie zip highlight
+    ctx.fillStyle = 'rgba(100,120,180,0.2)';
+    ctx.fillRect(bx + bw / 2 - 1, by + 2, 2, bh - 4);
+    // Chest highlight (visibility on dark bg)
+    ctx.fillStyle = 'rgba(80,100,160,0.12)';
+    ctx.fillRect(bx + 2, by + 2, bw / 2 - 4, bh - 4);
 
-    // Head — forward and low
-    const hx = bx - 2;
-    const hy = y - 12;
+    // === DJ BAG — compact, on back ===
+    const bagW = 10;
+    const bagH = 16;
+    const bagX = bx + bw - 2;
+    const bagY = by + 1;
+    const bagGrad = ctx.createLinearGradient(bagX, bagY, bagX + bagW, bagY + bagH);
+    bagGrad.addColorStop(0, '#2a2a44');
+    bagGrad.addColorStop(1, '#16162a');
+    ctx.fillStyle = bagGrad;
+    ctx.fillRect(bagX, bagY, bagW, bagH);
+    // Bag strap
+    ctx.strokeStyle = '#4466AA';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(bagX, bagY + 2);
+    ctx.lineTo(bx + bw - 8, by + 2);
+    ctx.stroke();
+    // Bag detail
+    ctx.fillStyle = '#6688AA';
+    ctx.fillRect(bagX + 4, bagY + 2, 2, bagH - 4);
+    ctx.fillStyle = '#888888';
+    ctx.fillRect(bagX + 2, bagY + bagH - 3, 6, 2);
+
+    // === HEAD — forward and low, tucked ===
+    const hx = bx - 4;
+    const hy = by - 14;
     const face = getFaceImage();
     if (face && face.complete) {
-      const clipRx = headW * 0.50;
-      const clipRy = headH * 0.55;
+      const clipRx = headW * 0.48;
+      const clipRy = headH * 0.52;
       ctx.save();
       ctx.beginPath();
-      ctx.ellipse(hx + headW / 2 + 2, hy + headH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);
+      ctx.ellipse(hx + headW / 2 + 1, hy + headH / 2 + 1, clipRx, clipRy, 0, 0, Math.PI * 2);
       ctx.clip();
       ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(face, hx - 6, hy - 8, headW + 16, headH + 16);
+      ctx.drawImage(face, hx - 5, hy - 6, headW + 14, headH + 14);
       ctx.imageSmoothingEnabled = true;
       ctx.restore();
     } else {
-      ctx.fillStyle = '#2e2e48';
+      const headGrad = ctx.createLinearGradient(hx, hy, hx + headW, hy + headH);
+      headGrad.addColorStop(0, '#2e2e4a');
+      headGrad.addColorStop(1, '#1e1e38');
+      ctx.fillStyle = headGrad;
       ctx.beginPath();
-      ctx.ellipse(hx + headW / 2 + 2, hy + headH / 2, headW / 2, headH / 2, 0, 0, Math.PI * 2);
+      ctx.ellipse(hx + headW / 2 + 1, hy + headH / 2 + 1, headW / 2, headH / 2, 0, 0, Math.PI * 2);
       ctx.fill();
+      // Visor / shades
       ctx.fillStyle = '#0a0a14';
-      ctx.fillRect(hx + 5, hy + 8, 18, 5);
+      ctx.fillRect(hx + 4, hy + 8, 18, 5);
     }
 
-    // Headphones
+    // === HEADPHONES ===
     ctx.strokeStyle = '#5577BB';
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.arc(hx + headW / 2 + 2, hy + 2, 14, Math.PI * 1.1, Math.PI * -0.1);
+    ctx.arc(hx + headW / 2 + 1, hy + 3, 13, Math.PI * 1.1, Math.PI * -0.1);
     ctx.stroke();
+    // Ear cups
     ctx.fillStyle = '#5577BB';
-    ctx.fillRect(hx - 1, hy + 2, 5, 9);
-    ctx.fillRect(hx + headW, hy + 2, 5, 9);
+    ctx.fillRect(hx - 1, hy + 3, 5, 8);
+    ctx.fillStyle = '#3a5599';
+    ctx.fillRect(hx, hy + 4, 3, 6);
+    ctx.fillStyle = '#5577BB';
+    ctx.fillRect(hx + headW - 1, hy + 3, 5, 8);
+    ctx.fillStyle = '#3a5599';
+    ctx.fillRect(hx + headW, hy + 4, 3, 6);
 
-    // Arm forward
+    // === ARM — reaching forward for balance ===
     ctx.strokeStyle = '#1a1a30';
     ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    const armSwing = [-3, -1, 2, 0][frame] || 0;
     ctx.beginPath();
-    ctx.moveTo(bx + 2, y + 8);
-    ctx.lineTo(bx - 4, y + 18);
+    ctx.moveTo(bx + 4, by + 5);
+    ctx.lineTo(bx - 4 + armSwing, by + 16);
+    ctx.lineTo(bx - 6 + armSwing, by + 22);
     ctx.stroke();
+    // Hand
+    ctx.fillStyle = '#ddb88a';
+    ctx.beginPath();
+    ctx.arc(bx - 6 + armSwing, by + 22, 3, 0, Math.PI * 2);
+    ctx.fill();
 
   } else {
     // Standing/running pose

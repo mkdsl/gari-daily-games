@@ -47,10 +47,14 @@ function drawObstacle(ctx, obj, sx, groundY) {
   // Try sprite first
   if (hasSprites('obstacles')) {
     if (obj.kind === 'kamion') {
-      // Flip sprite (faces right, moves left) + engine vibration
-      const shake = Math.sin(Date.now() * 0.06) * 1.2;
+      // Flip sprite (faces right, moves left) + realistic engine vibration
+      const t = Date.now();
+      const shakeY = Math.sin(t * 0.06) * 0.9 + Math.sin(t * 0.13) * 0.5 + Math.sin(t * 0.037) * 0.3;
+      const shakeX = Math.sin(t * 0.047) * 0.4 + Math.sin(t * 0.11) * 0.25;
+      const shakeRot = (Math.sin(t * 0.053) * 0.004 + Math.sin(t * 0.09) * 0.002);
       ctx.save();
-      ctx.translate(sx + obj.w / 2, shake);
+      ctx.translate(sx + obj.w / 2 + shakeX, shakeY);
+      ctx.rotate(shakeRot);
       ctx.scale(-1, 1);
       ctx.translate(-(sx + obj.w / 2), 0);
       const drawn = drawSprite(ctx, 'obstacles', obj.kind, sx, sy, obj.w, obj.h);
@@ -70,8 +74,12 @@ function drawObstacle(ctx, obj, sx, groundY) {
     case 'bor':    drawBor(ctx, sx, sy, obj.w, obj.h); break;
     case 'kamen':  drawKamen(ctx, sx, sy, obj.w, obj.h); break;
     case 'kamion': {
-      const shake = Math.sin(Date.now() * 0.06) * 1.2;
-      ctx.translate(0, shake);
+      const t = Date.now();
+      const shakeY = Math.sin(t * 0.06) * 0.9 + Math.sin(t * 0.13) * 0.5 + Math.sin(t * 0.037) * 0.3;
+      const shakeX = Math.sin(t * 0.047) * 0.4 + Math.sin(t * 0.11) * 0.25;
+      const shakeRot = (Math.sin(t * 0.053) * 0.004 + Math.sin(t * 0.09) * 0.002);
+      ctx.translate(shakeX, shakeY);
+      ctx.rotate(shakeRot);
       drawKamion(ctx, sx, sy, obj.w, obj.h);
       break;
     }
