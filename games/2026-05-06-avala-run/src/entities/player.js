@@ -25,11 +25,11 @@ export function updatePlayer(state, dt, groundY) {
 
   if (wantsDuck && p.isDucking) {
     p.grabAnim = 'down';
-    p.grabTimer = 0.3;
+    p.grabTimer = 0.4;
   }
   if (wantsJump && p.isJumping) {
     p.grabAnim = 'up';
-    p.grabTimer = 0.3;
+    p.grabTimer = 0.4;
   }
   if (p.grabTimer > 0) {
     p.grabTimer -= dt;
@@ -106,24 +106,22 @@ export function drawPlayer(ctx, player, groundY) {
     if (ducking) frameName = 'duck';
     else if (p.isJumping) frameName = 'jump';
     else frameName = 'run_' + p.animFrame;
-    const pw = CONFIG.PLAYER_W + 16; // sprite is wider than hitbox
-    const ph = ducking ? CONFIG.PLAYER_H_DUCK + 12 : CONFIG.PLAYER_H_RUN + 12;
-    const drawn = drawSprite(ctx, 'player', frameName, x - 8, y - 6, pw, ph);
+    const pw = CONFIG.PLAYER_W + 16;
+    // Keep sprite visual height constant — duck sprite already has crouched pose
+    const ph = CONFIG.PLAYER_H_RUN + 12;
+    // When ducking, draw sprite higher so bottom aligns with ducked hitbox bottom
+    const spriteY = ducking ? y - (CONFIG.PLAYER_H_RUN - CONFIG.PLAYER_H_DUCK) - 6 : y - 6;
+    const drawn = drawSprite(ctx, 'player', frameName, x - 8, spriteY, pw, ph);
     if (drawn) {
-      // Face overlay on sprite head area — position relative to sprite draw coords
       const face = getFaceImage();
       if (face && face.complete) {
-        const spriteX = x - 8;
-        const spriteY = y - 6;
-        // Head is in top portion of 48x64 sprite, scaled to pw x ph
+        const sprX = x - 8;
         const scaleX = pw / 48;
         const scaleY = ph / 64;
-        // Face region in sprite: wider area for bigger face
         const faceW = 37 * scaleX;
         const faceH = 32 * scaleY;
-        const faceX = spriteX + 8 * scaleX;
+        const faceX = sprX + 8 * scaleX;
         const faceY = spriteY + (ducking ? 2 : -2) * scaleY;
-        // Oval clip — focused on center of selfie
         const clipRx = faceW * 0.46;
         const clipRy = faceH * 0.48;
         ctx.save();
@@ -135,6 +133,7 @@ export function drawPlayer(ctx, player, groundY) {
         ctx.imageSmoothingEnabled = true;
         ctx.restore();
       }
+      drawGrabOverlay(ctx, p, x, y, ducking);
       return;
     }
   }
@@ -441,35 +440,38 @@ export function drawPlayer(ctx, player, groundY) {
     ctx.stroke();
   }
 
-  // Grab animation overlay
-  if (p.grabAnim !== 'none' && p.grabTimer > 0) {
-    const progress = 1 - (p.grabTimer / 0.3);
-    ctx.strokeStyle = '#14142a';
-    ctx.lineWidth = 5;
-    ctx.lineCap = 'round';
-    if (p.grabAnim === 'down') {
-      const armLen = 20 + progress * 12;
-      ctx.beginPath();
-      ctx.moveTo(x + 3, y + (ducking ? 10 : 14));
-      ctx.lineTo(x - 4, y + (ducking ? 10 : 14) + armLen);
-      ctx.stroke();
-      // Hand
-      ctx.fillStyle = '#2a2244';
-      ctx.beginPath();
-      ctx.arc(x - 4, y + (ducking ? 10 : 14) + armLen, 4, 0, Math.PI * 2);
-      ctx.fill();
-    } else {
-      const armLen = 20 + progress * 14;
-      ctx.beginPath();
-      ctx.moveTo(x + 3, y + 6);
-      ctx.lineTo(x - 2, y + 6 - armLen);
-      ctx.stroke();
-      ctx.fillStyle = '#2a2244';
-      ctx.beginPath();
-      ctx.arc(x - 2, y + 6 - armLen, 4, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
+  drawGrabOverlay(ctx, p, x, y, ducking);
 
+  ctx.restore();
+}
+
+function drawGrabOverlay(ctx, p, x, y, ducking) {
+  if (p.grabAnim === 'none' || p.grabTimer <= 0) return;
+  const progress = 1 - (p.grabTimer / 0.4);
+  ctx.save();
+  ctx.strokeStyle = '#14142a';
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+  if (p.grabAnim === 'down') {
+    const armLen = 20 + progress * 16;
+    ctx.beginPath();
+    ctx.moveTo(x + 3, y + (ducking ? 10 : 14));
+    ctx.lineTo(x - 6, y + (ducking ? 10 : 14) + armLen);
+    ctx.stroke();
+    ctx.fillStyle = '#ddb88a';
+    ctx.beginPath();
+    ctx.arc(x - 6, y + (ducking ? 10 : 14) + armLen, 5, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    const armLen = 20 + progress * 18;
+    ctx.beginPath();
+    ctx.moveTo(x + 3, y + 6);
+    ctx.lineTo(x - 4, y + 6 - armLen);
+    ctx.stroke();
+    ctx.fillStyle = '#ddb88a';
+    ctx.beginPath();
+    ctx.arc(x - 4, y + 6 - armLen, 5, 0, Math.PI * 2);
+    ctx.fill();
+  }
   ctx.restore();
 }

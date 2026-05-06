@@ -16,7 +16,7 @@ export const CONFIG = {
   PLAYER_H_DUCK: 40,
   PLAYER_JUMP_VY: -620,
   GRAVITY: 1400,
-  DUCK_DURATION: 0.4,  // sekunde
+  DUCK_DURATION: 0.6,  // sekunde
   FAST_FALL_BOOST: 2000,
 
   // Speed
@@ -46,13 +46,13 @@ export const CONFIG = {
   },
   COLLECTIBLES: {
     flasa: { w: 16, h: 24, groundOffset: 24, scoreType: 'trash', trashVal: 1, requireAction: 'grab_down' },
-    kesa:  { w: 20, h: 18, groundOffset: 80, scoreType: 'trash', trashVal: 1, requireAction: 'grab_up' },
+    kesa:  { w: 20, h: 18, groundOffset: 60, scoreType: 'trash', trashVal: 1, requireAction: 'grab_up' },
     logo:  { w: 28, h: 28, groundOffset: 50, scoreType: 'logo',  trashVal: 0, requireAction: null }
   },
 
   // Logo power-up
   LOGO_SCORE: 50,
-  LOGO_CHANCE: 0.08,
+  LOGO_CHANCE: 0.03,
 
   // Colors
   COLORS: {
