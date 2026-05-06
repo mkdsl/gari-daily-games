@@ -113,257 +113,445 @@ function circle(ctx, cx, cy, r, color) {
   }
 }
 
-// ── A) Player sprite sheet (128x64, 4x2 grid of 32x32) ──
+// ── A) Player sprite sheet (192x128, 4x2 grid of 48x64) ──
 function generatePlayer() {
-  const canvas = createCanvas(128, 64);
+  const canvas = createCanvas(192, 128);
   const ctx = canvas.getContext('2d');
 
   function drawBase(ox, oy, opts = {}) {
     const { legPhase = 0, jumping = false, ducking = false, dead = false } = opts;
 
+    // Frame is 48x64. Character centered roughly in the frame.
+
     if (dead) {
-      // Fallen sideways — more detail
+      // Fallen sideways
       // Body horizontal
-      rect(ctx, ox+6, oy+20, 20, 6, C.hoodie);
-      rect(ctx, ox+7, oy+21, 18, 4, C.hoodieLt);
-      rect(ctx, ox+8, oy+22, 16, 2, C.hoodiePurp);
+      rect(ctx, ox+6, oy+36, 32, 10, C.hoodie);
+      rect(ctx, ox+7, oy+37, 30, 8, C.hoodieLt);
+      rect(ctx, ox+8, oy+38, 28, 6, C.hoodiePurp);
+      // Zipper
+      for (let i = 0; i < 28; i += 2) px(ctx, ox+8+i, oy+41, C.hoodie);
       // Head
-      rect(ctx, ox+3, oy+17, 6, 6, C.skin);
-      rect(ctx, ox+4, oy+18, 4, 4, C.skinDk);
+      rect(ctx, ox+2, oy+30, 10, 10, C.skin);
+      rect(ctx, ox+3, oy+31, 8, 8, C.skinDk);
+      rect(ctx, ox+4, oy+32, 4, 3, C.skinLt);
       // Hair
-      rect(ctx, ox+3, oy+16, 6, 2, C.outline);
-      // Headphones fallen
-      px(ctx, ox+3, oy+19, C.blue);
-      px(ctx, ox+8, oy+19, C.blue);
-      rect(ctx, ox+3, oy+17, 6, 1, C.blueDark);
+      rect(ctx, ox+2, oy+28, 10, 3, C.outline);
+      px(ctx, ox+2, oy+27, C.outline);
+      // Headphones fallen off
+      rect(ctx, ox+1, oy+33, 3, 5, C.blue);
+      px(ctx, ox+1, oy+33, C.blueLt);
+      rect(ctx, ox+11, oy+33, 3, 5, C.blue);
+      px(ctx, ox+13, oy+33, C.blueLt);
+      rect(ctx, ox+2, oy+28, 10, 2, C.blueDark);
       // X eyes
-      px(ctx, ox+4, oy+19, C.red);
-      px(ctx, ox+5, oy+20, C.red);
-      px(ctx, ox+6, oy+19, C.red);
-      px(ctx, ox+7, oy+20, C.red);
-      px(ctx, ox+5, oy+19, C.red);
-      px(ctx, ox+6, oy+20, C.red);
-      // Bag
-      rect(ctx, ox+22, oy+17, 5, 7, C.brown);
-      rect(ctx, ox+23, oy+18, 3, 5, C.brownDk);
+      px(ctx, ox+4, oy+34, C.red); px(ctx, ox+5, oy+35, C.red);
+      px(ctx, ox+5, oy+34, C.red); px(ctx, ox+4, oy+35, C.red);
+      px(ctx, ox+7, oy+34, C.red); px(ctx, ox+8, oy+35, C.red);
+      px(ctx, ox+8, oy+34, C.red); px(ctx, ox+7, oy+35, C.red);
+      // DJ Bag
+      rect(ctx, ox+34, oy+30, 8, 12, C.brown);
+      rect(ctx, ox+35, oy+31, 6, 10, C.brownDk);
+      px(ctx, ox+37, oy+33, C.gold);
+      px(ctx, ox+37, oy+37, C.gold);
       // Legs horizontal
-      rect(ctx, ox+26, oy+21, 4, 3, C.hoodie);
-      rect(ctx, ox+26, oy+23, 4, 2, C.shoe);
+      rect(ctx, ox+38, oy+37, 6, 5, C.hoodie);
+      rect(ctx, ox+38, oy+42, 6, 4, C.shoe);
+      rect(ctx, ox+39, oy+43, 4, 2, C.shoeLt);
       // Ground shadow
-      rect(ctx, ox+2, oy+26, 28, 1, C.outline);
+      rect(ctx, ox+2, oy+46, 42, 2, C.outline);
       ctx.globalAlpha = 0.3;
-      rect(ctx, ox+3, oy+27, 26, 1, C.outline);
+      rect(ctx, ox+4, oy+48, 38, 1, C.outline);
       ctx.globalAlpha = 1.0;
       return;
     }
 
     if (ducking) {
-      // Crouching — compact, detailed
-      // Legs (wider stance)
-      rect(ctx, ox+9, oy+25, 5, 5, C.shoe);
-      rect(ctx, ox+10, oy+26, 3, 3, C.shoeLt);
-      rect(ctx, ox+18, oy+25, 5, 5, C.shoe);
-      rect(ctx, ox+19, oy+26, 3, 3, C.shoeLt);
-      // Knee area
-      rect(ctx, ox+9, oy+22, 5, 3, C.hoodie);
-      rect(ctx, ox+18, oy+22, 5, 3, C.hoodie);
+      // Crouching — compact, pognuti
+      // Legs (wider stance, bent knees)
+      // Left leg
+      rect(ctx, ox+10, oy+48, 7, 6, C.hoodie);
+      rect(ctx, ox+11, oy+49, 5, 4, C.hoodieLt);
+      rect(ctx, ox+9, oy+54, 8, 6, C.shoe);
+      rect(ctx, ox+10, oy+55, 6, 4, C.shoeLt);
+      px(ctx, ox+11, oy+56, C.shoeHL);
+      // Shoe sole
+      rect(ctx, ox+9, oy+59, 8, 1, C.outline);
+      // Right leg
+      rect(ctx, ox+26, oy+48, 7, 6, C.hoodie);
+      rect(ctx, ox+27, oy+49, 5, 4, C.hoodieLt);
+      rect(ctx, ox+25, oy+54, 8, 6, C.shoe);
+      rect(ctx, ox+26, oy+55, 6, 4, C.shoeLt);
+      px(ctx, ox+27, oy+56, C.shoeHL);
+      rect(ctx, ox+25, oy+59, 8, 1, C.outline);
+
       // Body (low, squished)
-      rect(ctx, ox+8, oy+17, 16, 6, C.hoodie);
-      rect(ctx, ox+9, oy+18, 14, 4, C.hoodieLt);
-      rect(ctx, ox+10, oy+19, 12, 2, C.hoodiePurp);
+      rect(ctx, ox+9, oy+36, 24, 13, C.hoodie);
+      rect(ctx, ox+10, oy+37, 22, 11, C.hoodieLt);
+      rect(ctx, ox+11, oy+38, 20, 9, C.hoodiePurp);
       // Hoodie pocket
-      rect(ctx, ox+12, oy+21, 8, 1, C.hoodie);
+      rect(ctx, ox+14, oy+44, 14, 3, C.hoodie);
+      rect(ctx, ox+15, oy+45, 12, 1, C.hoodieLt);
+      // Zipper
+      for (let i = 37; i <= 48; i++) px(ctx, ox+21, oy+i, C.hoodie);
+
       // Head (ducked forward)
-      rect(ctx, ox+7, oy+13, 8, 6, C.skin);
-      rect(ctx, ox+8, oy+14, 6, 4, C.skinDk);
+      rect(ctx, ox+6, oy+24, 14, 12, C.skin);
+      rect(ctx, ox+7, oy+25, 12, 10, C.skinDk);
+      rect(ctx, ox+8, oy+26, 6, 4, C.skinLt);
+      // Face area oval (~16x14 placeholder)
       // Hair
-      rect(ctx, ox+7, oy+12, 8, 2, C.outline);
-      px(ctx, ox+7, oy+11, C.outline);
-      // Headphones (around head)
-      rect(ctx, ox+6, oy+13, 2, 4, C.blue);
-      px(ctx, ox+6, oy+13, C.blueLt);
-      rect(ctx, ox+14, oy+13, 2, 4, C.blue);
-      px(ctx, ox+15, oy+13, C.blueLt);
-      rect(ctx, ox+7, oy+11, 8, 2, C.blueDark);
-      // Eyes (looking forward, alert)
-      px(ctx, ox+9, oy+15, C.white);
-      px(ctx, ox+10, oy+15, C.outline);
-      px(ctx, ox+12, oy+15, C.white);
-      px(ctx, ox+13, oy+15, C.outline);
-      // Bag on back (angled)
-      rect(ctx, ox+21, oy+14, 5, 7, C.brown);
-      rect(ctx, ox+22, oy+15, 3, 5, C.brownDk);
-      px(ctx, ox+22, oy+15, C.brownLt);
-      // Bag strap
-      px(ctx, ox+20, oy+17, C.brownDk);
-      px(ctx, ox+20, oy+18, C.brownDk);
+      rect(ctx, ox+6, oy+22, 14, 3, C.outline);
+      px(ctx, ox+6, oy+21, C.outline);
+      px(ctx, ox+19, oy+22, C.outline);
+
+      // Headphones
+      rect(ctx, ox+4, oy+25, 4, 7, C.blue);
+      rect(ctx, ox+5, oy+26, 2, 5, C.blueLt);
+      rect(ctx, ox+18, oy+25, 4, 7, C.blue);
+      rect(ctx, ox+19, oy+26, 2, 5, C.blueLt);
+      // Headband
+      rect(ctx, ox+6, oy+21, 14, 3, C.blueDark);
+      rect(ctx, ox+8, oy+20, 10, 2, C.blueDark);
+      px(ctx, ox+13, oy+20, C.blue);
+
+      // Eyes
+      px(ctx, ox+9, oy+29, C.white); px(ctx, ox+10, oy+29, C.white);
+      px(ctx, ox+11, oy+29, C.outline);
+      px(ctx, ox+14, oy+29, C.white); px(ctx, ox+15, oy+29, C.white);
+      px(ctx, ox+16, oy+29, C.outline);
+      // Eyebrows
+      rect(ctx, ox+9, oy+28, 3, 1, C.outline);
+      rect(ctx, ox+14, oy+28, 3, 1, C.outline);
+
+      // Bag above (torba iznad)
+      rect(ctx, ox+28, oy+26, 10, 14, C.brown);
+      rect(ctx, ox+29, oy+27, 8, 12, C.brownDk);
+      px(ctx, ox+31, oy+29, C.gold);
+      px(ctx, ox+31, oy+35, C.gold);
+      px(ctx, ox+29, oy+27, C.brownLt);
+      // Strap
+      px(ctx, ox+27, oy+36, C.brownDk);
+      px(ctx, ox+27, oy+37, C.brownDk);
+      px(ctx, ox+26, oy+38, C.brownDk);
+
       // Arms tucked
-      rect(ctx, ox+6, oy+18, 2, 4, C.hoodie);
-      px(ctx, ox+6, oy+22, C.skin);
+      rect(ctx, ox+5, oy+37, 4, 8, C.hoodie);
+      rect(ctx, ox+6, oy+38, 2, 6, C.hoodieLt);
+      rect(ctx, ox+5, oy+45, 4, 3, C.skin);
+      px(ctx, ox+5, oy+45, C.skinLt);
+
       // Shadow
-      rect(ctx, ox+7, oy+30, 20, 1, C.outline);
+      rect(ctx, ox+7, oy+60, 30, 2, C.outline);
       ctx.globalAlpha = 0.2;
-      rect(ctx, ox+8, oy+31, 18, 1, C.outline);
+      rect(ctx, ox+9, oy+62, 26, 1, C.outline);
       ctx.globalAlpha = 1.0;
       return;
     }
 
-    const bodyY = jumping ? oy - 2 : oy;
+    const bodyY = jumping ? oy - 4 : oy;
 
-    // Shoes / Legs
+    // ── Legs / Shoes ──
     if (jumping) {
-      // Legs tucked up dynamically
+      // Legs tucked up, dynamic jump pose
       // Left leg bent back
-      rect(ctx, ox+10, oy+24, 4, 4, C.hoodie);
-      rect(ctx, ox+9, oy+26, 4, 3, C.shoe);
-      rect(ctx, ox+10, oy+27, 2, 1, C.shoeLt);
+      rect(ctx, ox+12, oy+48, 6, 6, C.hoodie);
+      rect(ctx, ox+13, oy+49, 4, 4, C.hoodieLt);
+      rect(ctx, ox+10, oy+52, 7, 5, C.shoe);
+      rect(ctx, ox+11, oy+53, 5, 3, C.shoeLt);
+      px(ctx, ox+12, oy+54, C.shoeHL);
       // Right leg bent forward
-      rect(ctx, ox+18, oy+23, 4, 4, C.hoodie);
-      rect(ctx, ox+19, oy+25, 4, 3, C.shoe);
-      rect(ctx, ox+20, oy+26, 2, 1, C.shoeLt);
+      rect(ctx, ox+26, oy+46, 6, 6, C.hoodie);
+      rect(ctx, ox+27, oy+47, 4, 4, C.hoodieLt);
+      rect(ctx, ox+27, oy+50, 7, 5, C.shoe);
+      rect(ctx, ox+28, oy+51, 5, 3, C.shoeLt);
+      px(ctx, ox+29, oy+52, C.shoeHL);
     } else {
-      // Running legs with more detail
-      const legOff1 = legPhase === 0 ? -2 : legPhase === 2 ? 2 : 0;
-      const legOff2 = legPhase === 0 ? 2 : legPhase === 2 ? -2 : 0;
+      // Running legs — 4 distinct phases
+      // legPhase: 0=left forward, 1=transition, 2=right forward, 3=transition back
+      let lLegX, lLegY, rLegX, rLegY;  // offsets for each leg
+      let lFootX, lFootY, rFootX, rFootY;
 
-      // Left leg
-      rect(ctx, ox+10+legOff1, oy+24, 4, 4, C.hoodie);
-      rect(ctx, ox+11+legOff1, oy+25, 2, 2, C.hoodieLt);
-      rect(ctx, ox+10+legOff1, oy+28, 5, 3, C.shoe);
-      rect(ctx, ox+11+legOff1, oy+29, 3, 1, C.shoeLt);
-      px(ctx, ox+14+legOff1, oy+28, C.shoeHL); // shoe highlight
+      if (legPhase === 0) {
+        // Left leg forward, right leg back
+        // Left leg (forward, extended)
+        lLegX = -4; lLegY = 0;
+        rLegX = 4;  rLegY = -1;
+        // Left thigh
+        rect(ctx, ox+10+lLegX, oy+44, 6, 8, C.hoodie);
+        rect(ctx, ox+11+lLegX, oy+45, 4, 6, C.hoodieLt);
+        // Left shin
+        rect(ctx, ox+9+lLegX, oy+52, 6, 5, C.hoodie);
+        rect(ctx, ox+10+lLegX, oy+53, 4, 3, C.hoodieLt);
+        // Left shoe (forward)
+        rect(ctx, ox+8+lLegX, oy+57, 8, 4, C.shoe);
+        rect(ctx, ox+9+lLegX, oy+58, 6, 2, C.shoeLt);
+        px(ctx, ox+15+lLegX, oy+57, C.shoeHL);
+        rect(ctx, ox+8+lLegX, oy+60, 8, 1, C.outline); // sole
 
-      // Right leg
-      rect(ctx, ox+18+legOff2, oy+24, 4, 4, C.hoodie);
-      rect(ctx, ox+19+legOff2, oy+25, 2, 2, C.hoodieLt);
-      rect(ctx, ox+18+legOff2, oy+28, 5, 3, C.shoe);
-      rect(ctx, ox+19+legOff2, oy+29, 3, 1, C.shoeLt);
-      px(ctx, ox+22+legOff2, oy+28, C.shoeHL);
+        // Right thigh (back, higher)
+        rect(ctx, ox+26+rLegX, oy+44, 6, 7, C.hoodie);
+        rect(ctx, ox+27+rLegX, oy+45, 4, 5, C.hoodieLt);
+        // Right shin (back, angled up)
+        rect(ctx, ox+27+rLegX, oy+51, 6, 5, C.hoodie);
+        rect(ctx, ox+28+rLegX, oy+52, 4, 3, C.hoodieLt);
+        // Right shoe (back)
+        rect(ctx, ox+28+rLegX, oy+56, 8, 4, C.shoe);
+        rect(ctx, ox+29+rLegX, oy+57, 6, 2, C.shoeLt);
+        px(ctx, ox+35+rLegX, oy+56, C.shoeHL);
+        rect(ctx, ox+28+rLegX, oy+59, 8, 1, C.outline);
+
+      } else if (legPhase === 1) {
+        // Transition: legs passing through middle
+        // Left leg (coming back, middle)
+        rect(ctx, ox+13, oy+44, 6, 8, C.hoodie);
+        rect(ctx, ox+14, oy+45, 4, 6, C.hoodieLt);
+        rect(ctx, ox+13, oy+52, 6, 5, C.hoodie);
+        rect(ctx, ox+14, oy+53, 4, 3, C.hoodieLt);
+        rect(ctx, ox+12, oy+57, 8, 4, C.shoe);
+        rect(ctx, ox+13, oy+58, 6, 2, C.shoeLt);
+        px(ctx, ox+19, oy+57, C.shoeHL);
+        rect(ctx, ox+12, oy+60, 8, 1, C.outline);
+
+        // Right leg (coming forward, middle — slightly ahead)
+        rect(ctx, ox+25, oy+44, 6, 8, C.hoodie);
+        rect(ctx, ox+26, oy+45, 4, 6, C.hoodieLt);
+        rect(ctx, ox+25, oy+52, 6, 5, C.hoodie);
+        rect(ctx, ox+26, oy+53, 4, 3, C.hoodieLt);
+        rect(ctx, ox+24, oy+57, 8, 4, C.shoe);
+        rect(ctx, ox+25, oy+58, 6, 2, C.shoeLt);
+        px(ctx, ox+31, oy+57, C.shoeHL);
+        rect(ctx, ox+24, oy+60, 8, 1, C.outline);
+
+      } else if (legPhase === 2) {
+        // Right leg forward, left leg back (mirror of 0)
+        // Right leg (forward, extended)
+        rect(ctx, ox+24, oy+44, 6, 8, C.hoodie);
+        rect(ctx, ox+25, oy+45, 4, 6, C.hoodieLt);
+        rect(ctx, ox+23, oy+52, 6, 5, C.hoodie);
+        rect(ctx, ox+24, oy+53, 4, 3, C.hoodieLt);
+        rect(ctx, ox+22, oy+57, 8, 4, C.shoe);
+        rect(ctx, ox+23, oy+58, 6, 2, C.shoeLt);
+        px(ctx, ox+29, oy+57, C.shoeHL);
+        rect(ctx, ox+22, oy+60, 8, 1, C.outline);
+
+        // Left leg (back)
+        rect(ctx, ox+14, oy+44, 6, 7, C.hoodie);
+        rect(ctx, ox+15, oy+45, 4, 5, C.hoodieLt);
+        rect(ctx, ox+15, oy+51, 6, 5, C.hoodie);
+        rect(ctx, ox+16, oy+52, 4, 3, C.hoodieLt);
+        rect(ctx, ox+16, oy+56, 8, 4, C.shoe);
+        rect(ctx, ox+17, oy+57, 6, 2, C.shoeLt);
+        px(ctx, ox+23, oy+56, C.shoeHL);
+        rect(ctx, ox+16, oy+59, 8, 1, C.outline);
+
+      } else {
+        // legPhase === 3: Transition back — legs passing through middle (reverse)
+        // Right leg (coming back)
+        rect(ctx, ox+26, oy+44, 6, 8, C.hoodie);
+        rect(ctx, ox+27, oy+45, 4, 6, C.hoodieLt);
+        rect(ctx, ox+26, oy+52, 6, 5, C.hoodie);
+        rect(ctx, ox+27, oy+53, 4, 3, C.hoodieLt);
+        rect(ctx, ox+25, oy+57, 8, 4, C.shoe);
+        rect(ctx, ox+26, oy+58, 6, 2, C.shoeLt);
+        px(ctx, ox+32, oy+57, C.shoeHL);
+        rect(ctx, ox+25, oy+60, 8, 1, C.outline);
+
+        // Left leg (coming forward)
+        rect(ctx, ox+12, oy+44, 6, 8, C.hoodie);
+        rect(ctx, ox+13, oy+45, 4, 6, C.hoodieLt);
+        rect(ctx, ox+12, oy+52, 6, 5, C.hoodie);
+        rect(ctx, ox+13, oy+53, 4, 3, C.hoodieLt);
+        rect(ctx, ox+11, oy+57, 8, 4, C.shoe);
+        rect(ctx, ox+12, oy+58, 6, 2, C.shoeLt);
+        px(ctx, ox+18, oy+57, C.shoeHL);
+        rect(ctx, ox+11, oy+60, 8, 1, C.outline);
+      }
     }
 
-    // Torso with hoodie detail
-    rect(ctx, ox+9, bodyY+14, 14, 11, C.hoodie);
-    rect(ctx, ox+10, bodyY+15, 12, 9, C.hoodieLt);
-    rect(ctx, ox+11, bodyY+16, 10, 7, C.hoodiePurp);
-    // Hoodie pocket
-    rect(ctx, ox+12, bodyY+20, 8, 2, C.hoodie);
-    rect(ctx, ox+13, bodyY+21, 6, 1, C.hoodieLt);
-    // Hoodie string
-    px(ctx, ox+14, bodyY+14, C.grayLt);
-    px(ctx, ox+14, bodyY+15, C.grayLt);
-    px(ctx, ox+17, bodyY+14, C.grayLt);
-    px(ctx, ox+17, bodyY+15, C.grayLt);
-    // Zipper line
-    for (let i = 14; i <= 24; i++) {
-      px(ctx, ox+16, bodyY+i, C.hoodie);
+    // ── Torso / Hoodie ──
+    rect(ctx, ox+11, bodyY+24, 22, 20, C.hoodie);
+    rect(ctx, ox+12, bodyY+25, 20, 18, C.hoodieLt);
+    rect(ctx, ox+13, bodyY+26, 18, 16, C.hoodiePurp);
+    // Hoodie pocket (kangaroo pocket)
+    rect(ctx, ox+15, bodyY+36, 14, 4, C.hoodie);
+    rect(ctx, ox+16, bodyY+37, 12, 2, C.hoodieLt);
+    // Pocket opening
+    rect(ctx, ox+18, bodyY+36, 8, 1, C.hoodiePurp);
+    // Hoodie strings
+    px(ctx, ox+19, bodyY+24, C.grayLt);
+    px(ctx, ox+19, bodyY+25, C.grayLt);
+    px(ctx, ox+19, bodyY+26, C.grayLt);
+    px(ctx, ox+24, bodyY+24, C.grayLt);
+    px(ctx, ox+24, bodyY+25, C.grayLt);
+    px(ctx, ox+24, bodyY+26, C.grayLt);
+    // Zipper line (center)
+    for (let i = 24; i <= 43; i++) {
+      px(ctx, ox+22, bodyY+i, C.hoodie);
     }
+    // Zip pull
+    px(ctx, ox+22, bodyY+24, C.gray);
+    px(ctx, ox+23, bodyY+25, C.gray);
+    // Seam lines (sides)
+    for (let i = 26; i <= 42; i += 3) {
+      px(ctx, ox+12, bodyY+i, C.hoodie);
+      px(ctx, ox+32, bodyY+i, C.hoodie);
+    }
+    // Hood (behind head, visible collar)
+    rect(ctx, ox+12, bodyY+18, 20, 7, C.hoodiePurp);
+    rect(ctx, ox+13, bodyY+19, 18, 5, C.hoodieLt);
 
-    // Bag on back (DJ bag with detail)
-    rect(ctx, ox+21, bodyY+12, 6, 11, C.brown);
-    rect(ctx, ox+22, bodyY+13, 4, 9, C.brownDk);
+    // ── DJ Bag on back/side ──
+    rect(ctx, ox+31, bodyY+20, 10, 18, C.brown);
+    rect(ctx, ox+32, bodyY+21, 8, 16, C.brownDk);
     // Bag zipper
-    px(ctx, ox+24, bodyY+14, C.gold);
-    px(ctx, ox+24, bodyY+18, C.gold);
+    px(ctx, ox+35, bodyY+24, C.gold);
+    px(ctx, ox+35, bodyY+28, C.gold);
+    px(ctx, ox+35, bodyY+32, C.gold);
     // Bag highlight
-    px(ctx, ox+22, bodyY+13, C.brownLt);
-    px(ctx, ox+22, bodyY+14, C.brownLt);
-    // Bag strap (diagonal)
-    px(ctx, ox+20, bodyY+13, C.brownDk);
-    px(ctx, ox+20, bodyY+14, C.brownDk);
-    px(ctx, ox+19, bodyY+15, C.brownDk);
+    rect(ctx, ox+32, bodyY+21, 2, 4, C.brownLt);
+    // Bag strap (diagonal across chest)
+    px(ctx, ox+30, bodyY+22, C.brownDk);
+    px(ctx, ox+29, bodyY+23, C.brownDk);
+    px(ctx, ox+28, bodyY+24, C.brownDk);
+    px(ctx, ox+27, bodyY+25, C.brownDk);
+    // Bag flap
+    rect(ctx, ox+31, bodyY+20, 10, 3, C.brown);
+    rect(ctx, ox+32, bodyY+20, 8, 1, C.brownLt);
+    // Bag bottom corner detail
+    px(ctx, ox+39, bodyY+36, C.brownDk);
+    px(ctx, ox+40, bodyY+35, C.brownDk);
 
-    // Head with more detail
-    rect(ctx, ox+10, bodyY+5, 9, 9, C.skin);
-    rect(ctx, ox+11, bodyY+6, 7, 7, C.skinDk);
+    // ── Head ──
+    // Face area: roughly 16x14 pixels for face upload zone
+    rect(ctx, ox+12, bodyY+5, 16, 14, C.skin);
+    rect(ctx, ox+13, bodyY+6, 14, 12, C.skinDk);
+    // Face upload zone highlight (lighter center)
+    rect(ctx, ox+14, bodyY+7, 12, 10, C.skin);
     // Forehead highlight
-    rect(ctx, ox+12, bodyY+6, 3, 2, C.skinLt);
-    // Hair (messy, under headphones)
-    rect(ctx, ox+10, bodyY+4, 9, 2, C.outline);
-    px(ctx, ox+10, bodyY+3, C.outline);
-    px(ctx, ox+18, bodyY+4, C.outline);
+    rect(ctx, ox+15, bodyY+7, 6, 3, C.skinLt);
+    // Chin
+    rect(ctx, ox+16, bodyY+17, 8, 1, C.skinDk);
     // Stubble
-    px(ctx, ox+12, bodyY+12, '#8A7A6A');
-    px(ctx, ox+14, bodyY+12, '#8A7A6A');
-    px(ctx, ox+16, bodyY+12, '#8A7A6A');
+    px(ctx, ox+16, bodyY+16, '#8A7A6A');
+    px(ctx, ox+18, bodyY+17, '#8A7A6A');
+    px(ctx, ox+20, bodyY+16, '#8A7A6A');
+    px(ctx, ox+22, bodyY+17, '#8A7A6A');
+    px(ctx, ox+24, bodyY+16, '#8A7A6A');
 
-    // Headphones (detailed, over-ear)
-    rect(ctx, ox+8, bodyY+5, 3, 6, C.blue);
-    px(ctx, ox+9, bodyY+6, C.blueLt);
-    px(ctx, ox+8, bodyY+5, C.blueLt);
-    rect(ctx, ox+18, bodyY+5, 3, 6, C.blue);
-    px(ctx, ox+19, bodyY+6, C.blueLt);
-    px(ctx, ox+20, bodyY+5, C.blueLt);
+    // Hair (messy, under headphones)
+    rect(ctx, ox+12, bodyY+3, 16, 3, C.outline);
+    px(ctx, ox+12, bodyY+2, C.outline);
+    px(ctx, ox+13, bodyY+2, C.outline);
+    px(ctx, ox+27, bodyY+3, C.outline);
+    px(ctx, ox+27, bodyY+4, C.outline);
+    // Hair wisps
+    px(ctx, ox+14, bodyY+5, C.outline);
+    px(ctx, ox+25, bodyY+5, C.outline);
+
+    // ── Headphones (detailed, over-ear) ──
+    // Left ear cup
+    rect(ctx, ox+9, bodyY+7, 5, 8, C.blue);
+    rect(ctx, ox+10, bodyY+8, 3, 6, C.blueLt);
+    px(ctx, ox+9, bodyY+7, C.blueLt);
+    // Ear cup padding
+    rect(ctx, ox+11, bodyY+9, 2, 4, C.blueDark);
+    // Right ear cup
+    rect(ctx, ox+26, bodyY+7, 5, 8, C.blue);
+    rect(ctx, ox+27, bodyY+8, 3, 6, C.blueLt);
+    px(ctx, ox+30, bodyY+7, C.blueLt);
+    rect(ctx, ox+27, bodyY+9, 2, 4, C.blueDark);
     // Headband
-    rect(ctx, ox+10, bodyY+3, 9, 2, C.blueDark);
-    rect(ctx, ox+11, bodyY+2, 7, 2, C.blueDark);
-    px(ctx, ox+14, bodyY+2, C.blue); // highlight center
+    rect(ctx, ox+12, bodyY+2, 16, 3, C.blueDark);
+    rect(ctx, ox+14, bodyY+1, 12, 2, C.blueDark);
+    rect(ctx, ox+16, bodyY+0, 8, 2, C.blueDark);
+    // Headband highlight
+    px(ctx, ox+19, bodyY+0, C.blue);
+    px(ctx, ox+20, bodyY+0, C.blue);
+    px(ctx, ox+21, bodyY+1, C.blue);
 
-    // Eyes (more expressive)
-    // Eye whites
-    px(ctx, ox+12, bodyY+8, C.white);
-    px(ctx, ox+13, bodyY+8, C.white);
-    px(ctx, ox+15, bodyY+8, C.white);
-    px(ctx, ox+16, bodyY+8, C.white);
+    // ── Eyes ──
+    // Eye whites (larger, more expressive)
+    rect(ctx, ox+15, bodyY+10, 4, 3, C.white);
+    rect(ctx, ox+21, bodyY+10, 4, 3, C.white);
     // Pupils
-    px(ctx, ox+12, bodyY+9, C.outline);
-    px(ctx, ox+15, bodyY+9, C.outline);
-    // Eyebrow
-    px(ctx, ox+12, bodyY+7, C.outline);
-    px(ctx, ox+15, bodyY+7, C.outline);
+    rect(ctx, ox+16, bodyY+11, 2, 2, C.outline);
+    rect(ctx, ox+22, bodyY+11, 2, 2, C.outline);
+    // Pupil highlight
+    px(ctx, ox+16, bodyY+11, '#333355');
+    px(ctx, ox+22, bodyY+11, '#333355');
+    // Eyebrows
+    rect(ctx, ox+15, bodyY+9, 4, 1, C.outline);
+    rect(ctx, ox+21, bodyY+9, 4, 1, C.outline);
 
-    // Mouth
+    // ── Mouth ──
     if (jumping) {
       // Open mouth (excited)
-      px(ctx, ox+13, bodyY+11, C.outline);
-      px(ctx, ox+14, bodyY+11, C.outline);
-      px(ctx, ox+15, bodyY+11, C.outline);
-      px(ctx, ox+14, bodyY+12, C.red);
+      rect(ctx, ox+17, bodyY+15, 6, 2, C.outline);
+      rect(ctx, ox+18, bodyY+15, 4, 1, C.red);
     } else {
       // Slight smile
-      px(ctx, ox+13, bodyY+11, C.outline);
-      px(ctx, ox+14, bodyY+12, C.outline);
-      px(ctx, ox+15, bodyY+11, C.outline);
+      px(ctx, ox+17, bodyY+15, C.outline);
+      px(ctx, ox+18, bodyY+16, C.outline);
+      px(ctx, ox+19, bodyY+16, C.outline);
+      px(ctx, ox+20, bodyY+16, C.outline);
+      px(ctx, ox+21, bodyY+16, C.outline);
+      px(ctx, ox+22, bodyY+15, C.outline);
     }
 
-    // Arms
+    // ── Arms ──
     if (jumping) {
-      // Arms raised dynamically
-      rect(ctx, ox+6, bodyY+8, 3, 7, C.hoodie);
-      rect(ctx, ox+7, bodyY+9, 1, 5, C.hoodieLt);
-      px(ctx, ox+6, bodyY+8, C.skin);
-      px(ctx, ox+7, bodyY+7, C.skin);
-      // Right arm with bag
-      rect(ctx, ox+23, bodyY+8, 3, 7, C.hoodie);
-      rect(ctx, ox+24, bodyY+9, 1, 5, C.hoodieLt);
-      px(ctx, ox+25, bodyY+8, C.skin);
+      // Arms raised up
+      // Left arm up
+      rect(ctx, ox+7, bodyY+12, 5, 12, C.hoodie);
+      rect(ctx, ox+8, bodyY+13, 3, 10, C.hoodieLt);
+      // Left hand up
+      rect(ctx, ox+6, bodyY+10, 5, 4, C.skin);
+      rect(ctx, ox+7, bodyY+11, 3, 2, C.skinLt);
+      // Right arm up
+      rect(ctx, ox+32, bodyY+12, 5, 12, C.hoodie);
+      rect(ctx, ox+33, bodyY+13, 3, 10, C.hoodieLt);
+      // Right hand up
+      rect(ctx, ox+33, bodyY+10, 5, 4, C.skin);
+      rect(ctx, ox+34, bodyY+11, 3, 2, C.skinLt);
     } else {
-      const armSwing = legPhase === 1 || legPhase === 3 ? 0 : legPhase === 0 ? -1 : 1;
+      // Arm swing matches leg phase (opposite arm/leg)
+      const armSwing = legPhase === 0 ? -3 : legPhase === 2 ? 3 : legPhase === 1 ? 1 : -1;
       // Left arm
-      rect(ctx, ox+7, bodyY+15+armSwing, 3, 7, C.hoodie);
-      rect(ctx, ox+8, bodyY+16+armSwing, 1, 5, C.hoodieLt);
-      // Hand
-      rect(ctx, ox+7, bodyY+21+armSwing, 3, 2, C.skin);
-      px(ctx, ox+7, bodyY+21+armSwing, C.skinLt);
+      rect(ctx, ox+7, bodyY+26+armSwing, 5, 12, C.hoodie);
+      rect(ctx, ox+8, bodyY+27+armSwing, 3, 10, C.hoodieLt);
+      // Left hand
+      rect(ctx, ox+7, bodyY+37+armSwing, 5, 3, C.skin);
+      px(ctx, ox+7, bodyY+37+armSwing, C.skinLt);
+      // Wrist
+      px(ctx, ox+8, bodyY+36+armSwing, C.skinDk);
+
+      // Right arm (opposite swing, partially behind bag)
+      const rArmSwing = -armSwing;
+      rect(ctx, ox+33, bodyY+26+rArmSwing, 5, 10, C.hoodie);
+      rect(ctx, ox+34, bodyY+27+rArmSwing, 3, 8, C.hoodieLt);
+      rect(ctx, ox+33, bodyY+35+rArmSwing, 5, 3, C.skin);
+      px(ctx, ox+34, bodyY+35+rArmSwing, C.skinLt);
     }
 
-    // Shadow on ground
-    rect(ctx, ox+8, oy+30, 16, 1, C.outline);
+    // ── Ground shadow ──
+    rect(ctx, ox+10, oy+61, 24, 2, C.outline);
     ctx.globalAlpha = 0.2;
-    rect(ctx, ox+9, oy+31, 14, 1, C.outline);
+    rect(ctx, ox+12, oy+62, 20, 1, C.outline);
     ctx.globalAlpha = 1.0;
   }
 
   // Row 0: run_0, run_1, run_2, run_3
   drawBase(0, 0, { legPhase: 0 });
-  drawBase(32, 0, { legPhase: 1 });
-  drawBase(64, 0, { legPhase: 2 });
-  drawBase(96, 0, { legPhase: 3 });
+  drawBase(48, 0, { legPhase: 1 });
+  drawBase(96, 0, { legPhase: 2 });
+  drawBase(144, 0, { legPhase: 3 });
 
   // Row 1: jump, duck, idle, dead
-  drawBase(0, 32, { jumping: true });
-  drawBase(32, 32, { ducking: true });
-  drawBase(64, 32, { legPhase: 1 }); // idle = standing
-  drawBase(96, 32, { dead: true });
+  drawBase(0, 64, { jumping: true });
+  drawBase(48, 64, { ducking: true });
+  drawBase(96, 64, { legPhase: 1 }); // idle = standing
+  drawBase(144, 64, { dead: true });
 
   saveCanvas(canvas, 'player.png');
 }
@@ -1192,17 +1380,17 @@ function generateAtlas() {
   const atlas = {
     player: {
       image: 'sprites/player.png',
-      frameWidth: 32,
-      frameHeight: 32,
+      frameWidth: 48,
+      frameHeight: 64,
       frames: {
         run_0: { x: 0, y: 0 },
-        run_1: { x: 32, y: 0 },
-        run_2: { x: 64, y: 0 },
-        run_3: { x: 96, y: 0 },
-        jump:  { x: 0, y: 32 },
-        duck:  { x: 32, y: 32 },
-        idle:  { x: 64, y: 32 },
-        dead:  { x: 96, y: 32 },
+        run_1: { x: 48, y: 0 },
+        run_2: { x: 96, y: 0 },
+        run_3: { x: 144, y: 0 },
+        jump:  { x: 0, y: 64 },
+        duck:  { x: 48, y: 64 },
+        idle:  { x: 96, y: 64 },
+        dead:  { x: 144, y: 64 },
       }
     },
     obstacles: {

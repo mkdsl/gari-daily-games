@@ -1,40 +1,40 @@
 {
   "player": {
     "image": "sprites/player.png",
-    "frameWidth": 32,
-    "frameHeight": 32,
+    "frameWidth": 48,
+    "frameHeight": 64,
     "frames": {
       "run_0": {
         "x": 0,
         "y": 0
       },
       "run_1": {
-        "x": 32,
+        "x": 48,
         "y": 0
       },
       "run_2": {
-        "x": 64,
+        "x": 96,
         "y": 0
       },
       "run_3": {
-        "x": 96,
+        "x": 144,
         "y": 0
       },
       "jump": {
         "x": 0,
-        "y": 32
+        "y": 64
       },
       "duck": {
-        "x": 32,
-        "y": 32
+        "x": 48,
+        "y": 64
       },
       "idle": {
-        "x": 64,
-        "y": 32
+        "x": 96,
+        "y": 64
       },
       "dead": {
-        "x": 96,
-        "y": 32
+        "x": 144,
+        "y": 64
       }
     }
   },
