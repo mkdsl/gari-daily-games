@@ -147,121 +147,88 @@ export function drawPlayer(ctx, player, groundY) {
   ctx.fill();
 
   if (ducking) {
-    // Crouched slide pose with animated legs
-    const legColor = '#0f0f22';
-    const shoeColor = '#2a1a3d';
-    ctx.lineWidth = 6;
-    ctx.lineCap = 'round';
+    // Slide/crouch — compact pose, animated shuffling legs
     const frame = p.animFrame;
-    // Leg offsets cycle: left/right alternate forward/back
-    const legCycle = [[-6, 4], [-2, 0], [4, -6], [0, -2]];
-    const [lOff, rOff] = legCycle[frame] || [0, 0];
+    const shuffle = [[-4, 3], [0, 0], [3, -4], [0, 0]][frame] || [0, 0];
 
-    // Left leg — bent knee, animated
-    ctx.strokeStyle = legColor;
+    // Legs — short bent, shuffling
+    ctx.strokeStyle = '#1a1a30';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    // Left
     ctx.beginPath();
-    ctx.moveTo(x + 6, y + 20);
-    ctx.lineTo(x - 2 + lOff, y + 14);
-    ctx.lineTo(x - 6 + lOff * 1.2, y + 28);
+    ctx.moveTo(x + 8, y + 22);
+    ctx.lineTo(x + 4 + shuffle[0], y + 34);
     ctx.stroke();
-    ctx.fillStyle = shoeColor;
-    ctx.fillRect(x - 10 + lOff * 1.2, y + 25, 9, 5);
-
-    // Right leg — bent knee, animated
-    ctx.strokeStyle = legColor;
+    ctx.fillStyle = '#2a1a3d';
+    ctx.fillRect(x + 1 + shuffle[0], y + 32, 8, 4);
+    // Right
     ctx.beginPath();
-    ctx.moveTo(x + 18, y + 20);
-    ctx.lineTo(x + 26 + rOff, y + 16);
-    ctx.lineTo(x + 30 + rOff * 1.2, y + 28);
+    ctx.moveTo(x + 20, y + 22);
+    ctx.lineTo(x + 24 + shuffle[1], y + 34);
     ctx.stroke();
-    ctx.fillStyle = shoeColor;
-    ctx.fillRect(x + 27 + rOff * 1.2, y + 25, 9, 5);
+    ctx.fillStyle = '#2a1a3d';
+    ctx.fillRect(x + 21 + shuffle[1], y + 32, 8, 4);
 
-    // Body — leaning forward, shorter and wider
-    const bodyH = 22;
-    const bodyLean = 6;
-    const bodyGrad = ctx.createLinearGradient(x - bodyLean, y, x + bodyW, y + bodyH);
-    bodyGrad.addColorStop(0, '#1e1e38');
-    bodyGrad.addColorStop(0.5, '#14142a');
-    bodyGrad.addColorStop(1, '#0a0a1e');
+    // Body — wider, low, rounded
+    const bh = 24;
+    const bw = 34;
+    const bx = x - 3;
+    const bodyGrad = ctx.createLinearGradient(bx, y, bx + bw, y + bh);
+    bodyGrad.addColorStop(0, '#252542');
+    bodyGrad.addColorStop(1, '#181830');
     ctx.fillStyle = bodyGrad;
-    ctx.beginPath();
-    ctx.moveTo(x - bodyLean, y - 2);
-    ctx.lineTo(x + bodyW - 2, y + 2);
-    ctx.lineTo(x + bodyW, y + bodyH);
-    ctx.lineTo(x - bodyLean + 2, y + bodyH);
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = 'rgba(100,120,180,0.15)';
-    ctx.fillRect(x - bodyLean, y, 3, bodyH - 4);
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(bx, y, bw, bh, 6);
+      ctx.fill();
+    } else {
+      ctx.fillRect(bx, y, bw, bh);
+    }
+    // Zip highlight
+    ctx.fillStyle = 'rgba(100,120,180,0.18)';
+    ctx.fillRect(bx + bw / 2 - 1, y + 3, 2, bh - 6);
 
-    // Head — lower and forward
-    const headY = y - 14;
-    const headX = x - bodyLean - 2;
+    // Head — forward and low
+    const hx = bx - 2;
+    const hy = y - 12;
     const face = getFaceImage();
     if (face && face.complete) {
-      const faceDraw = { x: headX - 6, y: headY - 8, w: headW + 16, h: headH + 16 };
       const clipRx = headW * 0.50;
       const clipRy = headH * 0.55;
       ctx.save();
       ctx.beginPath();
-      ctx.ellipse(headX + 2 + headW / 2, headY + headH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);
+      ctx.ellipse(hx + headW / 2 + 2, hy + headH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);
       ctx.clip();
       ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(face, faceDraw.x, faceDraw.y, faceDraw.w, faceDraw.h);
+      ctx.drawImage(face, hx - 6, hy - 8, headW + 16, headH + 16);
       ctx.imageSmoothingEnabled = true;
       ctx.restore();
     } else {
-      const headGrad = ctx.createLinearGradient(headX + 2, headY, headX + headW, headY + headH);
-      headGrad.addColorStop(0, '#2a2a44');
-      headGrad.addColorStop(1, '#1a1a30');
-      ctx.fillStyle = headGrad;
-      ctx.fillRect(headX + 2, headY, headW, headH);
+      ctx.fillStyle = '#2e2e48';
+      ctx.beginPath();
+      ctx.ellipse(hx + headW / 2 + 2, hy + headH / 2, headW / 2, headH / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
       ctx.fillStyle = '#0a0a14';
-      ctx.fillRect(headX + 5, headY + 8, 18, 5);
-      ctx.fillStyle = 'rgba(100,140,200,0.2)';
-      ctx.fillRect(headX + 5, headY + 2, 14, 4);
+      ctx.fillRect(hx + 5, hy + 8, 18, 5);
     }
 
     // Headphones
     ctx.strokeStyle = '#5577BB';
-    ctx.lineWidth = 3.5;
+    ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.arc(headX + headW / 2 + 2, headY + 2, 14, Math.PI * 1.1, Math.PI * -0.1);
+    ctx.arc(hx + headW / 2 + 2, hy + 2, 14, Math.PI * 1.1, Math.PI * -0.1);
     ctx.stroke();
     ctx.fillStyle = '#5577BB';
-    ctx.fillRect(headX - 1, headY + 2, 6, 10);
-    ctx.fillStyle = '#3a5599';
-    ctx.fillRect(headX, headY + 3, 4, 8);
-    ctx.fillStyle = '#5577BB';
-    ctx.fillRect(headX + headW - 1, headY + 2, 6, 10);
-    ctx.fillStyle = '#3a5599';
-    ctx.fillRect(headX + headW, headY + 3, 4, 8);
+    ctx.fillRect(hx - 1, hy + 2, 5, 9);
+    ctx.fillRect(hx + headW, hy + 2, 5, 9);
 
-    // DJ Bag on back (compressed)
-    const bagX = x + 22;
-    const bagY2 = y + 2;
-    const bagGrad = ctx.createLinearGradient(bagX, bagY2, bagX + 14, bagY2 + 18);
-    bagGrad.addColorStop(0, '#2a2a44');
-    bagGrad.addColorStop(1, '#16162a');
-    ctx.fillStyle = bagGrad;
-    ctx.fillRect(bagX, bagY2, 14, 18);
-    ctx.fillStyle = '#6688AA';
-    ctx.fillRect(bagX + 6, bagY2 + 2, 2, 14);
-    ctx.strokeStyle = '#4466AA';
-    ctx.lineWidth = 2;
+    // Arm forward
+    ctx.strokeStyle = '#1a1a30';
+    ctx.lineWidth = 4;
     ctx.beginPath();
-    ctx.moveTo(bagX, bagY2);
-    ctx.lineTo(x + 10, y - 2);
-    ctx.stroke();
-
-    // Arm tucked under body
-    ctx.strokeStyle = '#14142a';
-    ctx.lineWidth = 5;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(x - bodyLean + 2, y + 6);
-    ctx.lineTo(x - bodyLean - 4, y + 18);
+    ctx.moveTo(bx + 2, y + 8);
+    ctx.lineTo(bx - 4, y + 18);
     ctx.stroke();
 
   } else {

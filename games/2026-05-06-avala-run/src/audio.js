@@ -326,23 +326,32 @@ export function playCardSound() {
 
 export function playTrashSound() {
   if (!audioCtx) return;
-  const bufSize = Math.floor(audioCtx.sampleRate * 0.06);
-  const buffer = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * 0.3;
-  const src = audioCtx.createBufferSource();
-  const filter = audioCtx.createBiquadFilter();
-  filter.type = 'lowpass';
-  filter.frequency.value = 700;
+  const t = audioCtx.currentTime;
   const gain = audioCtx.createGain();
-  src.buffer = buffer;
-  src.connect(filter);
-  filter.connect(gain);
   gain.connect(audioCtx.destination);
-  gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
-  src.start();
-  src.stop(audioCtx.currentTime + 0.06);
+  gain.gain.setValueAtTime(0.25, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+
+  // Two-tone ascending pling
+  const o1 = audioCtx.createOscillator();
+  o1.type = 'sine';
+  o1.frequency.setValueAtTime(880, t);
+  o1.frequency.exponentialRampToValueAtTime(1320, t + 0.08);
+  o1.connect(gain);
+  o1.start(t);
+  o1.stop(t + 0.15);
+
+  // Harmonic shimmer
+  const o2 = audioCtx.createOscillator();
+  o2.type = 'triangle';
+  o2.frequency.setValueAtTime(1760, t + 0.03);
+  const g2 = audioCtx.createGain();
+  g2.gain.setValueAtTime(0.1, t + 0.03);
+  g2.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+  o2.connect(g2);
+  g2.connect(audioCtx.destination);
+  o2.start(t + 0.03);
+  o2.stop(t + 0.2);
 }
 
 export function playLogoSound() {

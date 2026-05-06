@@ -112,6 +112,8 @@ export function showGameOver(state, onRestart) {
         <div>Top Score:&nbsp; ${fmtScores}</div>
       </div>
       <button class="go-restart" id="btn-restart">POKUŠAJ PONOVO</button>
+      <button class="btn-face" id="btn-face-go">${localStorage.getItem('avala-run-face') ? 'PROMENI FACU' : 'DODAJ FACU'}</button>
+      <input type="file" id="face-input-go" accept="image/*" style="display:none">
     </div>
   `;
 
@@ -340,6 +342,36 @@ export function showGameOver(state, onRestart) {
   }
 
   document.getElementById('btn-restart').addEventListener('click', onRestart);
+
+  // Face upload on game over screen
+  const btnFaceGo = document.getElementById('btn-face-go');
+  const inputFaceGo = document.getElementById('face-input-go');
+  if (btnFaceGo && inputFaceGo) {
+    function triggerGo() { inputFaceGo.value = ''; inputFaceGo.click(); }
+    btnFaceGo.addEventListener('click', triggerGo);
+    btnFaceGo.addEventListener('touchend', (e) => { e.preventDefault(); triggerGo(); });
+    inputFaceGo.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          const size = Math.min(img.width, img.height);
+          const sx = (img.width - size) / 2;
+          const sy = (img.height - size) / 2;
+          const c = document.createElement('canvas');
+          c.width = 48; c.height = 48;
+          c.getContext('2d').drawImage(img, sx, sy, size, size, 0, 0, 48, 48);
+          localStorage.setItem('avala-run-face', c.toDataURL());
+          refreshFace();
+          btnFaceGo.textContent = 'PROMENI FACU';
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 }
 
 export function hideGameOver() {
