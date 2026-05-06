@@ -1,5 +1,5 @@
 import { CONFIG } from '../config.js';
-import { hasSprites, drawBgSection } from '../sprites.js';
+import { hasSprites } from '../sprites.js';
 
 // Parallax speeds: stars, clouds, avala, farPines, midPines
 const PARALLAX_SPEEDS = [0.02, 0.05, 0.1, 0.3, 0.6];
@@ -97,16 +97,10 @@ export function drawBackground(ctx, state, canvasW, canvasH) {
   const cloudPatternW = canvasW * 2;
   const cloudOff = state.world.parallaxOffsets[1];
   if (state.world.clouds) {
-    const useCloudSprites = hasSprites('background');
     state.world.clouds.forEach(c => {
       const cx = ((c.x - cloudOff) % cloudPatternW + cloudPatternW) % cloudPatternW;
       if (cx > canvasW + c.w) return;
       ctx.globalAlpha = c.alpha;
-      if (useCloudSprites) {
-        const drawn = drawBgSection(ctx, 'cloud_' + c.spriteVariant, cx - c.w / 2, c.y - c.h / 2, c.w, c.h);
-        if (drawn) { ctx.globalAlpha = 1; return; }
-      }
-      // Fallback: programmatic
       ctx.fillStyle = '#667a99';
       ctx.beginPath();
       ctx.ellipse(cx, c.y, c.w * 0.5, c.h * 0.4, 0, 0, Math.PI * 2);
@@ -367,14 +361,6 @@ function drawAvalaTower(ctx, towerX, towerBase) {
 
 function drawPine(ctx, x, baseY, h, color, variant, isFar) {
   const w = h * 0.5;
-
-  // Try background sprite tree variants (tree_0..tree_3)
-  if (hasSprites('background') && variant <= 3) {
-    const spriteW = w;
-    const spriteH = h;
-    const drawn = drawBgSection(ctx, 'tree_' + variant, x - spriteW / 2, baseY - spriteH, spriteW, spriteH);
-    if (drawn) return;
-  }
 
   const layers = isFar ? 3 : 4;
 
