@@ -1,26 +1,7 @@
 import { CONFIG } from '../config.js';
 import { consumeJump, consumeDuck, getInput } from '../input.js';
 import { drawSprite, hasSprites } from '../sprites.js';
-
-let _faceImg = null;
-let _faceLoaded = false;
-
-function getFaceImage() {
-  if (_faceLoaded) return _faceImg;
-  _faceLoaded = true;
-  const data = localStorage.getItem('avala-run-face');
-  if (data) {
-    _faceImg = new Image();
-    _faceImg.src = data;
-  }
-  return _faceImg;
-}
-
-// Reset face cache so new uploads are picked up on next run
-export function refreshFace() {
-  _faceLoaded = false;
-  _faceImg = null;
-}
+import { getFaceImage } from '../face.js';
 
 export function initPlayer(state, groundY) {
   const p = state.player;

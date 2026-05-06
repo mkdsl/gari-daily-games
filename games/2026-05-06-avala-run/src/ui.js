@@ -1,5 +1,5 @@
 import { CONFIG } from './config.js';
-import { refreshFace } from './entities/player.js';
+import { refreshFace } from './face.js';
 
 export function initFaceUpload() {
   const btn = document.getElementById('btn-face');

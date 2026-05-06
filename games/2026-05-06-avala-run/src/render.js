@@ -379,58 +379,6 @@ function drawPoseHint(ctx, sx, sy, w, h, requireState, baseKind) {
   ctx.globalAlpha = 1;
 }
 
-function drawKarta(ctx, x, y, w, h) {
-  const _t = Date.now() * 0.003;
-
-  // Outer glow
-  ctx.shadowBlur = 14;
-  ctx.shadowColor = '#FFD700';
-
-  // Card body with golden gradient
-  const cGrad = ctx.createLinearGradient(x, y, x + w, y + h);
-  cGrad.addColorStop(0, '#FFE44D');
-  cGrad.addColorStop(0.3, '#FFD700');
-  cGrad.addColorStop(0.7, '#FFAA00');
-  cGrad.addColorStop(1, '#CC8800');
-  ctx.fillStyle = cGrad;
-  ctx.fillRect(x, y, w, h);
-  ctx.shadowBlur = 0;
-
-  // Inner border
-  ctx.strokeStyle = '#CC8800';
-  ctx.lineWidth = 1;
-  ctx.strokeRect(x + 2, y + 2, w - 4, h - 4);
-
-  // Star/ticket symbol in center
-  ctx.fillStyle = '#FFFFFF';
-  ctx.globalAlpha = 0.6;
-  const starX = x + w / 2;
-  const starY = y + h / 2;
-  ctx.fillRect(starX - 1, starY - 3, 2, 6);
-  ctx.fillRect(starX - 3, starY - 1, 6, 2);
-  ctx.globalAlpha = 1;
-
-  // Top decorative line
-  ctx.fillStyle = '#FFFFFF';
-  ctx.globalAlpha = 0.4;
-  ctx.fillRect(x + 3, y + 3, w - 6, 1);
-  ctx.globalAlpha = 1;
-
-  // Bottom barcode-like detail
-  ctx.fillStyle = '#AA7700';
-  for (let i = 0; i < 4; i++) {
-    ctx.fillRect(x + 4 + i * 3, y + h - 5, 2, 3);
-  }
-
-  // Sparkle particle above (animated feel via position)
-  const sparkAlpha = 0.4 + Math.sin(_t) * 0.3;
-  ctx.globalAlpha = sparkAlpha;
-  ctx.fillStyle = '#FFFFFF';
-  ctx.fillRect(x + w / 2 - 1, y - 5, 2, 2);
-  ctx.fillRect(x + w / 2, y - 7, 1, 1);
-  ctx.globalAlpha = 1;
-}
-
 function drawLimenka(ctx, x, y, w, h) {
   // Can body with metallic gradient
   const canGrad = ctx.createLinearGradient(x, y, x + w, y);
