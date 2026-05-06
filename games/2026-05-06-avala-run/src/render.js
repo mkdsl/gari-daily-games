@@ -46,8 +46,19 @@ function drawObstacle(ctx, obj, sx, groundY) {
   const sy = groundY - obj.groundOffset;
   // Try sprite first
   if (hasSprites('obstacles')) {
-    const drawn = drawSprite(ctx, 'obstacles', obj.kind, sx, sy, obj.w, obj.h);
-    if (drawn) return;
+    if (obj.kind === 'kamion') {
+      // Kamion sprite faces right but moves left — flip horizontally
+      ctx.save();
+      ctx.translate(sx + obj.w / 2, 0);
+      ctx.scale(-1, 1);
+      ctx.translate(-(sx + obj.w / 2), 0);
+      const drawn = drawSprite(ctx, 'obstacles', obj.kind, sx, sy, obj.w, obj.h);
+      ctx.restore();
+      if (drawn) return;
+    } else {
+      const drawn = drawSprite(ctx, 'obstacles', obj.kind, sx, sy, obj.w, obj.h);
+      if (drawn) return;
+    }
   }
   // Fallback to programmatic
   ctx.save();
@@ -178,12 +189,7 @@ function drawKamen(ctx, x, y, w, h) {
 }
 
 function drawKamion(ctx, x, y, w, h) {
-  // Flip horizontally — truck faces left (cabin on right, cargo on left)
-  ctx.save();
-  ctx.translate(x + w / 2, 0);
-  ctx.scale(-1, 1);
-  ctx.translate(-(x + w / 2), 0);
-
+  // Cabin at left = front (truck moves left towards player)
   // Shadow
   ctx.fillStyle = 'rgba(0,0,0,0.3)';
   ctx.beginPath();
@@ -206,6 +212,25 @@ function drawKamion(ctx, x, y, w, h) {
   ctx.fillStyle = '#1a2533';
   ctx.fillRect(x + 4, y + 6, Math.floor(w * 0.16), Math.floor(h * 0.3));
 
+  // Headlight warning (blinking)
+  const blinkPhase = Math.sin(Date.now() * 0.008) > 0;
+  const screenDist = Math.max(0, x);
+  const glowSize = Math.min(18, 4 + screenDist * 0.04);
+  const glowAlpha = blinkPhase ? Math.min(0.8, 0.2 + screenDist * 0.002) : 0.1;
+  ctx.save();
+  ctx.globalAlpha = glowAlpha;
+  ctx.fillStyle = '#ffee66';
+  ctx.beginPath();
+  ctx.arc(x + 3, y + h - 10, glowSize, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+  ctx.fillStyle = blinkPhase ? '#ffee44' : '#ffdd88';
+  ctx.fillRect(x + 2, y + h - 12, 3, 3);
+
+  // Taillight
+  ctx.fillStyle = '#ff3344';
+  ctx.fillRect(x + w - 3, y + h - 12, 3, 3);
+
   // Wheels
   const wheelY = y + h;
   [x + 14, x + w - 14].forEach(wx => {
@@ -218,29 +243,6 @@ function drawKamion(ctx, x, y, w, h) {
     ctx.arc(wx, wheelY, 3, 0, Math.PI * 2);
     ctx.fill();
   });
-
-  ctx.restore();
-
-  // Headlight + taillight drawn AFTER restore (not flipped)
-  const blinkPhase = Math.sin(Date.now() * 0.008) > 0;
-  const screenDist = Math.max(0, x);
-  const glowSize = Math.min(18, 4 + screenDist * 0.04);
-  const glowAlpha = blinkPhase ? Math.min(0.8, 0.2 + screenDist * 0.002) : 0.1;
-
-  // Headlight on LEFT side (front, facing player)
-  ctx.save();
-  ctx.globalAlpha = glowAlpha;
-  ctx.fillStyle = '#ffee66';
-  ctx.beginPath();
-  ctx.arc(x + 3, y + h - 10, glowSize, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-  ctx.fillStyle = blinkPhase ? '#ffee44' : '#ffdd88';
-  ctx.fillRect(x + 2, y + h - 12, 3, 3);
-
-  // Taillight on RIGHT side (back)
-  ctx.fillStyle = '#ff3344';
-  ctx.fillRect(x + w - 3, y + h - 12, 3, 3);
 }
 
 function drawDron(ctx, x, y, w, h) {
@@ -325,16 +327,19 @@ function drawCollectible(ctx, obj, sx, groundY) {
   ctx.shadowBlur = 8 + Math.sin(Date.now() * 0.005) * 4;
   ctx.shadowColor = '#44ff88';
 
+  // Bounce animation for all collectibles
+  const bounce = Math.sin(Date.now() * 0.004 + obj.worldX) * 3;
+  const drawY = sy - bounce;
+
   if (obj.kind === 'logo') {
-    const bounceY = sy - Math.sin(Date.now() * 0.004 + obj.worldX) * 3;
-    drawLogo(ctx, sx, bounceY, obj.w, obj.h);
+    drawLogo(ctx, sx, drawY, obj.w, obj.h);
     ctx.restore();
     return;
   }
 
   switch (obj.kind) {
-    case 'flasa': drawFlasa(ctx, sx, sy, obj.w, obj.h); break;
-    case 'kesa':  drawKesa(ctx, sx, sy, obj.w, obj.h); break;
+    case 'flasa': drawFlasa(ctx, sx, drawY, obj.w, obj.h); break;
+    case 'kesa':  drawKesa(ctx, sx, drawY, obj.w, obj.h); break;
   }
 
   if (obj.requireAction) {
