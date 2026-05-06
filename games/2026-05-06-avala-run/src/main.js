@@ -4,7 +4,7 @@ import { createState, saveDailyHighscore } from './state.js';
 import { initInput } from './input.js';
 import {
   initAudio, resumeAudio, updateAudio,
-  playCardSound, playTrashSound, playGameOverSound
+  playTrashSound, playGameOverSound
 } from './audio.js';
 import { render } from './render.js';
 import { showMenu, hideMenu, updateHUD, showGameOver, hideGameOver } from './ui.js';
@@ -43,11 +43,9 @@ function startRun() {
 
   state.screen = 'playing';
   state.score = 0;
-  state.cardCount = 0;
   state.trashCount = 0;
   state.distance = 0;
   state.speed = CONFIG.SPEED_BASE;
-  state.cardBoostTimer = 0;
   state.antiAbuseTimer = 0;
   state.antiAbuseDelay = 0;
 
@@ -84,22 +82,18 @@ function loop(now) {
       CONFIG.SPEED_MAX,
       CONFIG.SPEED_BASE + state.distance * CONFIG.SPEED_GROWTH
     );
-    if (state.cardBoostTimer > 0) {
-      state.cardBoostTimer -= dt;
-      state.speed = Math.min(CONFIG.SPEED_MAX, state.speed + CONFIG.CARD_BOOST_SPEED);
-    }
 
     // Anti-abuse: svakih 30s dodaj random delay
     state.antiAbuseTimer += dt;
     if (state.antiAbuseTimer >= CONFIG.ANTI_ABUSE_INTERVAL) {
       state.antiAbuseTimer = 0;
-      state.antiAbuseDelay = Math.random() * 0.5;  // 0-500ms delay
+      state.antiAbuseDelay = Math.random() * 0.5;
     }
 
-    // Distance i score
+    // Distance i score (smeće + distanca)
     const dx = state.speed * dt;
     state.distance += dx;
-    state.score = state.cardCount * CONFIG.CARD_SCORE
+    state.score = state.trashCount * CONFIG.TRASH_SCORE
       + Math.floor(state.distance / 100) * CONFIG.DIST_SCORE_PER_100PX;
 
     // Update world
@@ -116,16 +110,9 @@ function loop(now) {
     if (hit) {
       if (obj.type === 'collectible') {
         obj.collected = true;
-        if (obj.kind === 'karta') {
-          state.cardCount++;
-          state.cardBoostTimer = CONFIG.CARD_BOOST_DURATION;
-          playCardSound();
-        } else {
-          state.trashCount++;
-          playTrashSound();
-        }
+        state.trashCount++;
+        playTrashSound();
       } else {
-        // Prepreka — game over
         endRun();
         requestAnimationFrame(loop);
         return;

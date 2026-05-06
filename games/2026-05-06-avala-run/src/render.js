@@ -331,7 +331,6 @@ function drawCollectible(ctx, obj, sx, groundY) {
   // Determine base kind (strip _high/_low suffix)
   const baseKind = obj.kind.replace(/_high|_low/, '');
   switch (baseKind) {
-    case 'karta':   drawKarta(ctx, sx, sy, obj.w, obj.h); break;
     case 'limenka': drawLimenka(ctx, sx, sy, obj.w, obj.h); break;
     case 'flasa':   drawFlasa(ctx, sx, sy, obj.w, obj.h); break;
     case 'papir':   drawPapir(ctx, sx, sy, obj.w, obj.h); break;

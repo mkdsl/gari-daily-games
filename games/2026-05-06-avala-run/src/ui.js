@@ -54,8 +54,7 @@ export function hideMenu() {
 
 export function updateHUD(state) {
   document.getElementById('score-display').textContent = state.score;
-  document.getElementById('card-display').textContent = '\u{1F3AB} ' + state.cardCount;
-  document.getElementById('trash-display').textContent = '\u{1F5D1}️ ' + state.trashCount;
+  document.getElementById('trash-display').textContent = state.trashCount + ' smeća';
 }
 
 export function showGameOver(state, onRestart) {
@@ -65,30 +64,25 @@ export function showGameOver(state, onRestart) {
   const distMeters = Math.floor(state.distance / 10);
   const aforizm = CONFIG.AFORIZMI[Math.floor(Math.random() * CONFIG.AFORIZMI.length)];
   const scores = state.daily.scores;
-  const trash  = state.daily.trash;
 
   const fmtScores = scores.length
     ? scores.map((s, i) => `${i + 1}. ${s}`).join('  ')
-    : '—';
-  const fmtTrash = trash.length
-    ? trash.map((s, i) => `${i + 1}. ${s}`).join('  ')
     : '—';
 
   el.innerHTML = `
     <div class="go-inner">
       <div class="go-title">GAME OVER</div>
       <div class="go-stats">
-        Prešao: ${distMeters}m &nbsp; \u{1F3AB} Karte: ${state.cardCount} &nbsp; \u{1F5D1}️ Smeće: ${state.trashCount}
+        Score: ${state.score} &nbsp; | &nbsp; ${distMeters}m &nbsp; | &nbsp; ${state.trashCount} smeća
       </div>
       <div class="go-aforizm">"${aforizm}"<br><em>— Pera</em></div>
       <hr>
-      <a href="${CONFIG.TICKET_URL}" target="_blank" rel="noopener" class="go-ticket">\u{1F3AB} Uzmi kartu — app.bilet.rs/show/261</a>
+      <a href="${CONFIG.TICKET_URL}" target="_blank" rel="noopener" class="go-ticket">Uzmi kartu — app.bilet.rs/show/261</a>
       <div class="go-rules">Učešćem prihvataš Pravila — Kluboslavija IG bio</div>
       <hr>
       <div class="go-highscore">
         <div><strong>DANAŠNJI REKORD</strong></div>
         <div>Top Score:&nbsp; ${fmtScores}</div>
-        <div>Top Smeće:&nbsp; ${fmtTrash}</div>
       </div>
       <button class="go-restart" id="btn-restart">POKUŠAJ PONOVO</button>
     </div>

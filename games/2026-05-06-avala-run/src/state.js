@@ -4,11 +4,9 @@ export function createState() {
   return {
     screen: 'menu',     // 'menu' | 'playing' | 'gameover'
     score: 0,
-    cardCount: 0,
     trashCount: 0,
-    distance: 0,        // ukupna pređena udaljenost u px
+    distance: 0,
     speed: CONFIG.SPEED_BASE,
-    cardBoostTimer: 0,
     antiAbuseTimer: 0,
     antiAbuseDelay: 0,
     // Player
@@ -52,8 +50,7 @@ export function loadDailyHighscore() {
 function emptyDaily() {
   return {
     date: new Date().toISOString().slice(0, 10),
-    scores: [],
-    trash: []
+    scores: []
   };
 }
 
@@ -61,7 +58,6 @@ export function saveDailyHighscore(state) {
   try {
     const d = state.daily;
     d.scores = [...d.scores, state.score].sort((a, b) => b - a).slice(0, 3);
-    d.trash  = [...d.trash,  state.trashCount].sort((a, b) => b - a).slice(0, 3);
     localStorage.setItem(CONFIG.SAVE_KEY, JSON.stringify(d));
   } catch {}
 }

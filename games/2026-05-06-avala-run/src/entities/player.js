@@ -113,9 +113,9 @@ export function drawPlayer(ctx, player, groundY) {
       // Face overlay on sprite head area
       const face = getFaceImage();
       if (face && face.complete) {
-        const faceY = y - 4 + (ducking ? 2 : 0); // align with sprite head
+        const headY = y - (ducking ? 8 : 14);
         ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(face, x, faceY, 14, 14);
+        ctx.drawImage(face, x + 2, headY + 1, 12, 12);
         ctx.imageSmoothingEnabled = true;
       }
       return;
@@ -210,7 +210,7 @@ export function drawPlayer(ctx, player, groundY) {
   const face = getFaceImage();
   if (face && face.complete) {
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(face, x + 1, headY + 1, headW - 1, headH - 1);
+    ctx.drawImage(face, x + 2, headY + 1, headW - 2, headH - 2);
     ctx.imageSmoothingEnabled = true;
   } else {
     const headGrad = ctx.createLinearGradient(x + 1, headY, x + headW, headY + headH);

@@ -25,17 +25,14 @@ export const CONFIG = {
   SPEED_MAX: 600,
 
   // Scoring
-  CARD_SCORE: 10,
-  DIST_SCORE_PER_100PX: 1,
-  CARD_BOOST_SPEED: 80,   // bonus speed za 2s
-  CARD_BOOST_DURATION: 2,
+  TRASH_SCORE: 10,           // bodovi po komadu smeća
+  DIST_SCORE_PER_100PX: 1,   // bodovi po 100px distance
 
   // Spawning
-  SPAWN_MIN_GAP: 280,    // minimalni pixel gap između objekata
+  SPAWN_MIN_GAP: 280,
   SPAWN_MAX_GAP: 520,
-  TRASH_CHANCE: 0.45,    // šansa da spawn bude trash umesto prepreke
-  CARD_CHANCE: 0.20,     // šansa da spawn bude karta
-  // ostatak (0.35) je prepreka
+  TRASH_CHANCE: 0.55,    // šansa da spawn bude smeće
+  // ostatak (0.45) je prepreka
 
   // Anti-abuse: svakih 30s random delay spawn
   ANTI_ABUSE_INTERVAL: 30,
@@ -48,7 +45,6 @@ export const CONFIG = {
     dron:   { w: 36, h: 16, groundOffset: 52, hitW: 34, hitH: 14, reqJump: false, moveSpeed: -100 }
   },
   COLLECTIBLES: {
-    karta:        { w: 20, h: 28, groundOffset: 56, scoreType: 'card',  trashVal: 0  },
     limenka_high: { w: 16, h: 24, groundOffset: 56, scoreType: 'trash', trashVal: 1, requireState: 'jumping' },
     limenka_low:  { w: 16, h: 24, groundOffset: 12, scoreType: 'trash', trashVal: 1, requireState: 'ducking' },
     flasa_high:   { w: 12, h: 28, groundOffset: 60, scoreType: 'trash', trashVal: 1, requireState: 'jumping' },
@@ -67,7 +63,6 @@ export const CONFIG = {
     PLAYER:      '#1a1a2e',
     PLAYER_HL:   '#4466AA',
     OBSTACLE:    '#1a0d06',
-    KARTA:       '#FFD700',
     LIMENKA:     '#8899AA',
     FLASA:       '#7A5C3A',
     PAPIR:       '#D0D0C0',
@@ -82,7 +77,7 @@ export const CONFIG = {
   BEAT_INTERVAL: 0.5,   // sekunde između bass beat-ova
 
   // Daily highscore
-  SAVE_KEY: 'avala-run-daily-v1',
+  SAVE_KEY: 'avala-run-daily-v2',
 
   // Aforizmi
   AFORIZMI: [

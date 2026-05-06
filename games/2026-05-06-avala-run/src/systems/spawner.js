@@ -35,9 +35,7 @@ function spawnObject(state, canvasW) {
   const roll = Math.random();
   let kind, type;
 
-  if (roll < CONFIG.CARD_CHANCE) {
-    type = 'collectible'; kind = 'karta';
-  } else if (roll < CONFIG.CARD_CHANCE + CONFIG.TRASH_CHANCE) {
+  if (roll < CONFIG.TRASH_CHANCE) {
     type = 'collectible'; kind = TRASH_TYPES[Math.floor(Math.random() * TRASH_TYPES.length)];
   } else {
     type = 'obstacle'; kind = OBSTACLE_TYPES[Math.floor(Math.random() * OBSTACLE_TYPES.length)];
