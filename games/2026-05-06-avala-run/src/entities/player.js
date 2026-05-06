@@ -14,6 +14,8 @@ export function initPlayer(state, groundY) {
   p.animTimer = 0;
   p.grabAnim = 'none';
   p.grabTimer = 0;
+  p.isDead = false;
+  p.deathTime = 0;
 }
 
 export function updatePlayer(state, dt, groundY) {
@@ -64,7 +66,7 @@ export function updatePlayer(state, dt, groundY) {
   if (input.left) p.x -= CONFIG.PLAYER_MOVE_SPEED * dt;
   if (input.right) p.x += CONFIG.PLAYER_MOVE_SPEED * dt;
   // Clamp to canvas width dynamically (state.canvasW set by game loop)
-  const maxX = state.canvasW ? state.canvasW - CONFIG.PLAYER_MIN_X : CONFIG.PLAYER_MAX_X;
+  const maxX = state.canvasW ? state.canvasW - CONFIG.PLAYER_MIN_X : 600;
   p.x = Math.max(CONFIG.PLAYER_MIN_X, Math.min(maxX, p.x));
 
   // Physics
@@ -100,6 +102,19 @@ export function drawPlayer(ctx, player, groundY) {
   const y = p.y;
   const ducking = p.isDucking;
 
+  if (p.isDead) {
+    p.deathTime = (p.deathTime || 0) + 0.016;
+    const progress = Math.min(p.deathTime / 0.8, 1);
+    const angle = progress * Math.PI * 0.5;
+    const fallY = progress * 40;
+    ctx.save();
+    ctx.translate(p.x, y + CONFIG.PLAYER_H_RUN);
+    ctx.rotate(angle);
+    ctx.translate(-p.x, -(y + CONFIG.PLAYER_H_RUN));
+    ctx.globalAlpha = 1 - progress * 0.5;
+    ctx.translate(0, fallY);
+  }
+
   // Try sprite first (not for ducking — programmatic has animated legs)
   if (hasSprites('player') && !ducking) {
     let frameName;
@@ -130,6 +145,7 @@ export function drawPlayer(ctx, player, groundY) {
         ctx.restore();
       }
       drawGrabOverlay(ctx, p, x, y, ducking);
+      if (p.isDead) ctx.restore();
       return;
     }
   }
@@ -479,6 +495,7 @@ export function drawPlayer(ctx, player, groundY) {
   drawGrabOverlay(ctx, p, x, y, ducking);
 
   ctx.restore();
+  if (p.isDead) ctx.restore();
 }
 
 function drawGrabOverlay(ctx, p, x, y, ducking) {

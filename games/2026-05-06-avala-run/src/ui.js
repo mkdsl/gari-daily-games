@@ -67,7 +67,14 @@ export function hideMenu() {
 }
 
 export function updateHUD(state) {
-  document.getElementById('score-display').textContent = state.score;
+  let scoreText = String(state.score);
+  if (state.comboMultiplier > 1) {
+    scoreText += '  COMBO x' + state.comboMultiplier + '!';
+  }
+  if (state.shield > 0) {
+    scoreText += '  \u{1F6E1}';
+  }
+  document.getElementById('score-display').textContent = scoreText;
   document.getElementById('trash-display').textContent = state.trashCount + ' smeća';
 }
 
@@ -362,15 +369,15 @@ export function showGameOver(state, onRestart) {
     _confettiAnimId = requestAnimationFrame(animConfetti);
   }
 
-  document.getElementById('btn-restart').addEventListener('click', onRestart);
+  document.getElementById('btn-restart').addEventListener('click', onRestart, { once: true });
 
   // Face upload on game over screen
   const btnFaceGo = document.getElementById('btn-face-go');
   const inputFaceGo = document.getElementById('face-input-go');
   if (btnFaceGo && inputFaceGo) {
     function triggerGo() { inputFaceGo.value = ''; inputFaceGo.click(); }
-    btnFaceGo.addEventListener('click', triggerGo);
-    btnFaceGo.addEventListener('touchend', (e) => { e.preventDefault(); triggerGo(); });
+    btnFaceGo.addEventListener('click', triggerGo, { once: true });
+    btnFaceGo.addEventListener('touchend', (e) => { e.preventDefault(); triggerGo(); }, { once: true });
     inputFaceGo.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;

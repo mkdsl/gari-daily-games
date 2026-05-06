@@ -55,7 +55,8 @@ function spawnObject(state, canvasW) {
     hitH: def.hitH || def.h,
     requireAction: def.requireAction || null,
     collected: false,
-    moveSpeed: def.moveSpeed || 0
+    moveSpeed: def.moveSpeed || 0,
+    nearMissed: false
   });
 
   // Truck horn warning when kamion spawns

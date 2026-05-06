@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0a0d1a">
+  <meta name="screen-orientation" content="portrait">
   <title>Avala Run — Kluboslavija 2026</title>
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/ui.css">
@@ -16,6 +17,7 @@
     <div id="hud">
       <div id="hud-left"><span id="score-display">0</span></div>
       <div id="hud-right"><span id="trash-display">0 smeća</span></div>
+      <button id="btn-mute" style="position:absolute;top:8px;right:14px;background:none;border:none;color:rgba(255,255,255,0.6);font-size:18px;cursor:pointer;z-index:5;pointer-events:auto;">&#x266A;</button>
     </div>
     <div id="menu" class="overlay">
       <div class="menu-inner">
@@ -26,6 +28,7 @@
           <div><span class="icon icon-arrow-up"></span> ArrowUp / Space — Skok</div>
           <div><span class="icon icon-arrow-down"></span> ArrowDown / S — Duck (sagnuti se)</div>
           <div><span class="icon icon-phone"></span> Mobilni: dugmići na ekranu</div>
+          <div><span class="icon icon-arrow-down"></span><span class="icon icon-arrow-down"></span> pokupi flašu · <span class="icon icon-arrow-up"></span><span class="icon icon-arrow-up"></span> pokupi kesu</div>
         </div>
         <div class="menu-goal">Očisti Avalu! Skupljaj smeće — <span class="icon icon-arrow-up"></span> za visoko, <span class="icon icon-arrow-down"></span> za nisko.<br><span class="icon icon-tree"></span> Drvo → skok ili duck &nbsp; <span class="icon icon-rock"></span> Kamen → skok<br><span class="icon icon-drone"></span> Dron → duck &nbsp; <span class="icon icon-truck"></span> Kamion → skok</div>
         <button class="btn-start" id="btn-menu-start">KRETANJE!</button>

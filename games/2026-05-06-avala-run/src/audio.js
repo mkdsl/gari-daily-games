@@ -13,22 +13,34 @@
 let audioCtx = null;
 let musicPlaying = false;
 let musicNodes = [];
+let muted = false;
+let masterGain = null;
 
 export function initAudio() {
   // Ne kreiraj AudioContext ovde — Safari blokira ako nije user gesture
 }
 
 export function resumeAudio() {
-  // Kreiraj AudioContext TEK na prvi user gesture (klik na KRETANJE)
   if (!audioCtx) {
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       audioCtx = new AudioCtx();
+      masterGain = audioCtx.createGain();
+      masterGain.connect(audioCtx.destination);
+      masterGain.gain.value = muted ? 0 : 1;
     } catch { return; }
   }
   if (audioCtx.state === 'suspended') {
     audioCtx.resume();
   }
+}
+
+export function toggleMute() {
+  muted = !muted;
+  if (masterGain) {
+    masterGain.gain.value = muted ? 0 : 1;
+  }
+  return muted;
 }
 
 // ─── TRUCK HORN ─────────────────────────────────────────────
@@ -61,7 +73,7 @@ export function playTruckHorn() {
     osc.connect(distortion);
     osc2.connect(distortion);
     distortion.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(masterGain);
 
     const t = now + offset;
     gain.gain.setValueAtTime(0, t);
@@ -176,7 +188,7 @@ function scheduleMelody(startTime) {
       osc.type = 'triangle';
       osc.frequency.value = freq;
       osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      gain.connect(masterGain);
       gain.gain.setValueAtTime(0, t);
       gain.gain.linearRampToValueAtTime(0.12, t + 0.02);
       gain.gain.setValueAtTime(0.12, t + noteDur * 0.7);
@@ -184,6 +196,7 @@ function scheduleMelody(startTime) {
       osc.start(t);
       osc.stop(t + noteDur);
       musicNodes.push(osc);
+      osc.onended = () => { const i = musicNodes.indexOf(osc); if (i >= 0) musicNodes.splice(i, 1); };
     }
     t += noteDur;
   }
@@ -198,7 +211,7 @@ function scheduleBass(startTime) {
     osc.type = 'sine';
     osc.frequency.value = freq;
     osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(masterGain);
     gain.gain.setValueAtTime(0, t);
     gain.gain.linearRampToValueAtTime(0.15, t + 0.01);
     gain.gain.setValueAtTime(0.15, t + noteDur * 0.5);
@@ -206,6 +219,7 @@ function scheduleBass(startTime) {
     osc.start(t);
     osc.stop(t + noteDur);
     musicNodes.push(osc);
+    osc.onended = () => { const i = musicNodes.indexOf(osc); if (i >= 0) musicNodes.splice(i, 1); };
   }
 }
 
@@ -226,13 +240,14 @@ function scheduleHiHat(startTime, totalBeats) {
     src.buffer = buffer;
     src.connect(hp);
     hp.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(masterGain);
     const vol = (i % 2 === 0) ? 0.06 : 0.03;
     gain.gain.setValueAtTime(vol, t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
     src.start(t);
     src.stop(t + 0.04);
     musicNodes.push(src);
+    src.onended = () => { const i = musicNodes.indexOf(src); if (i >= 0) musicNodes.splice(i, 1); };
   }
 }
 
@@ -245,12 +260,13 @@ function scheduleKick(startTime, totalBeats) {
     osc.frequency.setValueAtTime(150, t);
     osc.frequency.exponentialRampToValueAtTime(30, t + 0.12);
     osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(masterGain);
     gain.gain.setValueAtTime(0.22, t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
     osc.start(t);
     osc.stop(t + 0.25);
     musicNodes.push(osc);
+    osc.onended = () => { const i = musicNodes.indexOf(osc); if (i >= 0) musicNodes.splice(i, 1); };
   }
 }
 
@@ -314,7 +330,7 @@ export function playCardSound() {
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
   osc.connect(gain);
-  gain.connect(audioCtx.destination);
+  gain.connect(masterGain);
   osc.type = 'sine';
   osc.frequency.value = 880;
   gain.gain.setValueAtTime(0, audioCtx.currentTime);
@@ -328,7 +344,7 @@ export function playTrashSound() {
   if (!audioCtx) return;
   const t = audioCtx.currentTime;
   const gain = audioCtx.createGain();
-  gain.connect(audioCtx.destination);
+  gain.connect(masterGain);
   gain.gain.setValueAtTime(0.25, t);
   gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
 
@@ -349,7 +365,7 @@ export function playTrashSound() {
   g2.gain.setValueAtTime(0.1, t + 0.03);
   g2.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
   o2.connect(g2);
-  g2.connect(audioCtx.destination);
+  g2.connect(masterGain);
   o2.start(t + 0.03);
   o2.stop(t + 0.2);
 }
@@ -361,7 +377,7 @@ export function playLogoSound() {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(masterGain);
     osc.type = 'triangle';
     osc.frequency.value = freq;
     const t = audioCtx.currentTime + i * 0.08;
@@ -380,7 +396,7 @@ export function playGameOverSound() {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(masterGain);
     osc.type = 'sine';
     osc.frequency.value = freq;
     const t = audioCtx.currentTime + i * 0.18;

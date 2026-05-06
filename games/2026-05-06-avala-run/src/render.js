@@ -33,8 +33,64 @@ export function render(ctx, state, canvasW, canvasH) {
     }
   }
 
+  // Drop screen shake
+  if (state.dropping) {
+    const shakeX = (Math.random() - 0.5) * 6;
+    const shakeY = (Math.random() - 0.5) * 6;
+    ctx.save();
+    ctx.translate(shakeX, shakeY);
+  }
+
   // Player
   drawPlayer(ctx, state.player, groundY);
+
+  // Shield glow around player
+  if (state.shield > 0 && state.screen === 'playing') {
+    const px = state.player.x;
+    const pH = state.player.isDucking ? CONFIG.PLAYER_H_DUCK : CONFIG.PLAYER_H_RUN;
+    const py = state.player.y + pH / 2;
+    const glowR = Math.max(CONFIG.PLAYER_W, pH) * 0.8;
+    ctx.save();
+    ctx.globalAlpha = 0.25 + Math.sin(Date.now() * 0.005) * 0.1;
+    const shieldGrad = ctx.createRadialGradient(px, py, 0, px, py, glowR);
+    shieldGrad.addColorStop(0, 'rgba(255,215,0,0.4)');
+    shieldGrad.addColorStop(1, 'rgba(255,215,0,0)');
+    ctx.fillStyle = shieldGrad;
+    ctx.beginPath();
+    ctx.arc(px, py, glowR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Drop vignette overlay
+  if (state.dropping) {
+    const vigGrad = ctx.createRadialGradient(canvasW / 2, canvasH / 2, canvasH * 0.3, canvasW / 2, canvasH / 2, canvasH * 0.7);
+    vigGrad.addColorStop(0, 'rgba(255,0,0,0)');
+    vigGrad.addColorStop(1, 'rgba(255,0,0,0.25)');
+    ctx.fillStyle = vigGrad;
+    ctx.fillRect(0, 0, canvasW, canvasH);
+    ctx.restore(); // restore from shake translate
+  }
+
+  // Flash messages
+  if (state.flashMessages && state.flashMessages.length > 0) {
+    const centerX = canvasW / 2;
+    let offsetY = canvasH * 0.3;
+    for (const fm of state.flashMessages) {
+      const alpha = fm.timer < 0.4 ? fm.timer / 0.4 : 1;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = fm.color;
+      ctx.font = `bold ${fm.size}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = fm.color;
+      ctx.shadowBlur = 12;
+      ctx.fillText(fm.text, centerX, offsetY);
+      ctx.restore();
+      offsetY += fm.size + 8;
+    }
+  }
 
   // Branding
   drawBranding(ctx, canvasW, canvasH);
