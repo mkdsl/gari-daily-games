@@ -93,14 +93,21 @@ export function drawPlayer(ctx, player, groundY) {
     const ph = ducking ? CONFIG.PLAYER_H_DUCK + 8 : CONFIG.PLAYER_H_RUN + 8;
     const drawn = drawSprite(ctx, 'player', frameName, x - 6, y - 4, pw, ph);
     if (drawn) {
-      // Face overlay on sprite head area
+      // Face overlay on sprite head area — position relative to sprite draw coords
       const face = getFaceImage();
       if (face && face.complete) {
-        const faceW = 16;
-        const faceH = 14;
-        const headY = y - (ducking ? 8 : 14);
+        const spriteX = x - 6;
+        const spriteY = y - 4;
+        // Head is in top portion of 32x32 sprite, scaled to pw x ph
+        const scaleX = pw / 32;
+        const scaleY = ph / (ducking ? 32 : 32);
+        // Face region in sprite: roughly x=8..24, y=0..12 (top center of 32x32)
+        const faceX = spriteX + 8 * scaleX;
+        const faceY = spriteY + (ducking ? 2 : 0) * scaleY;
+        const faceW = 16 * scaleX;
+        const faceH = 12 * scaleY;
         ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(face, x + 1, headY, faceW, faceH);
+        ctx.drawImage(face, faceX, faceY, faceW, faceH);
         ctx.imageSmoothingEnabled = true;
       }
       return;
