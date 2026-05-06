@@ -47,6 +47,9 @@ function drawObstacle(ctx, obj, sx, groundY) {
   }
   // Fallback to programmatic
   ctx.save();
+  // Subtle red warning shadow on all obstacles
+  ctx.shadowColor = 'rgba(255,50,50,0.3)';
+  ctx.shadowBlur = 4;
   switch (obj.kind) {
     case 'bor':    drawBor(ctx, sx, sy, obj.w, obj.h); break;
     case 'kamen':  drawKamen(ctx, sx, sy, obj.w, obj.h); break;
@@ -133,8 +136,13 @@ function drawKamen(ctx, x, y, w, h) {
   ctx.closePath();
   ctx.fill();
 
-  // Top highlight (light source from above-left)
-  ctx.fillStyle = '#5a6a7a';
+  // Outline for contrast against dark ground
+  ctx.strokeStyle = 'rgba(150,160,180,0.4)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Top highlight (light source from above-left, brighter for visibility)
+  ctx.fillStyle = '#7a8a9a';
   ctx.beginPath();
   ctx.moveTo(x + 4, y + 5);
   ctx.lineTo(x + w * 0.3, y + 1);
@@ -299,7 +307,8 @@ function drawDron(ctx, x, y, w, h) {
 // ===== COLLECTIBLE DRAWING =====
 
 function drawCollectible(ctx, obj, sx, groundY) {
-  const sy = groundY - obj.groundOffset;
+  // Bounce animation on Y
+  const sy = groundY - obj.groundOffset - Math.sin(Date.now() * 0.004 + obj.worldX) * 3;
 
   // Try sprite first
   if (hasSprites('collectibles')) {
@@ -308,6 +317,11 @@ function drawCollectible(ctx, obj, sx, groundY) {
   }
 
   ctx.save();
+
+  // Pulsating green glow around collectibles
+  ctx.shadowBlur = 8 + Math.sin(Date.now() * 0.005) * 4;
+  ctx.shadowColor = '#44ff88';
+
   // Determine base kind (strip _high/_low suffix)
   const baseKind = obj.kind.replace(/_high|_low/, '');
   switch (baseKind) {

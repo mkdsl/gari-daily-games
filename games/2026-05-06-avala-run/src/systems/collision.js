@@ -23,8 +23,10 @@ export function checkCollisions(state, groundY) {
     const sx = objScreenX(obj, state.world.scrollX);
     const sy = groundY - obj.groundOffset;
 
-    // Kolektibli imaju širi hitbox za lakše skupljanje
-    const toleranceMul = obj.type === 'collectible' ? 1.3 : 1.0;
+    // Collectibles: wider hitbox for easier pickup
+    // Obstacles: smaller effective hitbox for forgiveness (75% of visual)
+    const isCollectible = obj.type === 'collectible';
+    const toleranceMul = isCollectible ? 1.3 : 0.75;
     const hitW = obj.hitW * toleranceMul;
     const hitH = obj.hitH * toleranceMul;
 
