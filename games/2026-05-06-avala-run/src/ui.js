@@ -11,10 +11,16 @@ export function initFaceUpload() {
     btn.textContent = 'PROMENI FACU';
   }
 
-  btn.addEventListener('click', () => {
+  function triggerUpload() {
     // Reset file input so same file can be re-selected
     input.value = '';
     input.click();
+  }
+  btn.addEventListener('click', triggerUpload);
+  // Mobile: touchend ensures the file picker opens on iOS/Android
+  btn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    triggerUpload();
   });
   input.addEventListener('change', (e) => {
     const file = e.target.files[0];

@@ -41,7 +41,7 @@ export const CONFIG = {
   OBSTACLES: {
     bor:    { w: 28, h: 64, groundOffset: 64, hitW: 20, hitH: 36, reqJump: false, moveSpeed: 0 },
     kamen:  { w: 36, h: 22, groundOffset: 22, hitW: 34, hitH: 20, reqJump: true,  moveSpeed: 0 },
-    kamion: { w: 80, h: 44, groundOffset: 44, hitW: 76, hitH: 42, reqJump: true,  moveSpeed: -150 },
+    kamion: { w: 80, h: 44, groundOffset: 44, hitW: 76, hitH: 42, reqJump: true,  moveSpeed: -80 },
     dron:   { w: 36, h: 16, groundOffset: 52, hitW: 34, hitH: 14, reqJump: false, moveSpeed: -100 }
   },
   COLLECTIBLES: {

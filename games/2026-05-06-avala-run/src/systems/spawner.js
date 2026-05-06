@@ -1,4 +1,5 @@
 import { CONFIG } from '../config.js';
+import { playTruckHorn } from '../audio.js';
 
 const OBSTACLE_TYPES = ['bor', 'kamen', 'kamion', 'dron'];
 const TRASH_TYPES    = ['limenka_high', 'limenka_low', 'flasa_high', 'flasa_low', 'papir_high', 'papir_low'];
@@ -54,6 +55,11 @@ function spawnObject(state, canvasW) {
     collected: false,
     moveSpeed: def.moveSpeed || 0
   });
+
+  // Truck horn warning when kamion spawns
+  if (kind === 'kamion') {
+    playTruckHorn();
+  }
 }
 
 // Vraca screen X od objekta

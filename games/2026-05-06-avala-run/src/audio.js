@@ -78,6 +78,9 @@ export function playTrashSound() {
   src.stop(audioCtx.currentTime + 0.06);
 }
 
+// Placeholder for truck horn — Ceca will implement
+export function playTruckHorn() {}
+
 export function playGameOverSound() {
   if (!audioCtx) return;
   [440, 330, 220].forEach((freq, i) => {

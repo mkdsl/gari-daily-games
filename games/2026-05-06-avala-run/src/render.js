@@ -190,8 +190,24 @@ function drawKamion(ctx, x, y, w, h) {
   ctx.fillStyle = '#1a2533';
   ctx.fillRect(x + 4, y + 6, Math.floor(w * 0.16), Math.floor(h * 0.3));
 
-  // Headlight
-  ctx.fillStyle = '#ffdd88';
+  // Blinking headlight warning — blinks faster as truck gets closer
+  // Uses screen X position: farther away = bigger/brighter glow, closer = subtle
+  const blinkPhase = Math.sin(Date.now() * 0.008) > 0;
+  const screenDist = Math.max(0, x); // how far right the truck is
+  const glowSize = Math.min(18, 4 + screenDist * 0.04);
+  const glowAlpha = blinkPhase ? Math.min(0.8, 0.2 + screenDist * 0.002) : 0.1;
+
+  // Headlight glow (blinking warning)
+  ctx.save();
+  ctx.globalAlpha = glowAlpha;
+  ctx.fillStyle = '#ffee66';
+  ctx.beginPath();
+  ctx.arc(x + 3, y + h - 10, glowSize, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // Headlight base
+  ctx.fillStyle = blinkPhase ? '#ffee44' : '#ffdd88';
   ctx.fillRect(x + 2, y + h - 12, 3, 3);
 
   // Taillight
