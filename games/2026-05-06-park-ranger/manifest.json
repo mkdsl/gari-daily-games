@@ -1,0 +1,38 @@
+{
+  "name": "Park Ranger",
+  "short_name": "ParkRanger",
+  "description": "Otvori igru jednom dnevno. Dobij nalog od Čuvara Parka — mikro-izazov iz realnog života. Izvrši ga. Vrati se. Stikuj streak. Level up.",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0D1F0F",
+  "theme_color": "#0D1F0F",
+  "icons": [
+    {"src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ],
+  "categories": ["games", "lifestyle"],
+  "lang": "sr",
+  "genre": "Daily Quest RPG / Habit Gamification",
+  "date": "2026-05-06",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-06-park-ranger/",
+  "modules": {
+    "manifest.json": "PWA manifest i game meta",
+    "quests.json": "120 dnevnih questova (30 po kategoriji, 3 tezine)",
+    "index.html": "Entry point, PWA shell, inicijalni loader",
+    "sw.js": "Service Worker — kesiranje + push notifikacije",
+    "src/config.js": "Sve konstante — leveli, XP, poruke, audio note frekvencije",
+    "src/state.js": "localStorage operacije — load, save, patch, history, propusnica",
+    "src/quest.js": "Quest selekcija — rotacija, level filter, 7-dan cooldown",
+    "src/streak.js": "Streak/level/propusnica mehanika, completeQuest, levelUp thresholds",
+    "src/ui.js": "Svi ekrani (DOM) — Home, Quest, Reward, LevelUp, Propusnica, Install",
+    "src/audio.js": "Web Audio API — 5 efekata, mute toggle, iOS unlock",
+    "src/main.js": "App init, screen routing, wiring svih modula",
+    "styles/base.css": "Layout, CSS custom properties, reset, mobile-first",
+    "styles/ui.css": "HUD, dugmad, XP bar, dialozi, menji, toast",
+    "styles/game.css": "CSS pixel-art sprites (7 nivoa), animacije, scanline overlay"
+  },
+  "line_counts": {"total_js": 1657, "total_css": 1449},
+  "beta_score": null,
+  "status": "in_progress"
+}
