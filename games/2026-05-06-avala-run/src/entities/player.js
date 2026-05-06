@@ -12,15 +12,32 @@ export function initPlayer(state, groundY) {
   p.duckTimer = 0;
   p.animFrame = 0;
   p.animTimer = 0;
+  p.grabAnim = 'none';
+  p.grabTimer = 0;
 }
 
 export function updatePlayer(state, dt, groundY) {
   const p = state.player;
   const input = getInput();
 
-  // Consume one-shot inputs once
   const wantsJump = consumeJump();
   const wantsDuck = consumeDuck();
+
+  if (wantsDuck && p.isDucking) {
+    p.grabAnim = 'down';
+    p.grabTimer = 0.3;
+  }
+  if (wantsJump && p.isJumping) {
+    p.grabAnim = 'up';
+    p.grabTimer = 0.3;
+  }
+  if (p.grabTimer > 0) {
+    p.grabTimer -= dt;
+    if (p.grabTimer <= 0) {
+      p.grabAnim = 'none';
+      p.grabTimer = 0;
+    }
+  }
 
   // Jump input
   if (wantsJump && !p.isJumping && !p.isDucking) {
@@ -102,13 +119,13 @@ export function drawPlayer(ctx, player, groundY) {
         const scaleX = pw / 48;
         const scaleY = ph / 64;
         // Face region in sprite: wider area for bigger face
-        const faceW = 32 * scaleX;
-        const faceH = 28 * scaleY;
+        const faceW = 37 * scaleX;
+        const faceH = 32 * scaleY;
         const faceX = spriteX + 8 * scaleX;
         const faceY = spriteY + (ducking ? 2 : -2) * scaleY;
         // Oval clip — focused on center of selfie
-        const clipRx = faceW * 0.42;
-        const clipRy = faceH * 0.44;
+        const clipRx = faceW * 0.46;
+        const clipRy = faceH * 0.48;
         ctx.save();
         ctx.beginPath();
         ctx.ellipse(faceX + faceW / 2, faceY + faceH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);
@@ -124,31 +141,142 @@ export function drawPlayer(ctx, player, groundY) {
 
   ctx.save();
 
-  const bodyH = ducking ? 32 : 50;
   const bodyW = 28;
   const headH = 22;
   const headW = 25;
-  const headY = y - (ducking ? 18 : 25);
 
   // Shadow on ground
   ctx.fillStyle = 'rgba(0,0,0,0.3)';
   ctx.beginPath();
-  ctx.ellipse(x + bodyW / 2 + 4, groundY - 1, 20, 5, 0, 0, Math.PI * 2);
+  ctx.ellipse(x + bodyW / 2 + 4, groundY - 1, ducking ? 24 : 20, 5, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Legs (behind body) — 4-frame cycle
-  if (!ducking) {
+  if (ducking) {
+    // Crouched/slide pose: bent knees, body leaning forward, head lower
+    const legColor = '#0f0f22';
+    const shoeColor = '#2a1a3d';
+    ctx.lineWidth = 6;
+    ctx.lineCap = 'round';
+
+    // Left leg — bent knee, foot forward
+    ctx.strokeStyle = legColor;
+    ctx.beginPath();
+    ctx.moveTo(x + 6, y + 20);
+    ctx.lineTo(x - 2, y + 14);
+    ctx.lineTo(x - 6, y + 28);
+    ctx.stroke();
+    ctx.fillStyle = shoeColor;
+    ctx.fillRect(x - 10, y + 25, 9, 5);
+
+    // Right leg — bent knee, foot back
+    ctx.strokeStyle = legColor;
+    ctx.beginPath();
+    ctx.moveTo(x + 18, y + 20);
+    ctx.lineTo(x + 26, y + 16);
+    ctx.lineTo(x + 30, y + 28);
+    ctx.stroke();
+    ctx.fillStyle = shoeColor;
+    ctx.fillRect(x + 27, y + 25, 9, 5);
+
+    // Body — leaning forward, shorter and wider
+    const bodyH = 22;
+    const bodyLean = 6;
+    const bodyGrad = ctx.createLinearGradient(x - bodyLean, y, x + bodyW, y + bodyH);
+    bodyGrad.addColorStop(0, '#1e1e38');
+    bodyGrad.addColorStop(0.5, '#14142a');
+    bodyGrad.addColorStop(1, '#0a0a1e');
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.moveTo(x - bodyLean, y - 2);
+    ctx.lineTo(x + bodyW - 2, y + 2);
+    ctx.lineTo(x + bodyW, y + bodyH);
+    ctx.lineTo(x - bodyLean + 2, y + bodyH);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = 'rgba(100,120,180,0.15)';
+    ctx.fillRect(x - bodyLean, y, 3, bodyH - 4);
+
+    // Head — lower and forward
+    const headY = y - 14;
+    const headX = x - bodyLean - 2;
+    const face = getFaceImage();
+    if (face && face.complete) {
+      const faceDraw = { x: headX - 6, y: headY - 8, w: headW + 16, h: headH + 16 };
+      const clipRx = headW * 0.50;
+      const clipRy = headH * 0.55;
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(headX + 2 + headW / 2, headY + headH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(face, faceDraw.x, faceDraw.y, faceDraw.w, faceDraw.h);
+      ctx.imageSmoothingEnabled = true;
+      ctx.restore();
+    } else {
+      const headGrad = ctx.createLinearGradient(headX + 2, headY, headX + headW, headY + headH);
+      headGrad.addColorStop(0, '#2a2a44');
+      headGrad.addColorStop(1, '#1a1a30');
+      ctx.fillStyle = headGrad;
+      ctx.fillRect(headX + 2, headY, headW, headH);
+      ctx.fillStyle = '#0a0a14';
+      ctx.fillRect(headX + 5, headY + 8, 18, 5);
+      ctx.fillStyle = 'rgba(100,140,200,0.2)';
+      ctx.fillRect(headX + 5, headY + 2, 14, 4);
+    }
+
+    // Headphones
+    ctx.strokeStyle = '#5577BB';
+    ctx.lineWidth = 3.5;
+    ctx.beginPath();
+    ctx.arc(headX + headW / 2 + 2, headY + 2, 14, Math.PI * 1.1, Math.PI * -0.1);
+    ctx.stroke();
+    ctx.fillStyle = '#5577BB';
+    ctx.fillRect(headX - 1, headY + 2, 6, 10);
+    ctx.fillStyle = '#3a5599';
+    ctx.fillRect(headX, headY + 3, 4, 8);
+    ctx.fillStyle = '#5577BB';
+    ctx.fillRect(headX + headW - 1, headY + 2, 6, 10);
+    ctx.fillStyle = '#3a5599';
+    ctx.fillRect(headX + headW, headY + 3, 4, 8);
+
+    // DJ Bag on back (compressed)
+    const bagX = x + 22;
+    const bagY2 = y + 2;
+    const bagGrad = ctx.createLinearGradient(bagX, bagY2, bagX + 14, bagY2 + 18);
+    bagGrad.addColorStop(0, '#2a2a44');
+    bagGrad.addColorStop(1, '#16162a');
+    ctx.fillStyle = bagGrad;
+    ctx.fillRect(bagX, bagY2, 14, 18);
+    ctx.fillStyle = '#6688AA';
+    ctx.fillRect(bagX + 6, bagY2 + 2, 2, 14);
+    ctx.strokeStyle = '#4466AA';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(bagX, bagY2);
+    ctx.lineTo(x + 10, y - 2);
+    ctx.stroke();
+
+    // Arm tucked under body
+    ctx.strokeStyle = '#14142a';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x - bodyLean + 2, y + 6);
+    ctx.lineTo(x - bodyLean - 4, y + 18);
+    ctx.stroke();
+
+  } else {
+    // Standing/running pose
+    const bodyH = 50;
+    const headY = y - 25;
+
+    // Legs — 4-frame cycle
     const legColor = '#0f0f22';
     const shoeColor = '#2a1a3d';
     ctx.lineWidth = 6;
     ctx.lineCap = 'round';
     const frame = p.animFrame;
-    // Frame 0: left forward, right back
-    // Frame 1: both middle (transition)
-    // Frame 2: right forward, left back
-    // Frame 3: both middle (transition back)
     if (frame === 0) {
-      // Left leg forward
       ctx.strokeStyle = legColor;
       ctx.beginPath();
       ctx.moveTo(x + 9, y + bodyH);
@@ -157,7 +285,6 @@ export function drawPlayer(ctx, player, groundY) {
       ctx.stroke();
       ctx.fillStyle = shoeColor;
       ctx.fillRect(x - 1, y + bodyH + 17, 8, 5);
-      // Right leg back
       ctx.strokeStyle = legColor;
       ctx.beginPath();
       ctx.moveTo(x + 19, y + bodyH);
@@ -167,7 +294,6 @@ export function drawPlayer(ctx, player, groundY) {
       ctx.fillStyle = shoeColor;
       ctx.fillRect(x + 22, y + bodyH + 13, 8, 5);
     } else if (frame === 1) {
-      // Both legs middle (passing)
       ctx.strokeStyle = legColor;
       ctx.beginPath();
       ctx.moveTo(x + 9, y + bodyH);
@@ -185,7 +311,6 @@ export function drawPlayer(ctx, player, groundY) {
       ctx.fillStyle = shoeColor;
       ctx.fillRect(x + 18, y + bodyH + 17, 8, 5);
     } else if (frame === 2) {
-      // Right leg forward
       ctx.strokeStyle = legColor;
       ctx.beginPath();
       ctx.moveTo(x + 19, y + bodyH);
@@ -194,7 +319,6 @@ export function drawPlayer(ctx, player, groundY) {
       ctx.stroke();
       ctx.fillStyle = shoeColor;
       ctx.fillRect(x + 24, y + bodyH + 17, 8, 5);
-      // Left leg back
       ctx.strokeStyle = legColor;
       ctx.beginPath();
       ctx.moveTo(x + 9, y + bodyH);
@@ -204,7 +328,6 @@ export function drawPlayer(ctx, player, groundY) {
       ctx.fillStyle = shoeColor;
       ctx.fillRect(x, y + bodyH + 13, 8, 5);
     } else {
-      // Frame 3: both legs middle (passing back)
       ctx.strokeStyle = legColor;
       ctx.beginPath();
       ctx.moveTo(x + 9, y + bodyH);
@@ -222,115 +345,130 @@ export function drawPlayer(ctx, player, groundY) {
       ctx.fillStyle = shoeColor;
       ctx.fillRect(x + 18, y + bodyH + 17, 8, 5);
     }
-  }
 
-  // Body — hoodie with shading
-  const bodyGrad = ctx.createLinearGradient(x, y, x + bodyW, y + bodyH);
-  bodyGrad.addColorStop(0, '#1e1e38');
-  bodyGrad.addColorStop(0.5, '#14142a');
-  bodyGrad.addColorStop(1, '#0a0a1e');
-  ctx.fillStyle = bodyGrad;
-  if (ctx.roundRect) {
-    ctx.beginPath();
-    ctx.roundRect(x, y, bodyW, bodyH, 5);
-    ctx.fill();
-  } else {
-    ctx.fillRect(x, y, bodyW, bodyH);
-  }
-  // Body highlight edge (left)
-  ctx.fillStyle = 'rgba(100,120,180,0.15)';
-  ctx.fillRect(x, y + 3, 3, bodyH - 6);
-  // Hoodie pocket detail
-  if (!ducking) {
+    // Body
+    const bodyGrad = ctx.createLinearGradient(x, y, x + bodyW, y + bodyH);
+    bodyGrad.addColorStop(0, '#1e1e38');
+    bodyGrad.addColorStop(0.5, '#14142a');
+    bodyGrad.addColorStop(1, '#0a0a1e');
+    ctx.fillStyle = bodyGrad;
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(x, y, bodyW, bodyH, 5);
+      ctx.fill();
+    } else {
+      ctx.fillRect(x, y, bodyW, bodyH);
+    }
+    ctx.fillStyle = 'rgba(100,120,180,0.15)';
+    ctx.fillRect(x, y + 3, 3, bodyH - 6);
     ctx.fillStyle = 'rgba(0,0,0,0.2)';
     ctx.fillRect(x + 5, y + bodyH - 14, 18, 7);
-  }
 
-  // Head
-  const face = getFaceImage();
-  if (face && face.complete) {
-    // Draw face larger than head, oval clip to crop to center of selfie
-    const faceDraw = { x: x - 4, y: headY - 6, w: headW + 12, h: headH + 12 };
-    const clipRx = headW * 0.48;
-    const clipRy = headH * 0.52;
-    ctx.save();
+    // Head
+    const face = getFaceImage();
+    if (face && face.complete) {
+      const faceDraw = { x: x - 6, y: headY - 8, w: headW + 16, h: headH + 16 };
+      const clipRx = headW * 0.50;
+      const clipRy = headH * 0.55;
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(x + 2 + headW / 2, headY + headH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(face, faceDraw.x, faceDraw.y, faceDraw.w, faceDraw.h);
+      ctx.imageSmoothingEnabled = true;
+      ctx.restore();
+    } else {
+      const headGrad = ctx.createLinearGradient(x + 2, headY, x + headW, headY + headH);
+      headGrad.addColorStop(0, '#2a2a44');
+      headGrad.addColorStop(1, '#1a1a30');
+      ctx.fillStyle = headGrad;
+      ctx.fillRect(x + 2, headY, headW, headH);
+      ctx.fillStyle = '#0a0a14';
+      ctx.fillRect(x + 5, headY + 8, 18, 5);
+      ctx.fillStyle = 'rgba(100,140,200,0.2)';
+      ctx.fillRect(x + 5, headY + 2, 14, 4);
+    }
+
+    // Headphones
+    ctx.strokeStyle = '#5577BB';
+    ctx.lineWidth = 3.5;
     ctx.beginPath();
-    ctx.ellipse(x + 2 + headW / 2, headY + headH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(face, faceDraw.x, faceDraw.y, faceDraw.w, faceDraw.h);
-    ctx.imageSmoothingEnabled = true;
-    ctx.restore();
-  } else {
-    const headGrad = ctx.createLinearGradient(x + 2, headY, x + headW, headY + headH);
-    headGrad.addColorStop(0, '#2a2a44');
-    headGrad.addColorStop(1, '#1a1a30');
-    ctx.fillStyle = headGrad;
-    ctx.fillRect(x + 2, headY, headW, headH);
-    // Face detail - visor/shades
-    ctx.fillStyle = '#0a0a14';
-    ctx.fillRect(x + 5, headY + 8, 18, 5);
-    // Highlight on forehead
-    ctx.fillStyle = 'rgba(100,140,200,0.2)';
-    ctx.fillRect(x + 5, headY + 2, 14, 4);
-  }
+    ctx.arc(x + headW / 2 + 2, headY + 2, 14, Math.PI * 1.1, Math.PI * -0.1);
+    ctx.stroke();
+    ctx.fillStyle = '#5577BB';
+    ctx.fillRect(x - 1, headY + 2, 6, 10);
+    ctx.fillStyle = '#3a5599';
+    ctx.fillRect(x, headY + 3, 4, 8);
+    ctx.fillStyle = '#5577BB';
+    ctx.fillRect(x + headW - 1, headY + 2, 6, 10);
+    ctx.fillStyle = '#3a5599';
+    ctx.fillRect(x + headW, headY + 3, 4, 8);
 
-  // Headphones band
-  ctx.strokeStyle = '#5577BB';
-  ctx.lineWidth = 3.5;
-  ctx.beginPath();
-  ctx.arc(x + headW / 2 + 2, headY + 2, 14, Math.PI * 1.1, Math.PI * -0.1);
-  ctx.stroke();
-  // Left ear cup
-  ctx.fillStyle = '#5577BB';
-  ctx.fillRect(x - 1, headY + 2, 6, 10);
-  ctx.fillStyle = '#3a5599';
-  ctx.fillRect(x, headY + 3, 4, 8);
-  // Right ear cup
-  ctx.fillStyle = '#5577BB';
-  ctx.fillRect(x + headW - 1, headY + 2, 6, 10);
-  ctx.fillStyle = '#3a5599';
-  ctx.fillRect(x + headW, headY + 3, 4, 8);
+    // DJ Bag
+    const bagH = 32;
+    const bagX = x + 25;
+    const bagY = y + 5;
+    const bagGrad = ctx.createLinearGradient(bagX, bagY, bagX + 14, bagY + bagH);
+    bagGrad.addColorStop(0, '#2a2a44');
+    bagGrad.addColorStop(1, '#16162a');
+    ctx.fillStyle = bagGrad;
+    ctx.fillRect(bagX, bagY, 14, bagH);
+    ctx.fillStyle = '#6688AA';
+    ctx.fillRect(bagX + 6, bagY + 3, 2, bagH - 6);
+    ctx.fillStyle = '#888888';
+    ctx.fillRect(bagX + 3, bagY + bagH - 5, 8, 3);
+    ctx.strokeStyle = '#4466AA';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(bagX, bagY);
+    ctx.lineTo(x + 14, y - 3);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(bagX + 14, bagY);
+    ctx.lineTo(x + 20, y - 3);
+    ctx.stroke();
 
-  // DJ Bag (right side, detailed)
-  const bagH = ducking ? 20 : 32;
-  const bagX = x + 25;
-  const bagY = y + 5;
-  // Bag body with gradient
-  const bagGrad = ctx.createLinearGradient(bagX, bagY, bagX + 14, bagY + bagH);
-  bagGrad.addColorStop(0, '#2a2a44');
-  bagGrad.addColorStop(1, '#16162a');
-  ctx.fillStyle = bagGrad;
-  ctx.fillRect(bagX, bagY, 14, bagH);
-  // Bag zipper
-  ctx.fillStyle = '#6688AA';
-  ctx.fillRect(bagX + 6, bagY + 3, 2, bagH - 6);
-  // Bag buckle
-  ctx.fillStyle = '#888888';
-  ctx.fillRect(bagX + 3, bagY + bagH - 5, 8, 3);
-  // Strap
-  ctx.strokeStyle = '#4466AA';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(bagX, bagY);
-  ctx.lineTo(x + 14, y + (ducking ? 0 : -3));
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(bagX + 14, bagY);
-  ctx.lineTo(x + 20, y + (ducking ? 0 : -3));
-  ctx.stroke();
-
-  // Arm (swinging with 4-frame animation)
-  if (!ducking) {
+    // Arm
     ctx.strokeStyle = '#14142a';
     ctx.lineWidth = 5;
     ctx.lineCap = 'round';
-    const armOffsets = [-4, -1, 4, 1]; // swing positions for 4 frames
+    const armOffsets = [-4, -1, 4, 1];
     const armSwing = armOffsets[p.animFrame] || 0;
     ctx.beginPath();
     ctx.moveTo(x + 3, y + 10);
     ctx.lineTo(x - 3 + armSwing, y + 28);
     ctx.stroke();
+  }
+
+  // Grab animation overlay
+  if (p.grabAnim !== 'none' && p.grabTimer > 0) {
+    const progress = 1 - (p.grabTimer / 0.3);
+    ctx.strokeStyle = '#14142a';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    if (p.grabAnim === 'down') {
+      const armLen = 20 + progress * 12;
+      ctx.beginPath();
+      ctx.moveTo(x + 3, y + (ducking ? 10 : 14));
+      ctx.lineTo(x - 4, y + (ducking ? 10 : 14) + armLen);
+      ctx.stroke();
+      // Hand
+      ctx.fillStyle = '#2a2244';
+      ctx.beginPath();
+      ctx.arc(x - 4, y + (ducking ? 10 : 14) + armLen, 4, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      const armLen = 20 + progress * 14;
+      ctx.beginPath();
+      ctx.moveTo(x + 3, y + 6);
+      ctx.lineTo(x - 2, y + 6 - armLen);
+      ctx.stroke();
+      ctx.fillStyle = '#2a2244';
+      ctx.beginPath();
+      ctx.arc(x - 2, y + 6 - armLen, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   ctx.restore();

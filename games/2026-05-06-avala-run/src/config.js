@@ -45,13 +45,9 @@ export const CONFIG = {
     dron:   { w: 36, h: 16, groundOffset: 84, hitW: 34, hitH: 14, reqJump: false, moveSpeed: -100 }
   },
   COLLECTIBLES: {
-    limenka_high: { w: 16, h: 24, groundOffset: 88, scoreType: 'trash', trashVal: 1, requireState: 'jumping' },
-    limenka_low:  { w: 16, h: 24, groundOffset: 12, scoreType: 'trash', trashVal: 1, requireState: 'ducking' },
-    flasa_high:   { w: 12, h: 28, groundOffset: 92, scoreType: 'trash', trashVal: 1, requireState: 'jumping' },
-    flasa_low:    { w: 12, h: 28, groundOffset: 10, scoreType: 'trash', trashVal: 1, requireState: 'ducking' },
-    papir_high:   { w: 22, h: 16, groundOffset: 82, scoreType: 'trash', trashVal: 1, requireState: 'jumping' },
-    papir_low:    { w: 22, h: 16, groundOffset: 8,  scoreType: 'trash', trashVal: 1, requireState: 'ducking' },
-    logo:         { w: 28, h: 28, groundOffset: 50, scoreType: 'logo',  trashVal: 0, requireState: null }
+    flasa: { w: 16, h: 24, groundOffset: 24, scoreType: 'trash', trashVal: 1, requireAction: 'grab_down' },
+    kesa:  { w: 20, h: 18, groundOffset: 80, scoreType: 'trash', trashVal: 1, requireAction: 'grab_up' },
+    logo:  { w: 28, h: 28, groundOffset: 50, scoreType: 'logo',  trashVal: 0, requireAction: null }
   },
 
   // Logo power-up

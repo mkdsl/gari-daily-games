@@ -1,4 +1,3 @@
-/** @type {{ jump: boolean, duck: boolean, jumpPressed: boolean, duckPressed: boolean, left: boolean, right: boolean }} */
 const input = { jump: false, duck: false, jumpPressed: false, duckPressed: false, left: false, right: false };
 
 let _isTouchDevice = false;

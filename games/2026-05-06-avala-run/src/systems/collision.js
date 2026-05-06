@@ -1,17 +1,11 @@
 import { CONFIG } from '../config.js';
 import { objScreenX } from './spawner.js';
 
-/**
- * Proverava AABB koliziju između igrača i svih objekata.
- * Kolektibli imaju 1.3x tolerantniji hitbox za lakše skupljanje.
- * @returns {{ hit: boolean, obj: object|null }}
- */
 export function checkCollisions(state, groundY) {
   const p = state.player;
   const ph = p.isDucking ? CONFIG.PLAYER_H_DUCK : CONFIG.PLAYER_H_RUN;
   const pw = CONFIG.PLAYER_W;
 
-  // Player hitbox
   const px1 = p.x - pw / 2;
   const py1 = p.y;
   const px2 = px1 + pw;
@@ -23,8 +17,6 @@ export function checkCollisions(state, groundY) {
     const sx = objScreenX(obj, state.world.scrollX);
     const sy = groundY - obj.groundOffset;
 
-    // Collectibles: wider hitbox for easier pickup
-    // Obstacles: smaller effective hitbox for forgiveness (75% of visual)
     const isCollectible = obj.type === 'collectible';
     const toleranceMul = isCollectible ? 1.3 : 0.75;
     const hitW = obj.hitW * toleranceMul;
@@ -37,10 +29,12 @@ export function checkCollisions(state, groundY) {
 
     const overlap = px1 < ox2 && px2 > ox1 && py1 < oy2 && py2 > oy1;
     if (overlap) {
-      // Collectibles with requireState only collect in the right pose
-      if (obj.type === 'collectible' && obj.requireState) {
-        if (obj.requireState === 'jumping' && !state.player.isJumping) continue;
-        if (obj.requireState === 'ducking' && !state.player.isDucking) continue;
+      if (isCollectible && obj.requireAction) {
+        if (obj.requireAction === 'grab_down') {
+          if (!p.isDucking || p.grabAnim !== 'down') continue;
+        } else if (obj.requireAction === 'grab_up') {
+          if (!p.isJumping || p.grabAnim !== 'up') continue;
+        }
       }
       return { hit: true, obj };
     }

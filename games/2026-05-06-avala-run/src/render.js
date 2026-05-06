@@ -311,10 +311,8 @@ function drawDron(ctx, x, y, w, h) {
 // ===== COLLECTIBLE DRAWING =====
 
 function drawCollectible(ctx, obj, sx, groundY) {
-  // Bounce animation on Y
-  const sy = groundY - obj.groundOffset - Math.sin(Date.now() * 0.004 + obj.worldX) * 3;
+  const sy = groundY - obj.groundOffset;
 
-  // Try sprite first
   if (hasSprites('collectibles')) {
     const drawn = drawSprite(ctx, 'collectibles', obj.kind, sx, sy, obj.w, obj.h);
     if (drawn) return;
@@ -322,48 +320,36 @@ function drawCollectible(ctx, obj, sx, groundY) {
 
   ctx.save();
 
-  // Pulsating green glow around collectibles
   ctx.shadowBlur = 8 + Math.sin(Date.now() * 0.005) * 4;
   ctx.shadowColor = '#44ff88';
 
-  // Logo collectible gets special premium rendering
   if (obj.kind === 'logo') {
-    drawLogo(ctx, sx, sy, obj.w, obj.h);
+    const bounceY = sy - Math.sin(Date.now() * 0.004 + obj.worldX) * 3;
+    drawLogo(ctx, sx, bounceY, obj.w, obj.h);
     ctx.restore();
     return;
   }
 
-  // Determine base kind (strip _high/_low suffix)
-  const baseKind = obj.kind.replace(/_high|_low/, '');
-  switch (baseKind) {
-    case 'limenka': drawLimenka(ctx, sx, sy, obj.w, obj.h); break;
-    case 'flasa':   drawFlasa(ctx, sx, sy, obj.w, obj.h); break;
-    case 'papir':   drawPapir(ctx, sx, sy, obj.w, obj.h); break;
+  switch (obj.kind) {
+    case 'flasa': drawFlasa(ctx, sx, sy, obj.w, obj.h); break;
+    case 'kesa':  drawKesa(ctx, sx, sy, obj.w, obj.h); break;
   }
 
-  // Draw directional arrow hint for pose-based collectibles
-  if (obj.requireState) {
-    drawPoseHint(ctx, sx, sy, obj.w, obj.h, obj.requireState, baseKind);
+  if (obj.requireAction) {
+    drawGrabHint(ctx, sx, sy, obj.w, obj.h, obj.requireAction);
   }
 
   ctx.restore();
 }
 
-function drawPoseHint(ctx, sx, sy, w, h, requireState, baseKind) {
-  const colorMap = {
-    limenka: CONFIG.COLORS.LIMENKA,
-    flasa:   CONFIG.COLORS.FLASA,
-    papir:   CONFIG.COLORS.PAPIR
-  };
-  const color = colorMap[baseKind] || '#FFFFFF';
-  ctx.globalAlpha = 0.45;
-  ctx.fillStyle = color;
+function drawGrabHint(ctx, sx, sy, w, h, requireAction) {
+  ctx.globalAlpha = 0.5 + Math.sin(Date.now() * 0.006) * 0.2;
+  ctx.fillStyle = requireAction === 'grab_down' ? CONFIG.COLORS.FLASA : '#88AACC';
 
   const arrowX = sx + w + 4;
   const arrowCY = sy + h / 2;
 
-  if (requireState === 'jumping') {
-    // Up arrow
+  if (requireAction === 'grab_up') {
     ctx.beginPath();
     ctx.moveTo(arrowX + 4, arrowCY - 6);
     ctx.lineTo(arrowX, arrowCY);
@@ -372,7 +358,6 @@ function drawPoseHint(ctx, sx, sy, w, h, requireState, baseKind) {
     ctx.fill();
     ctx.fillRect(arrowX + 2, arrowCY, 4, 5);
   } else {
-    // Down arrow
     ctx.fillRect(arrowX + 2, arrowCY - 5, 4, 5);
     ctx.beginPath();
     ctx.moveTo(arrowX + 4, arrowCY + 6);
@@ -384,46 +369,51 @@ function drawPoseHint(ctx, sx, sy, w, h, requireState, baseKind) {
   ctx.globalAlpha = 1;
 }
 
-function drawLimenka(ctx, x, y, w, h) {
-  // Can body with metallic gradient
-  const canGrad = ctx.createLinearGradient(x, y, x + w, y);
-  canGrad.addColorStop(0, '#6a7a8a');
-  canGrad.addColorStop(0.3, '#8899AA');
-  canGrad.addColorStop(0.5, '#AABBCC');
-  canGrad.addColorStop(0.7, '#8899AA');
-  canGrad.addColorStop(1, '#5a6a7a');
-  ctx.fillStyle = canGrad;
-  ctx.fillRect(x + 1, y + 3, w - 2, h - 6);
+function drawKesa(ctx, x, y, w, h) {
+  // Plastic bag hanging from branch
+  // Branch stub
+  ctx.fillStyle = '#3a2a14';
+  ctx.fillRect(x + w / 2 - 2, y - 6, 4, 8);
 
-  // Top rim (lid)
-  ctx.fillStyle = '#BBCCDD';
-  ctx.fillRect(x, y, w, 3);
-  // Tab on top
-  ctx.fillStyle = '#99AABB';
-  ctx.fillRect(x + w / 2 - 2, y - 1, 4, 2);
-  ctx.fillRect(x + w / 2, y - 2, 2, 1);
+  // Bag body (crinkled shape)
+  ctx.fillStyle = '#aabbcc';
+  ctx.beginPath();
+  ctx.moveTo(x + 2, y);
+  ctx.lineTo(x + w - 2, y);
+  ctx.lineTo(x + w, y + h * 0.3);
+  ctx.lineTo(x + w - 1, y + h * 0.7);
+  ctx.lineTo(x + w - 3, y + h);
+  ctx.lineTo(x + 3, y + h);
+  ctx.lineTo(x + 1, y + h * 0.7);
+  ctx.lineTo(x, y + h * 0.3);
+  ctx.closePath();
+  ctx.fill();
 
-  // Bottom rim
-  ctx.fillStyle = '#99AABB';
-  ctx.fillRect(x, y + h - 3, w, 3);
+  // Handle loops at top
+  ctx.strokeStyle = '#8899aa';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(x + w * 0.3, y - 1, 3, Math.PI, 0);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(x + w * 0.7, y - 1, 3, Math.PI, 0);
+  ctx.stroke();
 
-  // Label band (colored stripe)
-  ctx.fillStyle = '#cc3344';
-  ctx.fillRect(x + 2, y + 8, w - 4, 8);
-  // Label text suggestion
-  ctx.fillStyle = '#ffffff';
-  ctx.globalAlpha = 0.5;
-  ctx.fillRect(x + 4, y + 10, w - 8, 1);
-  ctx.fillRect(x + 5, y + 13, w - 10, 1);
-  ctx.globalAlpha = 1;
+  // Wrinkle lines
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(x + 3, y + 4);
+  ctx.lineTo(x + w - 4, y + h - 3);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x + w - 3, y + 3);
+  ctx.lineTo(x + 4, y + h - 4);
+  ctx.stroke();
 
-  // Specular highlight
-  ctx.fillStyle = 'rgba(255,255,255,0.25)';
-  ctx.fillRect(x + 3, y + 4, 2, h - 9);
-
-  // Dent/crush detail
-  ctx.fillStyle = 'rgba(0,0,0,0.1)';
-  ctx.fillRect(x + w - 4, y + h - 10, 2, 4);
+  // Logo/text on bag
+  ctx.fillStyle = 'rgba(0,80,150,0.3)';
+  ctx.fillRect(x + 4, y + h * 0.35, w - 8, 3);
 }
 
 function drawFlasa(ctx, x, y, w, h) {
@@ -465,61 +455,6 @@ function drawFlasa(ctx, x, y, w, h) {
   // Base shadow
   ctx.fillStyle = 'rgba(0,0,0,0.2)';
   ctx.fillRect(x + 1, y + h - 2, w - 2, 2);
-}
-
-function drawPapir(ctx, x, y, w, h) {
-  ctx.save();
-  ctx.translate(x + w / 2, y + h / 2);
-  ctx.rotate(0.18);
-
-  // Paper sheet with crumple effect
-  const pw = w / 2;
-  const ph = h / 2;
-
-  // Shadow under
-  ctx.fillStyle = 'rgba(0,0,0,0.15)';
-  ctx.fillRect(-pw + 2, -ph + 2, w, h);
-
-  // Main paper body
-  const pGrad = ctx.createLinearGradient(-pw, -ph, pw, ph);
-  pGrad.addColorStop(0, '#E8E8D8');
-  pGrad.addColorStop(0.5, '#D0D0C0');
-  pGrad.addColorStop(1, '#B8B8A8');
-  ctx.fillStyle = pGrad;
-  ctx.beginPath();
-  ctx.moveTo(-pw, -ph);
-  ctx.lineTo(pw - 3, -ph + 1);
-  ctx.lineTo(pw, -ph + 3);
-  ctx.lineTo(pw - 1, ph);
-  ctx.lineTo(-pw + 2, ph - 1);
-  ctx.closePath();
-  ctx.fill();
-
-  // Folded corner
-  ctx.fillStyle = '#C8C8B8';
-  ctx.beginPath();
-  ctx.moveTo(pw - 3, -ph + 1);
-  ctx.lineTo(pw, -ph + 3);
-  ctx.lineTo(pw - 3, -ph + 4);
-  ctx.closePath();
-  ctx.fill();
-
-  // Text lines
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.fillRect(-pw + 2, -ph + 3, w - 6, 1);
-  ctx.fillRect(-pw + 2, -ph + 6, w - 8, 1);
-  ctx.fillRect(-pw + 2, -ph + 9, w - 5, 1);
-  ctx.fillRect(-pw + 2, -ph + 12, w - 9, 1);
-
-  // Crumple wrinkle line
-  ctx.strokeStyle = 'rgba(0,0,0,0.08)';
-  ctx.lineWidth = 0.5;
-  ctx.beginPath();
-  ctx.moveTo(-pw + 4, -ph + 2);
-  ctx.lineTo(pw - 4, ph - 2);
-  ctx.stroke();
-
-  ctx.restore();
 }
 
 function drawLogo(ctx, x, y, w, h) {

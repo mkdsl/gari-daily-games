@@ -1,6 +1,8 @@
 import { CONFIG } from './config.js';
 import { refreshFace, getFaceImage } from './face.js';
 
+let _goAnimId = null;
+
 export function initFaceUpload() {
   const btn = document.getElementById('btn-face');
   const input = document.getElementById('face-input');
@@ -108,44 +110,65 @@ export function showGameOver(state, onRestart) {
     </div>
   `;
 
-  // Draw enlarged player character on game over canvas
-  requestAnimationFrame(() => {
+  // Dancing animation loop
+  function drawGameOverChar() {
     const c = document.getElementById('go-player-canvas');
     if (!c) return;
     const pctx = c.getContext('2d');
-    const cx = 60, cy = 95;
+    pctx.clearRect(0, 0, 120, 180);
 
-    // Legs
+    // ~129 BPM dance beat — 2 beats per cycle
+    const t = Date.now() * 0.006;
+    const beat = Math.sin(t);
+    const beatAbs = Math.abs(beat);
+    const beatSign = beat > 0 ? 1 : -1;
+
+    // Bounce down on beat (knees bend)
+    const bounce = beatAbs * 8;
+    // Sway left/right alternating
+    const sway = Math.sin(t * 0.5) * 4;
+    // Shoulder tilt
+    const tilt = Math.sin(t * 0.5) * 0.06;
+
+    const cx = 60 + sway, cy = 90 + bounce;
+
+    pctx.save();
+    pctx.translate(cx, cy);
+    pctx.rotate(tilt);
+    pctx.translate(-cx, -cy);
+
+    // Legs — alternating knee bends
+    const leftKnee = beat > 0 ? 6 : -2;
+    const rightKnee = beat > 0 ? -2 : 6;
     pctx.strokeStyle = '#0f0f22';
     pctx.lineWidth = 7;
     pctx.lineCap = 'round';
     // Left leg
     pctx.beginPath();
-    pctx.moveTo(cx - 10, cy + 60);
-    pctx.lineTo(cx - 14, cy + 85);
-    pctx.lineTo(cx - 16, cy + 105);
+    pctx.moveTo(cx - 10, cy + 55);
+    pctx.lineTo(cx - 14 - leftKnee * 0.5, cy + 75 - leftKnee);
+    pctx.lineTo(cx - 16, 165);
     pctx.stroke();
     // Right leg
     pctx.beginPath();
-    pctx.moveTo(cx + 10, cy + 60);
-    pctx.lineTo(cx + 14, cy + 85);
-    pctx.lineTo(cx + 16, cy + 105);
+    pctx.moveTo(cx + 10, cy + 55);
+    pctx.lineTo(cx + 14 + rightKnee * 0.5, cy + 75 - rightKnee);
+    pctx.lineTo(cx + 16, 165);
     pctx.stroke();
-    // Shoes
+    // Shoes (fixed to ground)
     pctx.fillStyle = '#2a1a3d';
-    pctx.fillRect(cx - 20, cy + 102, 10, 6);
-    pctx.fillRect(cx + 12, cy + 102, 10, 6);
+    pctx.fillRect(cx - 20, 163, 10, 6);
+    pctx.fillRect(cx + 12, 163, 10, 6);
 
-    // Body (hoodie) — rounded shape, not rectangle
-    const bodyW = 52, bodyH = 80;
-    const bodyTop = cy - 20;
+    // Body (hoodie)
+    const bodyW = 52, bodyH = 75;
+    const bodyTop = cy - 18;
     const bodyGrad = pctx.createLinearGradient(cx - bodyW/2, bodyTop, cx + bodyW/2, bodyTop + bodyH);
     bodyGrad.addColorStop(0, '#1e1e38');
     bodyGrad.addColorStop(0.5, '#14142a');
     bodyGrad.addColorStop(1, '#0a0a1e');
     pctx.fillStyle = bodyGrad;
     pctx.beginPath();
-    // Rounded hoodie shape
     pctx.moveTo(cx - bodyW/2 + 8, bodyTop);
     pctx.quadraticCurveTo(cx - bodyW/2, bodyTop, cx - bodyW/2, bodyTop + 12);
     pctx.lineTo(cx - bodyW/2, bodyTop + bodyH - 6);
@@ -156,39 +179,42 @@ export function showGameOver(state, onRestart) {
     pctx.quadraticCurveTo(cx + bodyW/2, bodyTop, cx + bodyW/2 - 8, bodyTop);
     pctx.closePath();
     pctx.fill();
-    // Hoodie highlights
+    // Highlight + zip
     pctx.fillStyle = 'rgba(100,120,180,0.12)';
     pctx.fillRect(cx - bodyW/2 + 1, bodyTop + 8, 3, bodyH - 16);
-    // Zip line
     pctx.fillStyle = 'rgba(100,120,180,0.2)';
     pctx.fillRect(cx - 1, bodyTop + 8, 2, bodyH - 16);
     // Pocket
     pctx.fillStyle = 'rgba(0,0,0,0.18)';
     pctx.fillRect(cx - 14, bodyTop + bodyH - 22, 28, 10);
 
-    // Arms
+    // Arms — pumping up on beat
+    const leftArmUp = beat > 0 ? 20 : 5;
+    const rightArmUp = beat > 0 ? 5 : 20;
     pctx.strokeStyle = '#14142a';
     pctx.lineWidth = 6;
     pctx.lineCap = 'round';
+    // Left arm
     pctx.beginPath();
     pctx.moveTo(cx - bodyW/2, bodyTop + 14);
-    pctx.lineTo(cx - bodyW/2 - 8, bodyTop + 40);
+    pctx.lineTo(cx - bodyW/2 - 10, bodyTop + 30 - leftArmUp);
     pctx.stroke();
+    // Right arm
     pctx.beginPath();
     pctx.moveTo(cx + bodyW/2, bodyTop + 14);
-    pctx.lineTo(cx + bodyW/2 + 8, bodyTop + 40);
+    pctx.lineTo(cx + bodyW/2 + 10, bodyTop + 30 - rightArmUp);
     pctx.stroke();
 
-    // Head area — larger face
+    // Head — bobbing
+    const headBob = Math.sin(t + 0.3) * 3;
     const headW = 56, headH = 50;
-    const headY = cy - 65;
+    const headY = cy - 65 + headBob;
 
-    // Face
     const face = getFaceImage();
     if (face && face.complete) {
       pctx.save();
       pctx.beginPath();
-      pctx.ellipse(cx, headY + headH/2, headW * 0.46, headH * 0.50, 0, 0, Math.PI * 2);
+      pctx.ellipse(cx, headY + headH/2, headW * 0.50, headH * 0.54, 0, 0, Math.PI * 2);
       pctx.clip();
       pctx.drawImage(face, cx - headW/2 - 6, headY - 8, headW + 12, headH + 16);
       pctx.restore();
@@ -231,11 +257,18 @@ export function showGameOver(state, onRestart) {
     pctx.moveTo(bagX, bagY);
     pctx.lineTo(cx + 10, cy - 30);
     pctx.stroke();
-  });
+
+    pctx.restore();
+    _goAnimId = requestAnimationFrame(drawGameOverChar);
+  }
+
+  if (_goAnimId) cancelAnimationFrame(_goAnimId);
+  requestAnimationFrame(drawGameOverChar);
 
   document.getElementById('btn-restart').addEventListener('click', onRestart);
 }
 
 export function hideGameOver() {
+  if (_goAnimId) { cancelAnimationFrame(_goAnimId); _goAnimId = null; }
   document.getElementById('game-over').classList.add('hidden');
 }

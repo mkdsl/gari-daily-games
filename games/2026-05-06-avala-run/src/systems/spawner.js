@@ -2,7 +2,7 @@ import { CONFIG } from '../config.js';
 import { playTruckHorn } from '../audio.js';
 
 const OBSTACLE_TYPES = ['bor', 'kamen', 'kamion', 'dron'];
-const TRASH_TYPES    = ['limenka_high', 'limenka_low', 'flasa_high', 'flasa_low', 'papir_high', 'papir_low'];
+const TRASH_TYPES    = ['flasa', 'kesa'];
 
 export function initSpawner(state, canvasW) {
   state.objects = [];
@@ -53,7 +53,7 @@ function spawnObject(state, canvasW) {
     groundOffset: def.groundOffset,
     hitW: def.hitW || def.w,
     hitH: def.hitH || def.h,
-    requireState: def.requireState || null,
+    requireAction: def.requireAction || null,
     collected: false,
     moveSpeed: def.moveSpeed || 0
   });

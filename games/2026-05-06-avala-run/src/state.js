@@ -18,7 +18,9 @@ export function createState() {
       isDucking: false,
       duckTimer: 0,
       animFrame: 0,
-      animTimer: 0
+      animTimer: 0,
+      grabAnim: 'none',
+      grabTimer: 0
     },
     // World
     world: {
