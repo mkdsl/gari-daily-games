@@ -18,11 +18,17 @@ const ctx = canvas.getContext('2d');
 
 function resize() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  canvas.width = Math.floor(window.innerWidth * dpr);
-  canvas.height = Math.floor(window.innerHeight * dpr);
-  canvas.style.width = window.innerWidth + 'px';
-  canvas.style.height = window.innerHeight + 'px';
+  const vw = window.innerWidth;
+  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  canvas.width = Math.floor(vw * dpr);
+  canvas.height = Math.floor(vh * dpr);
+  canvas.style.width = vw + 'px';
+  canvas.style.height = vh + 'px';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', resize);
 }
 
 window.addEventListener('resize', resize);

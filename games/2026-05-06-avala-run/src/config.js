@@ -4,7 +4,7 @@ export const CONFIG = {
   LOGICAL_HEIGHT: 854,
 
   // Ground
-  GROUND_RATIO: 0.72,  // groundY = canvas.height * 0.72
+  GROUND_RATIO: 0.82,  // groundY = canvas.height * 0.82
 
   // Player
   PLAYER_X: 80,

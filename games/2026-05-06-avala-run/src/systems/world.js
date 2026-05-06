@@ -1,4 +1,5 @@
 import { CONFIG } from '../config.js';
+import { hasSprites, drawBgSection } from '../sprites.js';
 
 // Parallax speeds: stars, clouds, avala, farPines, midPines
 const PARALLAX_SPEEDS = [0.02, 0.05, 0.1, 0.3, 0.6];
@@ -13,13 +14,14 @@ export function initWorld(state, canvasW, canvasH) {
     blinkPhase: Math.random() * Math.PI * 2,
     blinkSpeed: 1.5 + Math.random() * 2
   }));
-  // Generiši oblake
-  state.world.clouds = Array.from({ length: 5 }, (_, i) => ({
-    x: (i / 5) * canvasW * 2 + Math.random() * 100,
-    y: 30 + Math.random() * groundY * 0.25,
-    w: 40 + Math.random() * 60,
-    h: 12 + Math.random() * 10,
-    alpha: 0.06 + Math.random() * 0.08
+  // Generiši oblake — wispy, noćni, suptilni
+  state.world.clouds = Array.from({ length: 12 }, (_, i) => ({
+    x: (i / 12) * canvasW * 2 + Math.random() * 150,
+    y: 15 + Math.random() * groundY * 0.3,
+    w: 20 + Math.random() * 40,
+    h: 3 + Math.random() * 5,
+    alpha: 0.04 + Math.random() * 0.08,
+    spriteVariant: Math.floor(Math.random() * 4) // cloud_0..cloud_3
   }));
   // Generiši far pines (16 borova za seamless wrap)
   state.world.farPines = Array.from({ length: 16 }, (_, i) => ({
@@ -91,24 +93,27 @@ export function drawBackground(ctx, state, canvasW, canvasH) {
   });
   ctx.globalAlpha = 1;
 
-  // Clouds (0.05x parallax — slow drift)
+  // Clouds (0.05x parallax — slow drift, wispy night clouds)
   const cloudPatternW = canvasW * 2;
   const cloudOff = state.world.parallaxOffsets[1];
   if (state.world.clouds) {
+    const useCloudSprites = hasSprites('background');
     state.world.clouds.forEach(c => {
       const cx = ((c.x - cloudOff) % cloudPatternW + cloudPatternW) % cloudPatternW;
       if (cx > canvasW + c.w) return;
       ctx.globalAlpha = c.alpha;
-      ctx.fillStyle = '#8090aa';
-      // Multi-ellipse cloud shape
+      if (useCloudSprites) {
+        const drawn = drawBgSection(ctx, 'cloud_' + c.spriteVariant, cx - c.w / 2, c.y - c.h / 2, c.w, c.h);
+        if (drawn) { ctx.globalAlpha = 1; return; }
+      }
+      // Fallback: programmatic
+      ctx.fillStyle = '#667a99';
       ctx.beginPath();
-      ctx.ellipse(cx, c.y, c.w * 0.5, c.h * 0.5, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx, c.y, c.w * 0.5, c.h * 0.4, 0, 0, Math.PI * 2);
       ctx.fill();
+      ctx.globalAlpha = c.alpha * 0.6;
       ctx.beginPath();
-      ctx.ellipse(cx - c.w * 0.25, c.y + 2, c.w * 0.35, c.h * 0.4, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(cx + c.w * 0.3, c.y + 1, c.w * 0.3, c.h * 0.35, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx + c.w * 0.3, c.y + 1, c.w * 0.25, c.h * 0.25, 0, 0, Math.PI * 2);
       ctx.fill();
     });
     ctx.globalAlpha = 1;
@@ -137,29 +142,29 @@ export function drawBackground(ctx, state, canvasW, canvasH) {
 
 function drawMoon(ctx, canvasW, groundY) {
   const moonX = canvasW * 0.82;
-  const moonY = groundY * 0.15;
-  const moonR = 18;
+  const moonY = groundY * 0.12;
+  const moonR = 10;
 
-  // Outer glow
-  ctx.globalAlpha = 0.08;
-  const glow = ctx.createRadialGradient(moonX, moonY, moonR, moonX, moonY, moonR * 4);
+  // Subtle outer glow
+  ctx.globalAlpha = 0.06;
+  const glow = ctx.createRadialGradient(moonX, moonY, moonR, moonX, moonY, moonR * 3);
   glow.addColorStop(0, '#c0c8e0');
   glow.addColorStop(1, 'transparent');
   ctx.fillStyle = glow;
-  ctx.fillRect(moonX - moonR * 4, moonY - moonR * 4, moonR * 8, moonR * 8);
+  ctx.fillRect(moonX - moonR * 3, moonY - moonR * 3, moonR * 6, moonR * 6);
 
   // Moon body
-  ctx.globalAlpha = 0.7;
+  ctx.globalAlpha = 0.6;
   ctx.fillStyle = '#d0d4e8';
   ctx.beginPath();
   ctx.arc(moonX, moonY, moonR, 0, Math.PI * 2);
   ctx.fill();
 
-  // Crescent shadow (crescent moon effect)
+  // Crescent shadow
   ctx.globalAlpha = 1;
   ctx.fillStyle = '#0a1030';
   ctx.beginPath();
-  ctx.arc(moonX + 6, moonY - 3, moonR - 2, 0, Math.PI * 2);
+  ctx.arc(moonX + 4, moonY - 2, moonR - 1, 0, Math.PI * 2);
   ctx.fill();
   ctx.globalAlpha = 1;
 }
@@ -213,9 +218,9 @@ let partyPhase = 0;
 function drawAvalaSilhouette(ctx, offset, canvasW, groundY) {
   partyPhase += 0.02;
   const tileW = canvasW * 1.5;
-  const off = offset % tileW;
+  const off = ((offset % tileW) + tileW) % tileW;
 
-  for (let tx = -off; tx < canvasW + tileW; tx += tileW) {
+  for (let tx = -off - tileW; tx < canvasW + tileW; tx += tileW) {
     // Mountain body with subtle gradient
     const mtnGrad = ctx.createLinearGradient(tx, groundY - 190, tx, groundY);
     mtnGrad.addColorStop(0, '#0f1428');
@@ -362,6 +367,15 @@ function drawAvalaTower(ctx, towerX, towerBase) {
 
 function drawPine(ctx, x, baseY, h, color, variant, isFar) {
   const w = h * 0.5;
+
+  // Try background sprite tree variants (tree_0..tree_3)
+  if (hasSprites('background') && variant <= 3) {
+    const spriteW = w;
+    const spriteH = h;
+    const drawn = drawBgSection(ctx, 'tree_' + variant, x - spriteW / 2, baseY - spriteH, spriteW, spriteH);
+    if (drawn) return;
+  }
+
   const layers = isFar ? 3 : 4;
 
   // Trunk

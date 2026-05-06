@@ -30,6 +30,19 @@ export function drawSprite(ctx, sheetKey, frameName, x, y, w, h) {
   return true; // drawn successfully
 }
 
+export function drawBgSection(ctx, sectionName, dx, dy, dw, dh) {
+  const sheet = sheets['background'];
+  const atlas = atlasData['background'];
+  if (!sheet || !atlas || !atlas.sections) return false;
+
+  const sec = atlas.sections[sectionName];
+  if (!sec) return false;
+
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(sheet, sec.x, sec.y, sec.w, sec.h, dx, dy, dw || sec.w, dh || sec.h);
+  return true;
+}
+
 export function hasSprites(sheetKey) {
   return !!sheets[sheetKey];
 }

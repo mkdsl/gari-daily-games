@@ -172,81 +172,45 @@ function drawKamion(ctx, x, y, w, h) {
   ctx.ellipse(x + w / 2, y + h + 2, w / 2 - 4, 3, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Chassis/undercarriage
+  // Chassis
   ctx.fillStyle = '#1a1a2a';
-  ctx.fillRect(x + 8, y + h - 6, w - 16, 6);
+  ctx.fillRect(x + 6, y + h - 5, w - 12, 5);
 
-  // Main cargo body
-  const bodyGrad = ctx.createLinearGradient(x, y, x, y + h);
-  bodyGrad.addColorStop(0, '#3a4a5a');
-  bodyGrad.addColorStop(0.5, '#2a3a4a');
-  bodyGrad.addColorStop(1, '#1a2a3a');
-  ctx.fillStyle = bodyGrad;
-  ctx.fillRect(x + Math.floor(w * 0.3), y + 2, Math.floor(w * 0.68), h - 8);
+  // Cargo body — single solid block
+  ctx.fillStyle = '#2a3a4a';
+  ctx.fillRect(x + Math.floor(w * 0.3), y + 2, Math.floor(w * 0.68), h - 7);
+  // Cargo top highlight
+  ctx.fillStyle = '#3a4a5a';
+  ctx.fillRect(x + Math.floor(w * 0.3), y + 2, Math.floor(w * 0.68), 3);
 
-  // Cargo body ribs (vertical lines)
-  ctx.strokeStyle = '#4a5a6a';
-  ctx.lineWidth = 1;
-  for (let i = 1; i < 4; i++) {
-    const rx = x + Math.floor(w * 0.3) + i * Math.floor(w * 0.17);
-    ctx.beginPath();
-    ctx.moveTo(rx, y + 3);
-    ctx.lineTo(rx, y + h - 8);
-    ctx.stroke();
-  }
-
-  // Cabin
-  const cabGrad = ctx.createLinearGradient(x, y, x + w * 0.3, y + h);
-  cabGrad.addColorStop(0, '#4a5566');
-  cabGrad.addColorStop(1, '#2a3544');
-  ctx.fillStyle = cabGrad;
-  ctx.fillRect(x + 2, y + 4, Math.floor(w * 0.28), h - 10);
-
-  // Cabin windshield
+  // Cabin — solid block
+  ctx.fillStyle = '#3a4455';
+  ctx.fillRect(x + 2, y + 4, Math.floor(w * 0.28), h - 9);
+  // Windshield
   ctx.fillStyle = '#1a2533';
-  ctx.fillRect(x + 4, y + 6, Math.floor(w * 0.18), Math.floor(h * 0.35));
-  // Windshield reflection
-  ctx.fillStyle = 'rgba(100,150,200,0.15)';
-  ctx.fillRect(x + 5, y + 7, 3, Math.floor(h * 0.25));
+  ctx.fillRect(x + 4, y + 6, Math.floor(w * 0.16), Math.floor(h * 0.3));
 
   // Headlight
   ctx.fillStyle = '#ffdd88';
-  ctx.fillRect(x + 2, y + h - 14, 3, 4);
-  ctx.fillStyle = 'rgba(255,220,100,0.3)';
-  ctx.fillRect(x, y + h - 15, 2, 6);
+  ctx.fillRect(x + 2, y + h - 12, 3, 3);
 
   // Taillight
   ctx.fillStyle = '#ff3344';
-  ctx.fillRect(x + w - 3, y + h - 14, 3, 4);
+  ctx.fillRect(x + w - 3, y + h - 12, 3, 3);
 
-  // Wheels with detail
-  const wheelR = 9;
+  // Wheels — simple circles
+  const wheelR = 7;
   const wheelY = y + h;
-  [x + 16, x + w - 16].forEach(wx => {
-    // Tire
+  [x + 14, x + w - 14].forEach(wx => {
     ctx.fillStyle = '#0a0a14';
     ctx.beginPath();
     ctx.arc(wx, wheelY, wheelR, 0, Math.PI * 2);
     ctx.fill();
-    // Rim
-    ctx.fillStyle = '#3a3a4a';
+    ctx.fillStyle = '#4a4a5a';
     ctx.beginPath();
-    ctx.arc(wx, wheelY, wheelR - 3, 0, Math.PI * 2);
-    ctx.fill();
-    // Hub
-    ctx.fillStyle = '#5a5a6a';
-    ctx.beginPath();
-    ctx.arc(wx, wheelY, 2, 0, Math.PI * 2);
+    ctx.arc(wx, wheelY, 3, 0, Math.PI * 2);
     ctx.fill();
   });
-
-  // Top edge highlight
-  ctx.strokeStyle = 'rgba(100,120,150,0.3)';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(x + Math.floor(w * 0.3), y + 2);
-  ctx.lineTo(x + w - 2, y + 2);
-  ctx.stroke();
 }
 
 function drawDron(ctx, x, y, w, h) {
