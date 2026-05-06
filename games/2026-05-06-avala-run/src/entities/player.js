@@ -151,31 +151,35 @@ export function drawPlayer(ctx, player, groundY) {
   ctx.fill();
 
   if (ducking) {
-    // Crouched/slide pose: bent knees, body leaning forward, head lower
+    // Crouched slide pose with animated legs
     const legColor = '#0f0f22';
     const shoeColor = '#2a1a3d';
     ctx.lineWidth = 6;
     ctx.lineCap = 'round';
+    const frame = p.animFrame;
+    // Leg offsets cycle: left/right alternate forward/back
+    const legCycle = [[-6, 4], [-2, 0], [4, -6], [0, -2]];
+    const [lOff, rOff] = legCycle[frame] || [0, 0];
 
-    // Left leg — bent knee, foot forward
+    // Left leg — bent knee, animated
     ctx.strokeStyle = legColor;
     ctx.beginPath();
     ctx.moveTo(x + 6, y + 20);
-    ctx.lineTo(x - 2, y + 14);
-    ctx.lineTo(x - 6, y + 28);
+    ctx.lineTo(x - 2 + lOff, y + 14);
+    ctx.lineTo(x - 6 + lOff * 1.2, y + 28);
     ctx.stroke();
     ctx.fillStyle = shoeColor;
-    ctx.fillRect(x - 10, y + 25, 9, 5);
+    ctx.fillRect(x - 10 + lOff * 1.2, y + 25, 9, 5);
 
-    // Right leg — bent knee, foot back
+    // Right leg — bent knee, animated
     ctx.strokeStyle = legColor;
     ctx.beginPath();
     ctx.moveTo(x + 18, y + 20);
-    ctx.lineTo(x + 26, y + 16);
-    ctx.lineTo(x + 30, y + 28);
+    ctx.lineTo(x + 26 + rOff, y + 16);
+    ctx.lineTo(x + 30 + rOff * 1.2, y + 28);
     ctx.stroke();
     ctx.fillStyle = shoeColor;
-    ctx.fillRect(x + 27, y + 25, 9, 5);
+    ctx.fillRect(x + 27 + rOff * 1.2, y + 25, 9, 5);
 
     // Body — leaning forward, shorter and wider
     const bodyH = 22;

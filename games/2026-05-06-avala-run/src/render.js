@@ -178,6 +178,12 @@ function drawKamen(ctx, x, y, w, h) {
 }
 
 function drawKamion(ctx, x, y, w, h) {
+  // Flip horizontally — truck faces left (cabin on right, cargo on left)
+  ctx.save();
+  ctx.translate(x + w / 2, 0);
+  ctx.scale(-1, 1);
+  ctx.translate(-(x + w / 2), 0);
+
   // Shadow
   ctx.fillStyle = 'rgba(0,0,0,0.3)';
   ctx.beginPath();
@@ -188,28 +194,40 @@ function drawKamion(ctx, x, y, w, h) {
   ctx.fillStyle = '#1a1a2a';
   ctx.fillRect(x + 6, y + h - 5, w - 12, 5);
 
-  // Cargo body — single solid block
+  // Cargo body
   ctx.fillStyle = '#2a3a4a';
   ctx.fillRect(x + Math.floor(w * 0.3), y + 2, Math.floor(w * 0.68), h - 7);
-  // Cargo top highlight
   ctx.fillStyle = '#3a4a5a';
   ctx.fillRect(x + Math.floor(w * 0.3), y + 2, Math.floor(w * 0.68), 3);
 
-  // Cabin — solid block
+  // Cabin
   ctx.fillStyle = '#3a4455';
   ctx.fillRect(x + 2, y + 4, Math.floor(w * 0.28), h - 9);
-  // Windshield
   ctx.fillStyle = '#1a2533';
   ctx.fillRect(x + 4, y + 6, Math.floor(w * 0.16), Math.floor(h * 0.3));
 
-  // Blinking headlight warning — blinks faster as truck gets closer
-  // Uses screen X position: farther away = bigger/brighter glow, closer = subtle
+  // Wheels
+  const wheelY = y + h;
+  [x + 14, x + w - 14].forEach(wx => {
+    ctx.fillStyle = '#0a0a14';
+    ctx.beginPath();
+    ctx.arc(wx, wheelY, 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#4a4a5a';
+    ctx.beginPath();
+    ctx.arc(wx, wheelY, 3, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  ctx.restore();
+
+  // Headlight + taillight drawn AFTER restore (not flipped)
   const blinkPhase = Math.sin(Date.now() * 0.008) > 0;
-  const screenDist = Math.max(0, x); // how far right the truck is
+  const screenDist = Math.max(0, x);
   const glowSize = Math.min(18, 4 + screenDist * 0.04);
   const glowAlpha = blinkPhase ? Math.min(0.8, 0.2 + screenDist * 0.002) : 0.1;
 
-  // Headlight glow (blinking warning)
+  // Headlight on LEFT side (front, facing player)
   ctx.save();
   ctx.globalAlpha = glowAlpha;
   ctx.fillStyle = '#ffee66';
@@ -217,28 +235,12 @@ function drawKamion(ctx, x, y, w, h) {
   ctx.arc(x + 3, y + h - 10, glowSize, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
-
-  // Headlight base
   ctx.fillStyle = blinkPhase ? '#ffee44' : '#ffdd88';
   ctx.fillRect(x + 2, y + h - 12, 3, 3);
 
-  // Taillight
+  // Taillight on RIGHT side (back)
   ctx.fillStyle = '#ff3344';
   ctx.fillRect(x + w - 3, y + h - 12, 3, 3);
-
-  // Wheels — simple circles
-  const wheelR = 7;
-  const wheelY = y + h;
-  [x + 14, x + w - 14].forEach(wx => {
-    ctx.fillStyle = '#0a0a14';
-    ctx.beginPath();
-    ctx.arc(wx, wheelY, wheelR, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#4a4a5a';
-    ctx.beginPath();
-    ctx.arc(wx, wheelY, 3, 0, Math.PI * 2);
-    ctx.fill();
-  });
 }
 
 function drawDron(ctx, x, y, w, h) {
