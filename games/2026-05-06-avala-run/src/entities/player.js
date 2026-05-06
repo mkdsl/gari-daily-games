@@ -101,14 +101,14 @@ export function drawPlayer(ctx, player, groundY) {
         // Head is in top portion of 48x64 sprite, scaled to pw x ph
         const scaleX = pw / 48;
         const scaleY = ph / 64;
-        // Face region in sprite: roughly x=12..36, y=2..20 (top center of 48x64)
-        const faceW = 24 * scaleX;
-        const faceH = 20 * scaleY;
-        const faceX = spriteX + 12 * scaleX;
-        const faceY = spriteY + (ducking ? 4 : 2) * scaleY;
-        // Oval clip — smaller than face area to crop to center (where actual face is in selfie)
-        const clipRx = faceW * 0.38;
-        const clipRy = faceH * 0.42;
+        // Face region in sprite: wider area for bigger face
+        const faceW = 32 * scaleX;
+        const faceH = 28 * scaleY;
+        const faceX = spriteX + 8 * scaleX;
+        const faceY = spriteY + (ducking ? 2 : -2) * scaleY;
+        // Oval clip — focused on center of selfie
+        const clipRx = faceW * 0.42;
+        const clipRy = faceH * 0.44;
         ctx.save();
         ctx.beginPath();
         ctx.ellipse(faceX + faceW / 2, faceY + faceH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);
@@ -249,10 +249,10 @@ export function drawPlayer(ctx, player, groundY) {
   // Head
   const face = getFaceImage();
   if (face && face.complete) {
-    // Draw face larger than head, oval clip smaller to crop to center of selfie
-    const faceDraw = { x: x - 1, y: headY - 3, w: headW + 6, h: headH + 6 };
-    const clipRx = headW * 0.42;
-    const clipRy = headH * 0.46;
+    // Draw face larger than head, oval clip to crop to center of selfie
+    const faceDraw = { x: x - 4, y: headY - 6, w: headW + 12, h: headH + 12 };
+    const clipRx = headW * 0.48;
+    const clipRy = headH * 0.52;
     ctx.save();
     ctx.beginPath();
     ctx.ellipse(x + 2 + headW / 2, headY + headH / 2, clipRx, clipRy, 0, 0, Math.PI * 2);

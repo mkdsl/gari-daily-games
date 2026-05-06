@@ -113,41 +113,84 @@ export function showGameOver(state, onRestart) {
     const c = document.getElementById('go-player-canvas');
     if (!c) return;
     const pctx = c.getContext('2d');
-    const cx = 60, cy = 90;
+    const cx = 60, cy = 95;
 
-    // Body (hoodie)
-    const bodyW = 56, bodyH = 100;
-    const bodyGrad = pctx.createLinearGradient(cx - bodyW/2, cy - 20, cx + bodyW/2, cy - 20 + bodyH);
+    // Legs
+    pctx.strokeStyle = '#0f0f22';
+    pctx.lineWidth = 7;
+    pctx.lineCap = 'round';
+    // Left leg
+    pctx.beginPath();
+    pctx.moveTo(cx - 10, cy + 60);
+    pctx.lineTo(cx - 14, cy + 85);
+    pctx.lineTo(cx - 16, cy + 105);
+    pctx.stroke();
+    // Right leg
+    pctx.beginPath();
+    pctx.moveTo(cx + 10, cy + 60);
+    pctx.lineTo(cx + 14, cy + 85);
+    pctx.lineTo(cx + 16, cy + 105);
+    pctx.stroke();
+    // Shoes
+    pctx.fillStyle = '#2a1a3d';
+    pctx.fillRect(cx - 20, cy + 102, 10, 6);
+    pctx.fillRect(cx + 12, cy + 102, 10, 6);
+
+    // Body (hoodie) — rounded shape, not rectangle
+    const bodyW = 52, bodyH = 80;
+    const bodyTop = cy - 20;
+    const bodyGrad = pctx.createLinearGradient(cx - bodyW/2, bodyTop, cx + bodyW/2, bodyTop + bodyH);
     bodyGrad.addColorStop(0, '#1e1e38');
     bodyGrad.addColorStop(0.5, '#14142a');
     bodyGrad.addColorStop(1, '#0a0a1e');
     pctx.fillStyle = bodyGrad;
     pctx.beginPath();
-    if (pctx.roundRect) {
-      pctx.roundRect(cx - bodyW/2, cy - 20, bodyW, bodyH, 6);
-    } else {
-      pctx.rect(cx - bodyW/2, cy - 20, bodyW, bodyH);
-    }
+    // Rounded hoodie shape
+    pctx.moveTo(cx - bodyW/2 + 8, bodyTop);
+    pctx.quadraticCurveTo(cx - bodyW/2, bodyTop, cx - bodyW/2, bodyTop + 12);
+    pctx.lineTo(cx - bodyW/2, bodyTop + bodyH - 6);
+    pctx.quadraticCurveTo(cx - bodyW/2, bodyTop + bodyH, cx - bodyW/2 + 6, bodyTop + bodyH);
+    pctx.lineTo(cx + bodyW/2 - 6, bodyTop + bodyH);
+    pctx.quadraticCurveTo(cx + bodyW/2, bodyTop + bodyH, cx + bodyW/2, bodyTop + bodyH - 6);
+    pctx.lineTo(cx + bodyW/2, bodyTop + 12);
+    pctx.quadraticCurveTo(cx + bodyW/2, bodyTop, cx + bodyW/2 - 8, bodyTop);
+    pctx.closePath();
     pctx.fill();
-    // Hoodie highlight
-    pctx.fillStyle = 'rgba(100,120,180,0.15)';
-    pctx.fillRect(cx - bodyW/2, cy - 16, 4, bodyH - 8);
+    // Hoodie highlights
+    pctx.fillStyle = 'rgba(100,120,180,0.12)';
+    pctx.fillRect(cx - bodyW/2 + 1, bodyTop + 8, 3, bodyH - 16);
+    // Zip line
+    pctx.fillStyle = 'rgba(100,120,180,0.2)';
+    pctx.fillRect(cx - 1, bodyTop + 8, 2, bodyH - 16);
     // Pocket
-    pctx.fillStyle = 'rgba(0,0,0,0.2)';
-    pctx.fillRect(cx - 16, cy + 50, 32, 12);
+    pctx.fillStyle = 'rgba(0,0,0,0.18)';
+    pctx.fillRect(cx - 14, bodyTop + bodyH - 22, 28, 10);
 
-    // Head area
-    const headW = 50, headH = 44;
-    const headY = cy - 58;
+    // Arms
+    pctx.strokeStyle = '#14142a';
+    pctx.lineWidth = 6;
+    pctx.lineCap = 'round';
+    pctx.beginPath();
+    pctx.moveTo(cx - bodyW/2, bodyTop + 14);
+    pctx.lineTo(cx - bodyW/2 - 8, bodyTop + 40);
+    pctx.stroke();
+    pctx.beginPath();
+    pctx.moveTo(cx + bodyW/2, bodyTop + 14);
+    pctx.lineTo(cx + bodyW/2 + 8, bodyTop + 40);
+    pctx.stroke();
+
+    // Head area — larger face
+    const headW = 56, headH = 50;
+    const headY = cy - 65;
 
     // Face
     const face = getFaceImage();
     if (face && face.complete) {
       pctx.save();
       pctx.beginPath();
-      pctx.ellipse(cx, headY + headH/2, headW * 0.42, headH * 0.46, 0, 0, Math.PI * 2);
+      pctx.ellipse(cx, headY + headH/2, headW * 0.46, headH * 0.50, 0, 0, Math.PI * 2);
       pctx.clip();
-      pctx.drawImage(face, cx - headW/2 - 3, headY - 5, headW + 6, headH + 10);
+      pctx.drawImage(face, cx - headW/2 - 6, headY - 8, headW + 12, headH + 16);
       pctx.restore();
     } else {
       const hGrad = pctx.createLinearGradient(cx - headW/2, headY, cx + headW/2, headY + headH);
@@ -163,7 +206,7 @@ export function showGameOver(state, onRestart) {
     pctx.strokeStyle = '#5577BB';
     pctx.lineWidth = 5;
     pctx.beginPath();
-    pctx.arc(cx, headY + 2, 28, Math.PI * 1.1, Math.PI * -0.1);
+    pctx.arc(cx, headY + 4, 30, Math.PI * 1.1, Math.PI * -0.1);
     pctx.stroke();
     pctx.fillStyle = '#5577BB';
     pctx.fillRect(cx - 28, headY + 2, 8, 14);
