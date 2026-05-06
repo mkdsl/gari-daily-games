@@ -18,12 +18,9 @@ const ctx = canvas.getContext('2d');
 
 function resize() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const vw = window.innerWidth;
-  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  canvas.width = Math.floor(vw * dpr);
-  canvas.height = Math.floor(vh * dpr);
-  canvas.style.width = vw + 'px';
-  canvas.style.height = vh + 'px';
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.floor(rect.width * dpr);
+  canvas.height = Math.floor(rect.height * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
@@ -38,8 +35,8 @@ const state = createState();
 initInput(canvas);
 initAudio();
 
-function logicalW() { return canvas.width / (window.devicePixelRatio || 1); }
-function logicalH() { return canvas.height / (window.devicePixelRatio || 1); }
+function logicalW() { return canvas.getBoundingClientRect().width; }
+function logicalH() { return canvas.getBoundingClientRect().height; }
 function groundY() { return logicalH() * CONFIG.GROUND_RATIO; }
 
 function startRun() {
