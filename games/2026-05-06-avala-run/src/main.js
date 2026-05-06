@@ -1,7 +1,7 @@
 import { CONFIG } from './config.js';
 import { loadSprites } from './sprites.js';
 import { createState, saveDailyHighscore } from './state.js';
-import { initInput } from './input.js';
+import { initInput, showTouchControls, hideTouchControls } from './input.js';
 import {
   initAudio, resumeAudio, updateAudio,
   playTrashSound, playGameOverSound
@@ -42,6 +42,7 @@ function groundY() { return logicalH() * CONFIG.GROUND_RATIO; }
 function startRun() {
   hideMenu();
   hideGameOver();
+  showTouchControls();
   resumeAudio();
 
   state.screen = 'playing';
@@ -59,6 +60,7 @@ function startRun() {
 
 function endRun() {
   state.screen = 'gameover';
+  hideTouchControls();
   playGameOverSound();
   saveDailyHighscore(state);
   showGameOver(state, startRun);

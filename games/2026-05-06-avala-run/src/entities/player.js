@@ -106,9 +106,14 @@ export function drawPlayer(ctx, player, groundY) {
         const faceY = spriteY + (ducking ? 2 : 0) * scaleY;
         const faceW = 16 * scaleX;
         const faceH = 12 * scaleY;
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(faceX + faceW / 2, faceY + faceH / 2, faceW / 2, faceH / 2, 0, 0, Math.PI * 2);
+        ctx.clip();
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(face, faceX, faceY, faceW, faceH);
         ctx.imageSmoothingEnabled = true;
+        ctx.restore();
       }
       return;
     }
@@ -201,9 +206,14 @@ export function drawPlayer(ctx, player, groundY) {
   // Head
   const face = getFaceImage();
   if (face && face.complete) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(x + 1 + headW / 2, headY + headH / 2, headW / 2, headH / 2, 0, 0, Math.PI * 2);
+    ctx.clip();
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(face, x + 1, headY, headW, headH);
     ctx.imageSmoothingEnabled = true;
+    ctx.restore();
   } else {
     const headGrad = ctx.createLinearGradient(x + 1, headY, x + headW, headY + headH);
     headGrad.addColorStop(0, '#2a2a44');

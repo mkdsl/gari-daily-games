@@ -1,0 +1,67 @@
+/* Mobile touch controls — hidden on desktop, visible on touch devices */
+.touch-controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0 12px 12px;
+  gap: 8px;
+}
+.touch-controls.hidden {
+  display: none !important;
+}
+
+.touch-btn {
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 28px;
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-weight: 600;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+.touch-btn:active, .touch-btn.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Jump button — full width top bar */
+.touch-jump {
+  height: 64px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bottom row — three equal buttons */
+.touch-bottom-row {
+  display: flex;
+  gap: 8px;
+}
+.touch-bottom-row .touch-btn {
+  flex: 1;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hide on desktop / non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+  .touch-controls {
+    display: none !important;
+  }
+}

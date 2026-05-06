@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/ui.css">
   <link rel="stylesheet" href="styles/game.css">
+  <link rel="stylesheet" href="styles/controls.css">
 </head>
 <body>
   <div id="game-root">
@@ -23,8 +24,7 @@
         <div class="controls">
           <div><span class="icon icon-arrow-up"></span> ArrowUp / Space — Skok</div>
           <div><span class="icon icon-arrow-down"></span> ArrowDown / S — Duck (sagnuti se)</div>
-          <div><span class="icon icon-phone"></span> Tap gornju polovinu — Skok</div>
-          <div><span class="icon icon-phone"></span> Tap donju polovinu — Duck</div>
+          <div><span class="icon icon-phone"></span> Mobilni: dugmići na ekranu</div>
         </div>
         <div class="menu-goal">Očisti Avalu! Skupljaj smeće — <span class="icon icon-arrow-up"></span> za visoko, <span class="icon icon-arrow-down"></span> za nisko.<br><span class="icon icon-tree"></span> Drvo → skok ili duck &nbsp; <span class="icon icon-rock"></span> Kamen → skok<br><span class="icon icon-drone"></span> Dron → duck &nbsp; <span class="icon icon-truck"></span> Kamion → skok</div>
         <button class="btn-start" id="btn-menu-start">KRETANJE!</button>
@@ -33,6 +33,14 @@
       </div>
     </div>
     <div id="game-over" class="overlay hidden"></div>
+    <div id="touch-controls" class="touch-controls hidden">
+      <button class="touch-btn touch-jump" id="btn-touch-jump">&#x2191;</button>
+      <div class="touch-bottom-row">
+        <button class="touch-btn touch-left" id="btn-touch-left">&#x2190;</button>
+        <button class="touch-btn touch-duck" id="btn-touch-duck">&#x2193;</button>
+        <button class="touch-btn touch-right" id="btn-touch-right">&#x2192;</button>
+      </div>
+    </div>
   </div>
   <script>window.onerror=function(m,s,l,c,e){document.title='ERR';var d=document.createElement('pre');d.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:red;color:white;padding:16px;font-size:14px;white-space:pre-wrap;word-break:break-all';d.textContent=m+'\n'+s+':'+l+':'+c+'\n'+(e&&e.stack||'');document.body.prepend(d)}</script>
   <script type="module" src="src/main.js?v=2"></script>

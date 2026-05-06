@@ -6,12 +6,16 @@ export function initFaceUpload() {
   const input = document.getElementById('face-input');
   if (!btn || !input) return;
 
-  // If face already saved, show confirmation
+  // If face already saved, show option to change
   if (localStorage.getItem('avala-run-face')) {
-    btn.textContent = '✓ FACA UČITANA';
+    btn.textContent = 'PROMENI FACU';
   }
 
-  btn.addEventListener('click', () => input.click());
+  btn.addEventListener('click', () => {
+    // Reset file input so same file can be re-selected
+    input.value = '';
+    input.click();
+  });
   input.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -23,14 +27,14 @@ export function initFaceUpload() {
         const size = Math.min(img.width, img.height);
         const sx = (img.width - size) / 2;
         const sy = (img.height - size) / 2;
-        // Downscale to 24x24
+        // Downscale to 48x48 for better quality at various render sizes
         const c = document.createElement('canvas');
-        c.width = 24; c.height = 24;
+        c.width = 48; c.height = 48;
         const ctx = c.getContext('2d');
-        ctx.drawImage(img, sx, sy, size, size, 0, 0, 24, 24);
+        ctx.drawImage(img, sx, sy, size, size, 0, 0, 48, 48);
         localStorage.setItem('avala-run-face', c.toDataURL());
         refreshFace();
-        btn.textContent = '✓ FACA UČITANA';
+        btn.textContent = 'PROMENI FACU';
       };
       img.src = ev.target.result;
     };
