@@ -1,0 +1,21 @@
+{
+  "name": "Koji Tip Si Ti u MKDSLendu?",
+  "genre": "Narrative Quiz / Personality",
+  "date": "2026-05-07",
+  "description": "8 pitanja. 6 arhetipova. Nula laskanja. Otkrij koji MKDSLend tip si ti i šta te čeka.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-07-koji-tip-si-ti/",
+  "modules": {
+    "src/config.js": "Sva pitanja, odgovori, bodovna matrica, 6 arhetipova sa opisima i CTA linkovima",
+    "src/state.js": "Quiz state: trenutno pitanje, sakupljeni bodovi po arhetipovima, calculateResult()",
+    "src/ui.js": "Render pitanja, result screen, share card, animacije tranzicija",
+    "src/main.js": "Entry point: init, event wiring, screen switcher",
+    "styles/base.css": "Layout, full-screen, responsive, font",
+    "styles/ui.css": "Quiz card, answer buttons, result card, progress bar, share button"
+  },
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "status": "in_progress"
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koji Tip Si Ti u MKDSLendu?</title>
+
+  <!-- OG meta — statički, jedan zajednički preview (GDD §7) -->
+  <meta property="og:title" content="Koji Tip Si Ti u MKDSLendu?">
+  <meta property="og:description" content="8 pitanja. 6 arhetipova. Nula laskanja. Otkrij koji MKDSLend tip si ti.">
+  <meta property="og:url" content="https://mkdsl.games/koji-tip-si-ti">
+  <meta property="og:type" content="website">
+
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/ui.css">
+</head>
+<body>
+
+  <!-- Splash screen -->
+  <div class="screen screen--active" data-screen="splash">
+    <div class="splash-content">
+      <h1 class="game-title">Koji Tip Si Ti<br>u MKDSLendu?</h1>
+      <p class="game-subtitle">8 pitanja. 6 arhetipova. Nula laskanja.</p>
+      <p class="game-intro">Svi koji dolaze u MKDSLend donose nešto različito.<br>Šta ti donosiš?</p>
+      <button id="start-btn" class="cta-btn">Otkrij ko si →</button>
+    </div>
+  </div>
+
+  <!-- Quiz screen -->
+  <div class="screen" data-screen="quiz">
+    <div class="quiz-header">
+      <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+      <span id="progress-label" class="progress-label">1 / 8</span>
+    </div>
+    <div class="question-card">
+      <p id="question-text" class="question-text"></p>
+      <div id="answers" class="answers"></div>
+    </div>
+  </div>
+
+  <!-- Loading screen (GDD §1 — fake 1.5s delay) -->
+  <div class="screen" data-screen="loading">
+    <div class="loading-content">
+      <p class="loading-text">Analiziramo tvoj profil...</p>
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <!-- Result screen -->
+  <div class="screen" data-screen="result">
+    <div class="result-card">
+      <p class="result-intro">Ti si</p>
+      <h2 id="archetype-name" class="archetype-name"></h2>
+      <p id="archetype-desc" class="archetype-desc"></p>
+      <p id="archetype-quote" class="archetype-quote"></p>
+      <a id="cta-link" href="#" class="cta-btn" target="_blank" rel="noopener"></a>
+      <button id="share-btn" class="share-btn">Podeli rezultat 📋</button>
+      <button id="restart-btn" class="restart-btn">Igraj ponovo</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
