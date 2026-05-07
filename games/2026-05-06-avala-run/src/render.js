@@ -17,6 +17,14 @@ export function render(ctx, state, canvasW, canvasH) {
   // Background (sky, stars, silhouette, pines, ground)
   drawBackground(ctx, state, canvasW, canvasH);
 
+  // Kesa trees (draw always, even after collection — only bag disappears)
+  for (const obj of state.objects) {
+    if (obj.type === 'collectible' && obj.kind === 'kesa') {
+      const sx = objScreenX(obj, state.world.scrollX);
+      drawKesaTree(ctx, sx, groundY, obj.groundOffset);
+    }
+  }
+
   // Collectibles
   for (const obj of state.objects) {
     if (obj.type === 'collectible' && !obj.collected) {
@@ -449,123 +457,88 @@ function drawGrana(ctx, x, y, w, h) {
 }
 
 function drawRoj(ctx, x, y, w, h) {
-  // Swarm of wasps — DANGEROUS high obstacle, chaotic & unmistakable
+  // Swarm of mosquitoes — dark, annoying, DANGEROUS. Thin bodies, long proboscis.
   const cx = x + w / 2;
   const cy = y + h / 2;
   const t = Date.now() * 0.01;
 
   ctx.save();
 
-  // === OUTER DANGER GLOW — pulsing red-orange halo ===
-  const pulse = 0.4 + Math.sin(t * 3) * 0.15;
-  const glowGrad = ctx.createRadialGradient(cx, cy, 2, cx, cy, w * 0.75);
-  glowGrad.addColorStop(0, `rgba(255,80,0,${pulse})`);
-  glowGrad.addColorStop(0.5, `rgba(255,40,0,${pulse * 0.5})`);
-  glowGrad.addColorStop(1, 'rgba(200,0,0,0)');
-  ctx.fillStyle = glowGrad;
+  // === Dark haze around swarm ===
+  const hazeGrad = ctx.createRadialGradient(cx, cy, 3, cx, cy, w * 0.65);
+  hazeGrad.addColorStop(0, 'rgba(30,10,10,0.4)');
+  hazeGrad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = hazeGrad;
   ctx.beginPath();
-  ctx.arc(cx, cy, w * 0.75, 0, Math.PI * 2);
+  ctx.arc(cx, cy, w * 0.65, 0, Math.PI * 2);
   ctx.fill();
 
-  // === INNER CORE — hot center of the swarm ===
-  const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 6);
-  coreGrad.addColorStop(0, 'rgba(255,220,50,0.7)');
-  coreGrad.addColorStop(1, 'rgba(255,100,0,0)');
-  ctx.fillStyle = coreGrad;
-  ctx.beginPath();
-  ctx.arc(cx, cy, 6, 0, Math.PI * 2);
-  ctx.fill();
+  // === MOSQUITOES — thin dark bodies, long legs, erratic movement ===
+  const bugs = [
+    { ox: -7, oy: -5, phase: 0 },
+    { ox: 4, oy: -8, phase: 1.1 },
+    { ox: -3, oy: 4, phase: 2.3 },
+    { ox: 7, oy: -2, phase: 3.5 },
+    { ox: -9, oy: 3, phase: 4.2 },
+    { ox: 1, oy: 6, phase: 5.1 },
+    { ox: -5, oy: -9, phase: 1.8 },
+    { ox: 6, oy: 5, phase: 3.0 },
+  ];
 
-  // === DANGER SPIKES — sharp radiating lines ===
-  const spikeCount = 6;
-  for (let i = 0; i < spikeCount; i++) {
-    const angle = t * 0.7 + i * (Math.PI * 2 / spikeCount);
-    const r1 = w * 0.35;
-    const r2 = w * 0.7 + Math.sin(t * 4 + i * 2) * 3;
-    ctx.strokeStyle = `rgba(255,${60 + i * 20},0,${0.5 + Math.sin(t * 5 + i) * 0.2})`;
+  for (const bug of bugs) {
+    // Erratic jitter — mosquitoes move irregularly
+    const jx = Math.sin(t * 4 + bug.phase) * 3 + Math.sin(t * 11 + bug.phase * 2) * 2;
+    const jy = Math.cos(t * 5 + bug.phase) * 3 + Math.cos(t * 9 + bug.phase * 3) * 1.5;
+    const bx = cx + bug.ox + jx;
+    const by = cy + bug.oy + jy;
+
+    // Thin dark body
+    ctx.strokeStyle = '#1a1a1a';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(cx + Math.cos(angle) * r1, cy + Math.sin(angle) * r1);
-    ctx.lineTo(cx + Math.cos(angle) * r2, cy + Math.sin(angle) * r2);
+    ctx.moveTo(bx - 3, by);
+    ctx.lineTo(bx + 3, by);
+    ctx.stroke();
+
+    // Long proboscis (front needle)
+    ctx.strokeStyle = '#4a2020';
+    ctx.lineWidth = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(bx - 3, by);
+    ctx.lineTo(bx - 6, by + 1);
+    ctx.stroke();
+
+    // Wings (fast vibrating)
+    const wingOff = Math.sin(t * 30 + bug.phase * 5) * 1.5;
+    ctx.strokeStyle = 'rgba(150,150,170,0.4)';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.moveTo(bx, by);
+    ctx.lineTo(bx - 1, by - 3 - wingOff);
+    ctx.moveTo(bx, by);
+    ctx.lineTo(bx + 1, by - 3 + wingOff);
+    ctx.stroke();
+
+    // Legs (dangling)
+    ctx.strokeStyle = 'rgba(40,40,40,0.5)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(bx - 1, by + 1);
+    ctx.lineTo(bx - 2, by + 4);
+    ctx.moveTo(bx + 1, by + 1);
+    ctx.lineTo(bx + 2, by + 4);
     ctx.stroke();
   }
 
-  // === INDIVIDUAL WASPS — 7 distinct wasps with jitter & afterimage ===
-  const wasps = [
-    { ox: -9, oy: -7, phase: 0, size: 1.1 },
-    { ox: 5, oy: -9, phase: 1.3, size: 0.9 },
-    { ox: -5, oy: 3, phase: 2.6, size: 1.0 },
-    { ox: 9, oy: -1, phase: 3.8, size: 1.2 },
-    { ox: -11, oy: 5, phase: 4.5, size: 0.8 },
-    { ox: 3, oy: 7, phase: 0.9, size: 1.0 },
-    { ox: -3, oy: -11, phase: 2.2, size: 0.9 },
-  ];
-
-  for (const wasp of wasps) {
-    // Chaotic jitter — each wasp buzzes independently
-    const jitterX = Math.sin(t * 2.5 + wasp.phase) * 5 + Math.sin(t * 7.3 + wasp.phase * 3) * 1.5;
-    const jitterY = Math.cos(t * 3.1 + wasp.phase) * 4 + Math.cos(t * 6.7 + wasp.phase * 2) * 1.2;
-    const wx = cx + wasp.ox + jitterX;
-    const wy = cy + wasp.oy + jitterY;
-    const s = wasp.size;
-
-    // Motion blur / afterimage (ghost trailing behind)
-    const ghostX = wx - jitterX * 0.4;
-    const ghostY = wy - jitterY * 0.4;
-    ctx.globalAlpha = 0.25;
-    ctx.fillStyle = '#cc8800';
-    ctx.beginPath();
-    ctx.ellipse(ghostX, ghostY, 3 * s, 1.8 * s, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.globalAlpha = 1.0;
-
-    // Wings — fast flicker using high-freq sin
-    const wingFlap = Math.sin(t * 25 + wasp.phase * 10) * 0.4;
-    ctx.fillStyle = 'rgba(220,240,255,0.5)';
-    ctx.beginPath();
-    ctx.ellipse(wx - 2 * s, wy - 2 * s, 2.5 * s, (1.2 + wingFlap) * s, -0.6, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(wx + 1.5 * s, wy - 2 * s, 2.2 * s, (1.0 + wingFlap) * s, 0.5, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Body — yellow-black striped abdomen
-    ctx.fillStyle = '#ffcc00';
-    ctx.beginPath();
-    ctx.ellipse(wx, wy, 3.2 * s, 2 * s, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Black stripes
-    ctx.fillStyle = '#1a1000';
-    ctx.fillRect(wx - 1.2 * s, wy - 2 * s, 1.2 * s, 4 * s);
-    ctx.fillRect(wx + 0.8 * s, wy - 1.5 * s, 1 * s, 3 * s);
-
-    // Head
-    ctx.fillStyle = '#cc7700';
-    ctx.beginPath();
-    ctx.arc(wx - 3 * s, wy, 1.3 * s, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Stinger — red tip
-    ctx.fillStyle = '#ff2200';
-    ctx.beginPath();
-    ctx.moveTo(wx + 3.2 * s, wy);
-    ctx.lineTo(wx + 5 * s, wy - 0.5 * s);
-    ctx.lineTo(wx + 5 * s, wy + 0.5 * s);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  // === DANGER EXCLAMATION — subtle red flash above swarm ===
-  const flashAlpha = 0.4 + Math.sin(t * 6) * 0.4;
-  if (flashAlpha > 0.5) {
-    ctx.globalAlpha = flashAlpha;
-    ctx.fillStyle = '#ff1100';
-    ctx.font = 'bold 8px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('!', cx, y - 2);
-  }
+  // === Red danger ring — pulsing ===
+  const ringAlpha = 0.25 + Math.sin(t * 4) * 0.15;
+  ctx.strokeStyle = `rgba(180,30,30,${ringAlpha})`;
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([3, 3]);
+  ctx.beginPath();
+  ctx.arc(cx, cy, w * 0.55, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
 
   ctx.restore();
 }
@@ -634,49 +607,68 @@ function drawGrabHint(ctx, sx, sy, w, h, requireAction) {
   ctx.globalAlpha = 1;
 }
 
-function drawKesa(ctx, x, y, w, h) {
-  // Plastic bag hanging from branch
-  // Full branch extending from right side toward bag
-  const branchStartX = x + w / 2;
-  const branchEndX = branchStartX + 50;
-  const branchY = y - 4;
+function drawKesaTree(ctx, sx, groundY, groundOffset) {
+  // Tree trunk + branch that the bag hangs from (always visible, even after bag collected)
+  const bagY = groundY - groundOffset;
+  const branchY = bagY - 6;
+  const treeX = sx + 40; // trunk is to the right of the bag
 
-  // Main branch (curved)
+  // Trunk (goes from ground up past the branch)
+  const trunkBottom = groundY;
+  const trunkTop = branchY - 30;
+  ctx.fillStyle = '#2a1a0a';
+  ctx.fillRect(treeX - 5, trunkTop, 10, trunkBottom - trunkTop);
+  // Bark texture
+  ctx.fillStyle = '#3a2510';
+  ctx.fillRect(treeX - 3, trunkTop + 8, 3, 12);
+  ctx.fillRect(treeX + 1, trunkTop + 25, 2, 10);
+  ctx.fillStyle = '#1a0a04';
+  ctx.fillRect(treeX - 1, trunkTop + 5, 1, trunkBottom - trunkTop - 10);
+
+  // Branch extending left from trunk to where bag hangs
   ctx.strokeStyle = '#3a2a14';
   ctx.lineWidth = 7;
   ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.moveTo(branchEndX, branchY - 2);
-  ctx.quadraticCurveTo(branchStartX + 25, branchY + 3, branchStartX, branchY + 2);
+  ctx.moveTo(treeX - 2, branchY);
+  ctx.quadraticCurveTo(sx + 25, branchY + 4, sx + 10, branchY + 2);
   ctx.stroke();
-
   // Branch highlight
   ctx.strokeStyle = '#5a4228';
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.moveTo(branchEndX - 2, branchY - 4);
-  ctx.quadraticCurveTo(branchStartX + 25, branchY + 1, branchStartX + 2, branchY);
+  ctx.moveTo(treeX - 3, branchY - 2);
+  ctx.quadraticCurveTo(sx + 25, branchY + 1, sx + 11, branchY);
   ctx.stroke();
 
   // Leaves on branch
-  ctx.fillStyle = '#1a5a22';
+  ctx.fillStyle = '#1a4a20';
   ctx.beginPath();
-  ctx.ellipse(branchStartX + 18, branchY - 5, 5, 3, -0.4, 0, Math.PI * 2);
+  ctx.ellipse(sx + 20, branchY - 5, 5, 3, -0.4, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = '#226a2a';
   ctx.beginPath();
-  ctx.ellipse(branchStartX + 35, branchY - 4, 4, 2.5, 0.3, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = '#1a5a22';
-  ctx.beginPath();
-  ctx.ellipse(branchEndX - 5, branchY - 3, 4, 2, 0.1, 0, Math.PI * 2);
+  ctx.ellipse(treeX - 12, branchY - 4, 4, 2.5, 0.2, 0, Math.PI * 2);
   ctx.fill();
 
-  // Short connector from branch to bag
+  // Tree crown (foliage above trunk)
+  ctx.fillStyle = '#0d2a14';
+  ctx.beginPath();
+  ctx.ellipse(treeX, trunkTop - 5, 16, 20, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#1a4020';
+  ctx.beginPath();
+  ctx.ellipse(treeX - 4, trunkTop - 8, 10, 14, 0, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawKesa(ctx, x, y, w, h) {
+  // Just the plastic bag (tree/branch drawn separately via drawKesaTree)
+  // Short string connecting to branch above
   ctx.strokeStyle = '#8899aa';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(branchStartX, branchY + 2);
+  ctx.moveTo(x + w / 2, y - 8);
   ctx.lineTo(x + w / 2, y - 1);
   ctx.stroke();
 

@@ -88,6 +88,42 @@ export function playTruckHorn() {
   });
 }
 
+export function playMosquitoBuzz() {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  // High-pitched annoying buzz — two detuned oscillators
+  const osc1 = audioCtx.createOscillator();
+  const osc2 = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  const filter = audioCtx.createBiquadFilter();
+
+  osc1.type = 'sawtooth';
+  osc1.frequency.value = 380;
+  osc2.type = 'sawtooth';
+  osc2.frequency.value = 395; // slight detune for buzz
+
+  filter.type = 'bandpass';
+  filter.frequency.value = 400;
+  filter.Q.value = 8;
+
+  osc1.connect(filter);
+  osc2.connect(filter);
+  filter.connect(gain);
+  gain.connect(masterGain);
+
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(0.08, now + 0.1);
+  gain.gain.setValueAtTime(0.08, now + 0.6);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+
+  osc1.start(now);
+  osc1.stop(now + 1.0);
+  osc2.start(now);
+  osc2.stop(now + 1.0);
+
+  osc1.onended = () => { osc1.disconnect(); osc2.disconnect(); filter.disconnect(); gain.disconnect(); };
+}
+
 // ─── BEOGRADE INSTRUMENTAL — Đorđe Marjanović ──────────────
 // Muzika: Dušan Jakšić, tekst: Đorđe Marjanović
 // Tonalitet: A mol (natural minor) / relativni C-dur

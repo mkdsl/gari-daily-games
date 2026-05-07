@@ -1,5 +1,5 @@
 import { CONFIG } from '../config.js';
-import { playTruckHorn } from '../audio.js';
+import { playTruckHorn, playMosquitoBuzz } from '../audio.js';
 
 const OBSTACLE_TYPES = ['bor', 'kamen', 'kamion', 'dron', 'grana', 'roj'];
 const TRASH_TYPES    = ['flasa', 'kesa'];
@@ -68,9 +68,11 @@ function spawnObject(state, canvasW) {
     nearMissed: false
   });
 
-  // Truck horn warning when kamion spawns
+  // Sound warnings on spawn
   if (kind === 'kamion') {
     playTruckHorn();
+  } else if (kind === 'roj') {
+    playMosquitoBuzz();
   }
 }
 
