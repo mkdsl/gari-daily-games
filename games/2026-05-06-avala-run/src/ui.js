@@ -1,5 +1,10 @@
 import { CONFIG } from './config.js';
 import { refreshFace, getFaceImage } from './face.js';
+import { submitScore, fetchLeaderboard, hasToken } from './leaderboard.js';
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 let _goAnimId = null;
 let _confettiParticles = [];
@@ -114,9 +119,23 @@ export function showGameOver(state, onRestart) {
       <a href="${CONFIG.TICKET_URL}" target="_blank" rel="noopener" class="go-ticket">Uzmi kartu — app.bilet.rs/show/261</a>
       <div class="go-rules">Učešćem prihvataš Pravila — Kluboslavija IG bio</div>
       <hr>
-      <div class="go-highscore">
-        <div><strong>DANAŠNJI REKORD</strong></div>
-        <div>Top Score:&nbsp; ${fmtScores}</div>
+      <div class="go-highscore" id="go-leaderboard-section">
+        <div><strong>DANAŠNJA LISTA</strong></div>
+        ${hasToken() ? `
+        <div id="go-submit-area">
+          <input type="text" id="go-name-input" class="go-name-input"
+            placeholder="Tvoje ime" maxlength="20"
+            value="${(localStorage.getItem('avala-run-name') || '').replace(/"/g, '&quot;')}">
+          <button class="go-submit-btn" id="btn-submit-score">POSTAVI SCORE</button>
+        </div>
+        ` : ''}
+        <div id="go-rank-display"></div>
+        <div id="go-leaderboard-list">
+          <div class="go-loading">Učitavanje...</div>
+        </div>
+        <div id="go-local-fallback" style="display:none">
+          <div>Top Score:&nbsp; ${fmtScores}</div>
+        </div>
       </div>
       <button class="go-restart" id="btn-restart">POKUŠAJ PONOVO</button>
       <button class="btn-face" id="btn-face-go">${localStorage.getItem('avala-run-face') ? 'PROMENI FACU' : 'DODAJ FACU'}</button>
@@ -399,6 +418,73 @@ export function showGameOver(state, onRestart) {
       };
       reader.readAsDataURL(file);
     });
+  }
+
+  // --- Leaderboard integration ---
+  const listEl = document.getElementById('go-leaderboard-list');
+  const localFallback = document.getElementById('go-local-fallback');
+  const rankDisplay = document.getElementById('go-rank-display');
+  const submitArea = document.getElementById('go-submit-area');
+  let scoreSubmitted = false;
+
+  // Load leaderboard
+  async function loadLeaderboard() {
+    const data = await fetchLeaderboard();
+    if (!data || !data.scores) {
+      // Fallback to local scores
+      listEl.style.display = 'none';
+      localFallback.style.display = 'block';
+      return;
+    }
+    if (data.scores.length === 0) {
+      listEl.innerHTML = '<div style="color:rgba(255,255,255,0.4)">Još nema rezultata danas</div>';
+      return;
+    }
+    const cachedName = (localStorage.getItem('avala-run-name') || '').trim().toLowerCase();
+    listEl.innerHTML = data.scores.map(s => {
+      const isSelf = s.name.toLowerCase() === cachedName && s.score === state.score && scoreSubmitted;
+      return `<div class="go-leaderboard-row${isSelf ? ' go-leaderboard-self' : ''}">
+        <span class="go-lb-rank">#${s.rank}</span>
+        <span class="go-lb-name">${escapeHtml(s.name)}</span>
+        <span class="go-lb-score">${s.score}</span>
+      </div>`;
+    }).join('');
+  }
+
+  loadLeaderboard();
+
+  // Submit handler
+  if (submitArea) {
+    const nameInput = document.getElementById('go-name-input');
+    const submitBtn = document.getElementById('btn-submit-score');
+
+    submitBtn.addEventListener('click', async () => {
+      const playerName = (nameInput.value || '').trim();
+      if (playerName.length < 2) {
+        nameInput.style.borderColor = '#ff4466';
+        return;
+      }
+      nameInput.style.borderColor = '';
+      localStorage.setItem('avala-run-name', playerName);
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '...';
+
+      const result = await submitScore(playerName, state.score, state.trashCount, state.distance);
+
+      if (result.error) {
+        submitBtn.textContent = result.error;
+        submitBtn.disabled = false;
+        return;
+      }
+
+      scoreSubmitted = true;
+      submitArea.style.display = 'none';
+      rankDisplay.innerHTML = `<div class="go-rank-result">TVOJ RANG: <strong>#${result.rank}</strong> od ${result.total} danas!</div>`;
+
+      // Reload leaderboard with our score
+      await loadLeaderboard();
+    }, { once: true });
   }
 }
 

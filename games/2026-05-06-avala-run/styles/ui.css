@@ -153,6 +153,92 @@ hr { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 16px 0;
   transform: scale(0.97);
 }
 
+/* Leaderboard */
+.go-name-input {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 14px; color: #fff;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  width: 60%; max-width: 200px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-right: 8px;
+}
+.go-name-input::placeholder { color: rgba(255,255,255,0.3); }
+.go-name-input:focus { border-color: rgba(255,215,0,0.5); }
+
+.go-submit-btn {
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: 1px;
+  color: #fff;
+  background: linear-gradient(135deg, #cc2244 0%, #e63366 100%);
+  border: none; border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 0 2px 12px rgba(204,34,68,0.3);
+  transition: transform 0.15s, opacity 0.2s;
+  vertical-align: middle;
+}
+.go-submit-btn:active { transform: scale(0.95); }
+.go-submit-btn:disabled { opacity: 0.5; cursor: default; }
+
+#go-submit-area {
+  margin: 12px 0;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  flex-wrap: wrap;
+}
+
+.go-rank-result {
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 16px; color: #FFD700;
+  font-weight: 700; letter-spacing: 1px;
+  margin: 10px 0;
+  text-shadow: 0 0 12px rgba(255,215,0,0.4);
+}
+
+.go-leaderboard-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 4px 8px;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 12px; color: rgba(200,210,230,0.7);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.go-leaderboard-row:last-child { border-bottom: none; }
+
+.go-leaderboard-self {
+  background: rgba(255,215,0,0.08);
+  color: #FFD700;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.go-lb-rank {
+  width: 32px; text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+.go-lb-name {
+  flex: 1; text-align: left;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  padding: 0 8px;
+}
+.go-lb-score {
+  width: 50px; text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.go-loading {
+  color: rgba(255,255,255,0.4);
+  font-size: 12px;
+  animation: go-pulse 1.5s ease-in-out infinite;
+}
+@keyframes go-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
 /* Menu logo */
 .menu-logo {
   filter: invert(1);

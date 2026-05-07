@@ -9,6 +9,7 @@ import {
 } from './audio.js';
 import { render } from './render.js';
 import { showMenu, hideMenu, updateHUD, showGameOver, hideGameOver } from './ui.js';
+import { fetchToken } from './leaderboard.js';
 import { initPlayer, updatePlayer } from './entities/player.js';
 import { initWorld, updateWorld } from './systems/world.js';
 import { initSpawner, updateSpawner } from './systems/spawner.js';
@@ -35,6 +36,7 @@ resize();
 const state = createState();
 initInput(canvas);
 initAudio();
+fetchToken(); // Preuzmi server token za leaderboard
 
 document.getElementById('btn-mute').addEventListener('click', () => {
   const isMuted = toggleMute();
