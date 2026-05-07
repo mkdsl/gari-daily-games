@@ -457,89 +457,147 @@ function drawGrana(ctx, x, y, w, h) {
 }
 
 function drawRoj(ctx, x, y, w, h) {
-  // Swarm of mosquitoes — dark, annoying, DANGEROUS. Thin bodies, long proboscis.
+  // Swarm of mosquitoes — dark, menacing cloud. Avala 3AM nightmare.
   const cx = x + w / 2;
   const cy = y + h / 2;
-  const t = Date.now() * 0.01;
+  const t = Date.now() * 0.001;
 
   ctx.save();
 
-  // === Dark haze around swarm ===
-  const hazeGrad = ctx.createRadialGradient(cx, cy, 3, cx, cy, w * 0.65);
-  hazeGrad.addColorStop(0, 'rgba(30,10,10,0.4)');
-  hazeGrad.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = hazeGrad;
+  // === Layered dark miasma — toxic cloud effect ===
+  const haze1 = ctx.createRadialGradient(cx, cy, 2, cx, cy, w * 0.7);
+  haze1.addColorStop(0, 'rgba(20,5,5,0.55)');
+  haze1.addColorStop(0.5, 'rgba(15,10,10,0.35)');
+  haze1.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = haze1;
   ctx.beginPath();
-  ctx.arc(cx, cy, w * 0.65, 0, Math.PI * 2);
+  ctx.ellipse(cx, cy, w * 0.7, h * 0.6, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // === MOSQUITOES — thin dark bodies, long legs, erratic movement ===
+  // Secondary drifting haze (offset, breathing)
+  const breathe = Math.sin(t * 2.5) * 2;
+  const haze2 = ctx.createRadialGradient(cx + breathe, cy - 1, 1, cx + breathe, cy - 1, w * 0.5);
+  haze2.addColorStop(0, 'rgba(40,0,0,0.3)');
+  haze2.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = haze2;
+  ctx.beginPath();
+  ctx.ellipse(cx + breathe, cy - 1, w * 0.5, h * 0.4, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // === MOSQUITOES — 7 dark bodies, chaotic independent flight ===
   const bugs = [
-    { ox: -7, oy: -5, phase: 0 },
-    { ox: 4, oy: -8, phase: 1.1 },
-    { ox: -3, oy: 4, phase: 2.3 },
-    { ox: 7, oy: -2, phase: 3.5 },
-    { ox: -9, oy: 3, phase: 4.2 },
-    { ox: 1, oy: 6, phase: 5.1 },
-    { ox: -5, oy: -9, phase: 1.8 },
-    { ox: 6, oy: 5, phase: 3.0 },
+    { ox: -8, oy: -4, phase: 0, spd: 1.0 },
+    { ox: 5, oy: -7, phase: 1.3, spd: 1.2 },
+    { ox: -2, oy: 5, phase: 2.6, spd: 0.9 },
+    { ox: 8, oy: -1, phase: 3.8, spd: 1.1 },
+    { ox: -10, oy: 2, phase: 4.5, spd: 1.3 },
+    { ox: 2, oy: 7, phase: 5.4, spd: 0.8 },
+    { ox: -6, oy: -8, phase: 1.9, spd: 1.15 },
   ];
 
   for (const bug of bugs) {
-    // Erratic jitter — mosquitoes move irregularly
-    const jx = Math.sin(t * 4 + bug.phase) * 3 + Math.sin(t * 11 + bug.phase * 2) * 2;
-    const jy = Math.cos(t * 5 + bug.phase) * 3 + Math.cos(t * 9 + bug.phase * 3) * 1.5;
+    // Erratic multi-frequency jitter — mosquitoes are CHAOTIC
+    const jx = Math.sin(t * 6 * bug.spd + bug.phase) * 2.5
+             + Math.sin(t * 14 + bug.phase * 2.3) * 1.5
+             + Math.sin(t * 23 + bug.phase * 0.7) * 0.8;
+    const jy = Math.cos(t * 7 * bug.spd + bug.phase) * 2
+             + Math.cos(t * 12 + bug.phase * 1.7) * 1.8
+             + Math.sin(t * 19 + bug.phase * 3.1) * 0.6;
     const bx = cx + bug.ox + jx;
     const by = cy + bug.oy + jy;
 
-    // Thin dark body
-    ctx.strokeStyle = '#1a1a1a';
-    ctx.lineWidth = 1.5;
+    // Facing angle based on movement
+    const angle = Math.atan2(
+      Math.cos(t * 7 * bug.spd + bug.phase),
+      Math.sin(t * 6 * bug.spd + bug.phase)
+    );
+
+    // Abdomen — elongated dark ellipse
+    ctx.fillStyle = '#1a1a1a';
     ctx.beginPath();
-    ctx.moveTo(bx - 3, by);
-    ctx.lineTo(bx + 3, by);
+    ctx.ellipse(bx, by, 3.5, 1.2, angle, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Thorax — small darker bump
+    const thx = bx + Math.cos(angle) * 2.5;
+    const thy = by + Math.sin(angle) * 2.5;
+    ctx.fillStyle = '#111';
+    ctx.beginPath();
+    ctx.arc(thx, thy, 1.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Proboscis — long thin needle extending from head
+    const probLen = 4.5;
+    const px = thx + Math.cos(angle) * probLen;
+    const py = thy + Math.sin(angle) * probLen;
+    ctx.strokeStyle = '#2a1515';
+    ctx.lineWidth = 0.6;
+    ctx.beginPath();
+    ctx.moveTo(thx, thy);
+    ctx.lineTo(px, py);
     ctx.stroke();
 
-    // Long proboscis (front needle)
-    ctx.strokeStyle = '#4a2020';
+    // Wings — rapid vibration (high freq shimmer)
+    const wingFlicker = Math.sin(t * 80 + bug.phase * 7) * 2;
+    const wingPerp = angle + Math.PI / 2;
+    ctx.strokeStyle = 'rgba(120,120,140,0.35)';
     ctx.lineWidth = 0.7;
     ctx.beginPath();
-    ctx.moveTo(bx - 3, by);
-    ctx.lineTo(bx - 6, by + 1);
+    // Left wing
+    ctx.moveTo(bx, by);
+    ctx.lineTo(
+      bx + Math.cos(wingPerp) * (3 + wingFlicker * 0.5),
+      by + Math.sin(wingPerp) * (3 + wingFlicker * 0.5)
+    );
+    // Right wing
+    ctx.moveTo(bx, by);
+    ctx.lineTo(
+      bx - Math.cos(wingPerp) * (3 - wingFlicker * 0.5),
+      by - Math.sin(wingPerp) * (3 - wingFlicker * 0.5)
+    );
     ctx.stroke();
 
-    // Wings (fast vibrating)
-    const wingOff = Math.sin(t * 30 + bug.phase * 5) * 1.5;
-    ctx.strokeStyle = 'rgba(150,150,170,0.4)';
-    ctx.lineWidth = 0.8;
+    // Legs — 3 pairs, thin, dangling
+    ctx.strokeStyle = 'rgba(30,30,30,0.5)';
+    ctx.lineWidth = 0.4;
+    const legDown = angle + Math.PI / 2 + 0.5;
     ctx.beginPath();
-    ctx.moveTo(bx, by);
-    ctx.lineTo(bx - 1, by - 3 - wingOff);
-    ctx.moveTo(bx, by);
-    ctx.lineTo(bx + 1, by - 3 + wingOff);
-    ctx.stroke();
-
-    // Legs (dangling)
-    ctx.strokeStyle = 'rgba(40,40,40,0.5)';
-    ctx.lineWidth = 0.5;
-    ctx.beginPath();
-    ctx.moveTo(bx - 1, by + 1);
-    ctx.lineTo(bx - 2, by + 4);
-    ctx.moveTo(bx + 1, by + 1);
-    ctx.lineTo(bx + 2, by + 4);
+    for (let i = -1; i <= 1; i++) {
+      const lx = bx + Math.cos(angle) * i * 1.5;
+      const ly = by + Math.sin(angle) * i * 1.5;
+      ctx.moveTo(lx, ly);
+      ctx.lineTo(
+        lx + Math.cos(legDown + i * 0.3) * 3.5,
+        ly + Math.sin(legDown + i * 0.3) * 3.5
+      );
+    }
     ctx.stroke();
   }
 
-  // === Red danger ring — pulsing ===
-  const ringAlpha = 0.25 + Math.sin(t * 4) * 0.15;
-  ctx.strokeStyle = `rgba(180,30,30,${ringAlpha})`;
-  ctx.lineWidth = 1.5;
-  ctx.setLineDash([3, 3]);
+  // === Danger warning — dashed red ring, pulsing irregularly ===
+  const pulse = 0.2 + Math.sin(t * 5) * 0.12 + Math.sin(t * 13) * 0.06;
+  ctx.strokeStyle = `rgba(160,20,20,${pulse})`;
+  ctx.lineWidth = 1.3;
+  ctx.setLineDash([2, 4]);
   ctx.beginPath();
-  ctx.arc(cx, cy, w * 0.55, 0, Math.PI * 2);
+  ctx.ellipse(cx, cy, w * 0.58, h * 0.52, 0, 0, Math.PI * 2);
   ctx.stroke();
-  ctx.setLineDash([]);
 
+  // Inner danger dots — tiny red specks flickering in the swarm
+  for (let i = 0; i < 4; i++) {
+    const dotPhase = t * 8 + i * 1.57;
+    const dotAlpha = Math.max(0, Math.sin(dotPhase) * 0.5);
+    if (dotAlpha > 0.05) {
+      const dx = cx + Math.sin(dotPhase * 1.3) * w * 0.3;
+      const dy = cy + Math.cos(dotPhase * 0.9) * h * 0.25;
+      ctx.fillStyle = `rgba(140,15,15,${dotAlpha})`;
+      ctx.beginPath();
+      ctx.arc(dx, dy, 0.8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  ctx.setLineDash([]);
   ctx.restore();
 }
 
