@@ -58,7 +58,9 @@ export const CONFIG = {
     bor:    { w: 28, h: 64, groundOffset: 64, hitW: 20, hitH: 36, reqJump: false, moveSpeed: 0 },
     kamen:  { w: 56, h: 36, groundOffset: 36, hitW: 48, hitH: 28, reqJump: true,  moveSpeed: 0 },
     kamion: { w: 110, h: 58, groundOffset: 58, hitW: 104, hitH: 54, reqJump: true,  moveSpeed: -80 },
-    dron:   { w: 36, h: 16, groundOffset: 84, hitW: 34, hitH: 14, reqJump: false, moveSpeed: -100 }
+    dron:   { w: 36, h: 16, groundOffset: 84, hitW: 34, hitH: 14, reqJump: false, moveSpeed: -100 },
+    grana:  { w: 90, h: 12, groundOffset: 62, hitW: 85, hitH: 10, reqJump: false, moveSpeed: 0 },
+    roj:    { w: 32, h: 24, groundOffset: 185, hitW: 28, hitH: 20, reqJump: false, moveSpeed: -60 }
   },
   COLLECTIBLES: {
     flasa: { w: 16, h: 24, groundOffset: 24, scoreType: 'trash', trashVal: 1, requireAction: 'grab_down' },

@@ -1,7 +1,7 @@
 import { CONFIG } from '../config.js';
 import { playTruckHorn } from '../audio.js';
 
-const OBSTACLE_TYPES = ['bor', 'kamen', 'kamion', 'dron'];
+const OBSTACLE_TYPES = ['bor', 'kamen', 'kamion', 'dron', 'grana', 'roj'];
 const TRASH_TYPES    = ['flasa', 'kesa'];
 
 export function initSpawner(state, canvasW) {
@@ -16,6 +16,15 @@ export function updateSpawner(state, canvasW, dt) {
   for (const obj of state.objects) {
     if (obj.moveSpeed) {
       obj.worldX += obj.moveSpeed * dt;
+    }
+  }
+
+  // Check for missed collectibles before removing off-screen objects
+  for (const o of state.objects) {
+    if (o.type === 'collectible' && o.kind !== 'logo' && !o.collected && objScreenX(o, state.world.scrollX) + o.w <= -50) {
+      state.combo = 0;
+      state.comboMultiplier = 1;
+      state.flashMessages.push({ text: 'MISS!', timer: 0.8, color: '#ff4466', size: 24 });
     }
   }
 

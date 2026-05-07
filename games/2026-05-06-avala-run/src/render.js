@@ -140,6 +140,8 @@ function drawObstacle(ctx, obj, sx, groundY) {
       break;
     }
     case 'dron':   drawDron(ctx, sx, sy, obj.w, obj.h); break;
+    case 'grana':  drawGrana(ctx, sx, sy, obj.w, obj.h); break;
+    case 'roj':    drawRoj(ctx, sx, sy, obj.w, obj.h); break;
   }
   ctx.restore();
 }
@@ -382,6 +384,192 @@ function drawDron(ctx, x, y, w, h) {
   ctx.fill();
 }
 
+function drawGrana(ctx, x, y, w, h) {
+  // Horizontal branch obstacle — must duck to avoid
+  const cy = y + h / 2;
+
+  // Main branch (quadratic curve for natural shape)
+  ctx.strokeStyle = '#3a2a14';
+  ctx.lineWidth = 8;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x, cy);
+  ctx.quadraticCurveTo(x + w * 0.5, cy - 3, x + w, cy + 1);
+  ctx.stroke();
+
+  // Bark highlight
+  ctx.strokeStyle = '#5a4228';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(x + 4, cy - 2);
+  ctx.quadraticCurveTo(x + w * 0.5, cy - 5, x + w - 4, cy - 1);
+  ctx.stroke();
+
+  // Bark dark underline
+  ctx.strokeStyle = '#1a0d06';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x + 2, cy + 3);
+  ctx.quadraticCurveTo(x + w * 0.5, cy + 1, x + w - 2, cy + 4);
+  ctx.stroke();
+
+  // Leaves (small green ovals)
+  ctx.fillStyle = '#1a4a20';
+  // Leaf 1
+  ctx.beginPath();
+  ctx.ellipse(x + 12, cy - 6, 5, 3, -0.3, 0, Math.PI * 2);
+  ctx.fill();
+  // Leaf 2
+  ctx.fillStyle = '#225a28';
+  ctx.beginPath();
+  ctx.ellipse(x + w * 0.6, cy - 5, 4, 2.5, 0.2, 0, Math.PI * 2);
+  ctx.fill();
+  // Leaf 3
+  ctx.fillStyle = '#1a4a20';
+  ctx.beginPath();
+  ctx.ellipse(x + w - 15, cy - 4, 4, 2, -0.4, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Thorns/markers for visibility (small red-ish barbs)
+  ctx.fillStyle = '#cc3344';
+  ctx.beginPath();
+  ctx.moveTo(x + w * 0.35, cy + 4);
+  ctx.lineTo(x + w * 0.35 + 3, cy + 9);
+  ctx.lineTo(x + w * 0.35 - 3, cy + 9);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#cc3344';
+  ctx.beginPath();
+  ctx.moveTo(x + w * 0.7, cy + 4);
+  ctx.lineTo(x + w * 0.7 + 3, cy + 9);
+  ctx.lineTo(x + w * 0.7 - 3, cy + 9);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function drawRoj(ctx, x, y, w, h) {
+  // Swarm of wasps — DANGEROUS high obstacle, chaotic & unmistakable
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+  const t = Date.now() * 0.01;
+
+  ctx.save();
+
+  // === OUTER DANGER GLOW — pulsing red-orange halo ===
+  const pulse = 0.4 + Math.sin(t * 3) * 0.15;
+  const glowGrad = ctx.createRadialGradient(cx, cy, 2, cx, cy, w * 0.75);
+  glowGrad.addColorStop(0, `rgba(255,80,0,${pulse})`);
+  glowGrad.addColorStop(0.5, `rgba(255,40,0,${pulse * 0.5})`);
+  glowGrad.addColorStop(1, 'rgba(200,0,0,0)');
+  ctx.fillStyle = glowGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, w * 0.75, 0, Math.PI * 2);
+  ctx.fill();
+
+  // === INNER CORE — hot center of the swarm ===
+  const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 6);
+  coreGrad.addColorStop(0, 'rgba(255,220,50,0.7)');
+  coreGrad.addColorStop(1, 'rgba(255,100,0,0)');
+  ctx.fillStyle = coreGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+  ctx.fill();
+
+  // === DANGER SPIKES — sharp radiating lines ===
+  const spikeCount = 6;
+  for (let i = 0; i < spikeCount; i++) {
+    const angle = t * 0.7 + i * (Math.PI * 2 / spikeCount);
+    const r1 = w * 0.35;
+    const r2 = w * 0.7 + Math.sin(t * 4 + i * 2) * 3;
+    ctx.strokeStyle = `rgba(255,${60 + i * 20},0,${0.5 + Math.sin(t * 5 + i) * 0.2})`;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(angle) * r1, cy + Math.sin(angle) * r1);
+    ctx.lineTo(cx + Math.cos(angle) * r2, cy + Math.sin(angle) * r2);
+    ctx.stroke();
+  }
+
+  // === INDIVIDUAL WASPS — 7 distinct wasps with jitter & afterimage ===
+  const wasps = [
+    { ox: -9, oy: -7, phase: 0, size: 1.1 },
+    { ox: 5, oy: -9, phase: 1.3, size: 0.9 },
+    { ox: -5, oy: 3, phase: 2.6, size: 1.0 },
+    { ox: 9, oy: -1, phase: 3.8, size: 1.2 },
+    { ox: -11, oy: 5, phase: 4.5, size: 0.8 },
+    { ox: 3, oy: 7, phase: 0.9, size: 1.0 },
+    { ox: -3, oy: -11, phase: 2.2, size: 0.9 },
+  ];
+
+  for (const wasp of wasps) {
+    // Chaotic jitter — each wasp buzzes independently
+    const jitterX = Math.sin(t * 2.5 + wasp.phase) * 5 + Math.sin(t * 7.3 + wasp.phase * 3) * 1.5;
+    const jitterY = Math.cos(t * 3.1 + wasp.phase) * 4 + Math.cos(t * 6.7 + wasp.phase * 2) * 1.2;
+    const wx = cx + wasp.ox + jitterX;
+    const wy = cy + wasp.oy + jitterY;
+    const s = wasp.size;
+
+    // Motion blur / afterimage (ghost trailing behind)
+    const ghostX = wx - jitterX * 0.4;
+    const ghostY = wy - jitterY * 0.4;
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = '#cc8800';
+    ctx.beginPath();
+    ctx.ellipse(ghostX, ghostY, 3 * s, 1.8 * s, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.globalAlpha = 1.0;
+
+    // Wings — fast flicker using high-freq sin
+    const wingFlap = Math.sin(t * 25 + wasp.phase * 10) * 0.4;
+    ctx.fillStyle = 'rgba(220,240,255,0.5)';
+    ctx.beginPath();
+    ctx.ellipse(wx - 2 * s, wy - 2 * s, 2.5 * s, (1.2 + wingFlap) * s, -0.6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(wx + 1.5 * s, wy - 2 * s, 2.2 * s, (1.0 + wingFlap) * s, 0.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Body — yellow-black striped abdomen
+    ctx.fillStyle = '#ffcc00';
+    ctx.beginPath();
+    ctx.ellipse(wx, wy, 3.2 * s, 2 * s, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Black stripes
+    ctx.fillStyle = '#1a1000';
+    ctx.fillRect(wx - 1.2 * s, wy - 2 * s, 1.2 * s, 4 * s);
+    ctx.fillRect(wx + 0.8 * s, wy - 1.5 * s, 1 * s, 3 * s);
+
+    // Head
+    ctx.fillStyle = '#cc7700';
+    ctx.beginPath();
+    ctx.arc(wx - 3 * s, wy, 1.3 * s, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Stinger — red tip
+    ctx.fillStyle = '#ff2200';
+    ctx.beginPath();
+    ctx.moveTo(wx + 3.2 * s, wy);
+    ctx.lineTo(wx + 5 * s, wy - 0.5 * s);
+    ctx.lineTo(wx + 5 * s, wy + 0.5 * s);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // === DANGER EXCLAMATION — subtle red flash above swarm ===
+  const flashAlpha = 0.4 + Math.sin(t * 6) * 0.4;
+  if (flashAlpha > 0.5) {
+    ctx.globalAlpha = flashAlpha;
+    ctx.fillStyle = '#ff1100';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('!', cx, y - 2);
+  }
+
+  ctx.restore();
+}
+
 // ===== COLLECTIBLE DRAWING =====
 
 function drawCollectible(ctx, obj, sx, groundY) {
@@ -448,9 +636,49 @@ function drawGrabHint(ctx, sx, sy, w, h, requireAction) {
 
 function drawKesa(ctx, x, y, w, h) {
   // Plastic bag hanging from branch
-  // Branch stub
-  ctx.fillStyle = '#3a2a14';
-  ctx.fillRect(x + w / 2 - 2, y - 6, 4, 8);
+  // Full branch extending from right side toward bag
+  const branchStartX = x + w / 2;
+  const branchEndX = branchStartX + 50;
+  const branchY = y - 4;
+
+  // Main branch (curved)
+  ctx.strokeStyle = '#3a2a14';
+  ctx.lineWidth = 7;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(branchEndX, branchY - 2);
+  ctx.quadraticCurveTo(branchStartX + 25, branchY + 3, branchStartX, branchY + 2);
+  ctx.stroke();
+
+  // Branch highlight
+  ctx.strokeStyle = '#5a4228';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(branchEndX - 2, branchY - 4);
+  ctx.quadraticCurveTo(branchStartX + 25, branchY + 1, branchStartX + 2, branchY);
+  ctx.stroke();
+
+  // Leaves on branch
+  ctx.fillStyle = '#1a5a22';
+  ctx.beginPath();
+  ctx.ellipse(branchStartX + 18, branchY - 5, 5, 3, -0.4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#226a2a';
+  ctx.beginPath();
+  ctx.ellipse(branchStartX + 35, branchY - 4, 4, 2.5, 0.3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#1a5a22';
+  ctx.beginPath();
+  ctx.ellipse(branchEndX - 5, branchY - 3, 4, 2, 0.1, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Short connector from branch to bag
+  ctx.strokeStyle = '#8899aa';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(branchStartX, branchY + 2);
+  ctx.lineTo(x + w / 2, y - 1);
+  ctx.stroke();
 
   // Bag body (crinkled shape)
   ctx.fillStyle = '#aabbcc';

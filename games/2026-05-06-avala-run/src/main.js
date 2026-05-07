@@ -85,8 +85,6 @@ let deathTimer = 0;
 function endRun() {
   state.screen = 'dying';
   state.player.isDead = true;
-  state.combo = 0;
-  state.comboMultiplier = 1;
   deathTimer = 0;
   hideTouchControls();
   playGameOverSound();
@@ -219,8 +217,6 @@ function loop(now) {
         // Hit obstacle
         if (state.shield > 0) {
           state.shield = 0;
-          state.combo = 0;
-          state.comboMultiplier = 1;
           state.flashMessages.push({ text: 'SHIELD BROKEN!', timer: 1.2, color: '#ff8800', size: 32 });
           // Remove the obstacle so player can pass
           obj.collected = true;
