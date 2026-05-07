@@ -34,7 +34,7 @@ export function renderQuestion(q, qIndex, total) {
   // Progress bar
   const progressFill = document.getElementById('progress-fill');
   const progressLabel = document.getElementById('progress-label');
-  const percent = Math.round((qIndex / total) * 100);
+  const percent = Math.round(((qIndex + 1) / total) * 100);
 
   if (progressFill) {
     progressFill.style.width = `${percent}%`;

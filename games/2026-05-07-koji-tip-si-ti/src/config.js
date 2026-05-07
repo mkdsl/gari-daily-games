@@ -171,60 +171,60 @@ export const ARCHETYPES = {
     name: 'DJ',
     description: 'Zvuk je za tebe jezik, ne pozadina. Znaš šta znači da set "radi" i znaš kada ne radi — i to osećaš pre nego što to iko drugi primeti. U MKDSLendu tražiš ozvučenje, prostor za probe i ljude koji slušaju kako treba.',
     quote: '"Loš zvuk je loša komunikacija."',
-    shareText: 'DJ — "Loš zvuk je loša komunikacija." Koji si ti u MKDSLendu? → https://mkdsl.games/koji-tip-si-ti',
+    shareText: 'DJ — "Loš zvuk je loša komunikacija." Koji si ti u MKDSLendu? → https://mkdsl.github.io/gari-daily-games/games/2026-05-07-koji-tip-si-ti/',
     cta: {
-      text: '→ Igraj Setlistu',
-      url: 'https://mkdsl.games/setlista'
+      text: '→ Igraj Avala Run',
+      url: 'https://mkdsl.github.io/gari-daily-games/games/2026-05-06-avala-run/'
     }
   },
   PK: {
     name: 'Permakultura Nerd',
     description: 'Zemlja, kompost, polinatori i regenerativni sistemi — ovo ti nije hobi, ovo ti je način razmišljanja. MKDSLend vidiš kao živi laboratorij, ne kao vikend odmorište. Dok drugi traže program, ti gledaš u tlo.',
     quote: '"Zemlja nije podloga. Zemlja je sistem."',
-    shareText: 'Permakultura Nerd — "Zemlja nije podloga. Zemlja je sistem." Koji si ti u MKDSLendu? → https://mkdsl.games/koji-tip-si-ti',
+    shareText: 'Permakultura Nerd — "Zemlja nije podloga. Zemlja je sistem." Koji si ti u MKDSLendu? → https://mkdsl.github.io/gari-daily-games/games/2026-05-07-koji-tip-si-ti/',
     cta: {
-      text: '→ Igraj Šta Raste?',
-      url: 'https://mkdsl.games/sta-raste'
+      text: '→ Istraži GDG',
+      url: 'https://mkdsl.github.io/gari-daily-games/'
     }
   },
   SG: {
     name: 'Sound Geek',
     description: 'Nisi nužno DJ, ali znaš razliku između sub-basa i mid-basa i imaš mišljenje o tome. Kablovi, miksete, akustika prostora — tvoja zona udobnosti. Voliš da razumeš sisteme iznutra, a ne samo da uživaš u rezultatu.',
     quote: '"Signal chain je biografija zvuka."',
-    shareText: 'Sound Geek — "Signal chain je biografija zvuka." Koji si ti u MKDSLendu? → https://mkdsl.games/koji-tip-si-ti',
+    shareText: 'Sound Geek — "Signal chain je biografija zvuka." Koji si ti u MKDSLendu? → https://mkdsl.github.io/gari-daily-games/games/2026-05-07-koji-tip-si-ti/',
     cta: {
-      text: '→ Igraj Signal Chain',
-      url: 'https://mkdsl.games/signal-chain'
+      text: '→ Igraj Frekventni Grad',
+      url: 'https://mkdsl.github.io/gari-daily-games/games/2026-04-27-frekventni-grad/'
     }
   },
   EH: {
     name: 'Event Host',
     description: 'Ti si onaj zbog koga se ljudi dobro provode a da ne znaju zašto. Logistika, energija prostora, tajming — osećaš to instinktivno. MKDSLend za tebe nije destinacija nego platforma za ono što tek treba da se desi.',
     quote: '"Dobar event je nevidljiv. Loš event je jedini koji svi primete."',
-    shareText: 'Event Host — "Dobar event je nevidljiv." Koji si ti u MKDSLendu? → https://mkdsl.games/koji-tip-si-ti',
+    shareText: 'Event Host — "Dobar event je nevidljiv." Koji si ti u MKDSLendu? → https://mkdsl.github.io/gari-daily-games/games/2026-05-07-koji-tip-si-ti/',
     cta: {
-      text: '→ Igraj Program Menadžer',
-      url: 'https://mkdsl.games/program-menager'
+      text: '→ Istraži GDG',
+      url: 'https://mkdsl.github.io/gari-daily-games/'
     }
   },
   CB: {
     name: 'Crew Builder',
     description: 'Zajednica nije apstrakcija za tebe — to su konkretni ljudi koje si doveo, povezao i čuvaš. Mrežiš bez da mrežiš. MKDSLend vidiš kao mesto gde tvoja ekipa može da postane nešto veće od zbira pojedinaca.',
     quote: '"Dolazim sam samo kad testiram novo mesto. Posle dolazim sa svima."',
-    shareText: 'Crew Builder — "Dolazim sam samo kad testiram novo mesto." Koji si ti u MKDSLendu? → https://mkdsl.games/koji-tip-si-ti',
+    shareText: 'Crew Builder — "Dolazim sam samo kad testiram novo mesto." Koji si ti u MKDSLendu? → https://mkdsl.github.io/gari-daily-games/games/2026-05-07-koji-tip-si-ti/',
     cta: {
-      text: '→ Igraj Ko Je Ko?',
-      url: 'https://mkdsl.games/ko-je-ko'
+      text: '→ Istraži GDG',
+      url: 'https://mkdsl.github.io/gari-daily-games/'
     }
   },
   SE: {
     name: 'Slobodan Elektron',
     description: 'Ne dolaziš po programu — dolaziš po mogućnostima. Istraživaš sisteme, postavljaš neočekivana pitanja i pronalaziš veze koje drugi ne vide. U svakoj zajednici, Slobodan Elektron je katalizator: nema fiksnu ulogu, ali sve malo pokrene.',
     quote: '"Najzanimljiviji deo svakog mesta je ono što niko nije planirao."',
-    shareText: 'Slobodan Elektron — "Najzanimljiviji deo svakog mesta je ono što niko nije planirao." Koji si ti u MKDSLendu? → https://mkdsl.games/koji-tip-si-ti',
+    shareText: 'Slobodan Elektron — "Najzanimljiviji deo svakog mesta je ono što niko nije planirao." Koji si ti u MKDSLendu? → https://mkdsl.github.io/gari-daily-games/games/2026-05-07-koji-tip-si-ti/',
     cta: {
-      text: '→ Igraj Prvu Posetu',
-      url: 'https://mkdsl.games/prva-poseta'
+      text: '→ Igraj Signal Lost',
+      url: 'https://mkdsl.github.io/gari-daily-games/games/2026-04-20-signal-lost/'
     }
   }
 };
