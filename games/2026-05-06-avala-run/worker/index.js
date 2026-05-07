@@ -94,7 +94,7 @@ export default {
       }
       return jsonResponse({ error: 'Not found' }, 404, request);
     } catch (err) {
-      return jsonResponse({ error: 'Internal error' }, 500, request);
+      return jsonResponse({ error: 'Internal error', detail: err.message }, 500, request);
     }
   }
 };
@@ -171,7 +171,7 @@ async function handlePostScore(request, env) {
   if (existing) {
     return jsonResponse({ error: 'Sačekaj 30 sekundi' }, 429, request);
   }
-  await env.LEADERBOARD.put(rateLimitKey, '1', { expirationTtl: 30 });
+  await env.LEADERBOARD.put(rateLimitKey, '1', { expirationTtl: 60 });
 
   // --- Store score ---
   const date = todayKey();
