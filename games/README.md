@@ -20,6 +20,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-05-04 | Sudnik — Tribunal of Cards | Card / Deckbuilder + Strategy mini | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-04-sudnik/) |
 | 2026-05-05 | Bespuće | Arkada / Roguelike mini | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-05-bespouce/) |
 | 2026-05-06 | Avala Run ⭐ | Endless Runner / Arkada / Eko — Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-06-avala-run/) |
+| 2026-05-07 | Koji Tip Si Ti u MKDSLendu? | Narrative Quiz / Personality — MKDSLend | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-07-koji-tip-si-ti/) |
 
 ## Statusi
 

@@ -13,9 +13,10 @@
     "styles/ui.css": "Quiz card, answer buttons, result card, progress bar, share button"
   },
   "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+    "total_js": 360,
+    "total_css": 334
   },
-  "beta_score": null,
-  "status": "in_progress"
+  "beta_score": 6.8,
+  "post_fix_score": 9.0,
+  "status": "released"
 }
