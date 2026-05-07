@@ -2,9 +2,8 @@ name = "avala-run-leaderboard"
 main = "index.js"
 compatibility_date = "2024-01-01"
 
-[vars]
-SERVER_SECRET = "CHANGE_ME_IN_DASHBOARD"
+# SERVER_SECRET is set via `wrangler secret put` (not in file)
 
 [[kv_namespaces]]
 binding = "LEADERBOARD"
-id = "placeholder-id"
+id = "40ca259528164815a751a3f225a462f9"
