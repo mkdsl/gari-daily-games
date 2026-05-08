@@ -1,17 +1,17 @@
 // state.js — Quiz state mašina
-// GDD: Mile Mehanika | 2026-05-07 | v1.0
+// GDD: Mile Mehanika | 2026-05-07 | v2.0 (9 arhetipova, 10 pitanja)
 
 import { QUESTIONS } from './config.js';
 
 /**
  * Centralni state objekat.
- * - currentQ: indeks trenutnog pitanja (0–7 tokom quiza, 8 = završen)
+ * - currentQ: indeks trenutnog pitanja (0–9 tokom quiza, 10 = završen)
  * - scores: akumulirani bodovi po arhetip
  * - answers: niz objekata { questionId, chosenIndex, scores } — za tiesbreak
  */
 export const state = {
   currentQ: 0,
-  scores: { DJ: 0, PK: 0, SG: 0, EH: 0, CB: 0, SE: 0 },
+  scores: { DJ: 0, PK: 0, SG: 0, EH: 0, CB: 0, SE: 0, GI: 0, BH: 0, TČ: 0 },
   answers: []
 };
 
@@ -19,7 +19,7 @@ export const state = {
  * recordAnswer — beleži odgovor i ažurira state.
  * @param {string} questionId — npr. 'Q1'
  * @param {object} scores — { DJ:0, PK:1, ... } iz config.js
- * @param {number} chosenIndex — indeks odabranog odgovora (0, 1 ili 2)
+ * @param {number} chosenIndex — indeks odabranog odgovora (0, 1, 2 ili 3)
  */
 export function recordAnswer(questionId, scores, chosenIndex) {
   // Akumuliraj bodove
@@ -39,9 +39,9 @@ export function recordAnswer(questionId, scores, chosenIndex) {
  *
  * Tiesbreak procedura (GDD §5):
  * 1. Ako postoji jedinstven maksimum → taj arhetip pobeđuje.
- * 2. Ako tie → proveri Q8: pobednik je onaj od kandidata koji je bodovan na Q8.
- * 3. Ako Q8 ne razrešava → proveri Q7.
- * 4. Ako Q7 ne razrešava → proveri Q6.
+ * 2. Ako tie → proveri Q10: pobednik je onaj od kandidata koji je bodovan na Q10.
+ * 3. Ako Q10 ne razrešava → proveri Q9.
+ * 4. Ako Q9 ne razrešava → proveri Q8.
  * 5. Hard fallback → 'DJ' (GDD §5, dizajnerska odluka Mile Mehanika)
  *
  * Edge case — svi skorovi 0 (korumpirani state u dev/test modu):
@@ -75,7 +75,7 @@ export function calculateResult() {
     }
   }
 
-  for (const qId of ['Q8', 'Q7', 'Q6']) {
+  for (const qId of ['Q10', 'Q9', 'Q8']) {
     const winner = answersMap[qId];
     if (winner && tied.includes(winner)) {
       // Tačno jedan od tiesbreak kandidata je bodovan na ovom pitanju
@@ -88,7 +88,7 @@ export function calculateResult() {
 
   // FALLBACK: Ultra-rare tie koji sekundarni skor ne razrešava.
   // DJ je default po dizajnerskoj odluci (ne po poziciji u nizu).
-  // Ver. 1.0 — Mile Mehanika, 2026-05-07
+  // Ver. 2.0 — Mile Mehanika, 2026-05-08
   return 'DJ';
 }
 
@@ -98,6 +98,6 @@ export function calculateResult() {
  */
 export function resetState() {
   state.currentQ = 0;
-  state.scores = { DJ: 0, PK: 0, SG: 0, EH: 0, CB: 0, SE: 0 };
+  state.scores = { DJ: 0, PK: 0, SG: 0, EH: 0, CB: 0, SE: 0, GI: 0, BH: 0, TČ: 0 };
   state.answers = [];
 }
