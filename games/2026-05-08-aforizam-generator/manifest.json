@@ -15,7 +15,11 @@
     "styles/ui.css": "Dugmad, toast, Kluboslavija watermark",
     "styles/game.css": "Fade animacije, aforizam tipografija"
   },
-  "line_counts": { "total_js": 0, "total_css": 0 },
-  "beta_score": null,
-  "status": "in_progress"
+  "line_counts": {
+    "total_js": 255,
+    "total_css": 150
+  },
+  "beta_score": 7.5,
+  "post_fix_score": 8.5,
+  "status": "released"
 }
