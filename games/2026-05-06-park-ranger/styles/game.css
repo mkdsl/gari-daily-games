@@ -1,0 +1,158 @@
+/* game.css — Pixel character sprites via CSS box-shadow, animations */
+
+/* ─── Sprite container ────────────────────────────────── */
+.sprite {
+  width: 4px;
+  height: 4px;
+  image-rendering: pixelated;
+  transform: scale(3);
+  transform-origin: top left;
+  margin: 0 auto;
+  /* Each level overrides box-shadow with pixel grid */
+}
+
+.sprite-wrap {
+  width: 72px;   /* 16 * 4px + margins = ~ */
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ─── Level 0 — Sivi, pogrbljeni ──────────────────────── */
+.sprite-level-0 {
+  box-shadow:
+    /* head */
+    8px 0 #888, 12px 0 #888,
+    4px 4px #888, 8px 4px #aaa, 12px 4px #aaa, 16px 4px #888,
+    4px 8px #888, 8px 8px #666, 12px 8px #666, 16px 8px #888,
+    8px 12px #888, 12px 12px #888,
+    /* body - slouched */
+    8px 16px #666, 12px 16px #666,
+    4px 20px #777, 8px 20px #666, 12px 20px #666, 16px 20px #777,
+    8px 24px #666, 12px 24px #666,
+    /* legs */
+    8px 28px #555, 12px 28px #555,
+    8px 32px #555, 12px 32px #555;
+}
+
+/* ─── Level 1 — Mladi ranger, malo boje ───────────────── */
+.sprite-level-1 {
+  box-shadow:
+    8px 0 #7a9a6a, 12px 0 #7a9a6a,
+    4px 4px #7a9a6a, 8px 4px #9aba8a, 12px 4px #9aba8a, 16px 4px #7a9a6a,
+    4px 8px #7a9a6a, 8px 8px #556, 12px 8px #556, 16px 8px #7a9a6a,
+    8px 12px #8aaa7a, 12px 12px #8aaa7a,
+    /* body - green shirt */
+    8px 16px #2a5a2a, 12px 16px #2a5a2a,
+    4px 20px #3a6a3a, 8px 20px #2a5a2a, 12px 20px #2a5a2a, 16px 20px #3a6a3a,
+    8px 24px #2a5a2a, 12px 24px #2a5a2a,
+    /* legs */
+    8px 28px #4a3a2a, 12px 28px #4a3a2a,
+    8px 32px #4a3a2a, 12px 32px #4a3a2a;
+}
+
+/* ─── Level 2 — Park Ranger, uniform ──────────────────── */
+.sprite-level-2 {
+  box-shadow:
+    8px 0 #8aba7a, 12px 0 #8aba7a,
+    4px 4px #8aba7a, 8px 4px #aada9a, 12px 4px #aada9a, 16px 4px #8aba7a,
+    4px 8px #8aba7a, 8px 8px #446, 12px 8px #446, 16px 8px #8aba7a,
+    8px 12px #9aca8a, 12px 12px #9aca8a,
+    /* hat */
+    4px -4px #4a3a1a, 8px -4px #4a3a1a, 12px -4px #4a3a1a, 16px -4px #4a3a1a,
+    /* body - dark green uniform */
+    8px 16px #1a4a1a, 12px 16px #1a4a1a,
+    4px 20px #2a5a2a, 8px 20px #1a4a1a, 12px 20px #1a4a1a, 16px 20px #2a5a2a,
+    8px 24px #1a4a1a, 12px 24px #F5A623, /* badge */
+    /* legs */
+    8px 28px #3a2a1a, 12px 28px #3a2a1a,
+    8px 32px #3a2a1a, 12px 32px #3a2a1a;
+}
+
+/* ─── Level 3 — Stariji Ranger ────────────────────────── */
+.sprite-level-3 {
+  box-shadow:
+    8px 0 #9aca8a, 12px 0 #9aca8a,
+    4px 4px #9aca8a, 8px 4px #baea9a, 12px 4px #baea9a, 16px 4px #9aca8a,
+    4px 8px #9aca8a, 8px 8px #446, 12px 8px #446, 16px 8px #9aca8a,
+    8px 12px #aada9a, 12px 12px #aada9a,
+    /* hat + feather */
+    4px -4px #3a2a1a, 8px -4px #3a2a1a, 12px -4px #3a2a1a, 16px -4px #3a2a1a,
+    20px -4px #39FF14,
+    /* body */
+    8px 16px #0a3a0a, 12px 16px #0a3a0a,
+    4px 20px #1a4a1a, 8px 20px #0a3a0a, 12px 20px #0a3a0a, 16px 20px #1a4a1a,
+    0px 20px #5a3a1a, 20px 20px #5a3a1a, /* arms out */
+    8px 24px #0a3a0a, 12px 24px #F5A623,
+    /* legs */
+    8px 28px #2a1a0a, 12px 28px #2a1a0a,
+    8px 32px #2a1a0a, 12px 32px #2a1a0a;
+}
+
+/* ─── Level 5 — Cuvar Sume ────────────────────────────── */
+.sprite-level-5 {
+  box-shadow:
+    8px 0 #aaea9a, 12px 0 #aaea9a,
+    4px 4px #aaea9a, 8px 4px #ccffaa, 12px 4px #ccffaa, 16px 4px #aaea9a,
+    4px 8px #aaea9a, 8px 8px #39FF14, 12px 8px #39FF14, 16px 8px #aaea9a,
+    8px 12px #bbffaa, 12px 12px #bbffaa,
+    /* hat + eagle feather */
+    4px -4px #2a1a0a, 8px -4px #2a1a0a, 12px -4px #2a1a0a, 16px -4px #2a1a0a,
+    20px -8px #F5A623, 20px -4px #F5A623,
+    /* cape */
+    0px 16px #0a3a0a, 4px 16px #0a3a0a, 20px 16px #0a3a0a,
+    /* body */
+    8px 16px #0a2a0a, 12px 16px #0a2a0a,
+    4px 20px #0a3a0a, 8px 20px #0a2a0a, 12px 20px #0a2a0a, 16px 20px #0a3a0a,
+    8px 24px #0a2a0a, 12px 24px #FFD700, /* gold badge */
+    /* legs + boots */
+    8px 28px #1a0a00, 12px 28px #1a0a00,
+    8px 32px #1a0a00, 12px 32px #1a0a00;
+}
+
+/* ─── Level 7 — Park Legenda ──────────────────────────── */
+.sprite-level-7 {
+  box-shadow:
+    8px 0 #ccffaa, 12px 0 #ccffaa,
+    4px 4px #ccffaa, 8px 4px #eeffcc, 12px 4px #eeffcc, 16px 4px #ccffaa,
+    4px 8px #ccffaa, 8px 8px #FFD700, 12px 8px #FFD700, 16px 8px #ccffaa,
+    8px 12px #ddffbb, 12px 12px #ddffbb,
+    /* crown */
+    4px -8px #FFD700, 8px -8px #FFD700, 12px -8px #FFD700, 16px -8px #FFD700,
+    8px -12px #FFD700, 12px -12px #FFD700,
+    /* glow */
+    0px 8px rgba(57,255,20,0.3), 24px 8px rgba(57,255,20,0.3),
+    /* cape */
+    0px 16px #0a2a0a, 0px 20px #0a2a0a, 0px 24px #0a2a0a,
+    20px 16px #0a2a0a, 20px 20px #0a2a0a, 20px 24px #0a2a0a,
+    /* body */
+    8px 16px #082a08, 12px 16px #082a08,
+    4px 20px #0a3a0a, 8px 20px #082a08, 12px 20px #082a08, 16px 20px #0a3a0a,
+    8px 24px #082a08, 12px 24px #FFD700,
+    /* star badge */
+    4px 24px #FFD700,
+    /* legs */
+    8px 28px #0a0500, 12px 28px #0a0500,
+    8px 32px #0a0500, 12px 32px #0a0500;
+}
+
+/* ─── Level-up glow animation ─────────────────────────── */
+.sprite-levelup {
+  animation: spriteGlow 1.5s ease infinite;
+}
+@keyframes spriteGlow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(57,255,20,0.3)); }
+  50%      { filter: drop-shadow(0 0 16px rgba(57,255,20,0.8)); }
+}
+
+/* ─── Idle breathing ──────────────────────────────────── */
+.sprite-idle {
+  animation: breathe 3s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(3) translateY(0); }
+  50%      { transform: scale(3) translateY(-1px); }
+}

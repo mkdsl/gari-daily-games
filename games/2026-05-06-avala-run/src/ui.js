@@ -137,6 +137,7 @@ export function showGameOver(state, onRestart) {
           <div>Top Score:&nbsp; ${fmtScores}</div>
         </div>
       </div>
+      <button class="go-share" id="btn-share">PODELI REZULTAT</button>
       <button class="go-restart" id="btn-restart">POKUŠAJ PONOVO</button>
       <button class="btn-face" id="btn-face-go">${localStorage.getItem('avala-run-face') ? 'PROMENI FACU' : 'DODAJ FACU'}</button>
       <input type="file" id="face-input-go" accept="image/*" style="display:none">
@@ -387,6 +388,22 @@ export function showGameOver(state, onRestart) {
     }
     _confettiAnimId = requestAnimationFrame(animConfetti);
   }
+
+  // Share button
+  document.getElementById('btn-share').addEventListener('click', () => {
+    const distM = Math.floor(state.distance / 10);
+    const shareText = `Avala Run: ${state.score} poena | ${distM}m | ${state.trashCount} smeca\n"${aforizm}"\n\nIgraj: https://mkdsl.github.io/gari-daily-games/games/2026-05-06-avala-run/`;
+
+    if (navigator.share) {
+      navigator.share({ title: 'Avala Run', text: shareText }).catch(() => {});
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareText).then(() => {
+        const btn = document.getElementById('btn-share');
+        btn.textContent = 'KOPIRANO!';
+        setTimeout(() => { btn.textContent = 'PODELI REZULTAT'; }, 2000);
+      }).catch(() => {});
+    }
+  });
 
   document.getElementById('btn-restart').addEventListener('click', onRestart, { once: true });
 

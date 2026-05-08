@@ -1,0 +1,28 @@
+[
+  {"id":"t01","kategorija":"Telo","text":"Popij 2 pune case vode pre 10h.","tezina":"easy","level_min":0},
+  {"id":"t02","kategorija":"Telo","text":"Uradi 20 skokova na mestu. Sad odmah.","tezina":"easy","level_min":0},
+  {"id":"t03","kategorija":"Telo","text":"Prosetaj 10 minuta bez telefona.","tezina":"medium","level_min":0},
+  {"id":"t04","kategorija":"Telo","text":"Istegni se 5 minuta. Celo telo.","tezina":"easy","level_min":0},
+  {"id":"t05","kategorija":"Telo","text":"Udari 30 kettlebell swingova ili 30 cucnjeva.","tezina":"medium","level_min":1},
+  {"id":"t06","kategorija":"Telo","text":"Pojedi vocku umesto slatkisa danas.","tezina":"easy","level_min":0},
+
+  {"id":"f01","kategorija":"Fokus","text":"Ne diraj telefon prvih 10 minuta po budjenju.","tezina":"medium","level_min":0},
+  {"id":"f02","kategorija":"Fokus","text":"Napisi 3 stvari za koje si zahvalan/na.","tezina":"easy","level_min":0},
+  {"id":"f03","kategorija":"Fokus","text":"Sedi u tisini 5 minuta. Bez muzike, bez ekrana.","tezina":"medium","level_min":0},
+  {"id":"f04","kategorija":"Fokus","text":"Zavrsi jedan zadatak koji odlazes vec 3+ dana.","tezina":"medium","level_min":1},
+  {"id":"f05","kategorija":"Fokus","text":"Ugasi sve notifikacije na 1 sat.","tezina":"easy","level_min":0},
+  {"id":"f06","kategorija":"Fokus","text":"Procitaj 10 stranica necega sto nije ekran.","tezina":"medium","level_min":0},
+
+  {"id":"v01","kategorija":"Veze","text":"Posalji poruku starom prijatelju. Bas sad.","tezina":"easy","level_min":0},
+  {"id":"v02","kategorija":"Veze","text":"Reci nekome nesto lepo u lice danas.","tezina":"easy","level_min":0},
+  {"id":"v03","kategorija":"Veze","text":"Pozovi nekog na kafu ili setnju ove nedelje.","tezina":"medium","level_min":0},
+  {"id":"v04","kategorija":"Veze","text":"Pitaj nekog kako je — i slusaj ceo odgovor.","tezina":"easy","level_min":1},
+  {"id":"v05","kategorija":"Veze","text":"Zahvali se nekome ko ti je pomogao a nisi mu rekao.","tezina":"medium","level_min":0},
+
+  {"id":"p01","kategorija":"Priroda","text":"Otvori prozor na 10 minuta i udahni spolja.","tezina":"easy","level_min":0},
+  {"id":"p02","kategorija":"Priroda","text":"Pojedi nesto zeleno danas.","tezina":"easy","level_min":0},
+  {"id":"p03","kategorija":"Priroda","text":"Nadji jedno drvo na putu i stani pored njega 1 minut.","tezina":"easy","level_min":0},
+  {"id":"p04","kategorija":"Priroda","text":"Pokupi jedan komad smeca sa ulice.","tezina":"easy","level_min":0},
+  {"id":"p05","kategorija":"Priroda","text":"Provedi 15 minuta napolju bez cilja. Samo hodaj.","tezina":"medium","level_min":1},
+  {"id":"p06","kategorija":"Priroda","text":"Zasadi nesto. Bilo sta. Makar zacin u saksiji.","tezina":"medium","level_min":2}
+]

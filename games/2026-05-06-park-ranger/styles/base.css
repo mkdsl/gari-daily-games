@@ -1,0 +1,50 @@
+/* base.css — Reset, screen system, dark green park palette */
+:root {
+  --bg: #0D1F0F;
+  --panel: #1A3320;
+  --neon: #39FF14;
+  --amber: #F5A623;
+  --text: #E8F0E9;
+  --dim: #8FA892;
+  --danger: #FF4444;
+  --gold: #FFD700;
+  --border: #2A4A30;
+  --radius: 8px;
+  --fast: 180ms ease;
+  --med: 320ms ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; width: 100%; overflow: hidden; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--med);
+  overflow-y: auto;
+}
+.screen--active { opacity: 1; pointer-events: all; }
+
+.container {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
