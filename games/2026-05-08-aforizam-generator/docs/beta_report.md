@@ -1,8 +1,7 @@
 ## BETA TEST REPORT — Aforizam Generator
 
-**Datum:** 2026-05-08  
-**Testeri:** Beta Trio — Zora (UX) + Raša (Tehničko) + Lela (Engagement)  
-**Verzija:** main branch, SHA 29e9e17
+_Testeri: Beta Trio — Zora (UX) + Raša (Tehničko) + Lela (Engagement)_  
+_Datum: 2026-05-08 | Branch: main | Read: izvor direktno (bez deploy-a)_
 
 ### Ukupna ocena: 7.5/10
 
@@ -11,70 +10,73 @@
 ### Zora (UX): 8/10
 
 **Šta radi:**
-- Auto-load radi ispravno — `showAforizmImmediate` se poziva na init, korisnik ne vidi prazan ekran ni milisekundu.
-- `aria-live="polite"` postoji na `#toast` elementu — screen reader će čitati potvrdu kopiranja bez prekidanja korisnika.
-- Kontrast `#f0ece4` teksta na `#0d0d0d` pozadini je odličan (ratio ~19:1, WCAG AAA prolazi bez greške).
-- Google Fonts se učitava sa `&display=swap` u URL-u — tekst se prikazuje u fallback fontu dok se Lora ne učita, nema blokiranog rendera.
-- Struktura je čista: jedna kartica, dva dugmeta, footer watermark. Korisnik odmah zna šta da radi.
+- Auto-load funkcioniše — `generator.init()` u `DOMContentLoaded` odmah popunjava `aforizam-text`, korisnik ne vidi prazan ekran.
+- `aria-live="polite"` postoji na `#toast` i toast menja `textContent` dinamički — screen reader ce pročitati poruku bez fokus-skoka. Implementacija je ispravna.
+- Kontrast teksta `#f0ece4` na tamnoj pozadini `#0d0d0d` (pretpostavljeno iz watermark boje i `#1a1a1a` toast pozadine) prolazi WCAG AA — odnos je ~16:1, daleko iznad praga 4.5:1.
+- Fontovi se učitavaju sa `display=swap` parametrom direktno u Google Fonts URL-u (`?family=Lora:ital@1&display=swap`) — render se ne blokira, sistem-serif se prikazuje dok se Lora ne učita.
+- `font-size: clamp(18px, 5.5vw, 28px)` osigurava čitljivost na svim veličinama ekrana.
 
 **Šta ne radi:**
-- Dugmad (`#btn-next`, `#btn-copy`) nemaju definisanu minimalnu visinu u CSS-u. `game.css` ne setuje `min-height: 44px` — na mobilnom uređaju touch target može biti premali, posebno za `Kopiraj za IG` button koji ima duži label. WCAG 2.5.5 preporučuje minimum 44×44px.
-- Nema vizuelnog feedbacka na dugmadima dok je `transitioning = true` (pointer-events se gasi na `#controls`, ali dugmad vizuelno izgledaju identično — korisnik ne zna zašto klik ne reaguje).
-- Toast poruka nakon kopiranja nije videna u kodu (tekst poruke dolazi iz `share.js` koji nije čitan), ali ako kaže samo "Kopirano" bez konteksta, korisnik možda ne zna šta je kopirano.
+- Dugmad: `padding: 14px 28px` daje visinu ~43px (14+14+15px line-height ≈ 43px) — jedan piksel ispod preporučenog 44px touch targeta. Marginalna greška, ali postoji.
+- Na `#aforizam-text` nema `role` ili `aria-label` atributa — screen reader čita sadržaj ali ne najavljuje da je to aforizam koji se menja. Korisnik čuje novu rečenicu ali bez konteksta "novi aforizam".
+- `lang="sr"` je ispravno setovano, ali nema `lang` atributa na tekstu koji bi screen readeru signalizirao srpski izgovor za TTS engine.
+- Toast poruka "Nalepi u IG story" ima platformski pretpostavku — na desktop-u nema smisla (vidi Lela sekciju).
 
 ---
 
-### Raša (Tehničko): 7/10
+### Raša (Tehničko): 7.5/10
 
 **Šta radi:**
-- Nema circular importa. `ui.js` → `config.js` only. `input.js` → `config.js` + `ui.js`. `share.js` → `config.js` + `ui.js`. Graf je acikličan, ES moduli će se učitati bez problema.
-- Dvostruka zaštita od spam-klika: `isTransitioning()` guard u `input.js` + `DEBOUNCE_MS` (600ms) timestamp check. Čak i ako se guard zaobiđe, debounce hvata ponovne klikove.
-- `showAforizmImmediate` se koristi samo jednom (na init), pa izostanak `transitioning` flaga nije problem u trenutnoj upotrebi.
-- Shuffle algoritam (Fisher-Yates in-place na kopiji) je korektno implementiran. Reset na kraju queue je elegantan.
+- Nema circular importa. Graf: `ui.js` importuje samo `config.js`. `share.js` importuje `config.js` i `ui.js`. `input.js` importuje `config.js` i `ui.js`. `main.js` orkestrira sve. Čist jednosmerni graf.
+- `showAforizam` koristi `transitioning` flag koji blokira sve pozive dok animacija traje. `isTransitioning()` je eksportovana i `input.js` je proverava pre nego što pozove `onNext()`. Debounce od 600ms je dodatni sloj zaštite. Overlapping animacije su blokirane na oba nivoa.
+- Fisher-Yates shuffle je implementiran ispravno (in-place kopija, `i--` redosled).
+- `execCommand` fallback za starije browsere postoji i rukuje greškom — dobra defensive implementacija.
+- Google Fonts `display=swap` je prisutan u HTML `<link>` href-u — render ne blokira.
 
 **Šta puca:**
-- **Animation retrigger rizik u `showAforizam`:** Kada se `aforizmEl.style.animation` postavi na `fadeOut`, pa odmah na `fadeIn`, neki browseri (Chrome posebno) ne retriggeruju animaciju jer nije bilo `reflow` između. Standardni fix je `element.offsetHeight` (forced reflow) ili `element.style.animation = 'none'` + `requestAnimationFrame` pre setovanja nove animacije. Trenutni kod radi pouzdano samo zato što `await delay(FADE_OUT_MS)` između assignmenta daje browseru dovoljno vremena za paint — ali ovo je sretan slučaj, ne garantovan. Ako se timing promeni, animacija može "zalepiti".
-- **`showAforizmImmediate` ne setuje `transitioning = true`:** Ako se ova funkcija ikad pozove van init konteksta (npr. u budućem feature-u), overlapping animacija je moguća.
-- **`aforizmEl.style.animation = ''` reset na kraju `showAforizam`:** Element ostaje u fully-opaque stanju jer `fadeIn` animacija završi na `opacity: 1`, ali bez `animation-fill-mode: forwards` u inline stilu (postoji u keyframe stringu kao `forwards`), reset animacije može prouzrokovati flash na `opacity: 0` u edge case-u. Malo verovatno, ali nije nemoguće.
-- **Copy button nema debounce:** `btnCopy` listener poziva `onCopy()` bez ikakvog ograničenja — brzi dvostruki klik može pozvati share/clipboard API dva puta i prikazati dva toasta u nizu.
+- **Animation reset bug (MEDIUM):** Nakon što `showAforizmImmediate` postavi `fadeIn` animaciju, `setTimeout` resetuje `style.animation = ''`. Ovo je OK za initial load. Ali u `showAforizam` (async verzija), isti CSS property se koristi i za `fadeOut` i za `fadeIn` sekvencijalno na istom elementu. Problem: browser može da ne "vidi" promenu kada se setuje ista `animation` vrednost drugi put jer CSSOM ne detektuje novu animaciju ako je property vrednost identična stringu. Konkretno, ako se `fadeIn` završi, `style.animation` se resetuje na `''`, a sledeći `showAforizam` ponovo setuje `fadeOut` — to radi. Ali ako korisnik uspešno prodje kroz oba poziva sa istim timing-om, browser može skipovati reflow. Bezbednije bi bilo koristiti `animation` klase + `requestAnimationFrame` za force-reflow.
+- **`showAforizmImmediate` ne setuje `transitioning` flag:** Ako se `showAforizmImmediate` pozove u toku `fadeIn` (300ms), `transitioning` ostaje `false` jer ga `showAforizmImmediate` nikad ne setuje. Praktično to nije problem jer se `showAforizmImmediate` poziva samo jednom pri init-u pre nego što korisnik može da klikne — ali je arhitekturalni rizik ako se ikad pozove iz drugog konteksta.
+- **`btnCopy` nema debounce ni `isTransitioning()` check:** Korisnik može da klikne "Kopiraj za IG" tokom fade animacije i dobiće tekst koji je u tranziciji (stari ili novi, zavisno od timing-a). `generator.current` u tom trenutku je već zamenjen novim tekstom, ali animacija vizuelno još prikazuje stari. Raskorak između prikazanog i kopiranog teksta je moguć.
+- **`execCommand` deprecated:** `document.execCommand('copy')` je deprecated u svim modernim browserima. Fallback je tu i funkcionalan, ali MDN ga označava kao legacy. Nije bug danas, ali treba napomenuti.
+- **`navigator.share` na desktopima:** `navigator.share` nije dostupan u Firefox desktop i starije Chrome desktop verzije — kod ispravno pada na `copyToClipboard`, ali `share.catch()` koji takodje poziva `copyToClipboard` znači da mobile Web Share greška (korisnik otkaže share) rezultuje u neočekivanom clipboard kopiranju bez korisnikovog eksplicitnog pristanka.
 
 ---
 
-### Lela (Engagement): 7.5/10
+### Lela (Engagement): 7/10
 
 **Šta radi:**
-- Aforizmi autentično zvuče kao Pera Period — specifični detalji (garderober, subwoofer, ćevabdžija, fontana u centru) daju lokalni karakter koji generički aforizam generatori nemaju.
-- Posebno jaki primeri:
-  - *"Subwoofer ne laže. Sve ostalo — možda."* — savršena brevity.
-  - *"Posle četiri ujutru, iskrenost je jedini preostali filter."* — atmosferičan, tačan.
-  - *"Tramvaj kasni jednako pouzdano svako jutro. Bar to možeš da računaš."* — lokalno i gorko-smešno.
-  - *"Kafana u podne ima svoju filozofiju. Ona ne sudi, samo sluša i naplati."* — glasovit.
-- Kategorijska raznolikost (klub/ples/ljubav/grad/filozofija) znači da sekvenca retko postane monotona.
-- Fade ritam (200ms out + 300ms in = 500ms total) je dobar — nije ni tromav ni agresivan. Daje osećaj da aforizam "dolazi" a ne da se brutalno zamenjuje.
-- 52 aforizama sa ponovnim shuffleom — za casual korisnika koji klikne 10-15 puta, nikada neće videti isti dva puta u sesiji.
+- Aforizmi zvuče autentično Pera Period — rečenice su kratke, udaraju u kraju, imaju ritam. Primeri koji funkcionišu odlično:
+  - _"Subwoofer ne laže. Sve ostalo — možda."_ — savršen format: setup + obrat u dve reči.
+  - _"Posle četiri ujutru, iskrenost je jedini preostali filter."_ — precizno, nije kliše.
+  - _"Telo pamti muziku duže nego što mozak pamti reči."_ — emocionalno tačno.
+  - _"Kafana u podne ima svoju filozofiju. Ona ne sudi, samo sluša i naplati."_ — lokalni glas, duhovito.
+  - _"Blok pamti sve — ko je otišao, ko se vratio i ko se pravio da nije bio."_ — sjajan ritam.
+- 52 aforizama je dovoljan broj za casual session (prosečan korisnik ne klikne više od 10-15 puta). Reset shuffle posle 52 je elegantan — korisnik dobija novu permutaciju, ne istu sekvencu.
+- Fade 200ms out + 300ms in = 500ms total — nije sporo, ali nije ni instantno. Za aforizam format (kratke rečenice koje treba da "slete") ovo je prihvatljivo. Sporiji fade bi bio bolji za duže rečenice.
 
 **Šta dosadi:**
-- *"Kopiraj za IG"* label pretpostavlja Instagram i zbunjuje desktop korisnike. Puno korisnika koji nisu na Instagramu (ili su na desktopu) neće znati zašto bi kliknuli. Bolji label: *"Kopiraj"* sa toast-om koji objašnjava format.
-- Share poruka *"Nalepi u IG story"* nema smisla na desktopu — korisnik je kopirao tekst u clipboard ali ne može da ga paste-uje u mobil Story bez prebacivanja uređaja.
-- Kategorija "Filozofija/Apsurd" (8 aforizama) je najslabija od pet — nekoliko zvuče generično (*"Smisao nije skriven. On je samo previše blizu da bismo ga videli."*) i ne nose Pera Period specifičnost ostalih kategorija.
-- 52 aforizama je granica — heavy user koji otovri app svaki dan tokom nedelju dana počeće da prepoznaje aforizme. Nema mehanizma koji beleži već viđene između sesija.
+- **"Kopiraj za IG" label:** Pretpostavlja da korisnik ima Instagram. Korisnici koji nemaju IG (ili koriste Threads, X, TikTok) osećaju se isključeno. "Kopiraj" bi bio neutralan i dovoljno jasan.
+- **"Nalepi u IG story" u toast-u i share-u:** Na desktop browseru ovo je besmisleno. Desktop korisnik koji kopira tekst ne može da "nalepi u IG story" direktno. Toast bi trebalo da bude kontekstualan: mobilni → "Nalepi u IG story", desktop → "Kopirano u clipboard".
+- **Nekoliko aforizama je generičnija filozofija nego Pera Period glas:** _"Smisao nije skriven. On je samo previše blizu da bismo ga videli."_ i _"Sloboda je najlakša dok je nema niko drugi da je primeti."_ zvuče više kao opšta mudrost nego kao neko ko izlazi iz kluba u 5 ujutru. Ove bi mogle biti oštrije.
+- **Nema kategorije ili mooda:** Korisnik ne zna da li dolazi klub aforizam ili ljubavni. Shuffle je totalno nasumičan pa može da se dogodi 3 filozofska zaredom — ritam sadržaja nije orkestriran.
+- **Share suffix nije vidljiv u kodu koji smo čitali** (CONFIG.SHARE_SUFFIX iz config.js nije pročitan) — ne možemo oceniti koliko je CTA u share tekstu jak.
 
 ---
 
 ### TOP 3 kritična problema
 
-1. **MEDIUM:** Touch target veličina dugmadi nije garantovana — `game.css` i `ui.css` ne definišu `min-height: 44px` za `#btn-next` i `#btn-copy`. Na nekim mobilnim uređajima button može biti manji od preporučenog minimuma, što otežava tapping posebno za korisnike sa krupnijim prstima ili motoričkim poteškoćama.
+1. **MEDIUM — Animation CSS reset može preskočiti reflow:** U `showAforizam`, sekvencijalno setovanje `style.animation` na isti `fadeIn` string bez force-reflowa može izazvati da browser ne pokrene novu animaciju. Fix: dodati `void aforizmEl.offsetWidth` (reflow trigger) između resetovanja i ponovnog setovanja animacije, ili koristiti CSS klase umesto inline `style.animation`.
 
-2. **MEDIUM:** Animation retrigger nije robusno implementiran u `showAforizam` — oslanjanje na `await delay()` kao implicitni reflow nije garantovana tehnika. Treba dodati `requestAnimationFrame` ili `offsetHeight` reflow između `fadeOut` i `fadeIn` assignmenta da se spreči potencijalni bug pri promeni timinga ili optimizacijama browsera.
+2. **MEDIUM — Kopiraj dugme nema transitioning guard:** `btnCopy` može biti kliknut tokom fade tranzicije i kopirati `generator.current` koji je već sledeći aforizam, dok ekran još prikazuje prethodni. Fix: dodati `if (isTransitioning()) return;` u `btnCopy` click handler.
 
-3. **LOW:** `btnCopy` nema debounce zaštitu — brzi dvostruki klik poziva `onCopy()` dva puta, što može rezultovati duplikatnim toast-ovima i višestrukim pozivima Clipboard/Share API-a. Dodati isti `isTransitioning()` ili timestamp guard kao za `btnNext`.
+3. **LOW — Toast i button label su IG-specifični bez detekcije platforme:** "Kopiraj za IG" i "Nalepi u IG story" alienuju ne-Instagram korisnike i zbunjuju desktop korisnike. Fix: label → "Kopiraj", toast → `isMobile ? 'Nalepi u IG story.' : 'Kopirano u clipboard.'`.
 
 ---
 
 ### TOP 3 "nice to have"
 
-1. Promeniti label *"Kopiraj za IG"* u *"Kopiraj"* i u toast poruci napisati format koji je kopiran (npr. *"Tekst kopiran — spreman za deljenje"*) — eliminisati pretpostavku o platformi.
+1. **Kategorisani shuffle ili mood filter:** Dugme ili swipe gesta za promenu "mooda" (Klub / Ljubav / Filozofija) bi povećalo vreme provedeno u igri i dalo korisniku osećaj kontrole nad iskustvom.
 
-2. Dodati vizuelni disabled state na dugmad tokom `transitioning` (npr. `opacity: 0.5` ili `cursor: not-allowed`) — korisnik dobija feedback da sistem radi, a ne da je klik ignorisan.
+2. **Progres indikator aforizama:** Sitna oznaka tipa "14 / 52" (ili čak vizuelni progress bar) daje korisniku osećaj da "sakuplja" aforizme i motiviše da dođe do kraja šuflovane liste.
 
-3. Dodati 10-15 aforizma iz kategorije "Filozofija/Apsurd" sa više lokalnog karaktera (konkretni Beograd/Klub detalji, manje apstraktnih formulacija) — podići kvalitet najslabije kategorije na nivo ostalih četiri.
+3. **`aria-label` na aforizam kontejneru + live region role:** Dodati `role="status"` ili eksplicitni `aria-label="Trenutni aforizam"` na `#aforizam-text` kako bi screen reader korisnici imali bolji kontekst bez oslanjanja isključivo na `aria-live` toast.
