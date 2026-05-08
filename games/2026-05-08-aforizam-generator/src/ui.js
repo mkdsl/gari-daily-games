@@ -23,6 +23,10 @@ export async function showAforizam(text) {
   // Swap text
   aforizmEl.textContent = text;
 
+  // Bug 1 fix: reset animation i force reflow da browser pokrene novu animaciju
+  aforizmEl.style.animation = ''; // reset
+  void aforizmEl.offsetWidth;     // force reflow
+
   // Fade in
   aforizmEl.style.animation = `fadeIn ${CONFIG.FADE_IN_MS}ms ease forwards`;
   await delay(CONFIG.FADE_IN_MS);

@@ -15,7 +15,9 @@ export function initInput(onNext, onCopy) {
     onNext();
   });
 
+  // Bug 2 fix: blokira copy tokom fade tranzicije da ne kopira stari aforizam
   btnCopy.addEventListener('click', () => {
+    if (isTransitioning()) return;
     onCopy();
   });
 }

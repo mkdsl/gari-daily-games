@@ -18,7 +18,7 @@ export function shareAforizam(text) {
 function copyToClipboard(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text)
-      .then(() => showToast("Kopirano! Nalepi u IG story.", 2000))
+      .then(() => showToast("Kopirano! Podeli ili nalepi.", CONFIG.TOAST_MS))
       .catch(() => execCommandFallback(text));
   } else {
     execCommandFallback(text);
@@ -35,7 +35,7 @@ function execCommandFallback(text) {
   ta.select();
   try {
     document.execCommand('copy');
-    showToast("Kopirano! Nalepi u IG story.", 2000);
+    showToast("Kopirano! Podeli ili nalepi.", CONFIG.TOAST_MS);
   } catch {
     showToast("Kopiraj ručno — selekcija je aktivna.", 2000);
   }
