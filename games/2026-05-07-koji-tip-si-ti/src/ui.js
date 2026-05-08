@@ -47,6 +47,7 @@ export function renderQuestion(q, qIndex, total) {
   const answersEl = document.getElementById('answers');
   if (!answersEl) return;
 
+  answersEl.style.opacity = '0';
   answersEl.innerHTML = '';
 
   q.answers.forEach((answer, index) => {
@@ -57,6 +58,8 @@ export function renderQuestion(q, qIndex, total) {
     btn.dataset.answerIndex = index;
     answersEl.appendChild(btn);
   });
+
+  requestAnimationFrame(() => { answersEl.style.opacity = '1'; });
 }
 
 /**

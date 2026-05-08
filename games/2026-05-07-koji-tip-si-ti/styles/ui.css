@@ -110,6 +110,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
+  transition: opacity 150ms ease;
 }
 
 .answer-btn {
