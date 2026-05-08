@@ -185,13 +185,12 @@ async function handlePostScore(request, env) {
   const entry = { name: trimName, score, rank: 0 };
   scores.push(entry);
   scores.sort((a, b) => b.score - a.score);
-  scores = scores.slice(0, 100);
 
   // Assign ranks
   scores.forEach((s, i) => { s.rank = i + 1; });
 
-  // TTL: expire after 48 hours
-  await env.LEADERBOARD.put(scoresKey, JSON.stringify(scores), { expirationTtl: 172800 });
+  // Store all scores, no expiration
+  await env.LEADERBOARD.put(scoresKey, JSON.stringify(scores));
 
   // Find this player's rank
   const playerRank = scores.findIndex(s => s.name === trimName && s.score === score);
@@ -215,12 +214,5 @@ async function handleGetLeaderboard(request, env, url) {
     if (raw) scores = JSON.parse(raw);
   } catch {}
 
-  // Return top 20
-  const top20 = scores.slice(0, 20).map((s, i) => ({
-    name: s.name,
-    score: s.score,
-    rank: i + 1
-  }));
-
-  return jsonResponse({ date, scores: top20 }, 200, request);
+  return jsonResponse({ date, scores }, 200, request);
 }
