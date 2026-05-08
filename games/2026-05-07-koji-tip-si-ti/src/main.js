@@ -73,6 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Kratka pauza za vizuelni feedback pre tranzicije
       setTimeout(() => {
+        // Remove focus from any button to prevent ghost highlight
+        if (document.activeElement) document.activeElement.blur();
+
         if (state.currentQ < QUESTIONS.length) {
           // Sledeće pitanje
           renderQuestion(

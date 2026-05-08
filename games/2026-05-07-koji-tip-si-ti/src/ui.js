@@ -47,8 +47,8 @@ export function renderQuestion(q, qIndex, total) {
   const answersEl = document.getElementById('answers');
   if (!answersEl) return;
 
-  answersEl.style.opacity = '0';
-  answersEl.innerHTML = '';
+  // Remove old buttons completely — prevents ghost selection
+  while (answersEl.firstChild) answersEl.removeChild(answersEl.firstChild);
 
   q.answers.forEach((answer, index) => {
     const btn = document.createElement('button');
@@ -58,8 +58,6 @@ export function renderQuestion(q, qIndex, total) {
     btn.dataset.answerIndex = index;
     answersEl.appendChild(btn);
   });
-
-  requestAnimationFrame(() => { answersEl.style.opacity = '1'; });
 }
 
 /**

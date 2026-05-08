@@ -132,11 +132,15 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.answer-btn:hover:not(:disabled),
-.answer-btn:focus-visible:not(:disabled) {
-  background-color: #38385c;
-  border-color: var(--color-accent);
+.answer-btn:focus {
   outline: none;
+}
+
+@media (hover: hover) {
+  .answer-btn:hover:not(:disabled) {
+    background-color: #38385c;
+    border-color: var(--color-accent);
+  }
 }
 
 .answer-btn:active:not(:disabled) {
