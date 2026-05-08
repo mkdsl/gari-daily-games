@@ -1,0 +1,21 @@
+{
+  "name": "Aforizam Generator",
+  "genre": "Generative text toy",
+  "date": "2026-05-08",
+  "description": "Klikneš, dobiješ rečenicu koja te zaustavi. Pera Period piše, Kluboslavija distribuira.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-08-aforizam-generator/",
+  "modules": {
+    "src/main.js": "Entry point — wires sve module, auto-load prvog aforizama",
+    "src/config.js": "Pacing konstante: fade timing, debounce",
+    "src/generator.js": "Aforizam bank (52 aforizama) + Fisher-Yates shuffle + session tracking",
+    "src/share.js": "Clipboard copy + Web Share API fallback + toast notification",
+    "src/ui.js": "DOM tranzicije: fade out/in, state management, toast prikaz",
+    "src/input.js": "Button click handlers: next i copy",
+    "styles/base.css": "Layout, full-screen centering, responsive",
+    "styles/ui.css": "Dugmad, toast, Kluboslavija watermark",
+    "styles/game.css": "Fade animacije, aforizam tipografija"
+  },
+  "line_counts": { "total_js": 0, "total_css": 0 },
+  "beta_score": null,
+  "status": "in_progress"
+}

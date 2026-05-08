@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aforizam Generator — Pera Period × Kluboslavija</title>
+  <meta name="description" content="Klikneš, dobiješ rečenicu koja te zaustavi." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/ui.css" />
+  <link rel="stylesheet" href="styles/game.css" />
+</head>
+<body>
+  <div id="app">
+    <div id="aforizam-card">
+      <p id="aforizam-text"></p>
+    </div>
+    <div id="controls">
+      <button id="btn-next">Sledeći</button>
+      <button id="btn-copy">Kopiraj za IG</button>
+    </div>
+    <div id="toast" aria-live="polite"></div>
+    <footer id="watermark">Pera Period × Kluboslavija</footer>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
