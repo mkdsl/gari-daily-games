@@ -1,0 +1,24 @@
+{
+  "name": "DJ za Pultom",
+  "genre": "Idle/Incremental",
+  "date": "2026-05-09",
+  "description": "Ti si za pultom. Šest sati. Bez pauze. Kupi upgrades, klikni Next Track, drži crowd energy iznad nule.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-09-dj-za-pultom/",
+  "modules": {
+    "src/config.js": "Sve GDD konstante: zone definicije, upgrade tabela, trajanje igre, click parametri, offline cap — jedini izvor istine za brojeve.",
+    "src/state.js": "Singleton state objekat sa getState/setState, save/load u localStorage, offline formula pri učitavanju, i helper funkcije za pasivnu retenciju, trenutnu zonu i drain.",
+    "src/main.js": "Entry point i game loop: init(), requestAnimationFrame petlja sa delta-time, tick logika (energija, novčići, win/fail provjera), i koordinacija svih modula.",
+    "src/input.js": "Svi input handleri: Next Track klik sa cooldownom i touch podrškom, toggle upgrade drawera, i event delegacija za kupovinu upgradea.",
+    "src/render.js": "Canvas vizualizacija: crtanje crowd energy bara, zone indikatora, beat animacije i partikl efekata — čisti draw pozivi bez state mutacije.",
+    "src/ui.js": "DOM update funkcije: updateUI() osvježava HUD (energy, coins, timer, zona), prikazuje upgrade listu sa stanjem kupljeno/dostupno/skupo, i renderuje end screen.",
+    "src/audio.js": "Web Audio API omotač: proceduralni beat loop, pitch/BPM modulacija prema crowd energy, sfx za klik i upgrade, graceful fallback ako audio nije dostupan.",
+    "src/systems/upgrades.js": "Logika kupovine upgradea: canBuy(), buyUpgrade() s dedukcijom coins i dodavanjem u purchased, i getAvailableUpgrades() filtriran po trenutnoj zoni.",
+    "src/systems/zones.js": "Zone lifecycle: getZoneByTime(), provjera zone tranzicija, emitovanje zone-change eventa i primjena multiplier modifikatora na drain računicu.",
+    "styles/base.css": "Reset, CSS varijable (paleta, font, spacing tokeni), body layout i utility klase koje dijele svi ostali stylesheet fajlovi.",
+    "styles/ui.css": "Stilovi za HUD elemente, upgrade drawer, dugmad, tooltip, disabled stanja i animacije kupovine — sve što je DOM/UI, ne canvas.",
+    "styles/game.css": "Canvas kontejner pozicioniranje, zone-specifični colour grading overlay, end-screen modal i responsive breakpoints za mobile pult layout."
+  },
+  "line_counts": { "total_js": null, "total_css": null },
+  "beta_score": null,
+  "status": "in_progress"
+}
