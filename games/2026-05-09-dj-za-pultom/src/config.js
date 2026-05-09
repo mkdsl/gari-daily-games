@@ -1,15 +1,15 @@
 // config.js — jedini izvor istine za sve GDD konstante
 // Nema logike ovdje, samo podaci.
 
-export const GAME_DURATION_S = 21600; // 6 sati
+export const GAME_DURATION_S = 21600; // 6 sati u sekundama
 
-export const CLICK_ENERGY      = 2.5;
-export const CLICK_COINS        = 5;
-export const CLICK_COOLDOWN_MS  = 3000;
+export const CLICK_ENERGY     = 2.5;
+export const CLICK_COINS      = 5;
+export const CLICK_COOLDOWN_MS = 3000;
 
 export const PASSIVE_COINS_PER_S = 1.0;
 
-export const OFFLINE_CAP_S = 1800; // max 30 min offline
+export const OFFLINE_CAP_S = 1800; // max 30 min offline progresa
 
 export const INITIAL_ENERGY = 50.0;
 
@@ -21,9 +21,9 @@ export const INITIAL_ENERGY = 50.0;
  * @typedef {Object} Zone
  * @property {string} id
  * @property {string} name
- * @property {number} start_s  — početak u sekundama
- * @property {number} end_s    — kraj u sekundama (ekskluzivno)
- * @property {number} drain    — base drain /s (energy)
+ * @property {number} start_s  — početak zone u sekundama
+ * @property {number} end_s    — kraj zone u sekundama (ekskluzivno)
+ * @property {number} drain    — base drain energy/s
  * @property {number} mult     — drain multiplikator
  */
 
@@ -63,9 +63,9 @@ export const ZONES = [
  * @typedef {Object} Upgrade
  * @property {string} id
  * @property {string} name
- * @property {number} effect       — pasivna retencija energy /s
- * @property {number} cost         — cijena u MC
- * @property {string} zone         — zona ID u kojoj se otključava
+ * @property {number} effect   — pasivna retencija energy/s
+ * @property {number} cost     — cijena u Music Coinima
+ * @property {string} zone     — zona ID u kojoj se otključava
  */
 
 /** @type {Upgrade[]} */
