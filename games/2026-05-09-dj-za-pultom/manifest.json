@@ -4,21 +4,26 @@
   "date": "2026-05-09",
   "description": "Ti si za pultom. Šest sati. Bez pauze. Kupi upgrades, klikni Next Track, drži crowd energy iznad nule.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-09-dj-za-pultom/",
+  "kluboslavija_branded": true,
   "modules": {
     "src/config.js": "Sve GDD konstante: ZONES array, UPGRADES tabela, trajanje igre, klik parametri, pasivni prihod i offline cap — jedini izvor istine za sve brojeve.",
     "src/state.js": "Singleton state objekat sa getState/setState, save/load u localStorage, offline formula pri učitavanju i helperi getPassiveRetention/getCurrentZone/getZoneDrain.",
-    "src/main.js": "Ulazna tačka igre: init(), requestAnimationFrame game loop sa delta-time capom, tick logika (drain energije, pasivni coins, win/fail detekcija) i koordinacija svih modula.",
+    "src/main.js": "Ulazna tačka igre: init(), tick logika (drain energije, pasivni coins, win/fail detekcija) i koordinacija svih modula.",
     "src/input.js": "Svi input handleri: Next Track klik sa touch/click anti-ghost zaštitom i cooldown vizualom, toggle upgrade drawera sa swipe-up/down gestama i buy event delegacijom.",
-    "src/render.js": "Canvas renderer: vizualizacija crowd energy bara, zone indikatora, beat-sync animacija i partikelnih efekata publike — čisti draw pozivi bez mutacije statea.",
-    "src/ui.js": "DOM update funkcije: updateUI() osvježava HUD (energy, coins, timer, zona), renderuje upgrade listu sa stanjem kupljeno/dostupno/skupo, prikazuje end-game overlay.",
-    "src/audio.js": "Web Audio API omotač: proceduralni beat loop moduliran crowd energijom, SFX za klik i upgrade kupovinu, graceful fallback ako audio kontekst nije dostupan.",
-    "src/systems/upgrades.js": "Logika kupovine upgradeova: canBuy() provjera resursa i zone, buyUpgrade() sa dedukcijom coina i dodavanjem u purchased, getAvailableUpgrades() po zoni.",
-    "src/systems/zones.js": "Zone lifecycle: checkZoneTransition() poredeći stari/novi elapsed_s, emitovanje zone-change eventa za audio/vizuelne efekte pri prelasku u Vrhunac i After Hours.",
-    "styles/base.css": "Reset, CSS custom properties (paleta boja, tipografija, spacing tokeni), body layout grid i utility klase dijeljene između svih stylesheet fajlova.",
-    "styles/ui.css": "Stilovi za sve HUD elemente: energy bar, coin counter, timer, zone label, upgrade drawer, dugmad sa cooldown animacijom, disabled stanja i tooltip.",
-    "styles/game.css": "Canvas kontejner pozicioniranje, zone-specifični colour grading overlayevi, end-screen modal stilovi i responsive breakpointi za mobilni pult layout."
+    "src/render.js": "Canvas renderer: pult odozgo sa rotirajućim vinilima, BPM counter, crowd masa blokovi, Avala silhueta u after_hours zoni — sve Canvas draw pozivi.",
+    "src/ui.js": "DOM HUD: top-bar (sat+coins), energy bar, zona badge, track button, upgrade drawer sa karticama — initUI(), updateHUD(), showScreen(), hideScreen(), setBodyZone().",
+    "src/audio.js": "Web Audio API: ambient loop po zoni (zagrevanje/vrhunac/after_hours), SFX za klik/upgrade/zona-tranziciju/win/fail, mute toggle, graceful degrade.",
+    "src/systems/upgrades.js": "Logika upgradeova: canBuyUpgrade(), buyUpgrade(), getAvailableUpgrades() filtrira po zona-indeksu, getPurchasedUpgrades().",
+    "src/systems/zones.js": "Zone lifecycle: checkZoneTransition(), getZoneProgress(), formatElapsed() — čiste funkcije bez side-effecta.",
+    "styles/base.css": "Reset, CSS custom properties (paleta #0d1b2a / #ff8c00 / #e040fb), body layout, zona body klase.",
+    "styles/ui.css": "HUD komponente: top-bar, energy bar (3 boje), zona badge, track button pill (magenta/disabled), upgrade drawer slide-up.",
+    "styles/game.css": "Canvas glow animacije, zona fade, win/fail modal fade-in, BPM flicker, prefers-reduced-motion reset."
   },
-  "line_counts": { "total_js": null, "total_css": null },
-  "beta_score": null,
-  "status": "in_progress"
+  "line_counts": {
+    "total_js": 1040,
+    "total_css": 330
+  },
+  "beta_score": 3.5,
+  "post_fix_score": 7.0,
+  "status": "released"
 }
