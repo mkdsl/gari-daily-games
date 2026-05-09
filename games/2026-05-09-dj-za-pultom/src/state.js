@@ -8,10 +8,14 @@ import {
 } from './config.js';
 
 // ---------------------------------------------------------------------------
-// Pomoćne funkcije (ne exportuju se — interno)
+// Konstante
 // ---------------------------------------------------------------------------
 
 const STORAGE_KEY = 'dj-za-pultom';
+
+// ---------------------------------------------------------------------------
+// Interni helperi
+// ---------------------------------------------------------------------------
 
 /** Clamp float u [min, max] */
 function clamp(val, min, max) {
@@ -19,34 +23,34 @@ function clamp(val, min, max) {
 }
 
 // ---------------------------------------------------------------------------
-// Default state — koristi se pri prvom pokretanju
+// Default state — koristi se pri prvom pokretanju ili nevaljanom save-u
 // ---------------------------------------------------------------------------
 
 function defaultState() {
   return {
-    crowd_energy:  INITIAL_ENERGY,
-    music_coins:   0,
-    elapsed_s:     0,
-    purchased:     [],          // string[] — ID-ovi kupljenih upgrades
-    last_save_ts:  Date.now(),
-    phase:         'menu',      // 'menu' | 'playing' | 'win' | 'fail'
+    crowd_energy: INITIAL_ENERGY,  // 50.0
+    music_coins:  0,
+    elapsed_s:    0,
+    purchased:    [],              // string[] — ID-ovi kupljenih upgrades
+    last_save_ts: Date.now(),
+    phase:        'menu',          // 'menu' | 'playing' | 'win' | 'fail'
   };
 }
 
 // ---------------------------------------------------------------------------
-// Interni singleton
+// Singleton
 // ---------------------------------------------------------------------------
 
 let _state = defaultState();
 
 // ---------------------------------------------------------------------------
-// Public API
+// Public API — getState / setState
 // ---------------------------------------------------------------------------
 
 /**
- * Vraća kopiju trenutnog statea.
- * Kopija — ne mutiraj direktno, koristi setState().
- * @returns {typeof _state}
+ * Vraća shallow kopiju trenutnog statea.
+ * Ne mutiraj direktno — koristi setState().
+ * @returns {ReturnType<typeof defaultState>}
  */
 export function getState() {
   return { ..._state, purchased: [..._state.purchased] };
@@ -54,7 +58,7 @@ export function getState() {
 
 /**
  * Shallow merge parcijalnog objekta u state.
- * @param {Partial<typeof _state>} partial
+ * @param {Partial<ReturnType<typeof defaultState>>} partial
  */
 export function setState(partial) {
   _state = { ..._state, ...partial };
@@ -69,18 +73,17 @@ export function setState(partial) {
  * Ažurira last_save_ts na trenutni timestamp.
  */
 export function saveState() {
-  const toSave = { ..._state, last_save_ts: Date.now() };
-  _state.last_save_ts = toSave.last_save_ts;
+  _state.last_save_ts = Date.now();
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(_state));
   } catch (_e) {
-    // localStorage nedostupan (private mode itd.) — tiho nastavi
+    // localStorage nedostupan (private mode, quota) — tiho nastavi
   }
 }
 
 /**
  * Učitava state iz localStorage i primjenjuje offline formulu.
- * Ako nema sačuvanog statea, postavlja default.
+ * Ako nema sačuvanog statea ili je nevaljan, postavlja default.
  */
 export function loadState() {
   let raw = null;
@@ -103,7 +106,7 @@ export function loadState() {
     return;
   }
 
-  // Validacija — ako fale ključni fieldi, resetuj
+  // Validacija obaveznih polja
   if (
     typeof parsed.crowd_energy !== 'number' ||
     typeof parsed.elapsed_s    !== 'number' ||
@@ -113,41 +116,33 @@ export function loadState() {
     return;
   }
 
-  // Postavi učitani state kao osnovu
-  _state = {
-    ...defaultState(),
-    ...parsed,
-  };
+  // Merge sa defaultom — zaštita od novih polja koja ne postoje u starom save-u
+  _state = { ...defaultState(), ...parsed };
 
   // --- Offline formula ---
-  // Primjenjuje se samo ako je igra bila u toku
+  // Primjenjuje se samo kada je igra bila aktivno u toku
   if (_state.phase === 'playing') {
-    const now              = Date.now();
-    const raw_offline_s    = (now - _state.last_save_ts) / 1000;
-    const offline_s        = Math.min(raw_offline_s, OFFLINE_CAP_S);
+    const now           = Date.now();
+    const raw_offline_s = (now - _state.last_save_ts) / 1000;
+
+    // Korak 1: cap na 1800s
+    const offline_s = Math.min(raw_offline_s, OFFLINE_CAP_S);
 
     if (offline_s > 0) {
-      // MC zarađeni pasivno
+      // Korak 2: pasivni MC
       const mc_earned = PASSIVE_COINS_PER_S * offline_s;
 
-      // Pasivna retencija od kupljenih upgrades
-      const passive_ret = _getPassiveRetentionFromPurchased(_state.purchased);
+      // Korak 3: energija — (retencija - drain) * offline_s
+      const passive_ret    = _calcPassiveRetention(_state.purchased);
+      const zone_drain_ps  = _calcZoneDrainAtTime(_state.elapsed_s);
+      const energy_delta   = (passive_ret - zone_drain_ps) * offline_s;
 
-      // Neto promjena energije (može biti negativna)
-      const zone_drain_rate = _getZoneDrainAtTime(_state.elapsed_s);
-      const energy_delta    = (passive_ret - zone_drain_rate) * offline_s;
-
-      // Primijeni — offline mod ne može uzrokovati FAIL, clamp na 0
-      _state.music_coins  = _state.music_coins + mc_earned;
+      // Korak 4: clamp — offline FAIL nije moguć
       _state.crowd_energy = clamp(_state.crowd_energy + energy_delta, 0.0, 100.0);
+      _state.music_coins  = _state.music_coins + mc_earned;
 
-      // Napredak vremena u offline modu — skalje tick
-      // (tempo igre traje dok si offline, ali ne smije prekoračiti kraj)
-      const new_elapsed = Math.min(
-        _state.elapsed_s + offline_s,
-        21600
-      );
-      _state.elapsed_s = new_elapsed;
+      // Napredi elapsed (ne smije preći kraj igre)
+      _state.elapsed_s = Math.min(_state.elapsed_s + offline_s, 21600);
     }
   }
 
@@ -155,19 +150,19 @@ export function loadState() {
 }
 
 // ---------------------------------------------------------------------------
-// State helper funkcije — koriste se iz main.js i systems/
+// State helper funkcije — exportuju se za main.js i systems/
 // ---------------------------------------------------------------------------
 
 /**
- * Vraća sumu pasivnih retention efekata svih kupljenih upgrades.
+ * Suma pasivnih retention efekata svih kupljenih upgrades.
  * @returns {number} energy/s
  */
 export function getPassiveRetention() {
-  return _getPassiveRetentionFromPurchased(_state.purchased);
+  return _calcPassiveRetention(_state.purchased);
 }
 
 /**
- * Vraća zonu koja odgovara trenutnom elapsed_s iz statea.
+ * Zona koja odgovara trenutnom elapsed_s.
  * @returns {import('./config.js').Zone}
  */
 export function getCurrentZone() {
@@ -175,34 +170,34 @@ export function getCurrentZone() {
 }
 
 /**
- * Vraća efektivni drain (drain * mult) za trenutnu zonu.
+ * Efektivni drain (drain * mult) za trenutnu zonu.
  * @returns {number} energy/s
  */
 export function getZoneDrain() {
-  return _getZoneDrainAtTime(_state.elapsed_s);
+  return _calcZoneDrainAtTime(_state.elapsed_s);
 }
 
 // ---------------------------------------------------------------------------
-// Interni helperi (ne exportuju se)
+// Privatni kalkulatori (ne exportuju se)
 // ---------------------------------------------------------------------------
 
 /**
  * @param {string[]} purchased
  * @returns {number}
  */
-function _getPassiveRetentionFromPurchased(purchased) {
+function _calcPassiveRetention(purchased) {
   return UPGRADES
     .filter(u => purchased.includes(u.id))
     .reduce((sum, u) => sum + u.effect, 0);
 }
 
 /**
+ * Pronalazi zonu za dato vrijeme.
+ * Iterira od zadnje zone prema prvoj — zadnja zona je fallback.
  * @param {number} elapsed_s
  * @returns {import('./config.js').Zone}
  */
 function _getZoneAtTime(elapsed_s) {
-  // Pronađi zonu čiji interval pokriva elapsed_s
-  // Zadnja zona je fallback (after hours pokriva do kraja)
   for (let i = ZONES.length - 1; i >= 0; i--) {
     if (elapsed_s >= ZONES[i].start_s) {
       return ZONES[i];
@@ -213,9 +208,9 @@ function _getZoneAtTime(elapsed_s) {
 
 /**
  * @param {number} elapsed_s
- * @returns {number} efektivni drain /s
+ * @returns {number} efektivni drain/s
  */
-function _getZoneDrainAtTime(elapsed_s) {
+function _calcZoneDrainAtTime(elapsed_s) {
   const zone = _getZoneAtTime(elapsed_s);
   return zone.drain * zone.mult;
 }
