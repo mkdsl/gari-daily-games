@@ -3,7 +3,7 @@
  * Pera Piksel + Jova jQuery | Gari Daily Games
  */
 
-import { getCurrentZone } from '../../state.js';
+import { getCurrentZone } from '../state.js';
 
 // --- Konstante ---
 const ZONE_COLORS = {
