@@ -37,12 +37,25 @@ function _endGame(type) {
   if (type === 'win') playWin(); else playFail();
   const state = getState();
   const zone = getCurrentZone();
-  showScreen(type, {
-    elapsed: formatElapsed(state.elapsed_s),
-    peak_zone: zone.name,
-    total_clicks: state.total_clicks || 0,
-    coins_earned: Math.floor(state.music_coins),
-  });
+
+  if (type === 'win') {
+    showScreen(type, {
+      elapsed_s: state.elapsed_s,
+      peakZone: zone.id,
+      totalClicks: state.total_clicks || 0,
+      maxEnergy: state.max_energy || state.crowd_energy || 0,
+      shareText: `Odslužio/la sam 6h smenu bez incidenta. Floor je bio pun. 🎧 #DJzaPultom`,
+    });
+  } else {
+    showScreen(type, {
+      elapsed_s: state.elapsed_s,
+      peakZone: zone.id,
+      totalClicks: state.total_clicks || 0,
+      maxEnergy: state.max_energy || state.crowd_energy || 0,
+      shareText: `Floor se ispraznio u ${zone.name} nakon ${formatElapsed(state.elapsed_s)}. Sledeći put — bolji USB. #DJzaPultom`,
+      onRetry: () => { location.reload(); },
+    });
+  }
 }
 
 function _tick() {
@@ -57,7 +70,10 @@ function _tick() {
   const newEnergy = Math.max(0, Math.min(100, state.crowd_energy - netDrain));
   const newCoins = state.music_coins + PASSIVE_COINS_PER_S;
 
-  setState({ elapsed_s: newElapsed, crowd_energy: newEnergy, music_coins: newCoins });
+  // Prati maksimalnu energiju
+  const maxEnergy = Math.max(state.max_energy || 0, newEnergy);
+
+  setState({ elapsed_s: newElapsed, crowd_energy: newEnergy, music_coins: newCoins, max_energy: maxEnergy });
 
   const transition = checkZoneTransition(prevElapsed, newElapsed);
   if (transition) {
