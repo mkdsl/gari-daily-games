@@ -2,7 +2,7 @@
 
 ## Bug 1 — CRITICAL: config.js STORAGE_PREFIX konzistentnost
 **Problem:** `claimStamp()` u `state.js` direktno je pisao u localStorage koristeći `safeSet(STORAGE_PREFIX + slug, record)`, duplicirajući logiku koju SDK već ima u `utisniPecat()`. Ovo je rizik za konzistentnost: svaka promena SDK formata zapisa ne bi bila reflektovana u manualnom claim-u.
-**Fix:** Situacija A — `config.js` već eksportuje `'pasos_stamp_'` (identično SDK-ovom internom prefiksu), dakle nema key buga. Ipak, `claimStamp()` je refaktorisan da poziva `utisniPecat(slug, { method: 'manual' })` iz SDK-a umesto direktnog `safeSet`, eliminišući duplikaciju. Import dodat: `utisniPecat` pored već postojećeg `imaPecat`.
+**Fix:** Situacija A — `config.js` eksportuje `'pasos_stamp_'` (identično SDK-ovom internom prefiksu), dakle nema key buga. `claimStamp()` je refaktorisan da poziva `utisniPecat(slug, { method: 'manual' })` iz SDK-a umesto direktnog `safeSet`, eliminišući duplikaciju. Import dodat: `utisniPecat` pored već postojećeg `imaPecat`.
 **Fajlovi:** `games/2026-05-10-cross-event-pasos/src/state.js`
 
 ## Bug 2 — MEDIUM: html2canvas CDN bez null-check
