@@ -1,0 +1,549 @@
+/* ui.css — passport korice, stranice, pečati, badges */
+
+/* --- Cover --- */
+.cover-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  perspective: 800px;
+}
+
+.passport-cover {
+  background: var(--color-dark-red);
+  border: 3px solid var(--color-gold);
+  border-radius: var(--radius);
+  width: var(--passport-w);
+  height: var(--passport-h);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  user-select: none;
+  transform-origin: left center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.passport-cover-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.passport-emblem {
+  font-size: 3rem;
+  color: var(--color-gold);
+  line-height: 1;
+}
+
+.passport-title {
+  color: var(--color-gold);
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  letter-spacing: 6px;
+  text-align: center;
+}
+
+.passport-subtitle {
+  color: var(--color-gold);
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  opacity: 0.7;
+}
+
+.passport-org {
+  color: var(--color-gold);
+  font-size: 1rem;
+  letter-spacing: 4px;
+  margin-top: 8px;
+}
+
+.passport-tagline {
+  color: var(--color-gold);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  opacity: 0.5;
+  margin-top: 20px;
+}
+
+/* --- Passport Main --- */
+.passport-main {
+  background: #f5f0e8;
+  border: 2px solid var(--color-gold);
+  border-radius: var(--radius);
+  width: var(--passport-w);
+  max-height: var(--passport-h);
+  overflow-y: auto;
+  color: #2a2a2a;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  scrollbar-width: thin;
+}
+
+.passport-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--color-dark-red);
+  border-bottom: 2px solid var(--color-gold);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.passport-main-title {
+  color: var(--color-gold);
+  font-size: 0.85rem;
+  letter-spacing: 5px;
+}
+
+/* --- Profile --- */
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px dashed #ccc;
+  background: #fff;
+}
+
+.profile-avatar {
+  font-size: 2.5rem;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-gold);
+  border-radius: 50%;
+  background: #f5f0e8;
+  flex-shrink: 0;
+}
+
+.profile-avatar.has-frame {
+  box-shadow: 0 0 0 3px var(--color-gold), 0 0 12px rgba(201,168,76,0.6);
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #1a1a1a;
+}
+
+.profile-date {
+  font-size: 0.7rem;
+  color: #777;
+  letter-spacing: 1px;
+}
+
+.profile-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.badge {
+  font-size: 0.6rem;
+  background: var(--color-dark-red);
+  color: var(--color-gold);
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* --- Stamps --- */
+.stamps-section {
+  padding: 16px;
+}
+
+.stamps-label {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: #999;
+  margin-bottom: 12px;
+}
+
+.stamps-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+.stamp-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+
+.stamp-item:hover { transform: scale(1.05); }
+
+.stamp {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 4px dashed currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+}
+
+.stamp.empty {
+  opacity: 0.3;
+  border-style: dashed;
+  background: transparent;
+}
+
+.stamp.claimed {
+  border-style: solid;
+  opacity: 1;
+}
+
+.stamp-name {
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  color: #555;
+  text-align: center;
+  max-width: 85px;
+  line-height: 1.3;
+}
+
+.stamp-date {
+  font-size: 0.55rem;
+  color: #999;
+  letter-spacing: 1px;
+}
+
+/* --- Progress --- */
+.progress-section {
+  padding: 0 16px 16px;
+}
+
+.progress-bar-wrap {
+  background: #ddd;
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #2D6A4F, #C9A84C);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.progress-label {
+  font-size: 0.65rem;
+  color: #777;
+  letter-spacing: 2px;
+  text-align: right;
+}
+
+/* --- Rewards --- */
+.rewards-section {
+  padding: 0 16px 20px;
+  border-top: 1px dashed #ccc;
+}
+
+.rewards-title {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: #999;
+  margin: 12px 0 10px;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+.reward-item.locked {
+  background: #eee;
+  color: #aaa;
+  border: 1px dashed #ccc;
+}
+
+.reward-item.unlocked {
+  background: #fff8e6;
+  color: #4a3000;
+  border: 1px solid var(--color-gold);
+}
+
+.reward-item-icon { font-size: 1.2rem; }
+.reward-item-label { flex: 1; }
+.reward-item-req { font-size: 0.6rem; opacity: 0.7; }
+
+/* --- Stamp Detail Modal --- */
+.stamp-detail-modal {
+  background: #f5f0e8;
+  border: 2px solid var(--color-gold);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 100%;
+  max-width: 340px;
+  position: relative;
+  color: #2a2a2a;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #555;
+  line-height: 1;
+}
+
+.detail-stamp-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.detail-stamp-big {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 4px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.detail-title {
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  line-height: 1.3;
+}
+
+.detail-date {
+  font-size: 0.65rem;
+  color: #777;
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+.detail-description {
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 16px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 4px;
+  border-left: 3px solid currentColor;
+}
+
+.claim-btn {
+  display: block;
+  width: 100%;
+  background: var(--color-dark-red);
+  color: var(--color-gold);
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  transition: opacity var(--transition);
+}
+
+.claim-btn:hover { opacity: 0.85; }
+
+.claim-warning {
+  display: block;
+  font-size: 0.6rem;
+  color: #999;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.detail-claimed-badge {
+  text-align: center;
+  padding: 10px;
+  color: #2D6A4F;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+
+.detail-game-link {
+  display: block;
+  text-align: center;
+  font-size: 0.7rem;
+  color: #1B3A6B;
+  letter-spacing: 1px;
+  text-decoration: underline;
+  margin-top: 8px;
+}
+
+/* --- Reward Modal --- */
+.reward-modal {
+  background: var(--color-dark-red);
+  border: 3px solid var(--color-gold);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: center;
+  max-width: 300px;
+  width: 100%;
+}
+
+.reward-icon { font-size: 3rem; margin-bottom: 12px; }
+
+.reward-title {
+  color: var(--color-gold);
+  font-size: 1rem;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+.reward-desc {
+  color: #e8e8e8;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* --- Export Modal --- */
+.export-modal-inner {
+  background: #f5f0e8;
+  border: 2px solid var(--color-gold);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 100%;
+  max-width: 340px;
+  position: relative;
+  color: #2a2a2a;
+}
+
+.export-modal-inner h2 {
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+}
+
+.export-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.import-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.export-note {
+  font-size: 0.6rem;
+  color: #999;
+  letter-spacing: 0.5px;
+}
+
+/* --- Onboarding --- */
+.onboarding-modal {
+  background: var(--color-surface);
+  border: 2px solid var(--color-gold);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+}
+
+.onboarding-frames {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.onboarding-frame {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.onboarding-frame.active { display: flex; }
+
+.frame-passport {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.frame-stamp-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+}
+
+.frame-text {
+  color: var(--color-text);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  line-height: 1.6;
+}
+
+.onboarding-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #555;
+  transition: background var(--transition);
+}
+
+.dot.active { background: var(--color-gold); }
+
+/* --- Stamp demo in onboarding --- */
+.stamp-demo-anim {
+  width: 80px;
+  height: 80px;
+}

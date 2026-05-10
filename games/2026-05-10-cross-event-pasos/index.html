@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Kluboslavija Pasoš — GDG 2026</title>
+  <meta name="description" content="Tvoja putna isprava kroz GDG 2026. Svaka igra ostavlja pečat.">
+  <meta property="og:title" content="Kluboslavija Pasoš">
+  <meta property="og:description" content="Koliko si GDG igara odigrao/la?">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+  <!-- html2canvas za screenshot share —  zero-build projekat, CDN OK -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <!-- Onboarding overlay — prikazan samo na first visit -->
+  <div id="onboarding" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Dobrodošao/la u Pasoš">
+    <div class="onboarding-modal">
+      <div class="onboarding-frames">
+        <div class="onboarding-frame active" data-frame="0">
+          <div class="frame-passport empty-passport">📘</div>
+          <p class="frame-text">Svaki event ostavlja trag.</p>
+        </div>
+        <div class="onboarding-frame" data-frame="1">
+          <div class="frame-stamp-demo">
+            <div class="stamp claimed stamp-demo-anim" style="color:#2D6A4F; background:#2D6A4F22; border-color:#2D6A4F;">✓</div>
+          </div>
+          <p class="frame-text">Sakupi pečate, gradi priču.</p>
+        </div>
+        <div class="onboarding-frame" data-frame="2">
+          <div class="frame-passport full-passport">🛂</div>
+          <p class="frame-text">Ovo je tvoj GDG 2026.</p>
+        </div>
+      </div>
+      <div class="onboarding-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+      <button id="onboarding-next" class="btn-primary">Nastavi →</button>
+    </div>
+  </div>
+
+  <!-- Reward unlock overlay -->
+  <div id="reward-overlay" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="reward-modal">
+      <div class="reward-icon" id="reward-icon">🏅</div>
+      <h2 class="reward-title" id="reward-title">Dostignuće otključano!</h2>
+      <p class="reward-desc" id="reward-desc"></p>
+      <button id="reward-close" class="btn-primary">Super!</button>
+    </div>
+  </div>
+
+  <!-- Stamp detail overlay -->
+  <div id="stamp-detail" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="stamp-detail-modal">
+      <button class="close-btn" id="stamp-detail-close" aria-label="Zatvori">✕</button>
+      <div id="stamp-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- Export/Import modal -->
+  <div id="export-modal" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="export-modal-inner">
+      <button class="close-btn" id="export-close" aria-label="Zatvori">✕</button>
+      <h2>Pasoš Podaci</h2>
+      <div class="export-actions">
+        <button id="btn-export-json" class="btn-secondary">↓ Exportuj JSON</button>
+        <label class="btn-secondary import-label">
+          ↑ Importuj JSON
+          <input type="file" id="import-file" accept=".json" hidden>
+        </label>
+        <button id="btn-share-screenshot" class="btn-secondary">📷 Podeli screenshot</button>
+      </div>
+      <p class="export-note">Import nikad ne briše postojeće pečate.</p>
+    </div>
+  </div>
+
+  <!-- Glavni app container -->
+  <div id="app">
+
+    <!-- COVER_CLOSED state -->
+    <div id="passport-cover-wrap" class="cover-wrap">
+      <div class="passport-cover" id="passport-cover" role="button" tabindex="0" aria-label="Otvori pasoš">
+        <div class="passport-cover-inner">
+          <div class="passport-emblem">⬡</div>
+          <div class="passport-title">KLUBOSLAVIJA</div>
+          <div class="passport-subtitle">PASOŠ / PASSPORT</div>
+          <div class="passport-org">GDG 2026</div>
+          <div class="passport-tagline">Tapni za otvaranje</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASSPORT_MAIN state (hidden initially) -->
+    <div id="passport-main" class="passport-main hidden">
+      <div class="passport-header">
+        <button class="btn-icon" id="btn-close-passport" aria-label="Zatvori pasoš">✕</button>
+        <h1 class="passport-main-title">PASOŠ</h1>
+        <button class="btn-icon" id="btn-export" aria-label="Export">⋯</button>
+      </div>
+
+      <!-- Profil sekcija -->
+      <div class="profile-section">
+        <div class="profile-avatar" id="profile-avatar">👤</div>
+        <div class="profile-info">
+          <div class="profile-name" id="profile-name">Klubnik</div>
+          <div class="profile-date" id="profile-date"></div>
+        </div>
+        <div class="profile-badges" id="profile-badges"></div>
+      </div>
+
+      <!-- Pečati -->
+      <div class="stamps-section">
+        <div class="stamps-label">PEČATI / STAMPS</div>
+        <div class="stamps-grid" id="stamps-grid"></div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progress-section">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="progress-label" id="progress-label">0 / 3 pečata</div>
+      </div>
+
+      <!-- Rewards -->
+      <div class="rewards-section" id="rewards-section"></div>
+    </div>
+
+  </div><!-- #app -->
+
+  <!-- BUDUĆE IGRE: import { utisniPecat } from '/gari-daily-games/games/2026-05-10-cross-event-pasos/pasos-sdk.js';
+       utisniPecat('tvoj-slug', { score: 420 });  -->
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

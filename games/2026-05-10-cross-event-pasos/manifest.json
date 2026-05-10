@@ -1,0 +1,22 @@
+{
+  "name": "Kluboslavija Pasoš",
+  "genre": "Meta-collection / Progression",
+  "date": "2026-05-10",
+  "description": "Tvoja putna isprava kroz GDG 2026. Svaka igra ostavlja pečat. 3 pečata čekaju te odmah — ostale zarađuješ jednu po jednu.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-10-cross-event-pasos/",
+  "modules": {
+    "src/main.js": "Init, state machine orchestration, first-visit check",
+    "src/config.js": "Stamp registry (3 retro + format za buduće), reward thresholds",
+    "src/state.js": "localStorage load/save, wraps pasos-sdk.js",
+    "src/ui.js": "DOM rendering — passport pages, stamps, rewards, onboarding",
+    "src/animations.js": "CSS class toggles, timing, state machine transitions",
+    "src/audio.js": "Web Audio API — 5 sound events, lazy init na user gesture",
+    "src/share.js": "html2canvas screenshot, Web Share API, export/import JSON",
+    "styles/base.css": "Layout, responsive (mobile-first 320px), font",
+    "styles/ui.css": "Passport korice, stranice, stamp krugovi, badges, rewards",
+    "styles/game.css": "Keyframe animacije: flipOpen, inkSpread, unlockGlow, onboarding"
+  },
+  "line_counts": { "total_js": 520, "total_css": 280 },
+  "beta_score": null,
+  "status": "in_progress"
+}

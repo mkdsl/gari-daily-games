@@ -1,0 +1,111 @@
+/* base.css — layout, responsive, font */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --passport-w: 320px;
+  --passport-h: 480px;
+  --color-gold: #C9A84C;
+  --color-dark-red: #4A0E1A;
+  --color-bg: #1a1a2e;
+  --color-surface: #16213e;
+  --color-text: #e8e8e8;
+  --color-muted: #888;
+  --radius: 8px;
+  --font-mono: 'Courier New', Courier, monospace;
+  --transition: 0.2s ease;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 16px;
+  overflow-x: hidden;
+}
+
+#app {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+
+/* Overlay backdrop */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+.overlay.hidden { display: none; }
+
+/* Buttons */
+.btn-primary {
+  background: var(--color-gold);
+  color: #1a1a2e;
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px 24px;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: opacity var(--transition);
+}
+.btn-primary:hover { opacity: 0.85; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background var(--transition);
+}
+.btn-secondary:hover { background: rgba(201,168,76,0.12); }
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: var(--color-gold);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background var(--transition);
+}
+.btn-icon:hover { background: rgba(201,168,76,0.15); }
+
+.hidden { display: none !important; }
+
+@media (min-width: 440px) {
+  :root {
+    --passport-w: 400px;
+    --passport-h: 600px;
+  }
+}
