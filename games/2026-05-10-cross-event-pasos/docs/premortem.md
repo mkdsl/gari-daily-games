@@ -1,12 +1,13 @@
 # Premortem — Kluboslavija Pasoš
 
-*Nega Negovanović — kritička analiza, iteracija 1*
+*Autor analize: Nega Negovanović — kritički analitičar tima*
+*Datum: 2026-05-10*
 
 ---
 
 ## Steelmanning koncepta
 
-Kluboslavija Pasoš nije igra — on je **meta-sloj koji igre čini vrednijim retroaktivno**. Svaki GDG event ima svoju standalone igru, ali Pasoš im daje narativ i kontinuitet: bio si tu, ostavio si trag, sezona ima smisao. Ključna snaga je u tome što sistem funkcioniše i za prošlost (retroaktivni claim) i za budućnost (automatski pečat), što znači da ni novi ni stari igrač ne osećaju da su propustili voz. Vizuelni jezik pasoškog booklet-a je odmah čitljiv svakome — nema tutorijal, nema onboarding, kontekst je u samom predmetu. Ako se dobro izvede, Pasoš postaje razlog zašto neko želi da dođe na sledeći event.
+Kluboslavija Pasoš je meta-sloj koji od fragmentisanog niza nezavisnih event-igara pravi koherentnu sezonu sa identitetom. Umesto da svaki event bude izolovano iskustvo koje igrač zaboravi sutradan, Pasoš gradi narativ — "bio sam tamo, imam pečat, gradim priču." Mehanizam je asimetričan po dizajnu: retro pečati (manual claim) za prošlost, automatski pečati za budućnost — što znači da se sistem nadograđuje organički bez retkonstriranja. Vizuelna metafora putne isprave nije slučajna — dokumenti imaju težinu, kolekcija ima gravitas, a screenshot-sharing je viralni vektor koji košta nula development truda. Koncept je ujedno najlakši i najteži deo GDG 2026: lak jer ne mora da bude gameplay, težak jer cela sezona mora da mu veruje da bi imao vrednost.
 
 ---
 
@@ -14,91 +15,105 @@ Kluboslavija Pasoš nije igra — on je **meta-sloj koji igre čini vrednijim re
 
 ### 1. Integritet bez validacije — SREDNJI RIZIK
 
-**Problem:** Dugme "Odigrao/la sam ovo" za prošle igre ne proverava ništa. Igrač koji nikad nije video Avala Run igru može da klikne i dobije pečat.
+**Problem:** Igrač može da klikne "Odigrao/la sam ovo" za Avala Run, Aforizam i DJ za Pultom a da nikad nije otvorio ni jedan od tih URL-ova. Za 60 sekundi dobija 3 pečata i sve nagrade do nivoa "Ekipni Čovek".
 
-**Zašto je problem:** Vrednost pečata počiva na percepciji da su zasluženi. Ako se pročuje da je sistem honor-based, pečati gube statusnu težinu — posebno "Crew Member" tier koji pretenduje da znači nešto unutar zajednice. Nije showstopper jer GDG nije kompetitivni kontekst, ali ako nagrada ima ikakav ekskluzivni signal (avatar frame koji se vidi drugima), lakoća dobijanja taj signal degraduje.
+**Zašto je problem:** Vrednost Pasoša kao artefakta zajednice leži u tome da je pečat *dokaz prisustva*. Ako pečat znači "kliknuo sam dugme", screenshot koji neko deli nema socijalnu težinu — postaje estetski predmet bez memorije. Igrači koji su *zaista* bili na eventima i odigrali igre imaju isti pečat kao onaj ko je prevario sistem. To ne ruši tehničku funkcionalnost, ali ruši semantičku vrednost koja je srž koncepta.
 
-**Alternativa / korekcija:** Umesto tehničke validacije (koja je nemoguća za prošle evente bez backend-a), uvedи **социjalni pritisak kao jedini mehanizam**: tooltip na dugmetu kaže "Ovo je za ljude koji su stvarno bili tu — čast sistema." Uz to, retroaktivni claim je vizuelno drugačiji od auto-pečata — možda drugačija boja ili ikonica koja naznačuje "self-reported". Vrednost sistema ostaje, ali niko ne pravi iluziju verifikacije. Ako se u budućnosti uvede account sistem, ovo se može pooštriti.
+**Zašto NIJE showstopper:** Sistem ne troši servere, nije takmičarski (nema leaderboard), nema materijalne nagrade. Crew member badge u localStorage ne znači ništa van browser-a. Realna populacija koja bi zloupotrebila: minimalna. GDG zajednica nije motivišana da cheats-uje booklet.
+
+**Alternativa / korekcija:** Dve opcije — (A) Prihvati honor system svesno i eksplicitno, dodaj micro-copy uz dugme: *"Ovo je na tvoju savest — pečat se ne može poništiti"* — čime se psihološki troška prebacuje na igrača. (B) Za retro igre implementiraj soft-gating: prikaz URL-a igre sa CTA "Odigraj pa se vrati" pre nego što se pojavi claim dugme, bez tehničke provere ali sa friction-om koji odvraća pasivne claimere. Preporuka: opcija A, brže i iskrenije.
 
 ---
 
 ### 2. Nula pečata na startu = prazna stranica — SREDNJI RIZIK
 
-**Problem:** Igrač koji dolazi na cross-event-pasos URL bez ijedne prethodno odigrane igre vidi prazan booklet sa kružićima bez sadržaja.
+**Problem:** Igrač koji dođe na Pasoš bez ikakvog prethodnog iskustva vidi prazan booklet — možda 0/7 stranica popunjenih. Svaki slot je prazan kružić ili placeholder. Nema konteksta, nema orijentacije, nema nagoveštaja šta bi trebalo da uradi.
 
-**Zašto je problem:** Prazan state je najkritičniji UI momenat — u prvih 10 sekundi igrač odlučuje ostaje li. Booklet koji izgleda poluisprazan bez konteksta može delovati kao broken feature, ne kao poziv. Demotivisanost je realna ako igrač ne vidi path forward — šta da klikne, šta da uradi.
+**Zašto je problem:** Prazan state je najkritičniji UX momenat — korisnik koji ne razume za prvih 10 sekundi šta treba da radi, odlazi. "Ova stranica čeka tvoj dolazak" kao jedina povratna informacija na 7 praznih slotova je poetično ali nije informativno. Postoji realna opasnost da igrač pomisli da je stranica broken.
 
-**Alternativa / korekcija:** Empty state nije prazan — on je **pozivnica**. Svaki prazan slot ima micro-copy: za prošle igre "Igrao si? Potvrdi pečat" (CTA odmah), za buduće "Dolazi [datum] — sačuvaj mesto." Uz to, prva animacija otvaranja pasošа prikazuje ne prazne strane nego **ukratko šta te čeka** — jedan splash screen sa "X eventa, X šansa za pečat." Igrač odmah vidi da ovo nije bug, nego onboarding.
+**Zašto NIJE showstopper:** Retro claim dugmad za 3 prošle igre postoje — dakle čak i novi igrač može *odmah* da počne da puni Pasoš bez čekanja. Taj mehanizam pretvara prazan start u akcioni poziv. Problem je samo ako ta dugmad nisu vizuelno prominentna odmah na startu.
 
----
-
-### 3. Lokalizacija nagrade u localStorage — SHOWSTOPPER (operativno), SREDNJI (dizajn)
-
-**Problem:** `gdg_crew_member: true` i svi pečati žive isključivo u browser localStorage jednog uređaja. Promena uređaja, incognito, clear browsing data — sve briše progres. "Crew Member" titula nema nikakvu portabilnost.
-
-**Zašto je problem:** Ovo je jedini pravi showstopper u tehničkom smislu, ali samo ako se Pasoš prezentuje kao **trajna isprava**. Metafora pasošа podrazumeva dokument koji traje, koji se nosi. localStorage je po definiciji ephemeral. Ako igrač dobije "Crew Member" na laptopu, dođe na event sa telefonom i pokaže prazan pasoš, sistem je sebe diskreditovao.
-
-**Alternativa / korekcija:** Tri opcije, po prioritetu:
-1. **Export koda** — po dostizanju nagrade generiše se kratki alfanumerički kod (hash od slug+datum+random salt, bez backend-a) koji igrač može da snimi i unese na novom uređaju. Nije foolproof ali je jednosmerna portabilnost.
-2. **QR code pasoša** — screenshot koji se skenira importuje state. Kompleksno ali konsistentno sa pasoš metaforom.
-3. **Eksplicitno upozorenje** — u UI jasno stoji "Pasoš živi u ovom browser-u. Sačuvaj screenshot kao rezervu." Ako ne postoji ambicija trajnosti, bar upravljaj očekivanjima.
-
-Minimum koji mora ući u dizajn: opcija 3 + poziv na screenshot share (koji ionako postoji).
+**Alternativa / korekcija:** Uvedi onboarding sekvence koja se pokreće samo pri prvoj poseti (flag u localStorage): kratka animacija (3 frame-a) koja pokazuje prazan Pasoš → pečat koji se utiskuje → popunjen Pasoš. Zatim direct CTA na retro sekciju. Alternativno: empty state tekst umesto praznog kružića koji kaže "Odigraj [naziv igre] da dobiješ ovaj pečat" — konkretno, akciono, bez poetike.
 
 ---
 
-### 4. html2canvas dependency — KOZMETIKA (izvedba), SREDNJI (edge cases)
+### 3. Lokalizacija nagrade u localStorage — SHOWSTOPPER (uslovno)
 
-**Problem:** html2canvas je ~200KB overhead, ima poznate probleme sa custom fontovima, pixel-art renderingom, i shadow-dom elementima. Može da produži load time i da isporuči screenshot koji izgleda lošije od stvarnog UI-a.
+**Problem:** Sve — pečati, profil, nagrade, crew_member status — živi u jednom browseru, na jednom uređaju. Igrač koji menja telefon, briše kolačiće, ili koristi inkognito mod gubi sve. `gdg_crew_member: true` je trofej koji nestaje čišćenjem cache-a.
 
-**Zašto je problem:** Share funkcionalnost je jedini viralni vektor Pasoša. Ako screenshot izgleda grdo (font nije loadovan, boje su off, pixel-art je blurry) — deljeni sadržaj radi suprotno od namere. Na sporim vezama, 200KB extra može da produbi LCP problem.
+**Zašto je problem:** Ako se Pasoš pozicionira kao *dokaz prisustva kroz sezonu*, a taj dokaz može nestati nasumično, onda nije dokaz — onda je privremeni UI state. Igrač koji ponosi pokazuje screenshot u junu, a do septembra kada dođe novi event, nema više ništa u Pasošu. Restart iskustva je demotivišuć. Još ozbiljnije: ako buduće igre čitaju `gdg_crew_member` da bi otključale nešto specijalno — taj benefit je krhak.
 
-**Alternativa / korekcija:** Primarni alternativni plan koji ne zahteva eksternu biblioteku: **pre-generisana SVG/Canvas šablona**. Umesto da renderuješ HTML u sliku, generiši sliku direktno u `<canvas>` koristeći native Canvas API — iscrtaj pozadinu, boje, pečate i tekst programski. Ovo je ~0KB overhead, deterministički output, i radi konzistentno cross-browser. Fallback ostaje html2canvas samo ako native pristup ne može da reprodukuje pixel-art fidelnost. Procena: native Canvas rešenje je ovde 2-3 dana rada ali eliminiše dependency rizik u potpunosti.
+**Zašto je uslovno showstopper:** Ako nagrade ostanu čisto estetske (avatar frame u igri, badge u UI Pasoša) i ne postoje cross-site benefiti koji zavise od localStorage flagova — prihvatljivo je. Postaje showstopper tek ako neka buduća igra kaže *"ako imaš gdg_crew_member dobijaš bonus nivo"* jer taj benefit ne može biti garant.
+
+**Alternativa / korekcija:** Kratkoročno: eksport/import feature — dugme "Sačuvaj Pasoš" koje generiše JSON string koji korisnik može da kopira i uveze na drugom uređaju. Nula backend-a, nula infrastrukture. Srednjeročno: enkodovani URL parametar (base64 state) koji se može bookmarkovati ili podeliti — Pasoš se rekonstruiše iz URL-a. Dugoročno (van scope-a ove igre): GitHub-based auth ili Google Sheet write. Preporuka za MVP: export/import JSON — jedan dan implementacije, eliminiše showstopper.
 
 ---
 
-### 5. Previše placeholder stranica — SREDNJI RIZIK
+### 4. html2canvas dependency — SREDNJI RIZIK
 
-**Problem:** Ako Pasoš ima 10+ budućih event slotova koji su prazni, vizuelni utisak je booklet koji je 80% prazan prostor i 20% sadržaj.
+**Problem:** html2canvas je jedina eksterna biblioteka u projektu. Uvodi ~200KB overhead, ima poznate probleme sa: custom fontovima (pixel font može biti blank), CSS gradijentima, transform animacijama, i cross-origin slikama. Rendering izlaza zavisi od browser verzije i OS-a.
 
-**Zašto je problem:** Kontraintuitivno radi od namere — umesto da motiviše, prazan booklet sugeriše nedovršen proizvod. Specifično na prvoj poseti: igrač otvori pasoš, vidi 3 pečata koja može da claim-uje i 8 praznih slotova bez datuma i bez sadržaja. Pasoš izgleda kao mockup, ne kao produkt.
+**Zašto je problem:** Ako screenshot funkcija ne radi — deli se broken slika ili se share uopšte ne dogodi. To direktno udara na viralni vektor koji je u konceptu identifikovan kao ključni. Pixel art font koji ne renderuje u screenshotu je posebno bolan jer je vizuelni identitet Pasoša zavistan od tog fonta.
 
-**Alternativa / korekcija:** Prikaži samo **poznate evente + jedan "coming soon" slot** koji je vizuelno drugačiji od placeholder-a za konkretan event. Ne prikazuj stranice za evente koji nisu objavljeni — stranice se dodaju kako se eventi objavljuju. Alternativno, ako je statična struktura neophodna, eventi bez datuma imaju **drugačiji vizuelni tretman** (npr. zamagljeno, bez naslova, sa "Season 2026" watermark-om umesto praznog kruga). Ovo čuva doživljaj kompletnog dokumenta.
+**Zašto NIJE showstopper:** html2canvas je de-facto standard za ovaj problem u browser-only projektima. Problemi sa fontovima su rešivi loadom kroz FontFace API pre renderovanja. Ovo je tehnički rizik koji ima jasno rešenje, nije arhitekturalni problem.
+
+**Alternativa / korekcija:** Plan B: umesto canvas screenshota, generiši SVG reprezentaciju Pasoša koji se može downlodovati direktno — SVG ne zavisi od browser rendering, piksel-perfekt je, lightweight. Plan A+ (bolje od html2canvas): koristi OffscreenCanvas + font preloading sekvence:
+```js
+await document.fonts.ready; // čeka da pixel font bude učitan
+html2canvas(element, { useCORS: true, scale: 2 })
+```
+Dodati fallback: ako html2canvas baci error, prikaži "Napravi screenshot ručno" sa highlight animacijom na Pasošu. Nikad ne ostavljaj korisnika sa silent fail.
+
+---
+
+### 5. Placeholder stranice za buduće igre — KOZMETIKA (sa upozorenjem)
+
+**Problem:** Ako Pasoš ima 10+ stranica od kojih su 3 popunjene, a 7+ su prazni slotovi sa "Ova stranica čeka tvoj dolazak" — vizuelni utisak je da je produkt nedovršen, a ne da je sezona u toku.
+
+**Zašto je upozorenje:** Razlika između "nedovršen" i "anticipation building" je isključivo u dizajnu. Ako su prazni slotovi tamni, zaključani, sa lock ikonom i datumom sledećeg eventa — to je anticipation. Ako su svetli prazan krug sa jedinom porukom — to je empty state bez konteksta.
+
+**Zašto je kozmetika:** Ne ruši core loop, ne blokira vrednost, ne remeti tehničku implementaciju. Ovo je čist UX/copy problem.
+
+**Alternativa / korekcija:** Svaki prazni slot treba da ima: (1) naziv budućeg eventa, (2) okvirni datum, (3) vizuelni marker koji ga jasno razlikuje od grešake (npr. "coming soon" ribbon umesto praznog kruga). To pretvara prazan Pasoš u event calendar — drugačiji, ali vredan informacioni artefakt. Bonus: korisnik koji vidi "GDG Hackathon — oktobar 2026" u Pasošu ima razlog da se vrati.
 
 ---
 
 ### 6. Inter-game API bez koordinacije — SHOWSTOPPER
 
-**Problem:** Buduće igre moraju samostalno da znaju i poštuju localStorage slug konvenciju (`gdg_pasos_[slug]`) da bi pečat bio upisan. Ne postoji formalizovana specifikacija — postoji samo ova linija u concept.md.
+**Problem:** Svaka buduća igra mora samostalno da implementira tačan localStorage ključ u tačnom formatu da bi pečat bio upisan. Nema centralnog registra, nema validacije, nema dokumentacije koja se enforciuje. Jedan pogrešan slug (`gdg_pasos_avala_run` umesto `gdg_pasos_avala-run`) i pečat se ne pojavljuje — bez error poruke, bez fallbacka, bez debug alata.
 
-**Zašto je problem:** Ovo je jedini pravi arhitekturni showstopper. Jedan dev koji napravi igru za GDG event u julu 2026, bez pristupa ovom concept.md-u ili bez eksplicitnog briefinga, neće pisati u `gdg_pasos_` namespace. Ili će pogešiti slug. Ili će zaboraviti. Rezultat: pečat se ne pojavljuje u Pasošu, igrač ne razume zašto, sistem je tiho broken. Cross-event integracija koja se oslanja na neformalni dogovor je krhka po definiciji.
+**Zašto je showstopper:** Ovo je distributed system problem bez koordinacionog mehanizma. Svaki dev koji piše sledeću igru mora da: (a) zna da Pasoš postoji, (b) zna tačan format ključa, (c) pravilno implementira write logiku, (d) testira da Pasoš čita taj ključ. Bilo koji od ova 4 koraka može podbaciti tiho. Ako pečat ne dođe automatski za event koji igrač jeste odigrao — sistem je izgubio poverenje i vrednost.
 
-**Alternativa / korekcija:** Mora da postoji **shared JS modul / snippet** koji svaka igra importuje — jednolinijski API:
+**Alternativa / korekcija:** Mora se definisati i distribuisati `pasos-sdk.js` — minimalni JS snippet (< 1KB) koji svaka igra importuje i poziva jednom po završetku:
 ```js
-import { stampPassport } from '../shared/passport.js';
-stampPassport('avala-run', { score: 420 });
+import { utisniPecat } from '/shared/pasos-sdk.js';
+utisniPecat('avala-run', { score: 420 }); // to je sve
 ```
-Modul enkapsulira localStorage logiku, slug normalizaciju, i format objekta. Nije backend, nije server — samo zajednički client-side utility koji živi u repo-u. Svi game devovi dobijaju snippet u brief-u. Bez ovog modula, Pasoš sistem se raspada sa svakom novom igrom koja ne prati standard.
+SDK interno piše ispravni localStorage ključ, ispravni format, sa timestamp-om. Slug validacija se radi u SDK-u (whitelist poznatih evenata ili regex). Dokumentacija SDK-a treba da bude u `shared/README.md` i obavezno pomenuta u dev briefingu za svaku igru. Bez ovog, Pasoš je sistem koji se oslanja na kolektivno pamćenje tima — i to nije sistem, to je nada.
 
 ---
 
-### 7. Zanr "nije prava igra" — KOZMETIKA
+### 7. Zjanr: "Nije pravo igra" — SREDNJI RIZIK
 
-**Problem:** Igrač koji dođe na cross-event-pasos URL očekujući gameplay dobija interaktivni booklet. Klik, animacija, tooltip — ali ne postoji game loop u klasičnom smislu.
+**Problem:** Igrač koji klikne na link za GDG igru i umesto gameplay-a dobije interaktivni booklet može biti zbunjen ili razočaran. Pasoš nema win state, nema izazov, nema loop — to je UI za kolekciju, ne igra.
 
-**Zašto je problem:** Rizik je realan ali manji nego što izgleda. GDG publika koja dolazi na pasoš URL dolazi iz konteksta — videla je link na eventu ili u recap postu, ne iz app store-a. Kontekst uokviruje očekivanja. Pravo razočaranje nastaje samo ako se Pasoš marketinški pozicionira kao "igra" umesto kao "tvoj profil u GDG sezoni".
+**Zašto je problem:** Mismatch između očekivanja ("igra") i isporuke ("booklet") stvara kognitivnu disonancu u prvih 15 sekundi. U tom prozoru korisnik donosi odluku da li ostane ili ode. Ako CTA koji ga je doveo kaže "Igraj Pasoš" — taj mismatch je aktivan.
 
-**Alternativa / korekcija:** Korekcija je **u copy-u, ne u dizajnu**. Nikad ne zovi Pasoš "igrom" — zovi ga "tvojom knjižicom sezone", "GDG putnom ispravom", "personalnim rekordom". Landin page ili meta opis koji kaže "Pratimo GDG 2026 zajedno — svaki event, jedan pečat" ne stvara pogrešna očekivanja. Žanr label "Meta-collection / Progression Experience" iz concept.md je tačan — on samo ne sme da se komunicira kao game.
+**Zašto NIJE showstopper:** Pasoš nije zamena za igru — on je meta-sloj *iznad* igara. Ako je komunikacija prema igraču ispravna ("Tvoj GDG Pasoš", ne "Nova igra"), mismatch nestaje. Ovo je problem framinga, ne problema dizajna.
+
+**Alternativa / korekcija:** Sve komunikacije prema korisniku (email, socijalni post, QR kod na eventu) moraju da koriste tačan jezik: "Otvori svoj Pasoš", "Vidi koliko pečata imaš", nikad "Igraj". U samom UI, animacija otvaranja i haptic feedback (vibrate API na mobilnom) daju osećaj interakcije koja ima težinu bez potrebe za gameplay-em. Razmisli o tome da se doda jedna mini-interakcija pri utisku pečata — zvuk, particle animacija — koja daje satisfakciju čina.
 
 ---
 
-### 8. Naziv: Kluboslavija Pasoš vs Cross-Event Pasoš — SREDNJI RIZIK
+### 8. Naziv: Kluboslavija Pasoš vs Cross-Event Pasoš — KOZMETIKA (sa strateškim implikacijama)
 
-**Problem:** "Kluboslavija Pasoš" vezuje metahiku za specifičan brend/projekat (Kluboslavija), dok slug ostaje `cross-event-pasos`. Ova disonanca sugeriše da naziv još nije stabilan.
+**Problem:** "Kluboslavija Pasoš" je specifičan brend koji vezuje meta-sistem za GDG Srbija/Kluboslavija identitet. "Cross-Event Pasoš" je generički deskriptivni naziv. Ako se sistem proširi van GDG-a, ili ako Kluboslavija brend evoluira, naziv postaje mismatch.
 
-**Zašto je problem:** Ako "Kluboslavija" nije etabliran brend koji GDG publika prepoznaje, naziv zvuči interno — kao dev in-joke koji ne komunicira vrednost spolja. Nasuprot tome, "Cross-Event Pasoš" je deskriptivan i odmah čitljiv. Sa druge strane, ako Kluboslavija ima identitet i community, naziv može biti feature a ne bug — insider signal koji gradi tribal belonging. Problem je nekonzistentnost: concept.md koristi oba naziva u isto vreme.
+**Zašto ima strateških implikacija:** Ako je ambicija da Pasoš postane umbrella sistem za više sezoni ili više zajednica, "Kluboslavija" je previše specifičan i ograničava brendiranje. Ako je ambicija da ovo ostane GDG 2026 Srbija stvar — onda je "Kluboslavija" savršen, jer gradi lokalni identitet i in-group kulturu.
 
-**Alternativa / korekcija:** Donesi odluku pre implementacije jer naziv utiče na: URL strukturu, localStorage namespace (ako se brend ikad menja), marketing copy, i social share tekstove. Preporuka: **"GDG Pasoš 2026"** kao primarni javni naziv (jasan, brandiran, godišnji), a "Kluboslavija" kao flavor/interno ime za hard-core community layer. Slug ostaje `cross-event-pasos` kao tehnički identifier i ne mora da se menja.
+**Zašto je kozmetika u ovom trenutku:** Slug je `cross-event-pasos`, localStorage ključevi su `gdg_pasos_*`, UI naziv je `Kluboslavija Pasoš`. Ova neusklađenost nije problem za MVP ali postaje tehnički dug ako se naziv promeni nakon implementacije (refactoring localStorage ključeva je painful jer postoji live data korisnika).
+
+**Alternativa / korekcija:** Odlučiti odmah, pre implementacije: (A) Kluboslavija Pasoš svuda — slug, ključevi, UI. Jasan GDG identitet, in-group feel, ne skalira van GDG. (B) GDG Sezona Pasoš — skalira po sezonama, neutralno, manje poetično. (C) Zadrži Kluboslavija kao UI brend, slug ostaje `cross-event-pasos`, ali dokumentuj da su ključevi `gdg_pasos_*` namerno namespace-ovani po organizaciji. Preporuka: opcija C — daje slobodu na oba nivoa, ali zahteva eksplicitnu dokumentaciju da ne bi bilo zabune u timu.
 
 ---
 
@@ -106,19 +121,23 @@ Modul enkapsulira localStorage logiku, slug normalizaciju, i format objekta. Nij
 
 **Verdikt: Drži uz korekcije**
 
-Konceptualna osnova je čvrsta — Pasoš rešava realan problem (GDG eventi su izolovani, bez meta-sloja koji ih vezuje) na intuitivan, vizuelno koherentan način. Nije igra koja se takmiči sa igrama, nego sloj koji igrama daje vrednost. To je dobar dizajn.
-
-Međutim, dva showstopper-a moraju biti rešena pre nego što implementacija počne:
+Koncept je solidan, metafora je snažna, a tehnički pristup je proporcionalan ambiciji (browser-only, zero backend, kratka sezona). Dva rizika zahtevaju akciju pre implementacije.
 
 **Blokeri za implementaciju:**
-1. **Shared passport.js modul** — mora da postoji kao zajednički utility koji sve buduće igre importuju. Bez ovog, inter-game koordinacija je neformalni dogovor koji će se pokvariti.
-2. **localStorage ephemeralnost** — mora biti eksplicitno adresirana u UI (upozorenje + screenshot poziv) kao minimum, ili export kod kao bolji minimum. "Crew Member" titula ne može biti pozicionirana kao trajna bez ikakvog mehanizma portabilnosti.
 
-**Ide dalje sa sledećim korekcijama koncepta:**
-- Retroaktivni claim pečati su vizuelno distinktivni od auto-pečata (boja/ikonica), bez pretenzije na verifikaciju
-- Empty state ima aktivni onboarding copy, ne prazan booklet
-- Placeholder stranice za neannounced evente su skrivene ili vizuelno drugačije tretirane
-- Screenshot share je pozicioniran kao "rezervna kopija pasoša", ne samo kao social feature
-- Naziv se finalizuje pre implementacije — preporuka "GDG Pasoš 2026" kao primarni, "Kluboslavija" kao community layer
-- html2canvas se istražuje native Canvas alternativa paralelno sa implementacijom
-- Sav marketing copy izbegava reč "igra" za Pasoš sam po sebi
+1. **Inter-game API standard (Rizik 6)** — Pre nego što se napiše i jedna linija Pasošа, mora postojati `pasos-sdk.js` (ili ekvivalentna dokumentacija sa copy-paste snippet-om) koji svaka buduća igra koristi. Bez ovog, automatski pečati su mrtvo slovo na papiru.
+
+2. **localStorage persistencija (Rizik 3)** — Implementirati export/import JSON feature u MVP scope. Nije opcija — trofej koji nestaje čišćenjem cache-a nije trofej. Jedan dan implementacije, eliminiše strukturalni problem.
+
+**Ide dalje sa sledećim korekcijama:**
+
+- `pasos-sdk.js` u `shared/` direktorijumu sa slug whitelistom i write logikom — obavezno pre implementacije igara
+- Export/import JSON za Pasoš state — u MVP
+- Onboarding animacija pri prvoj poseti (3 frame) + konkretni CTA na retro claim
+- Micro-copy uz retro claim dugme: *"Ovo je na tvoju savest"* (honor system, ne gating)
+- Prazni slotovi dobijaju naziv + datum + "coming soon" vizualni marker
+- html2canvas: `document.fonts.ready` pre renderovanja + silent-fail fallback
+- Sve komunikacije prema korisniku: "Otvori Pasoš" nikad "Igraj Pasoš"
+- Naziv: dokumentovati razliku između UI brenda (Kluboslavija Pasoš) i tehničkog namespace-a (`gdg_pasos_*`) — slug se ne menja
+
+**Šta ostaje kako jeste:** Vizuelna estetika, win condition mapa (3/5/7 pečata), animacija flip efekta, tooltip na pečatima, screenshot sharing kao viralni vektor, ukupni scope i targetirana dužina sesije.
