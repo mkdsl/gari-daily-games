@@ -1,8 +1,6 @@
-# Cross-Event Pasoš — Concept Document
+# Cross-Event Pasoš — Concept
 
-**Autor:** Sine Scenario  
-**Datum:** 2026-05-10  
-**Pipeline faza:** KORAK 1 — Concept
+> *"Svaki pečat je dokaz da si bio tu."*
 
 ---
 
@@ -10,182 +8,164 @@
 
 **Kluboslavija Pasoš**
 
-*("Cross-Event Pasoš" ostaje kao interni kod naziv. Publičko ime je "Kluboslavija Pasoš" — zvuči kao da si član nečeg stvarnog.)*
+*(Cross-Event Pasoš je interni naziv pipeline-a. Za igrača — ovo je Kluboslavija Pasoš: zvanični dokument tvog prisustva u GDG ekosistemu.)*
 
 ---
 
 ## Žanr
 
-Meta-collection / Progression — interaktivno iskustvo sećanja. Nije igra u klasičnom smislu. Ali jeste iskustvo sa emocijom: otvaranje dokumenta koji potvrđuje da si postojao u tim trenucima.
+Meta-collection / Progression Experience
+
+Nije igra u klasičnom smislu — ali je interaktivno iskustvo sa emocijom. Misli na to kao digitalni pasulj koji se sam puni: svaki put kad odigrano nešto, ostaje trag. Pasoš je taj trag.
 
 ---
 
 ## Premisa
 
-Ti si GDG Beograd insider. Ne samo neko ko dođe na event — neko ko igra igre koje prethode eventu, ko ostaje, ko razume šalu sa aforizmima i ko zna zašto DJ kasni. Kluboslavija Pasoš je tvoj lični dokument tog insiderstva. Svaki pečat je dokaz prisustva. Sakupiti ih sve znači — bio/la si tu kroz celu sezonu.
+Ti si Kluboslavac — neko ko prati GDG događaje, igra igrice između predavanja, šali se u Slack kanalima. Svaki GDG event ima svoju igru. Svaka igra ostavlja pečat. A pečati grade priču — tvoju priču u ovoj sezoni GDG-a.
+
+Kluboslavija Pasoš je tvoja putna isprava kroz GDG 2026. Ne možeš da ga lažiraš. Možeš samo da ga zaradiš.
 
 ---
 
 ## Core Gameplay Loop
 
-Igrač otvara stranicu. Pred njim/njom se animirano otvara pixel art pasoš — kao fizička knjižica, stranica po stranica.
-
-Svaka stranica je jedna GDG igra:
-- Vidi pečat (u boji teme te igre)
-- Čita kratki flavor text — jednu rečenicu koja opisuje igru kao uspomenu (*"Trčao/la si uz Avalu. Smeće nije dotaklo pult."*)
-- Ako je igrao/la tu igru: pečat je popunjen, svetao, ima datum
-- Ako nije: pečat je outlinovan, siv, sa dugmetom **"Odigrao/la sam ovo"**
-
-Klikom na dugme → kratka animacija utiskivanja pečata (mast na papiru, zvuk) → localStorage claim se upiše → reward provera se pokreće automatski.
-
-Nakon svake stranice: igrač lista dalje. Na zadnjoj stranici je **Reward zona** — prikazuje šta je otključano, šta sledi.
+1. **Otvoriš Pasoš** — animacija otvaranja booklet-a (flip efekt, stranice se razdvajaju)
+2. **Vidiš stranice** — svaka strana = jedan GDG event. Strane za prošle igre prikazuju ili *prazan kružić* (nije odigrano) ili *pečat u boji* (odigrano)
+3. **Za prošle igre (Avala Run, Aforizam, DJ za Pultom):** ispod svakog pečat-slota stoji dugme — *"Odigrao/la sam ovo"* — klikneš, pečat se utisne uz kratku animaciju tinte koja se širi
+4. **Za buduće igre:** pečat dolazi automatski — igra ga upisuje u localStorage pri prvom završetku
+5. **Gledaš svoju napredak traku** — 3 / 5 / 7 pečata otključavaju nagrade koje se otkrivaju jedna po jedna
+6. **Deliš** — screenshot gumba koji generiše sliku pasoša za IG story
 
 ---
 
 ## Hook
 
-Pasoš te hvata jer nije igra — on je ogledalo. Vidiš šta si sve prošao/la i osećaš da to nije slučajno. A onda vidiš prazan pečat i pomisliš: *"Pa da odem na sledeći event."* To je hook. Ne mehanika — nostalgija za stvarima koje tek treba da se dogode.
+Trenutak kad se pečat utisne — animacija, zvuk, boja — traje svega 2 sekunde. Ali u tih 2 sekunde osećaš: *bio sam tamo.* To je hook. Ne mehanika, nego potvrda. Pasoš ti kaže: "Pamtim te."
 
-Dodatno: share moment. Avatar frame koji se otključa vizuelno je lep i odmah se može screenshot-ovati. Socialna valuta za IG story.
+Zašto bi neko proveo 3–5 minuta ovde? Jer je to prva stvar u GDG game pipeline-u koja pamti šta si radio pre. Sve prethodne igre su bile jednokratne. Ovo je kontinuitet.
 
 ---
 
 ## Vizuelna Estetika
 
-**Stil:** Pixel art + papirna tekstura. Pasoš izgleda kao stvarni dokument — tvrd korice, boja kojom dominira **tamno zelena** (klasični pasoš) sa zlatnim detaljem GDG logoa.
+**Referenca:** Fizički pasoš koji se otvara — bordo korice, unutra kremaste stranice, pečati u tinti.
 
-**Unutrašnje stranice:** Krem/žućkasta boja papira. Svaki pečat ima svoju boju:
-- Avala Run — **narandžasta** (sunce, trka, energija)
-- Aforizam Generator — **plavo-siva** (misao, mediteranski ink)
-- DJ za Pultom — **ljubičasta** (noć, UV svetlo, pult)
-- Buduće igre — **zlatna kontura**, čeka se utiskivanje
+**Paleta:**
+- Korice: tamno bordo (`#4A0E1A`) sa zlatnim tiskom (`#C9A84C`)
+- Stranice: krem (`#F5ECD7`) sa suptilnim grid-linijama
+- Pečati — svaki event ima svoju boju:
+  - Avala Run → zelena šuma (`#3A7D44`)
+  - Aforizam Generator → tamno plava tinta (`#1B3A6B`)
+  - DJ za Pultom → ljubičasta noć (`#5C2D91`)
+  - Buduće igre → gray placeholder sve do otključavanja
 
-**Tipografija:** Serif font za flavor text (osećaj dokumenta), monospace za datume i tehničke detalje.
+**Stil:** Pixel art ali u "premium dokumenta" ključu — pikselizovani detalji koji izgledaju kao gravirani. Ne retro gaming, nego retro državna štamparija.
 
-**Animacija otvaranja:** Pasoš se ne pojavljuje odjednom — leva korica se otvara ka desno, stranice se listaju s laganim inercijskim efektom. Svaki pečat koji se utiskuje ima micro-animaciju: krug koji se širi od centra, kao suha mast koja se upija u papir.
-
-**UI filozofija:** Manje je više. Nema scoreboard-a, nema timera. Samo ti i dokument.
+**Animacije:**
+- Otvaranje Pasoša: flip knjige, 0.6s, ease-in-out
+- Utiskivanje pečata: tinta se širi iz centra, 0.4s, sa blagim blur-om koji nestaje
+- Unlock nagrade: stranica se otvara kao pismo iz koverte
 
 ---
 
 ## Audio Mood
 
-Ambient, suptilno, nikad nametljivo.
+Ambient, suptilno, bez loop-a koji smara.
 
-- **Pozadina:** Lo-fi papirni šum — kao da si u tihoj sobi i listas staru knjigu
-- **Listanje stranica:** Mechanički šuštaj papira, kratko, organski
-- **Utiskivanje pečata:** Dup! — gumeni pečat na papiru. Satisfying, bez ikakve muzike oko njega. Samo taj zvuk.
-- **Reward otključavanje:** Kratka 3-nota melodija u durу — kao kad otvoriš poklon
-- **Nema loop muzike** — tišina je deo estetike. Audio prati akciju, ne ambijent.
+- **Pozadina:** tihi šum kafića / čekaonica — glasovi iz daljine, kašike, koraci
+- **Pečat zvuk:** gumeni pečat na papiru — *thunk* + blag echo
+- **Unlock zvuk:** papir koji se prevrće + kratki fanfar u lo-fi stilu (2–3 note, ne više)
+- **Hover na pečat:** suptilni šum tinte, kao pero na papiru
+
+*Sve zvuke treba da mogu da se ugase jednim klikom — pasoš se često listá u tišini kancelarije.*
 
 ---
 
 ## Win Condition / Reward Mapa
 
-| Pečata | Reward | Opis |
-|--------|--------|------|
-| 1 | Pasoš postoji | Prva stranica je popunjena, osećaj da nešto krećeš |
-| 3 | **Avatar Frame** | CSS pixel art frame koji se prikazuje u reward zoni pasoša — screenshot-ready, deljivo na IG |
-| 5 | **"Ekipni Čovek" badge** | Persona se pojavljuje u pasošu: pixel art silhueta GDG crew-a sa tvojim inicijalima |
-| 7 | **"Crew Member" badge** + skin unlock | Zlatna oznaka u pasošu + `localStorage.setItem('gdg_crew_member', 'true')` — buduće igre čitaju ovo i otključavaju poseban skin automatski |
+| Pečata | Nagrada | Šta se dešava |
+|--------|---------|---------------|
+| 3 | **Specijalni Avatar Frame** | CSS pixel art okvir se pojavljuje u pasošu oko tvoje inicijale-avatar ikone. Možeš da ga screenshot-uješ. |
+| 5 | **Badge: "Ekipni Čovek"** | Stranica pasoša se otvara kao sertifikat — tvoje ime (koje si uneo/la pri prvom posetu) ispisano u pixel-font kaligrafiji. Kopiraš kao sliku. |
+| 7 | **Crew Member** | Posebna stranica pasoša sa holografskim efektom (CSS shimmer). LocalStorage dobija `gdg_crew_member: true` — buduće igre čitaju ovo i otključavaju skin. |
 
-**Progresija je vidljiva sve vreme** — na naslovnoj strani pasoša je brojanik pečata (npr. `3 / 7`), kao broj posećenih zemalja.
+*Nagrade su kumulativne — 7 pečata znači da imaš sve tri.*
 
 ---
 
 ## Interaktivni Elementi
 
-**Klik na popunjen pečat:**  
-Mali popup — flavor card. Prikazuje naziv igre, datum claimа, i jednu rečenicu flavor teksta. Zatvaranje klikom bilo gde.
+**Klik na pečat (već utisnut):**
+Pečat se lagano zumira, pojavljuje se tooltip sa nazivom igre, datumom, i jednom rečenicom opisa eventa. Osećaj: "Prelistavam uspomene."
 
-**Klik na prazan pečat:**  
-Otvarase stranica sa opisom igre i CTA: `→ Igraj` (link na igru) i `✓ Odigrao/la sam ovo` (claim dugme).
+**Klik na prazan slot (buduća igra):**
+Slot se lagano trese (ne, nisi tu bio), pojavljuje se poruka: *"Ova stranica čeka tvoj dolazak."* + link na igru kad bude dostupna.
 
-**Claim dugme flow:**  
-1. Klik → confirm modal (*"Potvrđuješ da si odigrao/la [naziv igre]?"*)
-2. Potvrda → animacija utiskivanja pečata
-3. Pečat prelazi iz sivog u boju igre
-4. Provera reward praga — ako je dostignut, reward animacija
+**Klik na avatar / nagradu:**
+Otvara se modal sa instrukcijama za download/screenshot nagrade.
 
-**Klik na Avatar Frame (reward zona):**  
-Frame se prikazuje fullscreen na tamnoj pozadini sa uputstvom: *"Screenshot ovo i objavi na IG story. Tag: @gdgbeograd"*
+**Dugme "Odigrao/la sam ovo" (retro claim):**
+Jednom kliknut, dugme nestaje zauvek za taj pečat. Pečat se utiskuje. Nema undo-a. To je poenta — izjava, ne potvrdni okvir.
 
-**Animacija otvaranja pasoša (autoplay pri prvom učitavanju):**  
-Traje 1.5 sekundi. Korice se otvaraju, naslovna stranica se fade-uje in. Skip dostupan klikom.
+**Animacija otvaranja:**
+Prvi put kad dođeš na stranicu — korice pasoša su zatvorene. Klikneš (ili tapneš). Booklet se otvori. Tek tada vidiš šta te čeka unutra.
 
 ---
 
 ## Targetirana Dužina Sesije
 
-**3–5 minuta** za prvu posetu (listanje, čitanje, claimovanje prošlih igara).  
-**30–60 sekundi** za povratne posete (provjera novih pečata, otključavanje).  
+**3–5 minuta** pri prvoj poseti (otkrivaš, utiskuješ prošle pečate, gledaš nagrade).
 
-Pasoš ne zadržava — on poziva da se vrati.
+**30–60 sekundi** pri svakom povratku (proveruješ novi pečat posle nove igre).
+
+Pasoš nije igra u kojoj se zadržavaš — on te šalje nazad na igre. To je njegova uloga u ekosistemu.
 
 ---
 
 ## Tehničke Napomene za Jovu
 
-### localStorage Ključevi
+### LocalStorage Ključevi
 
-**Format za prošle igre (hybrid claim — ručni unos):**
 ```json
-{
-  "claimed": true,
-  "claimDate": "2026-05-10",
-  "source": "manual"
-}
-```
-Ključevi:
-- `gdg_pasos_avala-run`
-- `gdg_pasos_aforizam-generator`
-- `gdg_pasos_dj-za-pultom`
+// Pečat za svaku igru — upisuje igra ili ručni claim
+"gdg_pasos_avala-run"       → { "claimed": true, "date": "2026-05-06", "method": "manual" }
+"gdg_pasos_aforizam"        → { "claimed": true, "date": "2026-05-08", "method": "manual" }
+"gdg_pasos_dj-za-pultom"   → { "claimed": true, "date": "2026-05-09", "method": "manual" }
+// Buduće igre — automatski po završetku:
+"gdg_pasos_[slug]"          → { "claimed": true, "date": "YYYY-MM-DD", "method": "auto", "score": 1234 }
 
-**Format za buduće igre (automatski write iz igre):**
-```json
-{
-  "score": 4200,
-  "date": "2026-05-15",
-  "source": "auto"
-}
-```
-Ključ pattern: `gdg_pasos_[SLUG]` — slug je ime foldera igre bez datuma.
+// Korisnički profil (kreiran pri prvom otvaranju pasoša)
+"gdg_pasos_profile"         → { "name": "Marko", "created": "2026-05-10" }
 
-**Reward flags:**
-```
-gdg_crew_member: "true"          // string, ne boolean — localStorage nema tipove
-gdg_pasos_avatar_unlocked: "3"   // broj pečata kad je unlock dostignut
-gdg_pasos_badge_unlocked: "5"
+// Nagrada unlock status
+"gdg_pasos_rewards"         → { "avatar_frame": true, "ekipni_covek": false, "crew_member": false }
+
+// Crew member flag — čitaju buduće igre
+"gdg_crew_member"           → true
 ```
 
-**Pasoš čita sve `gdg_pasos_*` ključeve pri učitavanju** — automatski broji koliko ih ima i prikazuje odgovarajuće reward stanje.
+### Logika claim-a
 
-**Nema server-side persistence** — integritet nije kritičan. Pasoš je lično zadovoljstvo, nije nagradna igra.
+- Pasoš pri učitavanju skenira sve `gdg_pasos_*` ključeve i broji `claimed: true`
+- Retro claim (manual) je jednosmerna operacija — bez validacije, bez servera
+- Integritet nije kritičan (nije nagradna igra) — ali UI treba da komunicira ozbiljnost: dugme se ne poništava, nema "Otkaži"
+- **Za buduće igre:** igra poziva `window.localStorage.setItem('gdg_pasos_[slug]', JSON.stringify({ claimed: true, date, method: 'auto', score }))` pri `gameOver` ili `levelComplete` eventu
 
-### Config fajl (predlog)
+### Slug konvencija
 
-`games/2026-05-10-cross-event-pasos/data/games.json` — lista svih igara sa:
-```json
-[
-  {
-    "slug": "avala-run",
-    "title": "Avala Run",
-    "date": "2026-05-06",
-    "color": "#FF6B35",
-    "flavorText": "Trčao/la si uz Avalu. Smeće nije dotaklo pult.",
-    "url": "/games/2026-05-06-avala-run/",
-    "claimType": "manual"
-  }
-]
-```
-Ovo odvaja podatke od logike — buduće igre se dodaju samo u JSON, bez editovanja JS-a.
+Slug = direktorijum igre bez datumskog prefiksa:
+- `games/2026-05-06-avala-run/` → slug `avala-run`
+- `games/2026-05-08-aforizam-generator/` → slug `aforizam-generator` (ili `aforizam`)
+- `games/2026-05-09-dj-za-pultom/` → slug `dj-za-pultom`
 
-### URL Pasoša
+*Preporuka: definiši kanonski slug list u config JSON-u unutar Pasosa repo foldera da buduće igre imaju referencu.*
 
-`https://mkdsl.github.io/gari-daily-games/games/2026-05-10-cross-event-pasos/`
+### Screenshot / Share
+
+Koristiti `html2canvas` ili `dom-to-image` na `.pasos-share-card` elementu — generisati PNG koji se nudi za download ili direktno za Web Share API na mobilnom.
 
 ---
 
-## Narativna Nota (za pipeline)
-
-Kluboslavija Pasoš nije igra o bodovima. To je igra o **prisustvu**. Svaki pečat kaže: *bio/la sam tu kad se nešto dešavalo.* Na kraju sezone, otvoriti pasoš sa 7 pečata i zlatnim Crew Member badge-om — to je trenutak. I to je dovoljno.
+*Concept: Sine Scenario — 2026-05-10*
+*Pipeline korak: KORAK1 — sledeće: Premortem (Nega)*
