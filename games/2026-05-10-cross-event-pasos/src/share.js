@@ -45,9 +45,30 @@ function onImportFile(e) {
   e.target.value = '';
 }
 
+// ─── Share status helper ────────────────────────────────────────────────────────────
+
+function showShareFallback(msg) {
+  let status = document.getElementById('share-status');
+  if (!status) {
+    status = document.createElement('p');
+    status.id = 'share-status';
+    status.style.cssText = 'color:#c00; font-size:0.7rem; margin-top:8px; text-align:center;';
+    const btn = document.getElementById('btn-share-screenshot');
+    if (btn) btn.parentNode.insertBefore(status, btn.nextSibling);
+    else document.body.appendChild(status);
+  }
+  status.textContent = msg;
+  setTimeout(() => status.remove(), 3000);
+}
+
 // ─── Screenshot share ───────────────────────────────────────────────────────────────
 
 async function shareScreenshot() {
+  if (typeof html2canvas === 'undefined') {
+    showShareFallback('Napravi screenshot ručno — dugme ne radi bez interneta.');
+    return;
+  }
+
   const target = document.querySelector('.passport-main');
   if (!target) return;
 
@@ -55,8 +76,8 @@ async function shareScreenshot() {
   btn.textContent = 'Generisem...';
   btn.disabled = true;
 
+  await document.fonts.ready; // obavezno pre html2canvas
   try {
-    await document.fonts.ready; // obavezno pre html2canvas
     const canvas = await html2canvas(target, { scale: 2, useCORS: true, backgroundColor: '#f5f0e8' });
     canvas.toBlob(async blob => {
       if (!blob) throw new Error('canvas blob null');
@@ -80,12 +101,7 @@ async function shareScreenshot() {
     }, 'image/png');
   } catch (err) {
     console.warn('[share] html2canvas failed:', err);
-    // Silent fail — prikaži poruku
-    const note = document.createElement('p');
-    note.style.cssText = 'color:#c00; font-size:0.7rem; margin-top:8px;';
-    note.textContent = 'Napravi screenshot ručno (screenshot dugme na telefonu).';
-    btn.parentNode.insertBefore(note, btn.nextSibling);
-    setTimeout(() => note.remove(), 5000);
+    showShareFallback('Screenshot ne radi u ovom browser-u — napravi ručno.');
   } finally {
     btn.textContent = '📷 Podeli screenshot';
     btn.disabled = false;

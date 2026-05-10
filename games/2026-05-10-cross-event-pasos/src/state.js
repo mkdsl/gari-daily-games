@@ -1,5 +1,5 @@
 // state.js — localStorage load/save, wraps pasos-sdk
-import { imaPecat } from '../pasos-sdk.js';
+import { utisniPecat, imaPecat } from '../pasos-sdk.js';
 import {
   STAMPS, REWARD_THRESHOLDS,
   STORAGE_PREFIX, STORAGE_PROFILE, STORAGE_REWARDS,
@@ -40,19 +40,12 @@ export function loadStampRecord(slug) {
 }
 
 export function claimStamp(slug) {
-  if (isStampClaimed(slug)) return { success: false, error: 'ALREADY_CLAIMED' };
-  const record = {
-    slug,
-    claimed: true,
-    method: 'manual',
-    date: new Date().toISOString().slice(0, 10),
-    sdk_version: '1.0'
-  };
-  const saved = safeSet(STORAGE_PREFIX + slug, record);
-  if (!saved) return { success: false, error: 'STORAGE_UNAVAILABLE' };
+  if (imaPecat(slug)) return { success: false, error: 'ALREADY_CLAIMED' };
+  const result = utisniPecat(slug, { method: 'manual' });
+  if (!result.success) return result;
   updateRewards();
   persistFullState();
-  return { success: true, record };
+  return { success: true };
 }
 
 export function isStampClaimed(slug) {

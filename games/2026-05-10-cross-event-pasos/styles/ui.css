@@ -321,6 +321,9 @@
   cursor: pointer;
   color: #555;
   line-height: 1;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px;
 }
 
 .detail-stamp-row {
