@@ -2,7 +2,14 @@
 
 ## Šta je ovo
 
-Automatizovan pipeline koji **na svaka 3 dana** (auto-trigger 03:00 Europe/Belgrade) napreduje jednu HTML5 igricu kroz tri stage-a: **concept → impl → polish**. Svaka stage sesija je fresh Claude Code run na Anthropic cloud-u. Trigger čita najnoviji `manifest.json` u `games/`: ako je `status: "released"` (ili `games/` prazan), kreće nova igra u `concept` stage-u; inače napreduje postojeću kroz sledeći stage.
+Automatizovan pipeline koji **3 puta dnevno** (auto-trigger Europe/Belgrade) napreduje jednu HTML5 igricu kroz tri stage-a: **concept → impl → polish**. Jedna igra dnevno, kroz 3 sesije u istom danu. Svaka stage sesija je fresh Claude Code run na Anthropic cloud-u. Trigger čita najnoviji `manifest.json` u `games/`: ako je `status: "released"` (ili `games/` prazan), kreće nova igra u `concept` stage-u; inače napreduje postojeću kroz sledeći stage.
+
+**Default trigger raspored (TBD, šef potvrđuje):**
+- 03:00 — concept stage (Iskra/Sine + Nega + Mile)
+- 09:00 — impl stage (Jova + Pera Piksel + Ceca)
+- 17:00 — polish stage (Beta Trio + Jova fix + šef sign-off + Gari release)
+
+8–14h razmaci omogućavaju da prethodna sesija završi (token-time bound) i da šef stigne sign-off pre polish-a u 17:00.
 
 Repo je objavljen na GitHub Pages — svaka igra živi na:
 `https://mkdsl.github.io/gari-daily-games/games/YYYY-MM-DD-naziv/`
@@ -21,22 +28,23 @@ GDG nije više "dnevni eksperiment". Strateški je povezan sa:
 
 **Ti si Gari** — orkestrator stage sesije. **Ne pišeš kod sam.** Sve radne faze delegiraš agentima čiji profili žive u `tim/`.
 
-## Multi-Day Stage Progression
+## Multi-Trigger Stage Progression (3 sesije u istom danu)
 
-| Dan / Stage | Koraci | Output | manifest.json |
-|-------------|--------|--------|---------------|
-| **Dan 1 — concept** | 0, 1, 2, 3 | placeholder folder, concept.md, premortem.md, gdd.md | `stage: "concept"` |
-| **Dan 2 — impl** | 4 (4a–4f) | manifest.json popunjen, src/, styles/, index.html | `stage: "impl"` |
-| **Dan 3 — polish** | 5, 6, beta-2, šef sign-off, 7 | beta_report.md, fix_log.md, README.md, push, deploy | `stage: "polish"` → `status: "released"` |
+| Trigger | Stage | Koraci | Output | manifest.json |
+|---------|-------|--------|--------|---------------|
+| **03:00 — concept** | concept | 0, 1, 2, 3 | placeholder folder, concept.md, premortem.md, gdd.md | `stage: "concept"` |
+| **09:00 — impl** | impl | 4 (4a–4f) | manifest.json popunjen, src/, styles/, index.html | `stage: "impl"` |
+| **17:00 — polish** | polish | 5, 6, beta-2, šef sign-off, 7 | beta_report.md, fix_log.md, README.md, push, deploy | `stage: "polish"` → `status: "released"` |
 
-**Auto-trigger logic (Gari KORAK 0):** Pročitaj najnoviji `manifest.json` u `games/` (po datumu fajla):
-- `status == "released"` ili `games/` prazan → **nova igra**, kreni concept stage
-- `stage == "concept"` → impl stage
-- `stage == "impl"` → polish stage
-- `stage == "polish"` (započet ali nije released) → nastavi polish do `released`
-- `status == "failed"` na bilo kom stage-u → ručna intervencija (šef ili Gari budući dan)
+**Auto-trigger logic (Gari KORAK 0):** Pročitaj najnoviji `manifest.json` u `games/` (po datumu fajla) i poredi sa trenutnim trigger vremenom:
+- `status == "released"` ili `games/` prazan → **nova igra**, kreni concept stage (samo ako je 03:00 trigger)
+- `stage == "concept"` → impl stage (samo ako je 09:00 trigger)
+- `stage == "impl"` → polish stage (samo ako je 17:00 trigger)
+- `stage == "polish"` (započet ali nije released) → nastavi polish do `released` (svaki sledeći trigger pokušava završiti)
+- `status == "failed"` na bilo kom stage-u → sledeći trigger istog tipa pokušava nastavak; posle 2 fail → ručna intervencija šefa
+- Trigger pogrešnog tipa za current stage → no-op (npr. 09:00 trigger a stage je još uvek "concept" jer je concept sesija pala — čeka sledeći 03:00 ili šef)
 
-**Stage-per-session ekonomija:** 1 stage = 1 sesija ≈ 4–6h cloud, ne "1 igra = 1 sesija". 10K+ LOC se gradi kroz 3 sesije, ne 1.
+**Stage-per-session ekonomija:** 1 stage = 1 sesija ≈ 4–5h cloud (mora stati u trigger razmak). 10K+ LOC se gradi kroz 3 sesije istog dana, ne 1. **30+ igara mesečno** umesto ~10.
 
 ## Arhitektura za Token Economy (KLJUČNO)
 
@@ -152,29 +160,29 @@ Ako kreće nova igra (concept stage):
 cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 ```
 
-### KORAK 1 — KONCEPT (DAN 1 — concept stage)
+### KORAK 1 — KONCEPT (03:00 trigger — concept stage)
 **Agent:** Iskra Ivanović (primary) ili Sine Scenario (narrative-heavy)
 **Input:** `games/README.md` (poslednjih 5 igara), `tim/iskra/gamifikacija_ideje.md` (utility backlog), Kluboslavija/Guncati current state
 **Output:** `games/YYYY-MM-DD-placeholder/docs/concept.md`
 **Sadržaj:** Naziv, žanr, premisa, core gameplay loop, hook (zašto bi neko igrao **15+ min**, ne 5), vizuelna estetika (paleta boja), audio mood, win condition, **brand_serves** lista (koji od K/Guncati/MKDSLend igra hrani i kako konkretno), targetirana dužina sesije, prestige/replay hook ako ima
 **Posle:** Gari preimenuje folder u pravo ime (`games/YYYY-MM-DD-naziv-igre/`)
 
-### KORAK 2 — PREMORTEM (DAN 1)
+### KORAK 2 — PREMORTEM (03:00 trigger)
 **Agent:** Nega Negovanović
 **Input:** SAMO concept.md
 **Output:** `docs/premortem.md`
 **Sadržaj:** Šta može da puca, showstopper rizici, "drži / ne drži / drži uz korekcije", **brand-utility kritika** (da li sprega zaista funkcioniše ili je decoration)
 **Ako "ne drži":** Iskra/Sine revidira concept.md (do 2 iteracije). Inače dalje.
 
-### KORAK 3 — GAME DESIGN (DAN 1)
+### KORAK 3 — GAME DESIGN (03:00 trigger)
 **Agent:** Mile Mehanika
 **Input:** SAMO concept.md + premortem.md
 **Output:** `docs/gdd.md`
 **Sadržaj:** Mehanike detaljno, progression krive, ekonomija brojeva (eksponencijalne, ne linearne), formule (base, growth factor, caps), prestige loop, multiplier stacking, win/lose uslovi, tabele upgrade-ova (minimum 20 stavki ako je idle-flavor), pacing po minutama, balance tabele
 
-**Kraj DAN 1 stage-a:** Commit `[concept] folder, docs/concept.md, docs/premortem.md, docs/gdd.md`. Postavi `stage: "concept"`, `status: "in_progress"` u manifest.json.
+**Kraj 03:00 sesije:** Commit `[concept] folder, docs/concept.md, docs/premortem.md, docs/gdd.md`. Postavi `stage: "concept"`, `status: "in_progress"` u manifest.json. Push origin/main da 09:00 trigger vidi.
 
-### KORAK 4 — IMPLEMENTACIJA (DAN 2 — impl stage, multi-faza)
+### KORAK 4 — IMPLEMENTACIJA (09:00 trigger — impl stage, multi-faza)
 
 **4a. Scaffold (Jova jQuery)**
 - Input: concept.md + gdd.md
@@ -198,33 +206,33 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 **4f. Content + share + finalni wire (Jova)**
 - Output: `src/content/*.js` (aforizmi, brand hooks), `src/share.js` (html2canvas + Web Share API), `index.html` sa svim module imports
 
-**Kraj DAN 2 stage-a:** Commit. Postavi `stage: "impl"`. Zapiši `line_counts` u manifest.
+**Kraj 09:00 sesije:** Commit. Postavi `stage: "impl"`. Zapiši `line_counts` u manifest. Push origin/main da 17:00 trigger vidi.
 
-### KORAK 5 — BETA TEST (DAN 3 — polish stage, iter 1)
+### KORAK 5 — BETA TEST (17:00 trigger — polish stage, iter 1)
 **Agent:** Beta Trio (Zora UX + Raša tech + Lela engagement)
 **Input:** manifest.json FIRST, pa igra kroz `play_url` (deploy ide odmah po impl push-u) ili izvor
 **Output:** `docs/beta_report.md`
 **Pravilo:** Beta Trio testira **first-impression strogo** — prvih 5 minuta moraju da rade, ne fast-forward. Šefov first-impression je viši authority od beta_score brojke. Severity tagovi (CRITICAL / MEDIUM / LOW) obavezni.
 
-### KORAK 6 — ISPRAVKE (DAN 3, prvi krug)
+### KORAK 6 — ISPRAVKE (17:00 trigger, prvi krug)
 **Agent:** Jova jQuery
 **Input:** SAMO beta_report.md + manifest.json + TAČNO ONI MODULI koji se menjaju
 **Output:** Ažurirani fajlovi + `docs/fix_log.md`
 **Pravilo:** Rešava SVE CRITICAL bugove + sve MEDIUM koji oštećuju first-impression. LOW se logguje za "next pass" ako stigne.
 
-### KORAK 6.5 — BETA ITER 2 (DAN 3)
+### KORAK 6.5 — BETA ITER 2 (17:00 trigger)
 **Agent:** Beta Trio (re-test posle fix-ova)
 **Input:** fix_log.md + igra ponovo
 **Output:** `docs/beta_report_2.md`
 **Gate:** Ako iter 2 nađe nove CRITICAL bugove → još jedan fix krug (Jova). Inače → šef sign-off.
 
-### KORAK 6.75 — ŠEF SIGN-OFF (DAN 3, OBAVEZAN)
+### KORAK 6.75 — ŠEF SIGN-OFF (17:00 trigger, OBAVEZAN)
 **Agent:** Gari traži šefovu potvrdu eksplicitno
 **Input:** Šef testira igru (`play_url`) za 5+ minuta
 **Output:** `docs/sef_signoff.md` — kratka beleška šefa: "OK za release" ili "vrati u fix"
 **Bez sign-off-a, igra NE ide u released status.** Beta Trio score ne zamenjuje šefa.
 
-### KORAK 7 — FINALE (Gari direktno, DAN 3)
+### KORAK 7 — FINALE (Gari direktno, 17:00 trigger kraj)
 - Ažuriraj `manifest.json` sa line counts, oba beta_score-a, post_fix_score, `sef_signoff: true`, `stage: "polish"`, `status: "released"`
 - Izračunaj `post_fix_score`:
   ```
@@ -271,8 +279,8 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 
 | Parametar | Cilj | Hard Cap |
 |-----------|------|----------|
-| Vreme po stage sesiji | 4–5h | 6h |
-| Vreme ukupno (3 stage) | 12–15h | 18h |
+| Vreme po stage sesiji | 4–5h | 6h (mora stati u trigger razmak) |
+| Vreme ukupno (3 stage istog dana) | 12–15h | 18h |
 | JS linija ukupno | 8000–12000 | 15000 |
 | CSS linija ukupno | 800–1500 | 2500 |
 | Broj modula | 25–40 | 60 |
@@ -306,10 +314,10 @@ Iskra/Sine bira iz ove palete ili kombinuje (uvek drugačiji od poslednje 3 igre
 ## Git Workflow
 
 Svaki stage završava commit-om sa stage tag-om u poruci:
-- `[concept] <Naziv>: docs done` (kraj DAN 1)
-- `[impl] <Naziv>: <broj> modula, <LOC> linija` (kraj DAN 2)
-- `[polish] <Naziv>: beta iter <N>, fix log` (DAN 3 fix krugovi)
-- `Released: <Naziv> (<žanr>) — serves <brand_serves>` (DAN 3 finalni)
+- `[concept] <Naziv>: docs done` (kraj 03:00 sesije)
+- `[impl] <Naziv>: <broj> modula, <LOC> linija` (kraj 09:00 sesije)
+- `[polish] <Naziv>: beta iter <N>, fix log` (17:00 sesija fix krugovi)
+- `Released: <Naziv> (<žanr>) — serves <brand_serves>` (17:00 sesija finalni)
 
 Push origin/main posle svakog commit-a — auto-trigger gleda samo main.
 
@@ -336,4 +344,4 @@ Ako stage propadne ili padneš preko token budžeta:
 
 ## Mantra
 
-> *"Pravimo stvari koje valjaju. Ritam je 3 dana, ne 1. Svaka igra hrani Kluboslaviju, Guncati ili obadva — ili ne ide."*
+> *"Pravimo stvari koje valjaju. Tri sesije dnevno, jedna igra dnevno. Svaka igra hrani Kluboslaviju, Guncati ili obadva — ili ne ide."*
