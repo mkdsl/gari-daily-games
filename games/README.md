@@ -23,6 +23,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-05-07 | Koji Tip Si Ti u MKDSLendu? | Narrative Quiz / Personality — MKDSLend | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-07-koji-tip-si-ti/) |
 | 2026-05-08 | Aforizam Generator ⭐ | Generative text toy — Pera Period × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-08-aforizam-generator/) |
 | 2026-05-09 | DJ za Pultom ⭐ | Idle/Incremental — Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-09-dj-za-pultom/) |
+| 2026-05-10 | Kluboslavija Pasoš ⭐ | Meta-collection / Progression — GDG umbrella | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-10-cross-event-pasos/) |
 
 ## Statusi
 

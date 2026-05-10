@@ -17,6 +17,7 @@
     "styles/game.css": "Keyframe animacije: flipOpen, inkSpread, unlockGlow, onboarding"
   },
   "line_counts": { "total_js": 520, "total_css": 280 },
-  "beta_score": null,
-  "status": "in_progress"
+  "beta_score": 7.5,
+  "post_fix_score": 9.0,
+  "status": "released"
 }
