@@ -3,8 +3,8 @@
  * Pera Piksel + Jova jQuery | Gari Daily Games
  */
 
-import { formatElapsed, getZoneProgress } from '../systems/zones.js';
-import { getAvailableUpgrades, canBuyUpgrade } from '../systems/upgrades.js';
+import { formatElapsed, getZoneProgress } from './systems/zones.js';
+import { getAvailableUpgrades, canBuyUpgrade } from './systems/upgrades.js';
 
 // --- Interne reference ---
 let _onTrackClick = null;
