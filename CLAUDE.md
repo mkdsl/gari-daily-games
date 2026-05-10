@@ -281,9 +281,11 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 |-----------|------|----------|
 | Vreme po stage sesiji | 4–5h | 6h (mora stati u trigger razmak) |
 | Vreme ukupno (3 stage istog dana) | 12–15h | 18h |
-| JS linija ukupno | 8000–12000 | 15000 |
-| CSS linija ukupno | 800–1500 | 2500 |
-| Broj modula | 25–40 | 60 |
+| JS linija ukupno (single-layer) | 8000–12000 | 15000 |
+| JS linija ukupno (multi-layer manager/sim) | 18000–28000 | 35000 |
+| CSS linija ukupno | 800–1500 | 3000 |
+| Broj modula (single-layer) | 25–40 | 60 |
+| Broj modula (multi-layer) | 50–90 | 120 |
 | Beta iteracija | 2 | 3 |
 | Šef sign-off pre release | OBAVEZAN | — |
 | Premortem revizija | 1–2 | 2 |
@@ -310,6 +312,8 @@ Iskra/Sine bira iz ove palete ili kombinuje (uvek drugačiji od poslednje 3 igre
 - **Card/deckbuilder** (slay-the-spire lite, solitaire variants)
 
 **Princip selekcije (2026-05-10):** Iskra/Sine bira po triage-u **"koji brand profitira od ove igre"** prvo, žanr drugo. Branded/utility-igre su default (vidi `tim/iskra/gamifikacija_ideje.md`). Random žanr fallback samo kad 3 uzastopna dana backlog ne nudi utility-temu.
+
+**Multi-layer princip (2026-05-10 direktiv):** Branded/utility igre treba da budu **multi-layer manager/sim** (Game Dev Tycoon / Two Point Hospital / Project Highrise tier), ne single-layer time management ili clicker. Macro layer (sezona/nedelja: planiranje, promo, networking, resursi) + Micro layer (sesija: sama izvedba) + Meta progresija (career, prestige, branching ishodi). Resource carry-over između layer-a je obavezan — što se postiže u jednom uticaje sledeći. Single-layer "nezanimljivo" je default greška u concept fazi.
 
 ## Git Workflow
 
