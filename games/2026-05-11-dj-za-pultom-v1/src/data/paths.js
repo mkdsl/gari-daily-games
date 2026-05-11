@@ -4,12 +4,12 @@
 
 export const PATH_UI = {
   pro_set: {
-    label: 'Pro Set',
+    label: 'Selektor',
     tag: 'glavni put',
     description: 'Pustio si svoj set. Sala te pamti.'
   },
   peak_maker: {
-    label: 'Peak Maker',
+    label: 'Faca',
     tag: 'showman',
     description: 'Persona ti je porasla pre nego sto si stigao da je objasnis.'
   },
@@ -19,22 +19,22 @@ export const PATH_UI = {
     description: 'Drzao si glavu iznad vode i pustio kraj.'
   },
   networker: {
-    label: 'Networker',
+    label: 'Vezista',
     tag: 'scena',
     description: 'Pio si sa svima. Sad svi znaju kako si.'
   },
   hustler: {
-    label: 'Hustler',
+    label: 'Gurač',
     tag: 'novac + reputacija',
     description: 'Naplatio si scenu pre nego sto te je scena platila.'
   },
   underground_craftsman: {
-    label: 'Underground Craftsman',
+    label: 'Andergraund',
     tag: 'znanje',
     description: 'Znas po imenima. Pustas po seciji.'
   },
   reckless_selector: {
-    label: 'Reckless Selector',
+    label: 'Prkosni',
     tag: 'signature',
     description: 'Pustio si nesto sto niko ne pusta.'
   },

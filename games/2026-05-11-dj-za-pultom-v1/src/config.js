@@ -434,7 +434,7 @@ export const RECOGNIZABILITY = {
 // -----------------------------------------------------------------------------
 export const PATHS = {
   pro_set: {
-    name: 'Pro Set',
+    name: 'Selektor',
     description: 'Manager-sim glavni clear. Reputation gradi se postupno, žrtvovanje pod kontrolom.',
     conditions: {
       reputation_min: 3,
@@ -444,7 +444,7 @@ export const PATHS = {
     pera_finale: '"Pustio si svoj set. Sala te pamti. Sledeca sezona zna gde da te pita."'
   },
   networker: {
-    name: 'Networker',
+    name: 'Vezista',
     description: 'Scene Presence dominant. Pio si sa svima, svi te poznaju.',
     conditions: {
       network_min: 5,
@@ -454,7 +454,7 @@ export const PATHS = {
     pera_finale: '"Pio si sa svima. Sad svi znaju kako si. Pitanje je da li to znaci da te poznaju."'
   },
   reckless_selector: {
-    name: 'Reckless Selector',
+    name: 'Prkosni',
     description: 'Signature picks definiše tvoj identitet. Knowledge gating te štiti od šuma.',
     conditions: {
       reckless_success_rate_min: 0.7,
