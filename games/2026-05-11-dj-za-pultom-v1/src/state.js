@@ -5,24 +5,36 @@
 import { SAVE_KEY, CLASS_MODIFIERS, WEEKS_PER_SEASON } from './config.js';
 import { deepCopy } from './util.js';
 
+// v2 — Macro Week 7×3 = 21 slot
+export function createEmptyMacroGrid() {
+  const grid = [];
+  for (let d = 0; d < 7; d++) {
+    for (let s = 0; s < 3; s++) {
+      grid.push({ day: d, slot: s, sticker: null });
+    }
+  }
+  return grid;
+}
+
 export function createNewState() {
   return {
-    version: '0.1.0-scaffold',
+    version: '0.2.0-v2',
     season: 1,
     week: 1,
-    scene: 'splash',  // splash → origin → macro → micro → recap → finale
+    scene: 'cinematic',  // cinematic → origin → macro → micro → recap → finale
 
     origin: {
       class_key: null,
       class_name: null,
-      custom_preset: null,      // izabran custom-path key kad je class='custom' (Jova 2026-05-11)
+      preset_key: null,         // v2: 1 od 9 preseta (zameni custom_preset)
+      preset_label: null,
       answers: {
-        q1_class: null,         // klasna pozadina
-        q2_observed_djs: null,  // kako gledao DJ-eve
-        q3_signature_taste: null, // signature ukus (single_choice value) — Jova 2026-05-11
-        q4_first_decks: null,   // ko te pustio prvi put
-        q5_apstinencija: null,  // 'apstinent' / 'drustveno' / 'scene_fitted' / 'dj_navike'
-        custom_preset: null     // u answers takodje (mirror)
+        q1_class: null,
+        q2_observed_djs: null,
+        q3_signature_taste: null,
+        q4_first_decks: null,
+        q5_apstinencija: null,
+        preset_key: null        // mirror
       }
     },
 
@@ -75,6 +87,35 @@ export function createNewState() {
 
     // Pera nudges arhiva
     pera_log: [],
+
+    // Pera overlay (v2 — bottom-center subtitle)
+    pera_overlay: {
+      active: false,
+      line: '',
+      shown_at: 0
+    },
+
+    // Settings (v2)
+    settings: {
+      numeric_mode: false,    // default OFF — sve skrivene sprege
+      audio_enabled: true,
+      first_run_done: false   // cinematic skip ako true
+    },
+
+    // SUBSTANCE STATE (S2)
+    substance: {
+      baseline: [],                // iz preset substance_baseline
+      active_substances: [],       // aktivne ove sezone (alc/cannabis/etc)
+      diagnoses: [],               // aktivne dijagnoze (id-ovi iz DIAGNOSES)
+      zovi_covika_total: 0,        // cumulative call count cele sezone
+      zovi_covika_this_week: 0,    // za current week tracking
+      compound_active: [],         // poly-use compound dijagnoze
+      recovery_uses: {             // 3 tipa × 2 = 6 uses
+        tisina: 0,
+        integration: 0,
+        reality: 0
+      }
+    },
 
     // History — nedeljna agregacija
     week_log: [],
@@ -131,6 +172,10 @@ export function createNewState() {
 
     // Plan za sledecu nedelju (Macro week input)
     next_week_plan: null,
+
+    // v2: Macro Week kalendar 7×3 — 21 slot grid
+    // Svaki slot: { day: 0-6, slot: 0-2, sticker: 'vector_id|recovery|hobby|zovi' | null }
+    macro_grid: createEmptyMacroGrid(),
 
     // Build/audit
     created_at: new Date().toISOString(),

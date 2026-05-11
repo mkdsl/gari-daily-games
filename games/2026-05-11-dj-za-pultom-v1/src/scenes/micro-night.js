@@ -11,6 +11,8 @@ import {
   resumeOnUserGesture, startSet, applyTransition, applyHalfBeatDelay,
   getEngine, isAudioReady
 } from '../audio.js';
+import { getDesyncProfile } from '../systems/cinematic-audio.js';
+import { triggerOverlay } from '../systems/pera-overlay.js';
 
 export function renderMicroNight(mount, state, transition) {
   const choices = {
@@ -98,9 +100,29 @@ export function renderMicroNight(mount, state, transition) {
           }
         }
 
+        // Substance de-sync audio cue (anti-stylish per Nega)
+        const activeSubs = state.substance?.active_substances || [];
+        if (eng && activeSubs.length > 0) {
+          const profile = getDesyncProfile(activeSubs);
+          const deckA = eng.getDeck && eng.getDeck('A');
+          if (deckA) {
+            // Drift = mali pomak tempa (BPM creep) — predstavlja distorziju tempa
+            try {
+              if (deckA.setPlaybackRate) {
+                const drift = 1 + (Math.random() - 0.5) * 2 * profile.drift_pct;
+                deckA.setPlaybackRate(drift);
+              }
+              if (profile.chaos > 0.3 && deckA.applyHalfBeatDelay) {
+                // Psihodelici: extra delay layering
+                deckA.applyHalfBeatDelay(Math.min(1, profile.chaos + 0.3));
+              }
+            } catch (err) { /* silent */ }
+          }
+        }
+
         // Pera komentar
         if (setResult.canceled) {
-          peraLine = getPeraNudge(state, 'health_low');
+          peraLine = getPeraNudge(state, 'symptom_health_red');
         } else if (setResult.quality > 80) {
           peraLine = getPeraNudge(state, 'set_high');
         } else if (setResult.quality < 40) {
@@ -108,6 +130,7 @@ export function renderMicroNight(mount, state, transition) {
         } else {
           peraLine = getPeraNudge(state, 'observation_neutral');
         }
+        if (peraLine) triggerOverlay(state, peraLine.startsWith('SET:') ? 'set_high' : 'observation_neutral');
         saveState(state);
         build();
       }, 'btn-primary btn-cta')

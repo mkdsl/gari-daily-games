@@ -32,13 +32,13 @@ const BASE = new URL('..', import.meta.url).pathname;
     const { processOriginCompletion } = await import(BASE + 'src/systems/origin.js');
     const s2 = createNewState();
     processOriginCompletion(s2, {
-      q1_class: 'radnicka_klasa',
+      preset_key: 'kafanski_muzicar',
       q2_observed_djs: 'craftsman',
-      q3_signature_taste: 'minimal techno',
+      q3_signature_taste: 'techno_drive',
       q4_first_decks: 'crew_friend',
       q5_apstinencija: 'drustveno'
     });
-    console.log('processOrigin OK, class=', s2.class_key, 'mixing=', s2.stats.mixing.toFixed(2));
+    console.log('processOrigin OK, preset=', s2.origin.preset_key, 'class=', s2.class_key, 'mixing=', s2.stats.mixing.toFixed(2));
 
     const { runWeek, getCurrentGigScheduled } = await import(BASE + 'src/systems/macro.js');
     s2.gigs_this_week = 0;
@@ -83,6 +83,40 @@ const BASE = new URL('..', import.meta.url).pathname;
         simulateSet(s3, { effort: 'normal', pre_drinks: 1, attempt_signatures: s3.stats.knowledge >= 2 ? 1 : 0 });
       }
     }
+
+    // v2: test buildPlanFromGrid
+    const { buildPlanFromGrid } = await import(BASE + 'src/scenes/macro-planner.js').catch(() => ({ buildPlanFromGrid: null }));
+    if (buildPlanFromGrid) {
+      const { createEmptyMacroGrid } = await import(BASE + 'src/state.js');
+      const grid = createEmptyMacroGrid();
+      grid[0].sticker = 'promo';
+      grid[1].sticker = 'mixing';
+      grid[2].sticker = 'mixing';
+      grid[3].sticker = 'knowledge';
+      grid[4].sticker = 'energy';
+      grid[5].sticker = 'hobby';
+      grid[6].sticker = 'scene';
+      const p = buildPlanFromGrid(grid);
+      console.log('buildPlanFromGrid OK, mixing=', p.mixing.session_length, 'min, promo=', p.promo.frequency, 'x/wk');
+    }
+
+    // v2: test substance + diagnoses
+    const { DIAGNOSES, detectCompounds, COUNT } = await import(BASE + 'src/data/pera-substance.js');
+    console.log('DIAGNOSES count:', COUNT, '(target 44)');
+    const compounds = detectCompounds(['alcohol', 'stim']);
+    console.log('detectCompounds([alc,stim]):', compounds.length, 'found');
+
+    // v2: test stickers
+    const { STICKERS } = await import(BASE + 'src/data/stickers.js');
+    console.log('STICKERS count:', STICKERS.length);
+
+    // v2: test 9 origin presets
+    const { ORIGIN_PRESETS } = await import(BASE + 'src/data/origin-questions.js');
+    console.log('ORIGIN_PRESETS count:', ORIGIN_PRESETS.length, '(target 9)');
+
+    // v2: test Pera bank size
+    const { TOTAL_COUNT } = await import(BASE + 'src/data/aforizmi.js');
+    console.log('Pera AFORIZMI total lines:', TOTAL_COUNT);
     const { evaluatePaths, getPrimaryPath } = await import(BASE + 'src/systems/path-tracker.js');
     const finalPaths = evaluatePaths(s3);
     console.log('12-week sim complete. paths:', finalPaths, 'primary:', getPrimaryPath(finalPaths));

@@ -1,192 +1,109 @@
 {
   "name": "DJ za Pultom",
-  "version": "0.1.0-scaffold",
+  "version": "0.2.0-v2",
   "season": 1,
   "build_date": "2026-05-11",
   "author": "Jova jQuery",
-  "gdd_source": "mile-gdd-v1-sezona1.md",
-  "audio_engine_source": "audio-engine-concept.md (Ceca)",
-  "status": "SCAFFOLD + CORE — playable end-to-end with Micro placeholder",
-  "target_loc": "18000-28000 (multi-layer scope)",
-  "achieved_loc_estimate": "see line_counts",
+  "gdd_source": "mile-gdd-v2-sezona1.md + mile-gdd-s2-substance.md",
+  "ui_source": "joca/ui-spec-s1-v2.md + joca/ui-spec-s2-substance.md",
+  "audio_engine_source": "lib/dj-audio/ (Ceca) + src/systems/cinematic-audio.js (procedural dub)",
+  "status": "V2 BUILD — playable end-to-end with Cinematic A + Macro 7×3 + Simptomatski HUD + Persona Profile (Telesno stanje + Recovery + Compound)",
+  "target_loc": "22000-25000 Mile v2 target / 35000 S1+S2 combined",
+  "achieved_loc": 7086,
   "entry": "index.html",
   "type": "vanilla-js-es6-no-build",
-  "scope": {
-    "macro_vectors": 9,
-    "classes": "3 + custom",
-    "origin_questions": 5,
-    "paths_basic": 3,
-    "sacrifice_stats": 3,
-    "weeks_per_season": 12,
-    "session_meta": "Sezona 1 — substance OUT (S2 expansion)"
+
+  "v2_features": {
+    "cinematic_a_hook": "splash-cinematic.js + cinematic-audio.js (procedural dub bass via Web Audio sub-sine, arrhythmic stagger per Nega)",
+    "origin_creator_9_presets": "flat single list (4 klasicni + 5 mladi), single-column mobile / 2-3 col desktop, no kategorija visible",
+    "macro_week_7x3": "21 sticker slot grid, drag-drop (touch+mouse), 14 stickers (9 vector + 3 recovery + hobby + zovi covika)",
+    "simptomatski_hud": "color zones, no numbers default; uže/struna za energiju, polica za knowledge, silhouettes za network, ripple za recog, zvezde za reputaciju",
+    "numeric_mode_toggle": "Settings scene, default OFF; ON otkriva 0-100% za stat-ove",
+    "pera_overlay": "bottom-center fade-in subtitle posle key event-a, 4.5s duration, fade-out",
+    "telesno_stanje_tab": "44 dijagnoze T1/T2/T3 color, organized po substance, Pera linija po dijagnozi",
+    "zovi_covika_sistem": "Macro sticker, cumulative tracker (this week + season total), random event integration u Micro",
+    "compound_venn": "venn-style overlap circles, compound dijagnoze list",
+    "recovery_slot": "3 tipa (Tisina/Integration/Reality) × 2 uses = 6 total, Macro sticker integration",
+    "audio_desync_substance": "alcohol drift +10%, stim +15%, psihodelici chaos 0.4, compound C8 panic 0.6 — anti-stylish per Nega"
   },
-  "modules": {
-    "src/main.js": {
-      "purpose": "Game bootstrap + scene manager (Splash → Origin → Macro → Micro → End)",
-      "layer": "core"
-    },
-    "src/config.js": {
-      "purpose": "All balance constants (Mile GDD section 11 pravilnik) — class modifiers, vector formulas, drain/recovery rates",
-      "layer": "core"
-    },
-    "src/state.js": {
-      "purpose": "Game state shape, save/load to localStorage, state validation",
-      "layer": "core"
-    },
-    "src/render.js": {
-      "purpose": "DOM renderer — scene mounting, screen transitions, HUD updates",
-      "layer": "core"
-    },
-    "src/ui.js": {
-      "purpose": "UI components — HUD, week planner, stat displays, modal dialogs",
-      "layer": "core"
-    },
-    "src/audio.js": {
-      "purpose": "Audio engine integration placeholder (Ceca lib/dj-audio pending)",
-      "layer": "core"
-    },
-    "src/util.js": {
-      "purpose": "Utility helpers — clamp, choice, formatRSD, deepCopy",
-      "layer": "core"
-    },
-    "src/systems/origin.js": {
-      "purpose": "Origin Story creator — 5 questions, class templates, custom keyword parsing",
-      "layer": "system"
-    },
-    "src/systems/macro.js": {
-      "purpose": "Macro week loop — 9 vector activity allocation, simulation tick",
-      "layer": "system"
-    },
-    "src/systems/micro.js": {
-      "purpose": "Micro layer — set night (placeholder simplified version)",
-      "layer": "system"
-    },
-    "src/systems/sacrifice.js": {
-      "purpose": "Žrtvovanje — Health/Odnosi/Normalnost drain/recovery, cascade thresholds",
-      "layer": "system"
-    },
-    "src/systems/scene-presence.js": {
-      "purpose": "V6 composite — Mingling + Atmospheric + Guest sets, network gain, reputation events",
-      "layer": "system"
-    },
-    "src/systems/recognizability.js": {
-      "purpose": "Recognizability tier 0-7, decay if Normalnost low",
-      "layer": "system"
-    },
-    "src/systems/finansije.js": {
-      "purpose": "Money flow — gig fees, sponsor inflow, side income, fixed/variable costs, šljakanje tax",
-      "layer": "system"
-    },
-    "src/systems/path-tracker.js": {
-      "purpose": "Emergent path tracking — which finale conditions are being built",
-      "layer": "system"
-    },
-    "src/systems/pera-period.js": {
-      "purpose": "Aforizam picker — context-aware nudges, phase-tone modulation",
-      "layer": "system"
-    },
-    "src/systems/pasos.js": {
-      "purpose": "Pasoš pečat sistem — accumulation, Crew loyalty modifier",
-      "layer": "system"
-    },
-    "src/systems/vector-promo.js": {
-      "purpose": "V1 Promo — RSVP gain formula, recognizability accelerator",
-      "layer": "vector"
-    },
-    "src/systems/vector-music.js": {
-      "purpose": "V2 Music Research — catalog growth, source efficiency, freshness decay",
-      "layer": "vector"
-    },
-    "src/systems/vector-knowledge.js": {
-      "purpose": "V3 Knowledge — tier growth, diminishing returns formula",
-      "layer": "vector"
-    },
-    "src/systems/vector-mixing.js": {
-      "purpose": "V4 Mixing skill — session intensity, recovery modifier",
-      "layer": "vector"
-    },
-    "src/systems/vector-visual.js": {
-      "purpose": "V5 Izgled — Visual tier, fitness baseline, class money tax",
-      "layer": "vector"
-    },
-    "src/systems/vector-energy.js": {
-      "purpose": "V8 Energija — regen, hobby slot Reckless buff",
-      "layer": "vector"
-    },
-    "src/systems/vector-reckless.js": {
-      "purpose": "V9 Reckless Selection — signature pick passive tracking",
-      "layer": "vector"
-    },
-    "src/systems/cascade.js": {
-      "purpose": "Hard Fail check — Health crash, Bankrupt, Identity crisis, Tragic Genius",
-      "layer": "system"
-    },
-    "src/data/classes.js": {
-      "purpose": "Class background templates — Bogata deca, Radnička klasa, Posthumna penzija, Custom",
-      "layer": "data"
-    },
-    "src/data/origin-questions.js": {
-      "purpose": "5 origin questions + answer options + stat modifiers",
-      "layer": "data"
-    },
-    "src/data/aforizmi.js": {
-      "purpose": "Pera Period placeholder bank (~30 lines, Pera will replace with full ~100)",
-      "layer": "data"
-    },
-    "src/data/paths.js": {
-      "purpose": "Path win conditions — Pro Set, Peak Maker, Survivor, Networker, Hustler, Underground, Reckless Selector + The Lasting DJ / Tragic Genius achievements",
-      "layer": "data"
-    },
-    "src/data/vector-meta.js": {
-      "purpose": "9 vector metadata — labels, descriptions, default values, UI hints",
-      "layer": "data"
-    },
-    "src/data/keywords.js": {
-      "purpose": "Custom origin keyword bank for narrative parsing",
-      "layer": "data"
-    },
-    "src/scenes/splash.js": {
-      "purpose": "Splash screen — title, season number, start button",
-      "layer": "scene"
-    },
-    "src/scenes/origin-creator.js": {
-      "purpose": "Origin Selection scene — Custom first, 3 templates, 5 questions flow",
-      "layer": "scene"
-    },
-    "src/scenes/macro-planner.js": {
-      "purpose": "Macro week planner scene — 9 vector slots, stat overview, commit week",
-      "layer": "scene"
-    },
-    "src/scenes/micro-night.js": {
-      "purpose": "Micro žurka scene — placeholder simplified (set rate sliders + random outcome)",
-      "layer": "scene"
-    },
-    "src/scenes/week-recap.js": {
-      "purpose": "End-of-week recap — stat deltas, Pera nudge, reputation events",
-      "layer": "scene"
-    },
-    "src/scenes/finale.js": {
-      "purpose": "Season finale — path identification, achievements, replay incentive",
-      "layer": "scene"
-    },
-    "styles/base.css": {
-      "purpose": "Reset, layout grid, color palette, typography"
-    },
-    "styles/ui.css": {
-      "purpose": "HUD, buttons, sliders, modal styles"
-    },
-    "styles/scenes.css": {
-      "purpose": "Per-scene specific styling — origin, planner, night, recap"
-    },
-    "styles/game.css": {
-      "purpose": "Animations, transitions, meter pulses"
-    },
-    "index.html": {
-      "purpose": "Entry — ES6 module loader, app mount point"
-    },
-    "README.md": {
-      "purpose": "Game folder readme — how to play, status, placeholders flagged"
-    }
+
+  "modules_v2_new": {
+    "src/scenes/splash-cinematic.js": "Cinematic A hook (113 LOC)",
+    "src/scenes/persona-profile.js": "Persona Profile with 4 tabs (284 LOC)",
+    "src/scenes/settings.js": "Settings scene with Numeric Mode toggle (95 LOC)",
+    "src/systems/cinematic-audio.js": "Procedural dub bass + substance de-sync profile (161 LOC)",
+    "src/systems/pera-overlay.js": "Bottom-center subtitle overlay (63 LOC)",
+    "src/data/pera-substance.js": "44 diagnoses + substance meta + compound detection (169 LOC)",
+    "src/data/stickers.js": "14 stickers + DAYS_OF_WEEK + SLOT_LABELS (52 LOC)",
+    "styles/v2.css": "All v2 CSS (cinematic, 7x3 grid, sticker palette, persona tabs, venn, overlay) (694 LOC)"
   },
-  "line_counts": "filled at build end — see README.md"
+
+  "modules_v2_updated": {
+    "src/main.js": "Cinematic boot, settings + persona scene routing, state migration",
+    "src/state.js": "Substance state, settings, pera_overlay, macro_grid 7x3",
+    "src/config.js": "VERSION → 0.2.0-v2",
+    "src/ui.js": "Simptomatski HUD (color zones, uze/polica/silhouettes), Numeric Mode hook",
+    "src/scenes/macro-planner.js": "Replaced with 7x3 calendar grid + sticker palette + buildPlanFromGrid",
+    "src/scenes/origin-creator.js": "9 preseta single flat list (no categories)",
+    "src/scenes/micro-night.js": "Substance de-sync audio cue integration",
+    "src/data/aforizmi.js": "Expanded Pera bank: cinematic_hook + symptom zones + recovery + zovi_covika + compound (89 lines, 28 categories)",
+    "src/data/origin-questions.js": "ORIGIN_PRESETS 9 entries (4 klasicni + 5 mladi)",
+    "src/systems/origin.js": "Preset-based processOriginCompletion (substance baseline integration)",
+    "src/systems/pera-period.js": "Context-aware symptom zone routing"
+  },
+
+  "line_counts": {
+    "index.html": 18,
+    "manifest.json": "see file",
+    "src/main.js": 116,
+    "src/config.js": 511,
+    "src/state.js": 277,
+    "src/util.js": 87,
+    "src/render.js": 31,
+    "src/ui.js": 227,
+    "src/audio.js": 288,
+    "src/data/aforizmi.js": 292,
+    "src/data/classes.js": 46,
+    "src/data/keywords.js": 76,
+    "src/data/origin-questions.js": 261,
+    "src/data/paths.js": 51,
+    "src/data/pera-substance.js": 169,
+    "src/data/stickers.js": 52,
+    "src/data/vector-meta.js": 121,
+    "src/scenes/finale.js": 73,
+    "src/scenes/macro-planner.js": 387,
+    "src/scenes/micro-night.js": 183,
+    "src/scenes/origin-creator.js": 121,
+    "src/scenes/persona-profile.js": 284,
+    "src/scenes/settings.js": 95,
+    "src/scenes/splash-cinematic.js": 113,
+    "src/scenes/splash.js": 43,
+    "src/scenes/week-recap.js": 82,
+    "src/systems/cascade.js": 49,
+    "src/systems/cinematic-audio.js": 161,
+    "src/systems/finansije.js": 73,
+    "src/systems/macro.js": 90,
+    "src/systems/micro.js": 148,
+    "src/systems/origin.js": 52,
+    "src/systems/pasos.js": 25,
+    "src/systems/path-tracker.js": 91,
+    "src/systems/pera-overlay.js": 63,
+    "src/systems/pera-period.js": 34,
+    "src/systems/recognizability.js": 18,
+    "src/systems/sacrifice.js": 110,
+    "src/systems/scene-presence.js": 95,
+    "src/systems/vector-energy.js": 64,
+    "src/systems/vector-knowledge.js": 40,
+    "src/systems/vector-mixing.js": 36,
+    "src/systems/vector-music.js": 52,
+    "src/systems/vector-promo.js": 30,
+    "src/systems/vector-reckless.js": 45,
+    "src/systems/vector-visual.js": 46,
+    "styles/base.css": 113,
+    "styles/game.css": 59,
+    "styles/scenes.css": 455,
+    "styles/ui.css": 247,
+    "styles/v2.css": 694,
+    "TOTAL": 7086
+  }
 }

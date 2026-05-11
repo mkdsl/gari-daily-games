@@ -104,33 +104,46 @@ function findButton(node, label) {
   return null;
 }
 
-console.log('\n--- Click "Nova karijera" ---');
-const newBtn = findButton(fakeApp, 'Nova karijera');
-if (newBtn && newBtn._listeners.click) {
+console.log('\n--- Click "Pojacaj" in cinematic ---');
+const cineBtn = findButton(fakeApp, 'Pojacaj');
+if (cineBtn && cineBtn._listeners.click) {
   try {
-    newBtn._listeners.click[0]();
-    console.log('app innerHTML after click (first 2000 chars):');
-    console.log(fakeApp.innerHTML.substring(0, 2000));
+    // Patch requestAnimationFrame / classList for cinematic-audio if needed
+    global.requestAnimationFrame = global.requestAnimationFrame || ((cb) => setTimeout(cb, 16));
+    cineBtn._listeners.click[0]();
+    // Cinematic uses 1.5s setTimeout to transition. Use small wait.
+    await new Promise(r => setTimeout(r, 1700));
+    console.log('app innerHTML after Pojacaj (first 1500 chars):');
+    console.log(fakeApp.innerHTML.substring(0, 1500));
   } catch (e) {
     console.error('CLICK ERROR:', e.message);
     console.error(e.stack);
   }
 } else {
-  console.log('No button found');
+  console.log('No Pojacaj button found');
 }
 
-// Simulate "Krecem" in origin
-console.log('\n--- Click "Krecem" in origin (with defaults filled in form) ---');
-const krBtn = findButton(fakeApp, 'Krecem');
-if (krBtn && krBtn._listeners.click) {
-  // patch alert
-  global.alert = (m) => { console.log('alert():', m); };
+// We're now in Origin scene. Check first 9 preset cards visible.
+console.log('\n--- Check ORIGIN preset cards ---');
+function findAllButtons(node) {
+  const out = [];
+  if (!node || !node.children) return out;
+  if (node.tag === 'button') out.push(node);
+  for (const c of node.children) out.push(...findAllButtons(c));
+  return out;
+}
+const allBtns = findAllButtons(fakeApp);
+console.log('total buttons in scene:', allBtns.length);
+// Click first preset
+const punkBtn = findButton(fakeApp, 'Punk → DJ');
+if (punkBtn && punkBtn._listeners.click) {
+  console.log('Found Punk → DJ preset card. Clicking...');
   try {
-    krBtn._listeners.click[0]();
-    console.log('app innerHTML after Krecem (first 1500 chars):');
-    console.log(fakeApp.innerHTML.substring(0, 1500));
+    punkBtn._listeners.click[0]();
+    console.log('After preset click — scene still in origin? Buttons:', findAllButtons(fakeApp).length);
   } catch (e) {
-    console.error('KRECEM ERROR:', e.message);
-    console.error(e.stack);
+    console.error('PRESET CLICK ERROR:', e.message);
   }
+} else {
+  console.log('No "Punk → DJ" preset button found');
 }

@@ -5,7 +5,7 @@
 // Svaka konstanta ima komentar sa Mile GDD referencom.
 // =============================================================================
 
-export const VERSION = '0.1.0-scaffold';
+export const VERSION = '0.2.0-v2';
 export const SEASON = 1;
 
 // -----------------------------------------------------------------------------

@@ -1,25 +1,28 @@
 // =============================================================================
-// scenes/origin-creator.js — Origin selection scene (Custom DEFAULT)
+// scenes/origin-creator.js — Origin Selection scene (v2: 9 preseta single list)
 // =============================================================================
-// MOBILE-FIRST (Jova 2026-05-11):
-//   - 0 text inputs / 0 textarea / 0 prompt() / 0 word matching
-//   - Q3 single_choice + Custom klasa preset picker (4 ponuđena puta)
+// V2 (Jova 2026-05-11):
+//   - 9 origin preseta u JEDNOJ flat listi (single-column scroll mobile,
+//     2-3 col grid desktop) — NEMA kategorija "Klasični/Mladi" visible
+//   - Preset izbor zamenjuje stari class + custom_preset tree
+//   - Q2-Q5 ostaju kao single-choice
 // =============================================================================
 import { el } from '../util.js';
 import { bigButton, peraQuote } from '../ui.js';
-import { CLASSES_UI_ORDER, CLASS_UI, CLASS_INTRO_TEXT } from '../data/classes.js';
-import { ORIGIN_QUESTIONS, CUSTOM_PRESETS } from '../data/origin-questions.js';
+import { ORIGIN_QUESTIONS, ORIGIN_PRESETS, findPreset } from '../data/origin-questions.js';
+import { CLASS_INTRO_TEXT } from '../data/classes.js';
 import { processOriginCompletion } from '../systems/origin.js';
 import { getPeraNudge } from '../systems/pera-period.js';
+import { showPeraOverlay } from '../systems/pera-overlay.js';
 
 export function renderOriginCreator(mount, state, transition) {
   const formAnswers = {
-    q1_class: 'custom',  // default per Dule Korekcija 2
+    q1_class: 'preset',           // v2: uvek preset
+    preset_key: null,             // 1 od 9
     q2_observed_djs: null,
-    q3_signature_taste: null,        // multiple choice (Jova 2026-05-11)
+    q3_signature_taste: null,
     q4_first_decks: null,
-    q5_apstinencija: 'drustveno',
-    custom_preset: null              // izbor iz CUSTOM_PRESETS kad je q1_class='custom'
+    q5_apstinencija: 'drustveno'
   };
 
   function rerenderForm() {
@@ -28,80 +31,51 @@ export function renderOriginCreator(mount, state, transition) {
   }
 
   function buildForm() {
-    return el('div', { className: 'scene origin-scene' },
+    return el('div', { className: 'scene origin-scene-v2' },
       el('h2', { className: 'scene-title' }, 'Tvoja prica'),
       el('div', { className: 'intro-text' }, CLASS_INTRO_TEXT),
 
-      // Q1: Class selection — Custom first
-      el('div', { className: 'question q1' },
-        el('div', { className: 'q-label' }, ORIGIN_QUESTIONS[0].prompt),
-        el('div', { className: 'class-grid' },
-          ...CLASSES_UI_ORDER.map(key => {
-            const ui = CLASS_UI[key];
-            const selected = formAnswers.q1_class === key;
+      // PRESET PICKER — 9 cards u single flat list
+      el('div', { className: 'preset-block' },
+        el('div', { className: 'q-label' }, 'Sta ti je dalo telo da ovo radis?'),
+        el('div', { className: 'preset-grid-v2' },
+          ...ORIGIN_PRESETS.map(preset => {
+            const sel = formAnswers.preset_key === preset.key;
             return el('button', {
-              className: `class-card ${selected ? 'sel' : ''} ${key === 'custom' ? 'custom-default' : ''}`,
+              className: `preset-card-v2 ${sel ? 'sel' : ''}`,
               onclick: () => {
-                formAnswers.q1_class = key;
-                // reset custom_preset kad korisnik prebaci na non-custom
-                if (key !== 'custom') formAnswers.custom_preset = null;
+                formAnswers.preset_key = preset.key;
                 rerenderForm();
               }
             },
-              el('div', { className: 'class-card-label' }, ui.label),
-              el('div', { className: 'class-card-tag' }, ui.short),
-              el('div', { className: 'class-card-tagline' }, ui.tagline),
-              el('div', { className: 'class-card-long' }, ui.long)
+              el('div', { className: 'pc-label' }, preset.label),
+              el('div', { className: 'pc-tag' }, preset.tag),
+              el('div', { className: 'pc-tagline' }, preset.tagline),
+              el('div', { className: 'pc-long' }, preset.long)
             );
           })
-        ),
-        // Custom preset picker — pojavljuje se samo kad je klasa custom
-        formAnswers.q1_class === 'custom'
-          ? el('div', { className: 'custom-presets-wrap' },
-              el('div', { className: 'custom-presets-prompt' },
-                'Tvoj put:'),
-              el('div', { className: 'custom-presets-grid' },
-                ...CUSTOM_PRESETS.map(preset => {
-                  const sel = formAnswers.custom_preset === preset.key;
-                  return el('button', {
-                    className: `custom-preset-card ${sel ? 'sel' : ''}`,
-                    onclick: () => {
-                      formAnswers.custom_preset = preset.key;
-                      rerenderForm();
-                    }
-                  },
-                    el('div', { className: 'cp-label' }, preset.label),
-                    el('div', { className: 'cp-tag' }, preset.tag),
-                    el('div', { className: 'cp-tagline' }, preset.tagline),
-                    el('div', { className: 'cp-long' }, preset.long)
-                  );
-                })
-              )
-            )
-          : null
+        )
       ),
 
       // Q2 — single choice
       questionBlock(ORIGIN_QUESTIONS[1], formAnswers, rerenderForm),
-
-      // Q3 — single choice (bivši free_text — Jova 2026-05-11)
+      // Q3 — single choice
       questionBlock(ORIGIN_QUESTIONS[2], formAnswers, rerenderForm),
-
       // Q4 — single choice
       questionBlock(ORIGIN_QUESTIONS[3], formAnswers, rerenderForm),
-
-      // Q5 (apstinencija) — single choice
+      // Q5 — single choice
       questionBlock(ORIGIN_QUESTIONS[4], formAnswers, rerenderForm),
 
       // Submit
       el('div', { className: 'scene-cta' },
         bigButton('Krecem', () => {
           if (!validate(formAnswers)) {
-            alert('Odgovori na sva pitanja pre nego sto krenes.');
+            showInlineError(mount, 'Izaberi pocetak i odgovori na pitanja pre nego sto krenes.');
             return;
           }
           processOriginCompletion(state, formAnswers);
           const teaser = getPeraNudge(state, 'origin_complete');
+          if (teaser) showPeraOverlay(state, teaser);
           transition('macro', { peraTeaser: teaser });
         }, 'btn-primary btn-cta')
       ),
@@ -114,10 +88,18 @@ export function renderOriginCreator(mount, state, transition) {
 }
 
 function validate(a) {
-  if (!a.q1_class) return false;
-  // kad je custom — mora i preset
-  if (a.q1_class === 'custom' && !a.custom_preset) return false;
+  if (!a.preset_key) return false;
   return a.q2_observed_djs && a.q3_signature_taste && a.q4_first_decks && a.q5_apstinencija;
+}
+
+function showInlineError(mount, msg) {
+  let err = mount.querySelector('.inline-error');
+  if (!err) {
+    err = document.createElement('div');
+    err.className = 'inline-error';
+    mount.querySelector('.scene-cta')?.appendChild(err);
+  }
+  err.textContent = msg;
 }
 
 function questionBlock(q, formAnswers, rerender) {
