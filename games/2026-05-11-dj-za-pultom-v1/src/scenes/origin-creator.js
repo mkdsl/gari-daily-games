@@ -1,10 +1,14 @@
 // =============================================================================
 // scenes/origin-creator.js — Origin selection scene (Custom DEFAULT)
 // =============================================================================
+// MOBILE-FIRST (Jova 2026-05-11):
+//   - 0 text inputs / 0 textarea / 0 prompt() / 0 word matching
+//   - Q3 single_choice + Custom klasa preset picker (4 ponuđena puta)
+// =============================================================================
 import { el } from '../util.js';
 import { bigButton, peraQuote } from '../ui.js';
 import { CLASSES_UI_ORDER, CLASS_UI, CLASS_INTRO_TEXT } from '../data/classes.js';
-import { ORIGIN_QUESTIONS } from '../data/origin-questions.js';
+import { ORIGIN_QUESTIONS, CUSTOM_PRESETS } from '../data/origin-questions.js';
 import { processOriginCompletion } from '../systems/origin.js';
 import { getPeraNudge } from '../systems/pera-period.js';
 
@@ -12,10 +16,10 @@ export function renderOriginCreator(mount, state, transition) {
   const formAnswers = {
     q1_class: 'custom',  // default per Dule Korekcija 2
     q2_observed_djs: null,
-    q3_signature_taste: '',
+    q3_signature_taste: null,        // multiple choice (Jova 2026-05-11)
     q4_first_decks: null,
     q5_apstinencija: 'drustveno',
-    custom_text: ''
+    custom_preset: null              // izbor iz CUSTOM_PRESETS kad je q1_class='custom'
   };
 
   function rerenderForm() {
@@ -39,6 +43,8 @@ export function renderOriginCreator(mount, state, transition) {
               className: `class-card ${selected ? 'sel' : ''} ${key === 'custom' ? 'custom-default' : ''}`,
               onclick: () => {
                 formAnswers.q1_class = key;
+                // reset custom_preset kad korisnik prebaci na non-custom
+                if (key !== 'custom') formAnswers.custom_preset = null;
                 rerenderForm();
               }
             },
@@ -49,46 +55,49 @@ export function renderOriginCreator(mount, state, transition) {
             );
           })
         ),
+        // Custom preset picker — pojavljuje se samo kad je klasa custom
         formAnswers.q1_class === 'custom'
-          ? el('div', { className: 'custom-text-wrap' },
-              el('div', { className: 'custom-text-prompt' }, 'Napisi par recenica o tvojoj pozadini (sistem cita):'),
-              el('textarea', {
-                className: 'custom-text-area',
-                placeholder: 'npr. "Rodjen sam u Borci, otac radio na gradilistu, gledao sam starije iz krv kako pustaju na proslavama..."',
-                maxlength: 1000,
-                rows: 4,
-                oninput: (e) => { formAnswers.custom_text = e.target.value; }
-              })
+          ? el('div', { className: 'custom-presets-wrap' },
+              el('div', { className: 'custom-presets-prompt' },
+                'Izaberi koji put te najvise opisuje:'),
+              el('div', { className: 'custom-presets-grid' },
+                ...CUSTOM_PRESETS.map(preset => {
+                  const sel = formAnswers.custom_preset === preset.key;
+                  return el('button', {
+                    className: `custom-preset-card ${sel ? 'sel' : ''}`,
+                    onclick: () => {
+                      formAnswers.custom_preset = preset.key;
+                      rerenderForm();
+                    }
+                  },
+                    el('div', { className: 'cp-label' }, preset.label),
+                    el('div', { className: 'cp-tag' }, preset.tag),
+                    el('div', { className: 'cp-tagline' }, preset.tagline),
+                    el('div', { className: 'cp-long' }, preset.long)
+                  );
+                })
+              )
             )
           : null
       ),
 
-      // Q2
+      // Q2 — single choice
       questionBlock(ORIGIN_QUESTIONS[1], formAnswers, rerenderForm),
 
-      // Q3 — free text
-      el('div', { className: 'question q3' },
-        el('div', { className: 'q-label' }, ORIGIN_QUESTIONS[2].prompt),
-        el('input', {
-          type: 'text',
-          className: 'free-text',
-          placeholder: ORIGIN_QUESTIONS[2].placeholder,
-          maxlength: ORIGIN_QUESTIONS[2].max_length,
-          oninput: (e) => { formAnswers.q3_signature_taste = e.target.value; }
-        })
-      ),
+      // Q3 — single choice (bivši free_text — Jova 2026-05-11)
+      questionBlock(ORIGIN_QUESTIONS[2], formAnswers, rerenderForm),
 
-      // Q4
+      // Q4 — single choice
       questionBlock(ORIGIN_QUESTIONS[3], formAnswers, rerenderForm),
 
-      // Q5 (apstinencija)
+      // Q5 (apstinencija) — single choice
       questionBlock(ORIGIN_QUESTIONS[4], formAnswers, rerenderForm),
 
       // Submit
       el('div', { className: 'scene-cta' },
         bigButton('Krecem', () => {
           if (!validate(formAnswers)) {
-            alert('Molim te odgovori na Q2, Q4, Q5 pre nego sto krenes.');
+            alert('Molim te odgovori na sva pitanja pre nego sto krenes.');
             return;
           }
           processOriginCompletion(state, formAnswers);
@@ -105,7 +114,10 @@ export function renderOriginCreator(mount, state, transition) {
 }
 
 function validate(a) {
-  return a.q1_class && a.q2_observed_djs && a.q4_first_decks && a.q5_apstinencija;
+  if (!a.q1_class) return false;
+  // kad je custom — mora i preset
+  if (a.q1_class === 'custom' && !a.custom_preset) return false;
+  return a.q2_observed_djs && a.q3_signature_taste && a.q4_first_decks && a.q5_apstinencija;
 }
 
 function questionBlock(q, formAnswers, rerender) {

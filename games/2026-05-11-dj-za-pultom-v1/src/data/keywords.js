@@ -1,5 +1,10 @@
 // =============================================================================
-// data/keywords.js — Custom origin keyword bank (Mile sekcija 5.5)
+// data/keywords.js — DEPRECATED 2026-05-11 (Jova mobile-first redizajn)
+// =============================================================================
+// Stara verzija: čitala je free-text Q3 + custom paragraf, word-match → klasa.
+// Nova verzija: Q3 + custom path su multiple choice (origin-questions.js
+// CUSTOM_PRESETS). Ovaj fajl više nije import-ovan iz systems/origin.js.
+// Ostavljen kao referenca, ne učestvuje u origin flow-u.
 // =============================================================================
 // Cita Q3 signature taste textual + custom_text iz Origin Creator
 // Aproksimira ka klasi.

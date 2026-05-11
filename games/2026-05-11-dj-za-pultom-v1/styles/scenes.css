@@ -80,16 +80,21 @@
   font-size: 15px;
 }
 
-/* Class grid */
+/* Class grid — mobile-first: single column default, 2 col desktop */
 .class-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 10px;
   margin-bottom: 12px;
 }
 
+@media (min-width: 720px) {
+  .class-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 .class-card {
   text-align: left;
+  /* min-height 44px touch target garantovan kroz padding */
   padding: 14px;
   background: var(--bg-elev2);
   border: 2px solid var(--border);
@@ -133,42 +138,91 @@
   line-height: 1.4;
 }
 
-.custom-text-wrap {
-  margin-top: 12px;
+/* ===== CUSTOM PRESETS — pojavljuju se kad klasa = "Tvoja prica" =====
+   Jova mobile-first 2026-05-11: zamena free-text paragrafa sa 4 izbora */
+.custom-presets-wrap {
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
 }
 
-.custom-text-prompt {
-  font-size: 13px;
+.custom-presets-prompt {
+  font-size: 14px;
   color: var(--fg-dim);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.custom-presets-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 720px) {
+  .custom-presets-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.custom-preset-card {
+  text-align: left;
+  padding: 14px;
+  background: var(--bg-elev2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s;
+  /* Touch target — padding garantuje >44px */
+}
+
+.custom-preset-card.sel {
+  background: rgba(255,122,0,0.1);
+  border-color: var(--accent);
+}
+
+.cp-label {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.cp-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.cp-tagline {
+  font-size: 13px;
+  color: var(--fg);
   margin-bottom: 6px;
 }
 
-.custom-text-area {
-  width: 100%;
-  min-height: 80px;
+.cp-long {
+  font-size: 12px;
+  color: var(--fg-dim);
+  line-height: 1.4;
 }
 
-/* Q options */
+/* Q options — mobile-first column, touch target 44+ */
 .q-options {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .q-option {
   text-align: left;
-  padding: 10px 12px;
+  padding: 12px 14px;
+  /* min-height kroz globalni button rule = 44px */
+  white-space: normal;
+  line-height: 1.35;
 }
 
 .q-option.sel {
   background: rgba(255,122,0,0.15);
   border-color: var(--accent);
-}
-
-.free-text {
-  width: 100%;
-  font-size: 14px;
-  padding: 10px;
 }
 
 /* ===== MACRO PLANNER ===== */

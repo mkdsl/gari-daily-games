@@ -22,16 +22,46 @@ let currentEnergy = 0.5;
 let isReady = false;
 
 // =============================================================================
+// Mobile detection — Jova 2026-05-11
+// =============================================================================
+// Šef brief: reverb je opcioni, default OFF za mobile (CPU friendly).
+// Trigger logika: UA match (iPhone/iPad/Android) OR coarse pointer OR <768px.
+// =============================================================================
+function isMobileDevice() {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  if (/iPhone|iPad|iPod|Android|Mobile/i.test(ua)) return true;
+  try {
+    if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return true;
+    if (window.innerWidth && window.innerWidth < 768) return true;
+  } catch (e) { /* SSR / no-window — skip */ }
+  return false;
+}
+
+// =============================================================================
 // Boot
 // =============================================================================
 export async function initAudioEngine() {
   if (engine) return engine;
   try {
     engine = new AudioEngine({ masterVolume: 0.8 });
+
+    // Mobile lite mode — skipuj reverb (CPU friendly).
+    // setMobileLiteMode mora pre createDeck (Cecin API constraint).
+    const lite = isMobileDevice();
+    if (lite) {
+      engine.setMobileLiteMode(true);
+      console.log('[audio] mobile detected → lite mode (no reverb, 1 deck max)');
+    }
+
     deckA = engine.createDeck('A');
-    deckB = engine.createDeck('B');
+    // Lite mode dozvoljava max 1 deck. Na mobilnom, deckB ostaje null —
+    // transitions će morati da budu na single-deck mode (gain ramp + delay).
+    if (!lite) {
+      deckB = engine.createDeck('B');
+    }
     isReady = true;
-    console.log('[audio] engine initialized — 2 decks ready, ctx state:', engine.ctx.state);
+    console.log('[audio] engine initialized — decks:', lite ? '1 (lite)' : '2', ', ctx state:', engine.ctx.state);
   } catch (e) {
     console.warn('[audio] init failed — fallback to silent stub:', e.message);
     engine = null;
@@ -100,6 +130,24 @@ export async function nextTransition(energyShift = 0) {
   const nextIdx = currentTrackIdx + 1;
   if (nextIdx >= currentSetlist.length) {
     console.log('[audio] setlist end — no more tracks');
+    return;
+  }
+
+  // Lite mode (mobile): nema deckB. Single-deck transition = load next u
+  // istom deck-u sa half-beat delay tail. Cross-fade nije moguć — gain ramp.
+  if (!deckB) {
+    try {
+      const nextTrack = currentSetlist[nextIdx];
+      const newEnergy = clamp01(currentEnergy + energyShift);
+      applyHalfBeatDelay(deckA, 0.8);
+      await deckA.load(nextTrack.url);
+      _applyEnergyToDeck(deckA, newEnergy);
+      deckA.play({ fadeIn: 0.4 });
+      currentTrackIdx = nextIdx;
+      currentEnergy = newEnergy;
+    } catch (e) {
+      console.warn('[audio] lite-mode nextTransition failed:', e.message);
+    }
     return;
   }
 

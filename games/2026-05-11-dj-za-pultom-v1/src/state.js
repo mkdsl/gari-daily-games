@@ -15,13 +15,14 @@ export function createNewState() {
     origin: {
       class_key: null,
       class_name: null,
-      custom_text: '',
+      custom_preset: null,      // izabran custom-path key kad je class='custom' (Jova 2026-05-11)
       answers: {
         q1_class: null,         // klasna pozadina
         q2_observed_djs: null,  // kako gledao DJ-eve
-        q3_signature_taste: '', // signature ukus (textual)
+        q3_signature_taste: null, // signature ukus (single_choice value) — Jova 2026-05-11
         q4_first_decks: null,   // ko te pustio prvi put
-        q5_apstinencija: null   // 'apstinent' / 'drustveno' / 'scene_fitted' / 'dj_navike'
+        q5_apstinencija: null,  // 'apstinent' / 'drustveno' / 'scene_fitted' / 'dj_navike'
+        custom_preset: null     // u answers takodje (mirror)
       }
     },
 

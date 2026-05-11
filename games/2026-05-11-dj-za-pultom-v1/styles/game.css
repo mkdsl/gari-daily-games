@@ -47,10 +47,13 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
-.q-option, .class-card {
+.q-option, .class-card, .custom-preset-card {
   transition: transform 0.1s;
 }
 
-.q-option:hover, .class-card:hover {
-  transform: translateY(-1px);
+/* Hover lift samo za desktop sa pravim pointerom — mobilni nema hover */
+@media (hover: hover) and (pointer: fine) {
+  .q-option:hover, .class-card:hover, .custom-preset-card:hover {
+    transform: translateY(-1px);
+  }
 }

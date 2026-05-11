@@ -1,38 +1,28 @@
 // =============================================================================
 // systems/origin.js — Origin Story creator orchestration
 // =============================================================================
+// MOBILE-FIRST (Jova 2026-05-11): bez keyword aproksimacije.
+// Custom klasa koristi predefinisani preset (CUSTOM_PRESETS) sa direktnim
+// stat distribucijama umesto teksta + word matching.
+// =============================================================================
 import { ORIGIN_QUESTIONS, applyOriginStatMods } from '../data/origin-questions.js';
 import { CLASS_UI } from '../data/classes.js';
-import { approximateClassFromText } from '../data/keywords.js';
 import { applyClassToState, applyOriginAnswers } from '../state.js';
 
 export function processOriginCompletion(state, formAnswers) {
   state.origin.answers = { ...formAnswers };
-  state.origin.custom_text = formAnswers.custom_text || '';
+  state.origin.custom_preset = formAnswers.custom_preset || null;
 
-  // Determine class
-  let classKey = formAnswers.q1_class;
-  if (classKey === 'custom') {
-    const taste = formAnswers.q3_signature_taste || '';
-    const customText = formAnswers.custom_text || '';
-    const merged = (taste + ' ' + customText).trim();
-    if (merged.length > 0) {
-      const approx = approximateClassFromText(merged);
-      // Note: per Mile 5.5 fallback — ako nema dovoljno matches, ostaje custom
-      // ako ima match, biramo hint as a stat tweak ne kao class override
-      // Za S1 V1 — custom ostaje custom, ali se primenjuju side flags
-      if (approx.flags.apstinent_hint) state.apstinent = true;
-    }
-    classKey = 'custom';
-  }
+  // Class key: za custom uvek custom (preset modifikuje stat-ove kasnije)
+  const classKey = formAnswers.q1_class;
 
-  // Apply class
+  // Apply class baseline
   applyClassToState(state, classKey);
 
   // Apply Q5 origin choice
   applyOriginAnswers(state);
 
-  // Apply Q2/Q4 stat mods
+  // Apply Q2/Q3/Q4 stat mods + custom preset stat mods
   applyOriginStatMods(state, formAnswers);
 
   return state;

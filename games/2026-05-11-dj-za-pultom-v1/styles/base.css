@@ -31,15 +31,22 @@ html, body {
   background: var(--bg);
   color: var(--fg);
   min-height: 100vh;
-  font-size: 15px;
+  /* Mobile-first: 16px da iOS Safari ne triggeruje zoom na input fokus */
+  font-size: 16px;
   line-height: 1.5;
+  /* Touch UX: spreči elastic bounce iznad granica */
+  -webkit-text-size-adjust: 100%;
 }
 
 #app {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 12px;
   min-height: 100vh;
+}
+
+@media (min-width: 720px) {
+  #app { padding: 16px; }
 }
 
 h1, h2, h3 {
@@ -53,27 +60,40 @@ h3 { font-size: 1.15rem; }
 
 button {
   font-family: inherit;
-  font-size: 14px;
+  /* Mobile-first: 16px min za touch UX i da iOS ne zumira */
+  font-size: 16px;
   background: var(--bg-elev2);
   color: var(--fg);
   border: 1px solid var(--border);
-  padding: 8px 14px;
+  /* Touch target min 44×44px (Apple HIG / Material) */
+  min-height: 44px;
+  padding: 10px 14px;
   border-radius: var(--radius);
   cursor: pointer;
   transition: background 0.12s, border-color 0.12s, transform 0.05s;
+  /* Tap UX: ukloni 300ms tap delay, ukloni native gray flash */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-button:hover { background: var(--bg-elev); border-color: var(--accent); }
-button:active { transform: translateY(1px); }
+/* Hover samo za uređaje sa pravim pokazivačem — ne primarni UX na mobilnom */
+@media (hover: hover) and (pointer: fine) {
+  button:hover { background: var(--bg-elev); border-color: var(--accent); }
+}
+button:active { transform: translateY(1px); background: var(--bg-elev); border-color: var(--accent); }
 
+/* Selects ostaju (npr. dropdownovi). Free text inputs su uklonjeni iz UI-ja
+   (Jova mobile-first 2026-05-11), ali stilovi ostaju radi backward compat. */
 select, input[type="text"], input[type="number"], textarea {
   font-family: inherit;
-  font-size: 14px;
+  /* 16px min — da iOS Safari ne triggeruje auto-zoom */
+  font-size: 16px;
   background: var(--bg-elev2);
   color: var(--fg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 6px 8px;
+  padding: 10px 12px;
+  min-height: 44px;
 }
 
 input[type="range"] {
