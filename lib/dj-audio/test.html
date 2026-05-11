@@ -119,9 +119,11 @@
 
     <div class="global">
       <h2>Global / Engine</h2>
+      <div id="status" style="padding: 8px 12px; margin-bottom: 8px; background: #1a1a22; border-left: 3px solid #888; font-size: 12px;">
+        Audio: <span id="statusText" style="color: #888;">NOT INITIALIZED — klikni "Pokreni" ↓</span>
+      </div>
       <div class="controls">
-        <button data-act="init" class="primary">1. Init Audio</button>
-        <button data-act="gen">2. Gen Test Tracks</button>
+        <button data-act="initAndGen" class="primary">▶ Pokreni (init + gen test tracks)</button>
         <button data-act="autoMixStart" class="demo">Auto-Mix demo (half-beat build-up + crossfade)</button>
         <button data-act="autoMixStop">Stop auto-mix</button>
       </div>
@@ -153,18 +155,54 @@
       let autoMix = null;
       let testLib = []; // procedural tracks ostaju u memoriji kao buffers
 
-      function init() {
-        if (engine) return;
-        engine = new AudioEngine({ masterVolume: 0.8 });
-        deckA = engine.createDeck('A');
-        deckB = engine.createDeck('B');
-        log('AudioEngine init - sampleRate=' + engine.ctx.sampleRate + ' state=' + engine.ctx.state);
-        engine.resume().then((s) => log('AudioContext.resume -> ' + s));
+      const statusEl = document.getElementById('statusText');
+      const statusBox = document.getElementById('status');
+      function setStatus(text, color) {
+        if (!statusEl) return;
+        statusEl.textContent = text;
+        statusEl.style.color = color;
+        if (statusBox) statusBox.style.borderLeftColor = color;
+      }
 
-        deckA.on('barEnd', (e) => log(`Deck A barEnd #${e.bar}`));
-        deckB.on('barEnd', (e) => log(`Deck B barEnd #${e.bar}`));
-        deckA.on('trackEnd', () => log('Deck A trackEnd'));
-        deckB.on('trackEnd', () => log('Deck B trackEnd'));
+      async function init() {
+        if (engine) return engine.ctx.state;
+        setStatus('INITIALIZING…', '#ffaa33');
+        try {
+          if (!window.AudioContext && !window.webkitAudioContext) {
+            throw new Error('AudioContext nije podržan u ovom browser-u');
+          }
+          engine = new AudioEngine({ masterVolume: 0.8 });
+          deckA = engine.createDeck('A');
+          deckB = engine.createDeck('B');
+          log('AudioEngine init - sampleRate=' + engine.ctx.sampleRate + ' state=' + engine.ctx.state);
+          const s = await engine.resume();
+          log('AudioContext.resume -> ' + s);
+
+          deckA.on('barEnd', (e) => log(`Deck A barEnd #${e.bar}`));
+          deckB.on('barEnd', (e) => log(`Deck B barEnd #${e.bar}`));
+          deckA.on('trackEnd', () => log('Deck A trackEnd'));
+          deckB.on('trackEnd', () => log('Deck B trackEnd'));
+
+          if (s === 'running') {
+            setStatus('READY ✓ — auto generišem test tracks…', '#33ff66');
+          } else {
+            setStatus(`STATE: ${s} — možda treba opet klik (iOS user gesture)`, '#ff3366');
+          }
+          return s;
+        } catch (err) {
+          setStatus('ERROR: ' + err.message, '#ff3366');
+          log('INIT ERROR: ' + err.message);
+          console.error(err);
+          throw err;
+        }
+      }
+
+      async function initAndGen() {
+        const s = await init();
+        if (s === 'running') {
+          await genTestTracks();
+          setStatus('READY ✓ — test tracks loaded, klikni Load A / Play A / Auto-Mix', '#33ff66');
+        }
       }
 
       /**
@@ -243,6 +281,7 @@
         if (!act) return;
         try {
           switch (act) {
+            case 'initAndGen': initAndGen(); break;
             case 'init': init(); break;
             case 'gen': genTestTracks(); break;
             case 'loadA': loadDeck(deckA, 0, metaA); break;
