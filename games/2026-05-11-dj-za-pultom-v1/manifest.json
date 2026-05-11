@@ -1,0 +1,192 @@
+{
+  "name": "DJ za Pultom",
+  "version": "0.1.0-scaffold",
+  "season": 1,
+  "build_date": "2026-05-11",
+  "author": "Jova jQuery",
+  "gdd_source": "mile-gdd-v1-sezona1.md",
+  "audio_engine_source": "audio-engine-concept.md (Ceca)",
+  "status": "SCAFFOLD + CORE — playable end-to-end with Micro placeholder",
+  "target_loc": "18000-28000 (multi-layer scope)",
+  "achieved_loc_estimate": "see line_counts",
+  "entry": "index.html",
+  "type": "vanilla-js-es6-no-build",
+  "scope": {
+    "macro_vectors": 9,
+    "classes": "3 + custom",
+    "origin_questions": 5,
+    "paths_basic": 3,
+    "sacrifice_stats": 3,
+    "weeks_per_season": 12,
+    "session_meta": "Sezona 1 — substance OUT (S2 expansion)"
+  },
+  "modules": {
+    "src/main.js": {
+      "purpose": "Game bootstrap + scene manager (Splash → Origin → Macro → Micro → End)",
+      "layer": "core"
+    },
+    "src/config.js": {
+      "purpose": "All balance constants (Mile GDD section 11 pravilnik) — class modifiers, vector formulas, drain/recovery rates",
+      "layer": "core"
+    },
+    "src/state.js": {
+      "purpose": "Game state shape, save/load to localStorage, state validation",
+      "layer": "core"
+    },
+    "src/render.js": {
+      "purpose": "DOM renderer — scene mounting, screen transitions, HUD updates",
+      "layer": "core"
+    },
+    "src/ui.js": {
+      "purpose": "UI components — HUD, week planner, stat displays, modal dialogs",
+      "layer": "core"
+    },
+    "src/audio.js": {
+      "purpose": "Audio engine integration placeholder (Ceca lib/dj-audio pending)",
+      "layer": "core"
+    },
+    "src/util.js": {
+      "purpose": "Utility helpers — clamp, choice, formatRSD, deepCopy",
+      "layer": "core"
+    },
+    "src/systems/origin.js": {
+      "purpose": "Origin Story creator — 5 questions, class templates, custom keyword parsing",
+      "layer": "system"
+    },
+    "src/systems/macro.js": {
+      "purpose": "Macro week loop — 9 vector activity allocation, simulation tick",
+      "layer": "system"
+    },
+    "src/systems/micro.js": {
+      "purpose": "Micro layer — set night (placeholder simplified version)",
+      "layer": "system"
+    },
+    "src/systems/sacrifice.js": {
+      "purpose": "Žrtvovanje — Health/Odnosi/Normalnost drain/recovery, cascade thresholds",
+      "layer": "system"
+    },
+    "src/systems/scene-presence.js": {
+      "purpose": "V6 composite — Mingling + Atmospheric + Guest sets, network gain, reputation events",
+      "layer": "system"
+    },
+    "src/systems/recognizability.js": {
+      "purpose": "Recognizability tier 0-7, decay if Normalnost low",
+      "layer": "system"
+    },
+    "src/systems/finansije.js": {
+      "purpose": "Money flow — gig fees, sponsor inflow, side income, fixed/variable costs, šljakanje tax",
+      "layer": "system"
+    },
+    "src/systems/path-tracker.js": {
+      "purpose": "Emergent path tracking — which finale conditions are being built",
+      "layer": "system"
+    },
+    "src/systems/pera-period.js": {
+      "purpose": "Aforizam picker — context-aware nudges, phase-tone modulation",
+      "layer": "system"
+    },
+    "src/systems/pasos.js": {
+      "purpose": "Pasoš pečat sistem — accumulation, Crew loyalty modifier",
+      "layer": "system"
+    },
+    "src/systems/vector-promo.js": {
+      "purpose": "V1 Promo — RSVP gain formula, recognizability accelerator",
+      "layer": "vector"
+    },
+    "src/systems/vector-music.js": {
+      "purpose": "V2 Music Research — catalog growth, source efficiency, freshness decay",
+      "layer": "vector"
+    },
+    "src/systems/vector-knowledge.js": {
+      "purpose": "V3 Knowledge — tier growth, diminishing returns formula",
+      "layer": "vector"
+    },
+    "src/systems/vector-mixing.js": {
+      "purpose": "V4 Mixing skill — session intensity, recovery modifier",
+      "layer": "vector"
+    },
+    "src/systems/vector-visual.js": {
+      "purpose": "V5 Izgled — Visual tier, fitness baseline, class money tax",
+      "layer": "vector"
+    },
+    "src/systems/vector-energy.js": {
+      "purpose": "V8 Energija — regen, hobby slot Reckless buff",
+      "layer": "vector"
+    },
+    "src/systems/vector-reckless.js": {
+      "purpose": "V9 Reckless Selection — signature pick passive tracking",
+      "layer": "vector"
+    },
+    "src/systems/cascade.js": {
+      "purpose": "Hard Fail check — Health crash, Bankrupt, Identity crisis, Tragic Genius",
+      "layer": "system"
+    },
+    "src/data/classes.js": {
+      "purpose": "Class background templates — Bogata deca, Radnička klasa, Posthumna penzija, Custom",
+      "layer": "data"
+    },
+    "src/data/origin-questions.js": {
+      "purpose": "5 origin questions + answer options + stat modifiers",
+      "layer": "data"
+    },
+    "src/data/aforizmi.js": {
+      "purpose": "Pera Period placeholder bank (~30 lines, Pera will replace with full ~100)",
+      "layer": "data"
+    },
+    "src/data/paths.js": {
+      "purpose": "Path win conditions — Pro Set, Peak Maker, Survivor, Networker, Hustler, Underground, Reckless Selector + The Lasting DJ / Tragic Genius achievements",
+      "layer": "data"
+    },
+    "src/data/vector-meta.js": {
+      "purpose": "9 vector metadata — labels, descriptions, default values, UI hints",
+      "layer": "data"
+    },
+    "src/data/keywords.js": {
+      "purpose": "Custom origin keyword bank for narrative parsing",
+      "layer": "data"
+    },
+    "src/scenes/splash.js": {
+      "purpose": "Splash screen — title, season number, start button",
+      "layer": "scene"
+    },
+    "src/scenes/origin-creator.js": {
+      "purpose": "Origin Selection scene — Custom first, 3 templates, 5 questions flow",
+      "layer": "scene"
+    },
+    "src/scenes/macro-planner.js": {
+      "purpose": "Macro week planner scene — 9 vector slots, stat overview, commit week",
+      "layer": "scene"
+    },
+    "src/scenes/micro-night.js": {
+      "purpose": "Micro žurka scene — placeholder simplified (set rate sliders + random outcome)",
+      "layer": "scene"
+    },
+    "src/scenes/week-recap.js": {
+      "purpose": "End-of-week recap — stat deltas, Pera nudge, reputation events",
+      "layer": "scene"
+    },
+    "src/scenes/finale.js": {
+      "purpose": "Season finale — path identification, achievements, replay incentive",
+      "layer": "scene"
+    },
+    "styles/base.css": {
+      "purpose": "Reset, layout grid, color palette, typography"
+    },
+    "styles/ui.css": {
+      "purpose": "HUD, buttons, sliders, modal styles"
+    },
+    "styles/scenes.css": {
+      "purpose": "Per-scene specific styling — origin, planner, night, recap"
+    },
+    "styles/game.css": {
+      "purpose": "Animations, transitions, meter pulses"
+    },
+    "index.html": {
+      "purpose": "Entry — ES6 module loader, app mount point"
+    },
+    "README.md": {
+      "purpose": "Game folder readme — how to play, status, placeholders flagged"
+    }
+  },
+  "line_counts": "filled at build end — see README.md"
+}
