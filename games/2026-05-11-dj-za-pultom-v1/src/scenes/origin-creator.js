@@ -22,7 +22,7 @@ export function renderOriginCreator(mount, state, transition) {
     q2_observed_djs: null,
     q3_signature_taste: null,
     q4_first_decks: null,
-    q5_apstinencija: 'drustveno'
+    q5_apstinencija: null
   };
 
   function rerenderForm() {
