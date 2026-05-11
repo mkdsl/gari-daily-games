@@ -89,7 +89,7 @@
     <h1>DJ Audio Engine — dev test</h1>
     <p class="subtitle">Developer-facing smoke test. EQ, reverb i half-beat delay su INTERNI engine API-ji — igrač ih ne dira u igri. Ovde su izložene samo kao demo buttoni za proveru signal flow-a.</p>
     <div class="note">
-      <b>Tok:</b> 1. Init Audio (iOS Safari user gesture) -&gt; 2. Gen Test Tracks -&gt; 3. Load A, Play A -&gt; 4. Load B, Play B, Sync B-&gt;A -&gt; 5. Auto-mix demo (cuje se half-beat delay build-up 4 bara pre crossfade-a). Standalone <code>Half-Beat Delay</code> button radi instant slap echo na Deck A.
+      <b>Tok:</b> 1. Init Audio (iOS Safari user gesture) -&gt; 2. Gen Test Tracks -&gt; 3. Load A, Play A -&gt; 4. Load B, Play B, Sync B-&gt;A -&gt; 5. Auto-mix demo (klasična DJ tranzicija: bass-cut na outgoing kroz 4 bara &rarr; half-beat delay 1 bar pred drop &rarr; drop: delay gasi + bass otvara na incoming). Standalone <code>Half-Beat Delay</code> button radi instant slap echo na Deck A.
     </div>
 
     <div class="row">
@@ -313,9 +313,14 @@
               if (testLib.length < 2) { log('Treba bar 2 tracka u library'); break; }
               if (autoMix) autoMix.stop();
               autoMix = new AutoMix(engine, deckA, deckB, testLib, {
+                crossfadeBars: 4,        // 4 ili 8 — šefov parametar
+                delayBars: 1,             // 1 bar ili 0.5 (pola bara)
                 useHalfBeatDelay: true,
                 halfBeatPeak: 0.7,
-                buildUpBars: 4,
+                bassOpenBeats: 2,         // koliko beat-a se bass otvara na drop-u
+                onEvent: (type, data) => {
+                  log(`AUTO-MIX [${type}] ${JSON.stringify(data)}`);
+                },
               });
               // patch deck.load za memory tracks (test mode)
               const origLoad = deckB.load.bind(deckB);
@@ -328,7 +333,7 @@
                 return origLoad(url);
               };
               autoMix.start();
-              log('Auto-mix ON - 4 bara pre kraja Deck A, half-beat delay build-up; zatim crossfade na Deck B');
+              log('Auto-mix ON — klasična DJ tranzicija: 4-bar crossfade sa bass-cut na outgoing, half-beat delay 1 bar pred drop, bass otvara na incoming na drop-u.');
               break;
             }
             case 'autoMixStop':
