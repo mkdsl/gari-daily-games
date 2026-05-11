@@ -26,9 +26,9 @@ export function renderFinale(mount, state, transition) {
     el('h1', null, 'Sezona 1 — kraj'),
 
     state.flags.tragic_genius
-      ? el('div', { className: 'finale-banner tragic' }, 'The Tragic Genius')
+      ? el('div', { className: 'finale-banner tragic' }, 'Tragični Genije')
       : state.flags.lasting_dj
-        ? el('div', { className: 'finale-banner lasting' }, 'The Lasting DJ')
+        ? el('div', { className: 'finale-banner lasting' }, 'Trajni')
         : null,
 
     panel('Path-finale',

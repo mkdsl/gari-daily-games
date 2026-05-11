@@ -42,7 +42,7 @@ export function checkCascadeThresholds(state) {
       && !state.flags.tragic_genius) {
     state.flags.tragic_genius = true;
     state.flags.season_lost = true;
-    events.push({ type: 'tragic_genius', label: 'The Tragic Genius. Sezona izgubljena u eksplicit-osu.' });
+    events.push({ type: 'tragic_genius', label: 'Tragični Genije. Sezona izgubljena u eksplicit-osu.' });
   }
 
   return events;

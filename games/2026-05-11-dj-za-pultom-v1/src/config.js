@@ -465,7 +465,7 @@ export const PATHS = {
     pera_finale: '"Pustio si nesto sto niko ne pusta. Pitanje je da li si to cuo, ili si se nadao."'
   },
   the_lasting_dj: {
-    name: 'The Lasting DJ',
+    name: 'Trajni',
     description: 'Pro Set sa sva tri žrtvovanje stat-a ≥ 40%. Dule Loop 41 parity.',
     is_achievement: true,
     conditions: {
@@ -476,7 +476,7 @@ export const PATHS = {
     pera_finale: '"Nikad ti se nije srusila kuca. Ne zato sto si imao srece — zato sto si umeo da nosis svoju tezinu, i tudju samo onoliko koliko si mogao. Niko ti nece praviti dokumentarac. Tvoja deca ce."'
   },
   the_tragic_genius: {
-    name: 'The Tragic Genius',
+    name: 'Tragični Genije',
     description: 'Sva tri žrtvovanje stat-a 0%. Replay value, ne soft-fail.',
     is_achievement: true,
     conditions: {

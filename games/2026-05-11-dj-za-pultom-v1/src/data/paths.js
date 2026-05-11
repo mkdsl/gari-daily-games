@@ -14,7 +14,7 @@ export const PATH_UI = {
     description: 'Persona ti je porasla pre nego sto si stigao da je objasnis.'
   },
   survivor: {
-    label: 'Survivor',
+    label: 'Žilav',
     tag: 'otpornost',
     description: 'Drzao si glavu iznad vode i pustio kraj.'
   },
@@ -24,7 +24,7 @@ export const PATH_UI = {
     description: 'Pio si sa svima. Sad svi znaju kako si.'
   },
   hustler: {
-    label: 'Gurač',
+    label: 'Promoter',
     tag: 'novac + reputacija',
     description: 'Naplatio si scenu pre nego sto te je scena platila.'
   },
@@ -39,12 +39,12 @@ export const PATH_UI = {
     description: 'Pustio si nesto sto niko ne pusta.'
   },
   the_lasting_dj: {
-    label: 'The Lasting DJ',
+    label: 'Trajni',
     tag: 'meta',
     description: 'Stigao do kraja sa kucom koja jos stoji.'
   },
   the_tragic_genius: {
-    label: 'The Tragic Genius',
+    label: 'Tragični Genije',
     tag: 'meta',
     description: 'Bio si prelep. Niko nije bio tu da te vidi.'
   }
