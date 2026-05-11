@@ -11,10 +11,10 @@ export const VECTORS = {
   promo: {
     id: 'promo',
     n: 'V1',
-    label: 'Promo (Insta + Stori)',
+    label: 'Promo',
     icon: 'megaphone',
-    short: 'Gradi RSVP + Recognizability',
-    long: 'Insta postovi, story-ji, reel-ovi. Boost-uj sa ad money ako zelis.',
+    short: 'Insta, stori, reel.',
+    long: 'Postovi i story-ji. Ad budzet ako hoces.',
     sub_choices: {
       frequency: { label: 'Frekvencija', options: [0, 1, 3, 5], unit: 'x/wk' },
       ad_money: { label: 'Ad budzet', min: 0, max: 50, unit: 'RSD' }
@@ -23,10 +23,10 @@ export const VECTORS = {
   music: {
     id: 'music',
     n: 'V2',
-    label: 'Music research (nabavka)',
+    label: 'Music nabavka',
     icon: 'disc',
-    short: 'Music katalog rast + Knowledge baseline',
-    long: 'Digital store, vinyl, soundcloud rip, friend trade. Razlicite brzine i dubina.',
+    short: 'Kupuj, traži, razmenjuj.',
+    long: 'Digital, vinyl, soundcloud, drug.',
     sub_choices: {
       source: { label: 'Izvor', options: ['digital', 'vinyl', 'soundcloud', 'friend'] },
       money_invested: { label: 'Budzet', min: 0, max: 300, unit: 'RSD' }
@@ -35,10 +35,10 @@ export const VECTORS = {
   knowledge: {
     id: 'knowledge',
     n: 'V3',
-    label: 'Knowledge (čitanje, slušanje, mentorstvo)',
+    label: 'Knowledge',
     icon: 'book',
-    short: 'Knowledge tier 0-7. Gating za Reckless Selection.',
-    long: 'Citanje, podcast, label deep dive, mentor session. Diminishing returns.',
+    short: 'Citanje, podcast, mentorstvo.',
+    long: 'Knjige, label deep dive, sesija sa mentorom.',
     sub_choices: {
       source: { label: 'Izvor', options: ['citanje', 'podcast', 'label', 'mentor'] },
       hours: { label: 'Sati', min: 0, max: 20, unit: 'h' }
@@ -47,10 +47,10 @@ export const VECTORS = {
   mixing: {
     id: 'mixing',
     n: 'V4',
-    label: 'Mixing skill (vežba, snimanje)',
+    label: 'Mixing',
     icon: 'sliders',
-    short: 'Mixing tier 0-7. Glavni gating za set quality.',
-    long: 'Vezba sa real opremom. Session intensity rast: 30min / 1h / 2h / 4h. Snimanje mixtape = bonus.',
+    short: 'Vezba sa opremom.',
+    long: 'Sesija — 30 min, 1h, 2h, 4h. Snimi mixtape ako vredi.',
     sub_choices: {
       session_length: { label: 'Sesija', options: [0, 30, 60, 120, 240], unit: 'min' },
       record_mixtape: { label: 'Snimi mixtape', type: 'bool' }
@@ -59,10 +59,10 @@ export const VECTORS = {
   visual: {
     id: 'visual',
     n: 'V5',
-    label: 'Izgled (garderoba, fitnes, frizer)',
+    label: 'Izgled',
     icon: 'shirt',
-    short: 'Visual tier 0-7. Showman path pristupacnost.',
-    long: 'Garderoba (skupo), fitness (vreme, gratis), frizer, fotka. Klasa modifikuje cost.',
+    short: 'Garderoba, fitnes, frizer.',
+    long: 'Sta nosis, kako stojis, kako te slikaju.',
     sub_choices: {
       category: { label: 'Kategorija', options: ['none', 'garderoba', 'fitness', 'frizer', 'fotka'] }
     }
@@ -70,10 +70,10 @@ export const VECTORS = {
   scene: {
     id: 'scene',
     n: 'V6',
-    label: 'Scene Presence (composite)',
+    label: 'Scene Presence',
     icon: 'users',
-    short: 'Mingling + Atmospheric + Guest sets. Gradi Network + Reputation.',
-    long: 'Tab 1: Mingling (barovi). Tab 2: Atmospheric (crew bonding). Tab 3: Guest sets (booking).',
+    short: 'Mingling, druzenje, guest set.',
+    long: 'Bar, crew, neciji rezidens.',
     sub_choices: {
       mingling_count: { label: 'Mingling izlazaka', min: 0, max: 5, unit: 'x/wk' },
       atmospheric_count: { label: 'Atmospheric hangouts', min: 0, max: 3, unit: 'x/wk' },
@@ -83,10 +83,10 @@ export const VECTORS = {
   finance: {
     id: 'finance',
     n: 'V7',
-    label: 'Finansije (cash flow, sponzor)',
+    label: 'Finansije',
     icon: 'dollar',
-    short: 'Bookkeeping, sponsor outreach, gig negotiation.',
-    long: 'Side income (radna klasa sljakanje), Bogata deca subvencija, sponsor inflow.',
+    short: 'Pare, sponzor, knjige.',
+    long: 'Side posao, subvencija, sponzor.',
     sub_choices: {
       sponsor_outreach: { label: 'Sponsor outreach', type: 'bool' },
       bookkeeping: { label: 'Bookkeeping', type: 'bool' }
@@ -95,10 +95,10 @@ export const VECTORS = {
   energy: {
     id: 'energy',
     n: 'V8',
-    label: 'Energija (odmor, hobby, porodica)',
+    label: 'Energija',
     icon: 'moon',
-    short: 'Recovery — Energy + Health regen + Hobby (Normalnost + Reckless buff).',
-    long: 'San, joga, setnja, hobi, mirna nedelja, porodicni moment. Hobby = Reckless breakthrough buff.',
+    short: 'San, joga, hobi, porodica.',
+    long: 'Sve sto te vraca u ovaj svet.',
     sub_choices: {
       san: { label: 'San +', type: 'bool' },
       joga: { label: 'Joga', type: 'bool' },
@@ -111,11 +111,11 @@ export const VECTORS = {
   reckless: {
     id: 'reckless',
     n: 'V9',
-    label: 'Reckless Selection (passive)',
+    label: 'Reckless Selection',
     icon: 'star',
-    short: 'Signature music identity. Aktivira se u Micro layer-u (žurka).',
-    long: 'Kad pustis track u Micro-u, oznaci ga kao "signature". Knowledge tier 2+ gating.',
-    locked_text: 'Otkljucava se kad dostignes Knowledge tier 2.',
+    short: 'Signature pick u zurci.',
+    long: 'Kad pustis nesto sto ne pripada — ali pripadalo je.',
+    locked_text: 'Zakljucano dok ne stignes Knowledge tier 2.',
     is_passive: true
   }
 };

@@ -13,8 +13,7 @@ export function renderSplash(mount, state, transition) {
     el('h1', { className: 'splash-title' }, 'DJ za Pultom'),
     el('div', { className: 'splash-subtitle' }, `Sezona ${SEASON} · v${VERSION}`),
     el('div', { className: 'splash-mantra' },
-      '"DJ ne pocinje za pultom. DJ pocinje sa onim sto ti je zivot dao, ',
-      'i onim sto ti je dragog dovoljno da to ne izgubis dok stignes."'
+      '"DJ ne pocinje za pultom. Pocinje sa onim sto ti zivot da, i sa onim sto ne pristajes da izgubis dok stignes."'
     ),
     el('div', { className: 'splash-buttons' },
       existing && !existing.flags?.season_completed && !existing.flags?.season_lost
@@ -34,11 +33,11 @@ export function renderSplash(mount, state, transition) {
     ),
     el('div', { className: 'splash-credits' },
       el('div', null, 'GDD: Mile Mehanika'),
-      el('div', null, 'Audio engine: Ceca Cujka (placeholder)'),
-      el('div', null, 'Implementacija: Jova jQuery'),
-      el('div', null, 'Aforizmi placeholder: Pera Period (full set sutra)'),
-      el('div', null, 'UI mockups: Zoki Piksel (pending)'),
-      el('div', null, 'NPC dialog: Sine Scenario (pending)')
+      el('div', null, 'Audio: Ceca Cujka'),
+      el('div', null, 'Kod: Jova jQuery'),
+      el('div', null, 'Aforizmi: Pera Period'),
+      el('div', null, 'UI: Zoki Piksel'),
+      el('div', null, 'Dijalog: Sine Scenario')
     )
   ));
 }

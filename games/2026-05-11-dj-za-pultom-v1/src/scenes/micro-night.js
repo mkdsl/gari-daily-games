@@ -35,10 +35,6 @@ export function renderMicroNight(mount, state, transition) {
     return el('div', { className: 'scene micro-scene' },
       renderHUD(state),
       el('h2', null, `Zurka — nedelja ${state.week}`),
-      el('div', { className: 'micro-placeholder-note' },
-        'Micro layer V1: SIMPLIFIED PLACEHOLDER. ',
-        'Diner Dash 2-deck beat-tap mechanic dolazi u sledecu iteraciju kad Ceca audio engine bude integrisan.'
-      ),
 
       panel('Tvoj plan za set',
         el('div', null,
@@ -60,23 +56,22 @@ export function renderMicroNight(mount, state, transition) {
         ),
         recklessReady
           ? el('div', null,
-              el('label', null, 'Signature pick attempts: '),
+              el('label', null, 'Signature pick — koliko puta: '),
               el('input', {
                 type: 'number', min: 0, max: 5, value: choices.attempt_signatures,
                 onchange: e => { choices.attempt_signatures = Number(e.target.value); }
-              }),
-              el('span', { className: 'hint' }, ` (Knowledge tier ${Math.floor(state.stats.knowledge)} — gating ≥ 2 ✓)`)
+              })
             )
           : el('div', { className: 'hint locked' },
-              'Reckless Selection zakljucana (potrebno Knowledge tier 2+).'
+              'Reckless Selection jos zakljucana.'
             )
       ),
 
       panel('Stanje',
         infoLine('Health', `${Math.round(state.sacrifice.health)}%`),
         infoLine('Mixing tier', `${Math.floor(state.stats.mixing)}/7`),
-        infoLine('Music katalog svezina', `${Math.round(state.music_catalog.avg_freshness * 100)}%`),
-        infoLine('De-sync timer ce krenuti', `~${getDesyncTimer(state)}s (placeholder — nije live u V1)`)
+        infoLine('Svezina kataloga', `${Math.round(state.music_catalog.avg_freshness * 100)}%`),
+        infoLine('De-sync timer', `~${getDesyncTimer(state)}s`)
       ),
 
       bigButton('Idi za pult', async () => {
@@ -126,7 +121,7 @@ export function renderMicroNight(mount, state, transition) {
       el('h2', null, setResult.canceled ? 'Zurka otkazana' : 'Set odsviran'),
       setResult.canceled
         ? el('div', { className: 'cancel-note' },
-            'Health je u zoni gde telo odgovara umesto tebe. Reputation -1.'
+            'Telo je odgovorilo umesto tebe.'
           )
         : panel('Rezultat',
             infoLine('Set quality', Math.round(setResult.quality) + ' / 150'),

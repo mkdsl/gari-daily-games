@@ -87,13 +87,13 @@ export function renderMacroPlanner(mount, state, transition) {
         gig
           ? el('div', { className: 'gig-indicator' },
               el('span', { className: 'gig-icon' }, '·'),
-              el('span', null, 'Zurka ove nedelje — pripremi se')
+              el('span', null, 'Zurka ove nedelje.')
             )
-          : el('div', { className: 'no-gig' }, 'Nema zurke ove nedelje — kuvas se, vezbas, izlazis.'),
+          : el('div', { className: 'no-gig' }, 'Nema zurke ove nedelje.'),
         el('div', { className: `pressure-indicator ${pressure.cls}` },
-          `Weekly schedule pressure: ${pressure.label}`
+          `Pritisak: ${pressure.label}`
         ),
-        el('div', { className: 'money-estimate' }, `Plan trosak: ${moneyDelta >= 0 ? '+' : ''}${moneyDelta} RSD`)
+        el('div', { className: 'money-estimate' }, `Trosak plana: ${moneyDelta >= 0 ? '+' : ''}${moneyDelta} RSD`)
       ),
 
       // 9 Vector slots
@@ -181,7 +181,7 @@ export function renderMacroPlanner(mount, state, transition) {
                     type: 'checkbox', checked: plan.mixing.record_mixtape,
                     onchange: e => { plan.mixing.record_mixtape = e.target.checked; build(); }
                   }),
-                  ' Snimi mixtape (+RSVP boost, +Recogn.)'
+                  ' Snimi mixtape'
                 )
               )
             : null
@@ -223,7 +223,7 @@ export function renderMacroPlanner(mount, state, transition) {
                 type: 'checkbox', checked: plan.scene.guest_set,
                 onchange: e => { plan.scene.guest_set = e.target.checked; build(); }
               }),
-              ' Guest set ovaj put (+gig fee)'
+              ' Guest set ovaj put'
             )
           )
         ),
@@ -236,7 +236,7 @@ export function renderMacroPlanner(mount, state, transition) {
                 type: 'checkbox', checked: plan.finance.sponsor_outreach,
                 onchange: e => { plan.finance.sponsor_outreach = e.target.checked; build(); }
               }),
-              ' Sponsor outreach (zahteva Network 3+, Recogn. 2+)'
+              ' Sponsor outreach'
             )
           ),
           el('div', null,
@@ -245,21 +245,28 @@ export function renderMacroPlanner(mount, state, transition) {
                 type: 'checkbox', checked: plan.finance.bookkeeping,
                 onchange: e => { plan.finance.bookkeeping = e.target.checked; build(); }
               }),
-              ' Bookkeeping (+20 RSD/wk)'
+              ' Bookkeeping'
             )
           )
         ),
 
         // V8 Energy
         vectorPanel('energy', plan, build,
-          ...['san', 'joga', 'setnja', 'hobi', 'porodica', 'mirna_nedelja'].map(k =>
+          ...[
+            ['san', 'San'],
+            ['joga', 'Joga'],
+            ['setnja', 'Setnja'],
+            ['hobi', 'Hobi'],
+            ['porodica', 'Porodica'],
+            ['mirna_nedelja', 'Mirna nedelja']
+          ].map(([k, lbl]) =>
             el('div', null,
               el('label', null,
                 el('input', {
                   type: 'checkbox', checked: plan.energy[k],
                   onchange: e => { plan.energy[k] = e.target.checked; build(); }
                 }),
-                ` ${k}`
+                ` ${lbl}`
               )
             )
           )
@@ -271,10 +278,7 @@ export function renderMacroPlanner(mount, state, transition) {
           el('div', { className: 'vp-short' }, VECTORS.reckless.short),
           isRecklessUnlocked(state)
             ? el('div', { className: 'reckless-status unlocked' },
-                'Otkljucan. Aktivira se u zurci (Micro layer).',
-                el('div', { className: 'reckless-buff' },
-                  `Breakthrough buff: +${(state.reckless_breakthrough_chance * 100).toFixed(0)}% (hobby reward)`
-                )
+                'Otkljucan. Aktivira se u zurci.'
               )
             : el('div', { className: 'reckless-status locked' }, VECTORS.reckless.locked_text)
         )
@@ -282,7 +286,7 @@ export function renderMacroPlanner(mount, state, transition) {
 
       // Commit week + Goto zurka
       el('div', { className: 'planner-cta' },
-        bigButton('Komituj nedelju', () => {
+        bigButton('Zavrsi nedelju', () => {
           state.gigs_this_week = gig ? 1 : 0;
           const log = runWeek(state, plan);
           saveState(state);

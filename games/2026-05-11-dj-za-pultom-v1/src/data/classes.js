@@ -14,29 +14,29 @@ export const CLASS_UI = {
   custom: {
     label: 'Tvoja prica',
     short: 'Custom',
-    tagline: 'Napisi je svojim recima. Sistem ce aproksimirati.',
-    long: 'Default origin. Tvoja prica nije ni jedna od ova tri. Sistem cita keywords i raspodeljuje stat-ove. Ako si nesiguran, probaj ovo prvo.',
+    tagline: 'Tvoj pocetak nije ni jedan od ova tri.',
+    long: 'Izaberi put ispod. Svaki nosi drugi teret i drugi dar.',
     icon: 'edit'
   },
   bogata_deca: {
     label: 'Bogata deca',
     short: 'Privilegija',
-    tagline: 'Roditeljska subvencija, oprema, mentorske sesije.',
-    long: 'Imas pristup. Pitanje je da li te scene prihvata kao jednog od svojih. Underground autenticnost je dokazivanje, ne preuzimanje.',
+    tagline: 'Imas pristup pre nego sto si trazio.',
+    long: 'Pitanje je da li te scena prihvata. Autenticnost se dokazuje, ne kupuje.',
     icon: 'briefcase'
   },
   radnicka_klasa: {
     label: 'Radnicka klasa',
     short: 'Šljakanje',
-    tagline: 'Drugi posao prvo. Šta ostane vremena, to je tvoje.',
-    long: 'Manje vremena, manje novca. Ali sve sto stignes da uradis ima vise tezine. Music dev efikasnost ti je vise — radis teze, vidi te.',
+    tagline: 'Posao prvo. Sta ostane, to je tvoje.',
+    long: 'Manje vremena, manje para. Sve sto stignes nosi tezinu.',
     icon: 'tool'
   },
   posthumna_penzija: {
     label: 'Posthumna penzija + faks',
     short: 'Tikajuci budilnik',
-    tagline: 'Imas vremena. Pitanje je da li ti je previse.',
-    long: 'Penzija/porodicna podrska je tu sad. Faks tek krece. Vec si na monomania pragu — to ti je prednost i opasnost.',
+    tagline: 'Imas vremena. Pitanje je da li previse.',
+    long: 'Podrska je tu sad. Faks krece. Vec si na ivici monomania.',
     icon: 'clock'
   }
 };

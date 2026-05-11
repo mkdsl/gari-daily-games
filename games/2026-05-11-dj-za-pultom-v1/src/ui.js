@@ -19,7 +19,7 @@ export function renderHUD(state) {
       meterBar(state.energy, 100, 'energy-meter')
     ),
     el('div', { className: 'hud-row hud-rsvp' },
-      el('span', { className: 'hud-label' }, 'RSVP sledeca'),
+      el('span', { className: 'hud-label' }, 'RSVP'),
       el('span', { className: 'hud-value' }, Math.round(state.rsvp_next))
     ),
     el('div', { className: 'hud-row hud-class' },
@@ -31,9 +31,9 @@ export function renderHUD(state) {
 
 export function renderSacrificeBar(state) {
   return el('div', { className: 'sacrifice-bar' },
-    renderSymptomTile('Health', state.sacrifice.health, 'telo, san'),
-    renderSymptomTile('Odnosi', state.sacrifice.odnosi, 'porodica, prijatelji'),
-    renderSymptomTile('Normalnost', state.sacrifice.normalnost, 'zivot van muzike')
+    renderSymptomTile('Health', state.sacrifice.health, 'telo'),
+    renderSymptomTile('Odnosi', state.sacrifice.odnosi, 'ljudi'),
+    renderSymptomTile('Normalnost', state.sacrifice.normalnost, 'sve van muzike')
   );
 }
 

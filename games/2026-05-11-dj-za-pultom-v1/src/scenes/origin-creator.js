@@ -59,7 +59,7 @@ export function renderOriginCreator(mount, state, transition) {
         formAnswers.q1_class === 'custom'
           ? el('div', { className: 'custom-presets-wrap' },
               el('div', { className: 'custom-presets-prompt' },
-                'Izaberi koji put te najvise opisuje:'),
+                'Tvoj put:'),
               el('div', { className: 'custom-presets-grid' },
                 ...CUSTOM_PRESETS.map(preset => {
                   const sel = formAnswers.custom_preset === preset.key;
@@ -97,7 +97,7 @@ export function renderOriginCreator(mount, state, transition) {
       el('div', { className: 'scene-cta' },
         bigButton('Krecem', () => {
           if (!validate(formAnswers)) {
-            alert('Molim te odgovori na sva pitanja pre nego sto krenes.');
+            alert('Odgovori na sva pitanja pre nego sto krenes.');
             return;
           }
           processOriginCompletion(state, formAnswers);

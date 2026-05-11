@@ -65,7 +65,7 @@ export function renderWeekRecap(mount, state, transition) {
 
     // Paths progress
     log.pathsAchieved.length > 0
-      ? panel('Path-finale uslovi zadovoljeni (running)',
+      ? panel('Putevi koje pratis',
           ...log.pathsAchieved.map(p => el('div', { className: 'path-tag' }, p))
         )
       : null,

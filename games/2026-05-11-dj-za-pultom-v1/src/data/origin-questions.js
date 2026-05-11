@@ -13,7 +13,7 @@ export const ORIGIN_QUESTIONS = [
   {
     id: 'q1_class',
     key: 'q1_class',
-    prompt: 'Kakav je bio tvoj kontekst kad si poceo da slusas muziku ozbiljno?',
+    prompt: 'Kakav ti je bio kontekst kad si poceo ozbiljno da slusas muziku?',
     type: 'class_or_custom',  // special handler — koristi CLASS_UI + CUSTOM_PRESETS
     is_required: true
   },
@@ -23,11 +23,11 @@ export const ORIGIN_QUESTIONS = [
     prompt: 'Kako si gledao DJ-eve pre nego sto si pomislio da budes jedan?',
     type: 'single_choice',
     options: [
-      { value: 'showman', label: 'Kao showmen — neko ko vlada salom', stat_mods: { visual: 0.3 } },
-      { value: 'craftsman', label: 'Kao zanatlije — sluсаm kako mix-uje', stat_mods: { mixing: 0.3, knowledge: 0.2 } },
-      { value: 'curator', label: 'Kao kustosi — sta pusta vise nego kako', stat_mods: { knowledge: 0.5 } },
-      { value: 'host', label: 'Kao domacin — okuplja ljude koje volim', stat_mods: { network: 0.4 } },
-      { value: 'mystery', label: 'Nisam ih razumeo, samo sam osetio', stat_mods: { recognizability: 0.1, mixing: 0.1 } }
+      { value: 'showman', label: 'Showmen koji drzi salu', stat_mods: { visual: 0.3 } },
+      { value: 'craftsman', label: 'Zanatlija — slusao sam mix', stat_mods: { mixing: 0.3, knowledge: 0.2 } },
+      { value: 'curator', label: 'Kustos — sta pusta', stat_mods: { knowledge: 0.5 } },
+      { value: 'host', label: 'Domacin koji okuplja', stat_mods: { network: 0.4 } },
+      { value: 'mystery', label: 'Nisam razumeo, osetio sam', stat_mods: { recognizability: 0.1, mixing: 0.1 } }
     ]
   },
   {
@@ -37,36 +37,36 @@ export const ORIGIN_QUESTIONS = [
     type: 'single_choice',
     options: [
       { value: 'deep_minimal', label: 'Deep / minimal house', stat_mods: { knowledge: 0.3, mixing: 0.2 } },
-      { value: 'techno_drive', label: 'Techno — pravolinijski drive', stat_mods: { mixing: 0.4, visual: 0.1 } },
-      { value: 'balkan_fusion', label: 'Balkan / folk fusion + electro', stat_mods: { recognizability: 0.3, network: 0.2 } },
+      { value: 'techno_drive', label: 'Techno — pravolinijski', stat_mods: { mixing: 0.4, visual: 0.1 } },
+      { value: 'balkan_fusion', label: 'Balkan folk + electro', stat_mods: { recognizability: 0.3, network: 0.2 } },
       { value: 'tech_house', label: 'Tech house / groovy', stat_mods: { mixing: 0.2, network: 0.2, visual: 0.1 } },
       { value: 'broken_beats', label: 'UKG / breaks / 140 / dnb', stat_mods: { knowledge: 0.2, recognizability: 0.2 } },
-      { value: 'open_format', label: 'Open format — sve sto radi za publiku', stat_mods: { visual: 0.2, network: 0.3 } }
+      { value: 'open_format', label: 'Open format', stat_mods: { visual: 0.2, network: 0.3 } }
     ]
   },
   {
     id: 'q4_first_decks',
     key: 'q4_first_decks',
-    prompt: 'Ko te je prvi put pustio za pult? (mentor faktor)',
+    prompt: 'Ko te je prvi put pustio za pult?',
     type: 'single_choice',
     options: [
-      { value: 'older_brother', label: 'Stariji brat / sestra ili rodjak', stat_mods: { mixing: 0.4, knowledge: 0.2 } },
-      { value: 'crew_friend', label: 'Drug iz krv koji je vec DJ-ovao', stat_mods: { network: 0.5 } },
-      { value: 'club_owner', label: 'Vlasnik kluba mi je dao 30 min "popunim prazninu"', stat_mods: { reputation: 0.3, network: 0.2 } },
-      { value: 'self_taught', label: 'Sam sam doso do toga — gledao tutorijale, vezbao kod kuce', stat_mods: { knowledge: 0.4, mixing: 0.3 } },
-      { value: 'random', label: 'Sasvim slucajno — neko nije dosao, ja sam tu bio', stat_mods: { reputation: 0.2 } }
+      { value: 'older_brother', label: 'Stariji brat ili rodjak', stat_mods: { mixing: 0.4, knowledge: 0.2 } },
+      { value: 'crew_friend', label: 'Drug iz kraja koji vec radi kao DJ', stat_mods: { network: 0.5 } },
+      { value: 'club_owner', label: 'Vlasnik kluba — popuni prazninu', stat_mods: { reputation: 0.3, network: 0.2 } },
+      { value: 'self_taught', label: 'Sam — tutorijali, soba, ponavljanje', stat_mods: { knowledge: 0.4, mixing: 0.3 } },
+      { value: 'random', label: 'Slucajno — neko nije dosao', stat_mods: { reputation: 0.2 } }
     ]
   },
   {
     id: 'q5_apstinencija',
     key: 'q5_apstinencija',
-    prompt: 'Kakav je tvoj odnos prema alkoholu i pusenju?',
+    prompt: 'Tvoj odnos prema alkoholu i pusenju?',
     type: 'single_choice',
     options: [
       { value: 'apstinent', label: 'Apstinent — ne pijem, ne pusim', flags: { apstinent: true, pusi: false } },
-      { value: 'drustveno', label: 'Pijem drustveno (1-2 piva po izlasku)', flags: { apstinent: false, pusi: false } },
-      { value: 'scene_fitted', label: 'Pijem aktivno scene-fitted (5-10 piva nedeljno)', flags: { apstinent: false, pusi: false } },
-      { value: 'dj_navike', label: 'DJ navike — pivo + pusenje, ide uz scenu', flags: { apstinent: false, pusi: true } }
+      { value: 'drustveno', label: 'Pijem drustveno, par piva', flags: { apstinent: false, pusi: false } },
+      { value: 'scene_fitted', label: 'Pijem uz scenu', flags: { apstinent: false, pusi: false } },
+      { value: 'dj_navike', label: 'Pivo i pusenje, ide uz pult', flags: { apstinent: false, pusi: true } }
     ]
   }
 ];
@@ -85,9 +85,9 @@ export const CUSTOM_PRESETS = [
   {
     key: 'punk_to_dj',
     label: 'Punk → DJ',
-    tag: 'Distortion-friendly',
-    tagline: 'Izasao iz punk/hardcore scene, donosis raw estetiku.',
-    long: 'Distortion-friendly mixing, slabija standard tech-house mreza, jaka underground reputacija od starta.',
+    tag: 'Iz buke',
+    tagline: 'Doso si iz scene koja ne trazi dozvolu.',
+    long: 'Distorzija ti je domaca. Glatko jos nije.',
     stat_mods: {
       knowledge: 0.4,
       mixing: 0.3,
@@ -100,9 +100,9 @@ export const CUSTOM_PRESETS = [
   {
     key: 'classical_kontinuum',
     label: 'Klasicna → kontinuum',
-    tag: 'Theory-strong',
-    tagline: 'Formalno muzicko obrazovanje, teorija ti je domaca.',
-    long: 'Theory-strong (key matching, harmonic mixing), mixing precizan ali emocionalno hladan na startu.',
+    tag: 'Iz note',
+    tagline: 'Teorija ti je u uvu pre nego u ploci.',
+    long: 'Sve znas gde ide. Pitanje je da li zvuci toplo.',
     stat_mods: {
       knowledge: 0.6,
       mixing: 0.5,
@@ -113,10 +113,10 @@ export const CUSTOM_PRESETS = [
   },
   {
     key: 'migrant_scene',
-    label: 'Strana zemlja → migrant scena',
-    tag: 'Unique sound',
+    label: 'Strana zemlja → migrant',
+    tag: 'Iz druge zemlje',
     tagline: 'Doneo si zvuk koji ovde niko ne pusta.',
-    long: 'Unique sound (rare records, foreign scene contacts), ali slabija lokalna mreza i lokalna reputacija na startu.',
+    long: 'Tvoja kutija ploca je neko drugo more. Lokal te jos ne zna.',
     stat_mods: {
       knowledge: 0.5,
       recognizability: 0.5,
@@ -128,9 +128,9 @@ export const CUSTOM_PRESETS = [
   {
     key: 'kafanski_muzicar',
     label: 'Kafanski muzicar → DJ',
-    tag: 'Crowd reader',
-    tagline: 'Iz live banda — citas publiku bolje od svih.',
-    long: 'Crowd reading jak (live performance pozadina), mreza jaka u kafanskoj sceni, slabija u klupskoj.',
+    tag: 'Iz banda',
+    tagline: 'Citao si publiku pre nego sto si pipnuo deck.',
+    long: 'Stol te slusa kao da pevas. Pult jos nije nauceno.',
     stat_mods: {
       visual: 0.5,
       network: 0.4,

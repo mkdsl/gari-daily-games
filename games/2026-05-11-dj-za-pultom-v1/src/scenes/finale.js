@@ -38,11 +38,11 @@ export function renderFinale(mount, state, transition) {
             el('div', { className: 'path-tag' }, PATH_UI[primary]?.tag || ''),
             el('div', { className: 'path-desc' }, PATH_UI[primary]?.description || '')
           )
-        : el('div', null, 'Nije ispunjen nijedan path-finale. Pokušaj ponovo — drugi tempo, drugaciji izbori.')
+        : el('div', null, 'Nije se zavrsio nijednim putem. Drugi tempo. Drugaciji izbori.')
     ),
 
     achieved.length > 1
-      ? panel('Dodatni postignuti paths',
+      ? panel('Drugi putevi koje si dotakao',
           ...achieved.filter(p => p !== primary).map(p =>
             el('div', { className: 'path-tag-extra' }, PATH_UI[p]?.label || p)
           )
@@ -50,11 +50,11 @@ export function renderFinale(mount, state, transition) {
       : null,
 
     panel('Sezonski rezime',
-      infoLine('Žurke odsvirane', state.gigs_played.length),
-      infoLine('Avg set quality', Math.round(getAvgSetQuality(state))),
-      infoLine('Reckless success rate', `${Math.round(recklessSuccessRate(state) * 100)}%`),
-      infoLine('Pasoš pecati', `${pecati.count} / ${pecati.cap}`),
-      infoLine('Reputation events triggered', state.path_progress.reputation_events_triggered)
+      infoLine('Zurke', state.gigs_played.length),
+      infoLine('Prosecan set', Math.round(getAvgSetQuality(state))),
+      infoLine('Signature pogodak', `${Math.round(recklessSuccessRate(state) * 100)}%`),
+      infoLine('Pasos pecati', `${pecati.count} / ${pecati.cap}`),
+      infoLine('Reputacijski trenuci', state.path_progress.reputation_events_triggered)
     ),
 
     peraQuote(finalePera),
