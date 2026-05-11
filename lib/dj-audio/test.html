@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="sr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DJ Audio Engine — MVP Test</title>
+    <style>
+      :root {
+        --bg: #0a0a0e;
+        --panel: #15151c;
+        --accent: #ff3366;
+        --accent2: #33ccff;
+        --text: #e8e8ee;
+        --dim: #888;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        padding: 16px;
+      }
+      h1 { margin: 0 0 16px; font-size: 18px; color: var(--accent); }
+      h2 { margin: 0 0 8px; font-size: 14px; color: var(--accent2); }
+      .row { display: flex; gap: 16px; flex-wrap: wrap; }
+      .deck {
+        background: var(--panel);
+        border: 1px solid #2a2a35;
+        border-radius: 6px;
+        padding: 12px;
+        flex: 1 1 320px;
+        min-width: 280px;
+      }
+      .controls { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+      button {
+        background: #222;
+        color: var(--text);
+        border: 1px solid #444;
+        padding: 6px 10px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+        border-radius: 3px;
+      }
+      button:hover { background: #333; border-color: var(--accent); }
+      button.primary { background: var(--accent); color: #000; border-color: var(--accent); }
+      label { display: block; font-size: 11px; color: var(--dim); margin: 6px 0 2px; }
+      input[type=range] { width: 100%; }
+      .meta { font-size: 11px; color: var(--dim); margin: 6px 0; min-height: 28px; }
+      .log {
+        background: #000;
+        border: 1px solid #2a2a35;
+        padding: 8px;
+        font-size: 11px;
+        height: 200px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        margin-top: 12px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 6px;
+        background: #2a2a35;
+        border-radius: 3px;
+        font-size: 10px;
+        margin-right: 4px;
+      }
+      .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+      .global {
+        background: var(--panel);
+        border: 1px solid #2a2a35;
+        border-radius: 6px;
+        padding: 12px;
+        margin-top: 12px;
+      }
+      .note {
+        font-size: 11px;
+        color: var(--dim);
+        background: #1a1a22;
+        padding: 8px;
+        border-left: 2px solid var(--accent2);
+        margin: 12px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>DJ Audio Engine — MVP Test (Ceca Čujka, 2026-05-11)</h1>
+    <div class="note">
+      Šef: klikni <b>"Init Audio"</b> (iOS Safari traži user gesture). Onda <b>"Gen Test Tracks"</b> da napravi 2 placeholder klipa (sine wave loops, 8 bars, 120 i 124 BPM). Zatim Load A → Play A, Load B → Play B, pa Sync B→A. Klikni Desync slider da čuješ kako se raspada. Auto-mix automatski mixuje između A i B.
+    </div>
+
+    <div class="row">
+      <div class="deck" id="deckA-ui">
+        <h2>DECK A</h2>
+        <div class="meta" id="metaA">— nije učitan —</div>
+        <div class="controls">
+          <button data-act="loadA">Load A</button>
+          <button data-act="playA" class="primary">Play</button>
+          <button data-act="pauseA">Pause</button>
+          <button data-act="stopA">Stop</button>
+        </div>
+        <label>Volume</label>
+        <input type="range" min="0" max="100" value="100" data-knob="volA" />
+        <label>Reverb wet</label>
+        <input type="range" min="0" max="100" value="0" data-knob="revA" />
+        <div class="grid3">
+          <div>
+            <label>Low</label>
+            <input type="range" min="-24" max="24" value="0" data-knob="eqLowA" />
+          </div>
+          <div>
+            <label>Mid</label>
+            <input type="range" min="-24" max="24" value="0" data-knob="eqMidA" />
+          </div>
+          <div>
+            <label>High</label>
+            <input type="range" min="-24" max="24" value="0" data-knob="eqHighA" />
+          </div>
+        </div>
+      </div>
+
+      <div class="deck" id="deckB-ui">
+        <h2>DECK B</h2>
+        <div class="meta" id="metaB">— nije učitan —</div>
+        <div class="controls">
+          <button data-act="loadB">Load B</button>
+          <button data-act="playB" class="primary">Play</button>
+          <button data-act="pauseB">Pause</button>
+          <button data-act="stopB">Stop</button>
+          <button data-act="syncBA">Sync B → A</button>
+        </div>
+        <label>Volume</label>
+        <input type="range" min="0" max="100" value="100" data-knob="volB" />
+        <label>Reverb wet</label>
+        <input type="range" min="0" max="100" value="0" data-knob="revB" />
+        <div class="grid3">
+          <div>
+            <label>Low</label>
+            <input type="range" min="-24" max="24" value="0" data-knob="eqLowB" />
+          </div>
+          <div>
+            <label>Mid</label>
+            <input type="range" min="-24" max="24" value="0" data-knob="eqMidB" />
+          </div>
+          <div>
+            <label>High</label>
+            <input type="range" min="-24" max="24" value="0" data-knob="eqHighB" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="global">
+      <h2>Global</h2>
+      <div class="controls">
+        <button data-act="init" class="primary">1. Init Audio</button>
+        <button data-act="gen">2. Gen Test Tracks</button>
+        <button data-act="beatsyncStart">Beatsync Monitor: ON</button>
+        <button data-act="beatsyncStop">OFF</button>
+        <button data-act="autoMixStart">Auto-Mix: ON</button>
+        <button data-act="autoMixStop">OFF</button>
+        <button data-act="liteMode">Toggle Lite Mode</button>
+      </div>
+      <label>Master Volume</label>
+      <input type="range" min="0" max="100" value="80" data-knob="master" />
+      <label>Desync Intensity (Deck A) — 0=clean → 1=chaos</label>
+      <input type="range" min="0" max="100" value="0" data-knob="desyncA" />
+    </div>
+
+    <div class="log" id="log"></div>
+
+    <script type="module">
+      import { AudioEngine, CamelotWheel, parseTrackName } from './lib/dj-audio/index.js';
+      import { BeatsyncMonitor } from './lib/dj-audio/transition/beatsync.js';
+      import { AutoMix } from './lib/dj-audio/transition/auto-mix.js';
+      import { DesyncAnimator } from './lib/dj-audio/transition/desync.js';
+
+      const logEl = document.getElementById('log');
+      const metaA = document.getElementById('metaA');
+      const metaB = document.getElementById('metaB');
+
+      function log(msg) {
+        const ts = new Date().toLocaleTimeString();
+        logEl.textContent += `[${ts}] ${msg}\n`;
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      let engine = null;
+      let deckA = null;
+      let deckB = null;
+      let beatsync = null;
+      let autoMix = null;
+      let desyncAnim = null;
+      let testLib = []; // procedural tracks ostaju u memoriji kao buffers
+
+      function init() {
+        if (engine) return;
+        engine = new AudioEngine({ masterVolume: 0.8 });
+        deckA = engine.createDeck('A');
+        deckB = engine.createDeck('B');
+        desyncAnim = new DesyncAnimator(deckA);
+        log('AudioEngine init — sampleRate=' + engine.ctx.sampleRate + ' state=' + engine.ctx.state);
+        engine.resume().then((s) => log('AudioContext.resume → ' + s));
+
+        deckA.on('beat', (e) => { /* spam — disabled by default */ });
+        deckA.on('barEnd', (e) => log(`Deck A barEnd #${e.bar}`));
+        deckB.on('barEnd', (e) => log(`Deck B barEnd #${e.bar}`));
+        deckA.on('trackEnd', () => log('Deck A trackEnd'));
+        deckB.on('trackEnd', () => log('Deck B trackEnd'));
+      }
+
+      /**
+       * Generiše procedural test track kroz OfflineAudioContext.
+       * 8 bars na zadatom BPM-u, sine wave kick na svakom beat-u + mid sine layer.
+       */
+      async function generateTrack({ bpm, key, name, bars }) {
+        const beatsPerBar = 4;
+        const totalBeats = bars * beatsPerBar;
+        const secPerBeat = 60 / bpm;
+        const duration = totalBeats * secPerBeat;
+        const sr = 44100;
+        const oc = new OfflineAudioContext(2, Math.ceil(duration * sr), sr);
+
+        // kick na svakom beat-u
+        for (let b = 0; b < totalBeats; b++) {
+          const t = b * secPerBeat;
+          const osc = oc.createOscillator();
+          const gain = oc.createGain();
+          osc.frequency.setValueAtTime(120, t);
+          osc.frequency.exponentialRampToValueAtTime(50, t + 0.08);
+          gain.gain.setValueAtTime(0, t);
+          gain.gain.linearRampToValueAtTime(0.7, t + 0.005);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+          osc.connect(gain);
+          gain.connect(oc.destination);
+          osc.start(t);
+          osc.stop(t + 0.2);
+        }
+
+        // sustain mid layer — sine na key-related freq
+        const keyHz = key === '8A' ? 220 : (key === '9A' ? 246.94 : 261.63);
+        const mid = oc.createOscillator();
+        const midGain = oc.createGain();
+        mid.frequency.value = keyHz;
+        mid.type = 'sawtooth';
+        midGain.gain.value = 0.05;
+        const filter = oc.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 1200;
+        mid.connect(filter);
+        filter.connect(midGain);
+        midGain.connect(oc.destination);
+        mid.start(0);
+        mid.stop(duration);
+
+        const buf = await oc.startRendering();
+        const filename = `${bpm}-${key}-${name}-${bars}.opus`;
+        return { buffer: buf, meta: parseTrackName(filename) };
+      }
+
+      async function genTestTracks() {
+        if (!engine) { log('Init prvo!'); return; }
+        log('Generišem test tracks (offline render)...');
+        const t1 = await generateTrack({ bpm: 120, key: '8A', name: 'test_kick_a', bars: 8 });
+        const t2 = await generateTrack({ bpm: 124, key: '9A', name: 'test_kick_b', bars: 8 });
+        // ubacujemo u test "library" — koristi se u Load A/B i Auto-Mix
+        testLib = [
+          { ...t1.meta, buffer: t1.buffer, url: 'mem://test_a' },
+          { ...t2.meta, buffer: t2.buffer, url: 'mem://test_b' },
+        ];
+        log(`Test library: ${testLib.length} tracks ready`);
+        log(`Camelot compatible? 8A↔9A: ${CamelotWheel.isCompatible('8A', '9A')}`);
+      }
+
+      function loadDeck(deck, idx, metaEl) {
+        if (!testLib[idx]) { log('Nema test tracka. Klikni Gen.'); return; }
+        const t = testLib[idx];
+        deck.setBuffer(t.buffer, { ...t });
+        metaEl.innerHTML = `<span class="badge">${t.bpm} BPM</span><span class="badge">${t.key}</span><span class="badge">${t.bars} bars</span><span class="badge">${t.name}</span>`;
+        log(`Deck ${deck.label}: loaded ${t.bpm} BPM ${t.key} "${t.name}"`);
+      }
+
+      // event handlers
+      document.addEventListener('click', (e) => {
+        const act = e.target.dataset.act;
+        if (!act) return;
+        try {
+          switch (act) {
+            case 'init': init(); break;
+            case 'gen': genTestTracks(); break;
+            case 'loadA': loadDeck(deckA, 0, metaA); break;
+            case 'loadB': loadDeck(deckB, 1, metaB); break;
+            case 'playA': deckA.play(); log('Deck A play'); break;
+            case 'pauseA': deckA.pause(); log('Deck A pause'); break;
+            case 'stopA': deckA.stop(); log('Deck A stop'); break;
+            case 'playB': deckB.play(); log('Deck B play'); break;
+            case 'pauseB': deckB.pause(); log('Deck B pause'); break;
+            case 'stopB': deckB.stop(); log('Deck B stop'); break;
+            case 'syncBA':
+              deckB.syncTo(deckA);
+              log(`Sync B→A: B playbackRate=${deckB.playbackRate.toFixed(4)}`);
+              break;
+            case 'beatsyncStart':
+              if (beatsync) beatsync.stop();
+              beatsync = new BeatsyncMonitor(deckA, deckB, { interval: 2000 });
+              beatsync.on('driftCorrected', (e) => log(`Drift corrected: ${e.drift.toFixed(4)}`));
+              beatsync.on('syncLost', (e) => log(`Sync LOST: ${e.driftSec.toFixed(3)}s drift`));
+              beatsync.start();
+              log('Beatsync monitor ON');
+              break;
+            case 'beatsyncStop':
+              if (beatsync) { beatsync.stop(); log('Beatsync monitor OFF'); }
+              break;
+            case 'autoMixStart':
+              if (testLib.length < 2) { log('Treba bar 2 trackа u library'); break; }
+              if (autoMix) autoMix.stop();
+              // za auto-mix, library mora imati url-ove koje deckLoader razume.
+              // u test modu, monkey-patch load metoda nije idealan — skip url load, koristi buffer.
+              // za demo: pravimo "memory library" i override pickNext + load
+              autoMix = new AutoMix(engine, deckA, deckB, testLib);
+              // patch deck.load za memory tracks
+              const origLoad = deckB.load.bind(deckB);
+              deckB.load = async (url) => {
+                const t = testLib.find((x) => x.url === url);
+                if (t) {
+                  deckB.setBuffer(t.buffer, t);
+                  return t;
+                }
+                return origLoad(url);
+              };
+              autoMix.start();
+              log('Auto-mix ON — kad A udje u poslednja 2 bara, B će se crossfade-ovati');
+              break;
+            case 'autoMixStop':
+              if (autoMix) { autoMix.stop(); log('Auto-mix OFF'); }
+              break;
+            case 'liteMode':
+              if (!engine) { log('Init prvo'); break; }
+              engine.setMobileLiteMode(!engine.liteMode);
+              log(`Lite mode: ${engine.liteMode ? 'ON' : 'OFF'} (nije retroaktivno za existing decks)`);
+              break;
+          }
+        } catch (err) {
+          log('ERR: ' + err.message);
+          console.error(err);
+        }
+      });
+
+      document.addEventListener('input', (e) => {
+        const k = e.target.dataset.knob;
+        if (!k) return;
+        const v = parseFloat(e.target.value);
+        try {
+          switch (k) {
+            case 'volA': deckA.setVolume(v / 100); break;
+            case 'volB': deckB.setVolume(v / 100); break;
+            case 'revA': deckA.setReverb(v / 100); break;
+            case 'revB': deckB.setReverb(v / 100); break;
+            case 'eqLowA': deckA.setEQ({ low: v }); break;
+            case 'eqMidA': deckA.setEQ({ mid: v }); break;
+            case 'eqHighA': deckA.setEQ({ high: v }); break;
+            case 'eqLowB': deckB.setEQ({ low: v }); break;
+            case 'eqMidB': deckB.setEQ({ mid: v }); break;
+            case 'eqHighB': deckB.setEQ({ high: v }); break;
+            case 'master': engine.setMasterVolume(v / 100); break;
+            case 'desyncA':
+              const intensity = v / 100;
+              desyncAnim.rampTo(intensity, 800);
+              break;
+          }
+        } catch (err) { log('ERR knob: ' + err.message); }
+      });
+    </script>
+  </body>
+</html>
