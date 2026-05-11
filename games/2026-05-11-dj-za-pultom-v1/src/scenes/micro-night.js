@@ -7,6 +7,10 @@ import { simulateSet, getDesyncTimer } from '../systems/micro.js';
 import { saveState } from '../state.js';
 import { getPeraNudge } from '../systems/pera-period.js';
 import { isUnlocked as isRecklessUnlocked } from '../systems/vector-reckless.js';
+import {
+  resumeOnUserGesture, startSet, applyTransition, applyHalfBeatDelay,
+  getEngine, isAudioReady
+} from '../audio.js';
 
 export function renderMicroNight(mount, state, transition) {
   const choices = {
@@ -75,8 +79,30 @@ export function renderMicroNight(mount, state, transition) {
         infoLine('De-sync timer ce krenuti', `~${getDesyncTimer(state)}s (placeholder — nije live u V1)`)
       ),
 
-      bigButton('Idi za pult', () => {
+      bigButton('Idi za pult', async () => {
+        // Audio: resume AudioContext iz user gesture (iOS Safari requirement),
+        // start set ako su tracks dostupni. Setlist se za sad konstruiše iz
+        // music_catalog tracks; placeholder fallback je prazan setlist.
+        await resumeOnUserGesture();
+        const energyLevel = { low: 0.25, normal: 0.5, high: 0.75, max: 1.0 }[choices.effort] ?? 0.5;
+        const setlist = buildSetlistFromCatalog(state);
+        if (isAudioReady() && setlist.length > 0) {
+          startSet(setlist, energyLevel);
+        }
+
         setResult = simulateSet(state, choices);
+
+        // Audio: half-beat delay kao default transition effect tokom result faze
+        // (šef brief: "delay daje brzinu i urgentnost u prelazu")
+        const eng = getEngine();
+        if (eng) {
+          const deckA = eng.getDeck && eng.getDeck('A');
+          if (deckA) {
+            const intensity = setResult.canceled ? 0 : Math.min(1, 0.3 + (setResult.quality / 150) * 0.5);
+            applyHalfBeatDelay(deckA, intensity);
+          }
+        }
+
         // Pera komentar
         if (setResult.canceled) {
           peraLine = getPeraNudge(state, 'health_low');
@@ -123,4 +149,17 @@ export function renderMicroNight(mount, state, transition) {
   }
 
   build();
+}
+
+// =============================================================================
+// Setlist constructor (placeholder)
+// =============================================================================
+// V1: vrača prazan array — engine je inicijalizovan ali nema realnih track-ova
+// dok šef ne dropne OGG opus fajlove sa BPM-KEY-name-BARS.opus naming-om.
+// Kad budu, jednostavno populisati `tracks` array sa {url, bpm, key, name, bars}.
+function buildSetlistFromCatalog(state) {
+  // TODO (post-Ceca asset drop): vraćaj real setlist iz state.music_catalog
+  // Privremeno — ostavljamo prazno, audio engine init i half-beat delay
+  // logika su funkcionalne ali bez actual playback-a.
+  return [];
 }

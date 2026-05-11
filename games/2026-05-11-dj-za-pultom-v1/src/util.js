@@ -40,7 +40,8 @@ export function deepCopy(obj) {
 
 export function el(tag, attrs = {}, ...children) {
   const node = document.createElement(tag);
-  for (const [key, val] of Object.entries(attrs)) {
+  const a = attrs == null ? {} : attrs;
+  for (const [key, val] of Object.entries(a)) {
     if (key === 'className') node.className = val;
     else if (key === 'style' && typeof val === 'object') Object.assign(node.style, val);
     else if (key.startsWith('on') && typeof val === 'function') node.addEventListener(key.slice(2).toLowerCase(), val);
