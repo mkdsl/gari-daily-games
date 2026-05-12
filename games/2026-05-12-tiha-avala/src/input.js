@@ -1,14 +1,14 @@
 // input.js — slider events (touch+mouse), button handlers
 
-import { playSliderTick, resumeAudio } from './audio.js';
+import { playSliderTick, unlockAudioOnGesture } from './audio.js';
 
-// Wires up a single user interaction event to resume AudioContext
+// Wires up a single user interaction event to create and unlock AudioContext on iOS
 export function wireAudioResume() {
-  const resume = () => {
-    resumeAudio();
+  const unlock = () => {
+    unlockAudioOnGesture();
   };
-  document.addEventListener('pointerdown', resume, { once: true });
-  document.addEventListener('keydown', resume, { once: true });
+  document.addEventListener('pointerdown', unlock, { once: true });
+  document.addEventListener('keydown', unlock, { once: true });
 }
 
 // Called from ui.js when slider changes

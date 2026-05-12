@@ -3,6 +3,7 @@
 import { LEVELS } from './levels/level_data.js';
 import { state } from './state.js';
 import { getLevelBest } from './systems/score.js';
+import { calcScore } from './systems/score.js';
 import { isLevelUnlocked } from './systems/progression.js';
 import { BRAND } from './content/brand.js';
 import { HINTS } from './content/hints.js';
@@ -40,6 +41,9 @@ export function renderMenu(root_el) {
       </div>
       <div class="menu-center">
         <button class="btn btn-play" id="btn-play">IGRAJ</button>
+        <p class="menu-rules">Podesi 3 klizača: jačina zvuka, bass, ugao zvučnika.<br>
+        PUBLIKA mora biti sretna. KOMŠIJA ne sme čuti više od 70dB.<br>
+        Drži oba merača u zelenoj zoni 10 sekundi — i prolaziš.</p>
       </div>
       <div class="menu-footer">
         <a href="${BRAND.footer_url}" target="_blank" rel="noopener" class="brand-link">${BRAND.footer}</a>
@@ -97,6 +101,7 @@ export function renderGameHUD(level) {
 
 function renderStandardHUD(level) {
   const hint = HINTS[level.hint_key] || {};
+  const win_condition = hint.win_condition || '';
   hud_el.innerHTML = `
     <div class="hud-inner">
       <div class="hud-level-info">
@@ -105,6 +110,7 @@ function renderStandardHUD(level) {
         <span class="hud-level-sub">${level.subtitle}</span>
       </div>
       ${hint.intro ? `<div class="hud-hint">${hint.intro}</div>` : ''}
+      ${win_condition ? `<div class="hud-win-condition">${win_condition}</div>` : ''}
       <div class="meter-container">
         <div class="meter">
           <div class="meter-label happiness">PUBLIKA</div>
@@ -126,6 +132,7 @@ function renderStandardHUD(level) {
       <div class="slider-container">
         ${makeSlider('spl', 'Master SPL', state.spl, 80, 120, 1, 'dB')}
         ${makeSlider('bass', 'Bass Ratio', Math.round(state.bass_ratio * 100), 0, 100, 1, '%')}
+        <small class="slider-hint">Bass: 0% = sve treble | 50% = balanced | 100% = distorzija</small>
         ${makeSlider('angle', 'Ugao zvučnika', state.angle, -60, 60, 1, '°')}
       </div>
       <div class="timer-bar-container" id="timer-bar-container" style="display:none">
@@ -274,7 +281,7 @@ export function updateMeters(happiness, kdbs, level) {
       if (bar) {
         const pct = Math.min(100, Math.max(0, ((kdb + 20) / 130) * 100));
         bar.style.width = pct + '%';
-        bar.style.background = kdb >= SPL_FAIL_THRESHOLD ? 'var(--accent-red)' : kdb >= SPL_WARN_THRESHOLD ? '#c0a020' : 'var(--accent-red)';
+        bar.style.background = kdb >= SPL_FAIL_THRESHOLD ? 'var(--accent-red)' : kdb >= SPL_WARN_THRESHOLD ? '#c0a020' : 'var(--accent-green)';
       }
       if (val) val.textContent = isFinite(kdb) ? kdb.toFixed(1) + ' dB' : '--';
     });
@@ -285,7 +292,7 @@ export function updateMeters(happiness, kdbs, level) {
     if (km) {
       const pct = Math.min(100, Math.max(0, ((kdb + 20) / 130) * 100));
       km.style.width = pct + '%';
-      km.style.background = kdb >= SPL_FAIL_THRESHOLD ? '#ff3030' : kdb >= SPL_WARN_THRESHOLD ? '#c0a020' : 'var(--accent-red)';
+      km.style.background = kdb >= SPL_FAIL_THRESHOLD ? '#ff3030' : kdb >= SPL_WARN_THRESHOLD ? '#c0a020' : 'var(--accent-green)';
     }
     if (kv) kv.textContent = isFinite(kdb) ? kdb.toFixed(1) + ' dB' : '--';
   }
@@ -325,11 +332,17 @@ export function showSimButtons(sim_running) {
 
 export function renderWinScreen(root_el, level, score, time_s, max_kdb, has_next) {
   const margin = (70 - max_kdb).toFixed(1);
+  const time_bonus = Math.max(0, Math.round((300 - time_s) * 10));
+  const margin_bonus = Math.max(0, Math.round((70 - max_kdb) * 50));
   root_el.innerHTML = `
     <div class="result-overlay">
       <div class="result-title win">BRAVO!</div>
       <div class="result-level">${level.name}</div>
-      <div class="result-score">${score}</div>
+      <div class="result-score">SCORE: ${score}</div>
+      <div class="result-score-breakdown">
+        <span>Vreme: ${time_bonus} pts</span>
+        <span>Margina: ${margin_bonus} pts</span>
+      </div>
       <div class="result-details">
         <span>Vreme: ${time_s.toFixed(1)}s</span>
         <span>Margina: ${margin} dB</span>

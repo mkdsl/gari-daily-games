@@ -85,6 +85,7 @@ export function tickSim(now, dt_ms) {
 
   const level = LEVELS[state.current_level];
   state.sim_elapsed_ms = now - state.sim_start_time;
+  const elapsed = state.sim_elapsed_ms;
 
   // Update wind
   if (level.has_wind) {
@@ -106,11 +107,14 @@ export function tickSim(now, dt_ms) {
     return 'fail_inspection';
   }
 
-  // Fail: publika
+  // Fail: publika (uz grace period)
   if (hs < HAPPINESS_FAIL_THRESHOLD) {
     if (!state.fail_crowd_start) {
       state.fail_crowd_start = now;
-    } else if (now - state.fail_crowd_start >= FAIL_CROWD_DURATION_MS) {
+    } else if (
+      now - state.fail_crowd_start >= FAIL_CROWD_DURATION_MS &&
+      elapsed > (level.grace_ms || 0)
+    ) {
       stopSimulation();
       return 'fail_crowd';
     }

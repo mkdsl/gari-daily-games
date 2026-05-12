@@ -9,6 +9,21 @@ let warning_interval = null;
 let warning_active = false;
 let slider_last_tick = 0;
 let initialized = false;
+let audioReady = false;
+
+export function unlockAudioOnGesture() {
+  if (audioReady) return;
+  audioReady = true;
+  if (!ctx_audio) {
+    ctx_audio = new (window.AudioContext || window.webkitAudioContext)();
+    _buildFestivalAmbient();
+    _buildCrowdNoise();
+    initialized = true;
+  }
+  if (ctx_audio.state === 'suspended') {
+    ctx_audio.resume();
+  }
+}
 
 export function initAudio() {
   if (initialized) return;
@@ -17,6 +32,9 @@ export function initAudio() {
     _buildFestivalAmbient();
     _buildCrowdNoise();
     initialized = true;
+    if (ctx_audio.state === 'suspended') {
+      ctx_audio.resume();
+    }
   } catch (e) {
     console.warn('Web Audio not available:', e);
   }

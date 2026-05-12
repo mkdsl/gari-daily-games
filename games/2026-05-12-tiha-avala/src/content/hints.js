@@ -3,6 +3,7 @@
 export const HINTS = {
   level1: {
     intro: "Ti si audio inžinjer. Podesi 3 klizača da publika bude srećna, ali komšija ne zove inspekciju.",
+    win_condition: "Drži oba merača u zelenoj zoni 10 sekundi zaredom da pređeš nivo.",
     spl_tip: "Master SPL: jačina zvuka sa bine. Više = sretnija publika, ali i glasnije za komšiju.",
     bass_tip: "Bass Ratio: više basa = sretnija publika, ali previše distortuješ zvuk.",
     angle_tip: "Speaker Angle: usmer zvuk prema plesu, daleko od kuća."
