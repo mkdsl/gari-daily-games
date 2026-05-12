@@ -12,35 +12,35 @@ export const CLASSES_UI_ORDER = [
 
 export const CLASS_UI = {
   custom: {
-    label: 'Tvoja prica',
+    label: 'Tvoja priča',
     short: 'Custom',
-    tagline: 'Tvoj pocetak nije ni jedan od ova tri.',
+    tagline: 'Tvoj početak nije ni jedan od ova tri.',
     long: 'Izaberi put ispod. Svaki nosi drugi teret i drugi dar.',
     icon: 'edit'
   },
   bogata_deca: {
     label: 'Bogata deca',
     short: 'Privilegija',
-    tagline: 'Imas pristup pre nego sto si trazio.',
-    long: 'Pitanje je da li te scena prihvata. Autenticnost se dokazuje, ne kupuje.',
+    tagline: 'Imaš pristup pre nego što si tražio.',
+    long: 'Pitanje je da li te scena prihvata. Autentičnost se dokazuje, ne kupuje.',
     icon: 'briefcase'
   },
   radnicka_klasa: {
-    label: 'Radnicka klasa',
+    label: 'Radnička klasa',
     short: 'Šljakanje',
-    tagline: 'Posao prvo. Sta ostane, to je tvoje.',
-    long: 'Manje vremena, manje para. Sve sto stignes nosi tezinu.',
+    tagline: 'Posao prvo. Šta ostane, to je tvoje.',
+    long: 'Manje vremena, manje para. Sve što stigneš nosi težinu.',
     icon: 'tool'
   },
   posthumna_penzija: {
     label: 'Posthumna penzija + faks',
-    short: 'Tikajuci budilnik',
-    tagline: 'Imas vremena. Pitanje je da li previse.',
-    long: 'Podrska je tu sad. Faks krece. Vec si na ivici monomania.',
+    short: 'Tikajući budilnik',
+    tagline: 'Imaš vremena. Pitanje je da li previše.',
+    long: 'Podrška je tu sad. Faks kreće. Već si na ivici monomanije.',
     icon: 'clock'
   }
 };
 
 // Onboarding text (Dule Korekcija 2 — Mile sekcija 5.5)
 export const CLASS_INTRO_TEXT =
-  'Tvoj origin nije presuda. Sve klase imaju puteve do finala. Razliciti tempovi, ne razliciti ishodi.';
+  'Tvoj origin nije presuda. Sve klase imaju puteve do finala. Različiti tempovi, ne različiti ishodi.';

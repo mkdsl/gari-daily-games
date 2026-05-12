@@ -1,276 +1,318 @@
 // =============================================================================
-// data/aforizmi.js — Pera Period bank (S1 v3 — event-trigger immediate action)
+// data/aforizmi.js — Pera Period bank (S1 final set, 2026-05-11)
 // =============================================================================
-// Tonalitet: telo, opservacija, pitanje. Ne dijagnoza, ne savet.
-// Po fazi: nedelja 1-3 supportive, 4-12 neutral observation, kraj može brutal.
+// Autor: Pera Period + Dule Dubina (etička validacija combined)
+// Reference:
+//   - dule-eticki-filter.md sekcija 4 (Pera Subtekst Pravilnik)
+//   - mile-gdd-v2-sezona1.md sekcija 12.3 (Pera ton po fazi)
+//   - concept/v7-paths-ui-rethink.md (6 paths + meta)
+//   - data/paths.js (Selektor / Faca / Žilav / Vezista / Promoter /
+//                    Andergraund / Prkosni / Trajni / Tragični Genije)
+//   - data/classes.js (Bogata deca / Radnička klasa / Posthumna penzija / Custom)
 //
-// v3 dodaci (Pera Period 2026-05-12, immediate action time-tax loop):
-//   - event_triggers — nove kategorije za immediate action paradigm:
-//       action_<vektor>_<success|fail|stale|breakthrough> — per-akcija feedback
-//       gig_<dan>_<success|fail> — gig night dan-of-week (uto-sub) + gig_miss
-//       cooldown_<akcija>_blocked — gray-out shake response (free, ne troši sat)
-//       path_lean_<path>_<wk4|wk7> — path emerge milestone (Negini pacing pragovi)
-//       onboarding_click_<n> — prvi 3 klika (Dule Mitigacija D: numerik balon overlay)
-//       wallclock_nudge — 25+ akcija u real-time sesiji (Dule Mitigacija E)
+// Pera ton pravilnik (Dule potvrdio):
+//   1. Observation, ne dijagnoza
+//   2. Pitanje, ne osuda
+//   3. Specifični brojevi, vremena, sećanja
+//   4. Tonalitet po fazi (1-3 podržavajući, 4-12 neutral, 13+ brutal samo ako kolaps)
 //
-// DROP iz v2: week_end_generic (week recap dump — Iskra concept eksplicitno OUT)
-//
-// Frequency cap mehanika (Dule Mitigacija C):
-//   - 1 linija per 30-45min internal default; upper bound 1 per 15min
-//   - Topic rotation: dve uzastopne ne smeju isti vector
-//   - Soft pause posle event-Pera: sledeće 2-3 standardne se preskoče
-//   - Event-trigger linije imaju prioritet nad random per-action
-//
-// v2 dodaci (Jova 2026-05-11):
-//   - cinematic_hook (Cinematic A boot scena)
-//   - origin_intro (pre/posle Origin Creator)
-//   - symptom_zone_yellow / red — overlay subtitle posle key event-a
-//   - recovery_slot_use (Tišina / Integration / Reality check)
-//   - rec_decay (recognizability normalnost-low decay)
+// Total: ~110 linija S1.
 // =============================================================================
 
-export const AFORIZMI = {
+export const PERA_AFORIZMI = {
 
-  // ===========================================================================
-  // CINEMATIC A HOOK — boot scena, dub bass, 1 rečenica fade-in
-  // ===========================================================================
-  cinematic_hook: [
-    'Niko ne počinje za pultom. Počinje od onoga što mu je život ostavio na podu.',
-    'Sat ti broji. Sala ne. Pitanje je čije pamćenje hoćeš.',
-    'Bas ti udara u grudni koš pre nego što stigne do ušiju. Tu si.',
-    'Nisi izabrao zvuk. Zvuk te je našao kad si ćutao.',
-    'Pet nedelja unapred zna se ko si. Dvanaest unapred niko.',
-    'Jedna ploča je dovoljna da te zapamte. Pitanje je da li si je ti birao ili ona tebe.',
-    'Petak je. Telo ti zna pre nego što ti kažeš.',
-    'Sve što si do sad puštao bila je vežba. Sad ti neko broji.'
+  // ---------------------------------------------------------------------------
+  // ORIGIN COMPLETION (5 origin pitanja gotovih) — po klasi + ukus
+  // ---------------------------------------------------------------------------
+  origin_complete_bogata_deca: [
+    'Tata ti je dao deck. Niko ti ga ne može oduzeti. Pitanje da li si zaslužio postavlja samo onaj koji ne razume da to nije pitanje.',
+    'Imaš pristup pre nego što si tražio. Scena vidi tu razliku, ali ne onako kako misliš.',
+    'Privilegija je alat. Pitanje je koji.'
   ],
-
-  // ===========================================================================
-  // ORIGIN INTRO — pre/posle Origin Creator
-  // ===========================================================================
-  origin_intro: [
-    'Tvoj početak nije presuda. Pitanje je šta ćeš nositi od njega.',
+  origin_complete_radnicka: [
+    'Šest sati ti uzima drugi posao. Pet ti je za muziku. Tih pet su tvoji — gušće od dvanaest tuđih.',
+    'Sve što ćeš napraviti, nosiš sam. Težina i zasluga su ista stvar.',
+    'Nemaš vremena za suvišno. To ti niko neće ukrasti kasnije.'
+  ],
+  origin_complete_penzija: [
+    'Imaš vremena. Pitanje je da li previše — to telo zna pre kalendara.',
+    'Nije pitanje šta ćeš, već šta nećeš. Sloboda izbora je teža nego što izgleda.',
+    'Faks kreće, podrška je tu. Pitanje koje samo ti znaš: čemu služi vreme koje ti je dato.'
+  ],
+  origin_complete_custom: [
+    'Tvoj početak nije ni jedan od tri. Pitanje koje ne moraš da odgovoriš: da li ti je lakše ili teže što si izabrao sam.',
     'Sve klase imaju puteve do kraja. Različiti tempovi, ne različiti ishodi.',
-    'Pitanje nije odakle si. Pitanje je šta si ostavio iza sebe da bi došao.'
+    'Priču si poneo sam. Sad da vidimo koliko od nje stane u dvanaest nedelja.'
   ],
 
-  origin_complete: [
-    'Klasa nije sudbina. Klasa je teret. Teret može da te ojača ili da te slomi.',
-    'Sad imaš ime. Sad imaš početak. Ostalo je tvoje.',
-    'Pre ovog ekrana — slušalac. Posle — neko ko misli da zna.'
+  // ---------------------------------------------------------------------------
+  // MACRO WEEK START (jutro DJ-a, ponedeljak)
+  // ---------------------------------------------------------------------------
+  week_start: [
+    'Nedelja je krenula. Niko još ne broji.',
+    'Sedmica počinje sa onim što si poneo iz prošle. Više nego što misliš.',
+    'Tri seta su pred tobom. Bar jedan će te iznenaditi.',
+    'Jutro je tiše nego što pamtiš. To je dobar znak ili nije — saznaćeš u petak.',
+    'Kalendar ti je prazan. To znači da ga ti pišeš ove nedelje.',
+    'Ponedeljak. Glava ti još pamti subotu. Telo čuje sredu.',
+    'Krenuo si bez plana ili sa planom. Petak će reći koje od to dvoje radi.'
   ],
 
-  // ===========================================================================
-  // WEEK OPEN — kad ponedeljak jutro stigne (immediate action, ne planner)
-  // ===========================================================================
-  week_open: [
-    'Ponedeljak. Telo zna pre nego što ti kažeš.',
-    'Nova nedelja. Sat nije pitao da li si spreman.',
-    'Sedam dana ispred. Niko ne piše unapred za tebe.',
-    'Klikni i počni. Ostalo se piše posle.'
+  // ---------------------------------------------------------------------------
+  // ACTIVITY FEEDBACK (posle pojedinih akcija po vektoru)
+  // ---------------------------------------------------------------------------
+  activity_promo: [
+    'Pet objava ove nedelje. Četiri nije video niko. Petu vide oni koje si već znao.',
+    'Story stigne brže nego što se setiš da si ga pustio.',
+    'Promo se gleda dok je svež. Posle je reč od usta jača.'
+  ],
+  activity_music_research: [
+    'Tri sata u digsu. Našao si dve pločice. Jedna će ti držati kraj seta sledeće nedelje.',
+    'Slušao si pre nego što si pomislio da pustiš. Razlika između zanata i pokazivanja.',
+    'Ono što pamti samo tvoje uvo — odatle dolazi signature.'
+  ],
+  activity_networking: [
+    'Pio si sa scenom. Pitanje je koliko od scene si poneo, koliko od sebe si ostavio.',
+    'Tri kontakta više u telefonu. Dva će te zvati. Jedan će te zaboraviti do utorka.',
+    'Stari rezident te je primetio. Pamti i one koji nisu primećeni.'
+  ],
+  activity_mixing: [
+    'Vežbao si dve nedelje istu tranziciju. Sad je nesvesna. Sledeća je teža.',
+    'Miks se čuje. Igrač u sali ne razume zašto je dobro, ali ne odlazi.',
+    'Četiri sata u sobi. Niko ti to neće priznati. Set u petak hoće.'
+  ],
+  activity_izgled: [
+    'Persona se gradi pre nego što stigneš da je objasniš. Ako stigneš da je objasniš — već je kasno.',
+    'Lice ti vide pre nego što čuju. Pitanje je šta vide.',
+    'Outfit nije suština. Ali je signal — i signal radi.'
+  ],
+  activity_scene_presence: [
+    'Bio si u sali iako nisi puštao. Vide ko ostane do kraja.',
+    'Stojiš pored boksa kad ne moraš. To se zove prisustvo, ne navijanje.',
+    'Tri sata u tuđoj žurci. Tvoj kraj nedelje kaže da nije bila tvoja noć. Sledeća će biti bliža.'
+  ],
+  activity_finansije: [
+    'Honorar je stigao. Nije ti rešio nedelju, ali je dao da je preživiš.',
+    'Račun je veći od fajla. To je matematika koja vraća, kasnije ili nikad.',
+    'Pet evra manje za muziku znači sto manje za nešto što ne pamtiš.'
+  ],
+  activity_reckless_selection: [
+    'Pustio si nešto što niko ne pušta. Tri u sali su odustala. Dvojica su ostala. Pitanje je da li ti je to dovoljno.',
+    'Hrabro ili glupo — i dalje je tvoj potpis. Razlika je u onom što se sledeći put desi.',
+    'Tuđi set ti se vrti u glavi. Tvoj je pušten — i to ti niko ne može oduzeti.'
   ],
 
-  // ===========================================================================
-  // SUPPORTIVE PHASE (nedelje 1-3)
-  // ===========================================================================
-  supportive_phase: [
-    'Prva nedelja. Niko još ne očekuje. Ni ti ne moraš.',
-    'Niko se ne pamti po prvoj nedelji. Pamti se po dvanaestoj.',
-    'Sve do sad bila je vežba. Sad je tu set koji će neko da pomene.',
-    'Sad si u tunelu. Svetlo nije obećanje, ali nije ni laž.'
+  // ---------------------------------------------------------------------------
+  // ŽRTVOVANJE DRAIN SIGNAL (Health / Odnosi / Normalnost)
+  // ---------------------------------------------------------------------------
+  health_low_50: [
+    'Tri noći. Ogledalo ti i sutra govori isto.',
+    'San je deo karijere. Onaj koji to ne primeti — pamti se kao dobar, ali ne dugo.',
+    'Telo ti piše ono što kalendar neće.',
+    'Četiri sata sna. Telo ti je popustilo prvo — glava još ne zna.'
   ],
-
-  observation_neutral: [
-    'Tri seta ove nedelje. Niko se ne seća kako je krenuo prvi.',
-    'Reputaciju nosiš u tuđim telefonima. Tvoj ti je ostao tih.',
-    'Pio si sa publikom. Pitanje je kad ćeš početi da piješ za nju.',
-    'Šest nedelja iza, šest ispred. Pola si već.',
-    'Ono što voliš da pustiš nije isto što i ono što treba da pustiš.'
-  ],
-
-  brutal_phase: [
-    'Ovo nije više igra. Ovo je ono što si izabrao da budeš.',
-    'Sad piše. Sad piše šta će ti pisati posle godinu dana.'
-  ],
-
-  // ===========================================================================
-  // SIMPTOMATSKI ZONE — overlay posle event-a (color zone trigger)
-  // ===========================================================================
-  symptom_health_yellow: [
-    'Telo ti je počelo da odgovara sporije. Sutra ćeš i ti.',
-    'Tri noći loš san. Ogledalo i sutra govori isto.',
-    'San je deo karijere. Onaj koji to ne primeti — pamti se kao dobar, ali ne dugo.'
-  ],
-  symptom_health_red: [
+  health_low_30: [
     'Došao si do publike. Do sutra još nisi.',
     'Telo ti je u zoni gde se ljudi mire da neće ustati u deset.',
-    'Mlad si dok ti se to ne sruši. Onda nisi.',
-    'Plan B nemaš. Telo je tvoj jedini.'
+    'Stomak prvi javi. Onda ramena. Glava poslednja stigne.',
+    'Ono što ne može da se izvuče kafom — to je signal, ne stanje.'
   ],
-
-  symptom_odnosi_yellow: [
-    'Majka ti je zvala pre devet dana.',
-    'Tri prijatelja više nije na listi. Nisi ih izbrisao — nisi ih pozvao.',
-    'Drugovima si poslednji put pisao u temi kojoj se ne sećaš.'
+  odnosi_low: [
+    'Majka ti je zvala pre devet dana. Telefon ti je tu, ona zna.',
+    'Tri prijatelja više nisu na listi. Nisi ih izbrisao — nisi ih pozvao.',
+    'Sestra ti je rodila pre dva meseca. Čestitao si porukom. Tačkica posle imena znači da te poznaje.',
+    'Drug iz srednje ti je pisao. Nisi odgovorio. Ne zato što nećeš — zato što si zaboravio kako se odgovara.'
   ],
-  symptom_odnosi_red: [
-    'Niko te ne zove. Ti si misao da je to mir. Nije.',
-    'Ostavili su te poslednji oni koji su ti rekli istinu pre tri godine.',
-    'Sad si sam u dobrom smislu. Sutra si sam u onom drugom.'
-  ],
-
-  symptom_normalnost_yellow: [
+  normalnost_low: [
     'Čitao si knjigu pre dva meseca. Ne sećaš se čije.',
-    'Hobby slot ti je prazan šest nedelja. Ponekad je to ok. Ne sad.',
-    'Pričao si o muzici 14 dana zaredom. Pitanje je da li se neko još slušao.'
-  ],
-  symptom_normalnost_red: [
-    'Sve što radiš je muzika. Pitanje je koga to interesuje osim tebe.',
-    'Identitet ti je polica sa pločama. Polica može da padne.',
-    'Kad si poslednji put bio bez slušalica i bez razloga?'
+    'Hobi slot ti je prazan šest nedelja. Ponekad je to u redu. Ne sad.',
+    'Sunce si video kroz prozor kola. To se ne broji.',
+    'Pisao si dnevnik. Sad pišeš samo set-listu. Razlika je teža nego što izgleda.'
   ],
 
-  // ===========================================================================
-  // SET QUALITY
-  // ===========================================================================
+  // ---------------------------------------------------------------------------
+  // ŽURKA PRE-START (Micro Night ulazak)
+  // ---------------------------------------------------------------------------
+  pre_event: [
+    'Set počinje za dvadeset minuta. Pripremio si dvadeset pločica. Iskoristićeš osam.',
+    'Čas je. Telo zna šta sledi pre nego što ti kažeš.',
+    'Niko još nije došao. Ti si tu prvi — to ti je posao.',
+    'Stiglo je vreme. Pitanje je da li si stigao i ti.',
+    'Set-lista ti je u glavi. Sala će je pisati drugačije.'
+  ],
+
+  // ---------------------------------------------------------------------------
+  // ŽURKA POST-EVENT (po set quality)
+  // ---------------------------------------------------------------------------
   set_high: [
     'Pustio si set kakav nisi očekivao da hoćeš.',
-    'Sala te je držala ovaj put. Sledeći put ti drži nju.',
-    'Sada znaš kako zvuči kad si bio tu. Pamti.'
+    'Sala te je držala ovaj put. Sledeći put ti držiš nju.',
+    'Tranzicija oko četiri ujutro. To si nosio nedeljama. Sad si je rekao.',
+    'Niko nije izašao za poslednjih sat. To se ne dešava slučajno.',
+    'Pljesak je iskren. To znaš po tome što si ga osetio pre nego što ga je bilo.'
   ],
   set_low: [
     'Publika oseti. Nisi morao da im kažeš.',
     'Ovo nije bio tvoj set. Pitanje je šta ga je odvelo od tebe.',
-    'Plejao si za sebe. Sala je to videla.'
+    'Pločica koja je trebalo da otvori — zatvorila je. Sutra se vraća, ne zaboravlja se.',
+    'Troje je izašlo u jednom trenutku. To je informacija, ne presuda.'
+  ],
+  set_average: [
+    'Set je bio dovoljan. To je reč koja se često kaže, ali ne kaže sve.',
+    'Niko nije izašao, niko nije pisao posle. Srednja zona — i ona ima svoju cenu.',
+    'Sala se setila ko si. Pitanje je da li će se setiti i sledeće subote.'
   ],
 
-  // ===========================================================================
-  // REPUTATION EVENTS
-  // ===========================================================================
-  rep_event_positive: [
-    'Stari rezident te je primetio. Pamti i one koji nisu primećeni.',
-    'Booker je gledao set. Ne mora se javiti da znači.',
-    'Neko ti je seo na bar i pitao gde su drugi tvoji setovi.'
+  // ---------------------------------------------------------------------------
+  // PATH LEAN SIGNAL (igrač jasno klizi ka jednom putu)
+  // ---------------------------------------------------------------------------
+  path_lean_selektor: [
+    'Set ti je primarni alat. Ostalo je doplata. Tako se nešto gradi do kraja.',
+    'Puštaš dovoljno često da te sala pamti po setu, ne po imenu. Teži smer, sigurniji put.'
   ],
-  rep_event_negative: [
-    'Neko te je preporučio. Onaj kome je preporučio nije zvao.',
-    'Ime ti je palo. Ne znaš čije usne, znaš da je palo.'
+  path_lean_faca: [
+    'Vide te pre nego što čuju. Pitanje koje ne moraš da odgovoriš: šta sledi kad oboje dođu.',
+    'Persona ti je porasla pre nego što si stigao da je objasniš. To je dar, ali i račun.'
+  ],
+  path_lean_vezista: [
+    'Svako te zna. Ti znaš svakog. To je posao koji se ne sme prekinuti.',
+    'Mreža ti raste brže nego set-lista. To je izbor, sa svojim ostavinama.'
+  ],
+  path_lean_promoter: [
+    'Naplatio si scenu pre nego što te je scena platila. Matematika je tvoja — i njena.',
+    'Tri honorara ove nedelje. Četvrti ti je odložio rođak. Tako se uči ko plaća kad.'
+  ],
+  path_lean_andergraund: [
+    'Znaš po imenima. Puštaš po sekciji. To je put koji niko ne brza — i to mu je suština.',
+    'Ne pojavljuješ se gde svi pišu. Pojavljuješ se gde se sluša.'
+  ],
+  path_lean_prkosni: [
+    'Pustio si nešto što niko ne pušta. Sledeći put hoćeš ponovo. To je signature, ne pogrešno.',
+    'Bezobrazan si u izboru. To je razlika između potpisa i kopije.'
+  ],
+  path_lean_zilav: [
+    'Držao si glavu iznad vode. To se ne pamti kao slava, ali se pamti.',
+    'Ovo je nedelja koju nisi mislio da ćeš dovući. Dovukao si.'
   ],
 
-  // ===========================================================================
-  // RECOGNIZABILITY DECAY (normalnost low)
-  // ===========================================================================
-  rec_decay: [
-    'Niko te ne pominje već dve nedelje. Ne zato što si nestao — zato što više nema gde.',
-    'Bio si u priči. Sad si u fusnoti.',
-    'Ono što te je činilo prepoznatljivim sad zvuči kao svi ostali.'
+  // ---------------------------------------------------------------------------
+  // WEEK RECAP (kraj nedelje, filozofski osvrt)
+  // ---------------------------------------------------------------------------
+  week_recap: [
+    'Nedelja je gotova. Ono što pamtiš razlikuje se od onog što kalendar pamti.',
+    'Ova nedelja te nije promenila. Pitanje je da li je trebalo.',
+    'Više muzike nego izlaska. Sad ti se isplati.',
+    'Više izlaska nego muzike. Sad ti se isplati.',
+    'Sedam dana je prošlo. Četiri si pamtio, kroz tri si prošao.',
+    'Brojiš šta si uradio. Sutra ćeš brojati šta nisi.',
+    'Nedelja se zatvara. Ono što si poneo, ponećeš dalje. Ostalo ostaje gde si ga zaboravio.',
+    'Kraj sedmice je tih. Bolji kraj nego početak.',
+    'Sve što si stigao, stigao si. Sve što nisi — to je sledeća nedelja.',
+    'Ništa preterano se nije desilo. To je takođe informacija.'
   ],
 
-  // ===========================================================================
-  // BOOZE / NAVIKE
-  // ===========================================================================
+  // ---------------------------------------------------------------------------
+  // FINALE PO PATH-U (6 path + Tragic Genius cascade + Lasting DJ)
+  // ---------------------------------------------------------------------------
+  finale_selektor: [
+    'Sezona je gotova. Niko više ne pita ko će pustiti. Pitaju kad.'
+  ],
+  finale_faca: [
+    'Persona je porasla. Lice te je pretrčalo. Sada glava treba da je sustigne.'
+  ],
+  finale_vezista: [
+    'Krug je pun. Svako te zna. Pitanje koje ne moraš da odgovoriš: koga još znaš ti.'
+  ],
+  finale_promoter: [
+    'Naplatio si nedelju. Naplatio si sezonu. Sledeće je da naplatiš sebi — to je teža naplata.'
+  ],
+  finale_andergraund: [
+    'Sezona je zatvorena tiho. Tako se i otvara ona sledeća.'
+  ],
+  finale_prkosni: [
+    'Pustio si do kraja ono što niko ne pušta. Sad imaš potpis. Pitanje je šta s njim sledeće sezone.'
+  ],
+  finale_trajni: [
+    'Nikad ti se nije srušila kuća. Ne zato što si imao sreće — zato što si umeo da nosiš svoju težinu, a tuđu samo onoliko koliko si mogao.'
+  ],
+  finale_tragicni: [
+    'Bio si prelep. Onda nije bilo nikog tu da te vidi. Razlika ti je trajala duže nego što si mislio.'
+  ],
+
+  // ---------------------------------------------------------------------------
+  // HARD FAIL EVENTS (kolaps, ne moralizovanje)
+  // ---------------------------------------------------------------------------
+  hard_fail_health: [
+    'Telo je reklo prvo. Ti ga sad čuješ.',
+    'Ovo nije presuda. To je pauza koja te je već čekala.'
+  ],
+  hard_fail_odnosi: [
+    'Niko nije pisao tri nedelje. To je više od slučajnosti.',
+    'Ono što se izgubilo, ne mora da ostane izgubljeno. Ali neće se vratiti samo.'
+  ],
+  hard_fail_finansije: [
+    'Račun je rekao ono što telo nije stiglo. Sad i jedno i drugo čekaju.',
+    'Četiri evra na računu. Nedelja je dugačka, ali se završava.'
+  ],
+  hard_fail_normalnost: [
+    'Zaboravio si kako se ne radi. To se uči ponovo, sa cenom.',
+    'Ime ti niko nije rekao mesec dana — bez prezimena DJ. To je signal.'
+  ],
+
+  // ---------------------------------------------------------------------------
+  // APSTINENT REFLECTION (q5 = apstinent)
+  // ---------------------------------------------------------------------------
   apstinent_reflection: [
-    'Bio si jedini trezni u sobi. Šta si video što ostali nisu.',
-    'Ne piješ godinama. Niko te zbog toga ne pamti. Pitanje koje ne mora odgovor.'
-  ],
-  alcohol_problem: [
-    'Pijan DJ pamti dobre noći. Trezna publika pamti loše setove.',
-    'Pivo nije izdaja. Drugo te nije lagalo. Petnaesto te je već deceniju uvuklo.'
+    'Bio si jedini trezan u sobi. Šta si video što ostali nisu.',
+    'Nisi pio sedam godina. Niko te ne pamti zbog toga. Pitanje koje ne moraš da odgovoriš: da li je trebalo.',
+    'Disciplina ti je tvoj alat. Pitanje koje sam sebi postavljaš — i to je dovoljno.'
   ],
 
-  // ===========================================================================
-  // RECOVERY SLOT (S2)
-  // ===========================================================================
-  recovery_tisina: [
-    'Bio si bez zvuka 48 sati. Sad ti se vraća sluh za ono što nisi čuo.',
-    'Tišina nije pauza. Tišina je sluh koji se vraća.'
-  ],
-  recovery_integration: [
-    'Tri dana razgovora sa sobom. Sad znaš šta si nosio bez da znaš.',
-    'Ono što si nedelju dana radio — to si ti ili to nije ti. Sad razlikuješ.'
-  ],
-  recovery_reality: [
-    'Telefonski razgovor sa nekim ko ne zna ko je tvoj rezidens. Ozdravljaš.',
-    'Pričao si o nečemu što nije muzika 40 minuta. Telo ti je bilo zahvalno.'
-  ],
-
-  // ===========================================================================
-  // ZOVI ČOVIKA (S2 — substance call)
-  // ===========================================================================
-  zovi_covika_first: [
-    'Zvao si ga. Niko te nije terao. Ovo je tvoja odluka.',
-    'On uvek odgovori. Pitanje je da li ti uvek treba.'
-  ],
-  zovi_covika_repeat: [
-    'Treći put ove nedelje. Pamti broj.',
-    'Sad je rutina. Rutina ima cenu koja nije u parama.',
-    'Više ga zoveš nego majku. Pitanje koje ne traži odgovor.'
-  ],
-
-  // ===========================================================================
-  // SUBSTANCE COMPOUND (poly use)
-  // ===========================================================================
-  compound_warning: [
-    'Tri komada u krvi. Telo broji čak i kad ti ne brojiš.',
-    'Compound nije sabiranje. Compound je novi prostor u kome nisi bio.',
-    'Sad ti telo radi matematiku koju ti nećeš razumeti dok ne stigne.'
-  ],
-
-  // ===========================================================================
-  // CASCADE / HARD FAIL
-  // ===========================================================================
-  cascade_warning: [
-    'Tri stuba se ljuljaju. Trećina od jednog je dovoljna da krene.',
-    'Sad biraš koji ćeš da ispustiš. Posle te neće niko pitati.'
-  ],
-
-  // ===========================================================================
-  // FINALE / WEEK 12
-  // ===========================================================================
-  finale_neutral: [
-    'Sezona je gotova. Pitanje je da li si ti.',
-    'Dvanaest nedelja. Tri imena će se setiti. Pet će zaboraviti.',
-    'Sad imaš priču. Sledeća sezona je pitanje da li je još ista.'
+  // ---------------------------------------------------------------------------
+  // SUPPORTIVE PHASE (nedelja 1-3) — Dule pravilnik 4.4
+  // ---------------------------------------------------------------------------
+  supportive_phase: [
+    'Prva nedelja. Niko još ne očekuje. Ni ti ne moraš.',
+    'Niko se ne pamti po prvoj nedelji. Pamti se po dvanaestoj.',
+    'Sve do sad bila je vežba. Sad je tu set koji će neko da pomene.',
+    'Početak je tih. Tako počinju i oni koji ostaju.',
+    'Treću nedelju radiš bez panike. To je već više od pola scene.'
   ],
 
   // ===========================================================================
   // EVENT TRIGGERS — immediate action loop (Pera v3, 2026-05-12)
   // ===========================================================================
-  // Per Dule Mitigacija C (frequency cap 1 per 30-45min internal, topic rotation,
-  // soft pause posle event-Pera). Per Iskra concept gameplay-loop-rework sekcija 6.
-  // Per Mile GDD sekcija 8 (substance) + sekcija 6 (gig nights).
+  // Drop "week_recap" dump paradigm. Pera linije se javljaju POSLE key event-a
+  // kontinualno (per Iskra gameplay-loop-rework + Mile GDD immediate action +
+  // Dule Mitigacija C frequency cap 1 per 30-45min, topic rotation, soft pause).
   // ===========================================================================
   event_triggers: {
 
-    // -------------------------------------------------------------------------
-    // V1 PROMO — per-akcija success/fail/stale
-    // -------------------------------------------------------------------------
+    // V1 PROMO
     action_promo_success: [
       'Tri lajka u prvom satu. Isti broj kao kad si ćutao.',
-      'Insta priča ne broji u jutro. Algoritam pamti samo večeru.',
+      'Insta priča ne broji ujutro. Algoritam pamti samo veče.',
       'Stavio si lice gore. Pitanje je da li te traže ili samo gledaju.',
-      'Stigao je do njih. Ne znaš kojih.'
+      'Stiglo je do njih. Ne znaš kojih.'
     ],
     action_promo_fail: [
       'Niko se nije javio. Telefon ne laže.',
-      'Reel je gledalo manje ljudi nego što ima u tvojoj fioci.',
+      'Reel je gledalo manje ljudi nego što ih ima u tvojoj fioci.',
       'Ad spend je legao u prazan plato.',
       'Pisalo je u prazno. Feed se okrenuo dva sata posle tebe.'
     ],
     action_promo_stale: [
-      'Iste pose, iste oči. Sledeći put pokušaj nešto što te boli.',
-      'Pet postova istih reči. Telo gledaoca vidi pre nego što oko stigne.',
+      'Iste poze, iste oči. Sledeći put pokušaj nešto što te boli.',
+      'Pet objava istih reči. Telo gledaoca vidi pre nego što oko stigne.',
       'Promo bez novosti je dnevnik koji niko ne otvori.'
     ],
 
-    // -------------------------------------------------------------------------
-    // V2 MUSIC RESEARCH — dud / breakthrough
-    // -------------------------------------------------------------------------
+    // V2 MUSIC RESEARCH
     action_music_breakthrough: [
       'Ploča ti je sela u stomak pre nego što ti je dotakla uvo.',
       'Jedna kompozicija ti je rekla nešto što tri nedelje nisu mogle.',
       'Sad imaš zvuk koji niko drugi nema. Pitanje je da li ćeš se setiti odakle.',
-      'Nešto u tom redu nota ti je otvorilo prozor. Sutra je ti.'
+      'Nešto u tom redu nota ti je otvorilo prozor. Sutra si ti.'
     ],
     action_music_dud: [
       'Dva sata digovanja, nula plus.',
@@ -279,14 +321,12 @@ export const AFORIZMI = {
       'Soundcloud feed ti je pružio ono što već imaš tri puta.'
     ],
 
-    // -------------------------------------------------------------------------
-    // V3 KNOWLEDGE — insight / mentorship reflection / dud
-    // -------------------------------------------------------------------------
+    // V3 KNOWLEDGE
     action_knowledge_insight: [
-      'Stranice gledaju iz tebe sad. Knjiga ti dotakla nešto.',
+      'Stranice gledaju iz tebe sad. Knjiga ti je dotakla nešto.',
       'Jedan red ti je premestio nešto u glavi. Ne znaš još šta.',
       'Posle ovog pasusa, slušaš drugačije.',
-      'Doc film ti je rekao staru priču. Sad je tvoja.'
+      'Dokumentarac ti je rekao staru priču. Sad je tvoja.'
     ],
     action_knowledge_mentor: [
       'Stariji ti je rekao u tri rečenice ono što si tražio tri meseca.',
@@ -294,43 +334,37 @@ export const AFORIZMI = {
       'Ručao si sa nekim ko je ostao u igri dvadeset godina. To se ne kupi.'
     ],
     action_knowledge_dud: [
-      'Podcast ti je pao iz uha posle pet minuta. Telo zna kad nije telo.',
+      'Podcast ti je ispao iz uha posle pet minuta. Telo zna kad nije telo.',
       'Knjiga ti se otvorila na strani gde već znaš sve. Ne ide ti danas.'
     ],
 
-    // -------------------------------------------------------------------------
-    // V4 MIXING — improvement / regression
-    // -------------------------------------------------------------------------
+    // V4 MIXING
     action_mixing_improvement: [
       'Vežbu osećaš u prstima. Sutra ne moraš da misliš na to.',
       'Tranzicija ti je sela ovaj put. Telo pamti.',
       'Beatmatching ti se uvukao u disanje. Brojiš bez brojanja.',
-      'Sad ti decka rade umesto tebe. To se ne dešava preko noći — dešava se posle tri sata noći koju nisi spavao.'
+      'Sad ti dekovi rade umesto tebe. To se ne dešava preko noći — dešava se posle tri sata noći koju nisi spavao.'
     ],
     action_mixing_regression: [
       'Sat vežbe, dva koraka unazad. Telo te traži.',
-      'Ruka ti se trese više nego pre nedelje. Pitanje koje si potisnuo.',
+      'Ruka ti se trese više nego pre nedelju dana. Pitanje koje si potisnuo.',
       'Studio sesija ti je danas zvučala kao tuđa. Verovatno jeste.'
     ],
 
-    // -------------------------------------------------------------------------
-    // V5 IZGLED — vanity moment
-    // -------------------------------------------------------------------------
+    // V5 IZGLED
     action_izgled_vanity: [
-      'Frizer te je novim glavom poslao u sobu. Sutra će ti reći ko si.',
-      'Garderoba ti je oduzela dve plate. Pitanje je da li su ti dale nešto što si do sad nemao.',
-      'Foto sesija ti je dala lice koje će neko da pamti. Pamti i kad pita ko si.',
-      'Fitness session, sat na trenažeru. Telo te ne laže.'
+      'Frizer te je novom glavom poslao u sobu. Sutra će ti reći ko si.',
+      'Garderoba ti je oduzela dve plate. Pitanje je da li su ti dale nešto što do sad nisi imao.',
+      'Foto-sesija ti je dala lice koje će neko da pamti. Pamti i kad pita ko si.',
+      'Fitnes sesija, sat na trenažeru. Telo te ne laže.'
     ],
 
-    // -------------------------------------------------------------------------
-    // V6 SCENE PRESENCE — networking / mingling outcomes
-    // -------------------------------------------------------------------------
+    // V6 SCENE PRESENCE
     action_scene_networking_success: [
       'Razgovor ti je rekao nešto što nije pitao za odgovor.',
       'Stao si pored nekoga ko te nije morao da pozdravi.',
       'Mingling ti je dao dva broja i jedan razlog za sutra.',
-      'Crew te je primio za sto. Bez pitanja, što je glasnije od pitanja.'
+      'Krju te je primio za sto. Bez pitanja, što je glasnije od pitanja.'
     ],
     action_scene_networking_dud: [
       'Stajao si dva sata. Niko nije pitao šta puštaš.',
@@ -338,34 +372,30 @@ export const AFORIZMI = {
       'Pratio si razgovor koji se ne tiče tebe. Energija ti je otišla.'
     ],
 
-    // -------------------------------------------------------------------------
-    // V7 FINANSIJE — gig book / sponsor / šljakanje
-    // -------------------------------------------------------------------------
+    // V7 FINANSIJE
     action_fin_gig_booked: [
       'Klub te je primio. Pamti broj — sutra je drugačiji.',
       'Pozvali su te. Pitanje je da li si ti ili je booker bio mamuran.',
-      'Cifra ti stigla bez pregovora. Znači da treba sledeći put više.'
+      'Cifra ti je stigla bez pregovora. Znači da treba sledeći put više.'
     ],
     action_fin_sponsor: [
       'Brend ti je rekao da ćeš zarađivati. Pamti ko ti je platio prvo pivo.',
-      'Sponsor pismo ti je palo u inbox. Otvori ga kad budeš sam.'
+      'Sponzorsko pismo ti je palo u inboks. Otvori ga kad budeš sam.'
     ],
     action_fin_sljakanje: [
       'Sedam sati za platu koja je tek za pivo i kartu.',
       'Šljakanje ti je oduzelo dan. Vratilo ti dostojanstvo.',
-      'Radio si dok su drugi diggovali. Pitanje koje neko mora da postavi.',
+      'Radio si dok su drugi digovali. Pitanje koje neko mora da postavi.',
       'Sad imaš pare i kičmu. Veza je tvoja.'
     ],
 
-    // -------------------------------------------------------------------------
-    // V8 ENERGIJA — siesta / hobby / sleep
-    // -------------------------------------------------------------------------
+    // V8 ENERGIJA
     action_energy_siesta: [
       'Dva sata mira u sredini dana. Niko ti to nije propisao osim tela.',
       'Spavao si kad su drugi pričali. Snovi su ti rekli šta da pustiš.'
     ],
     action_energy_hobby: [
-      'Tri sata sa nečim što nije muzika. Knjiga, lopta, ribljak — svejedno.',
+      'Tri sata sa nečim što nije muzika. Knjiga, lopta, ribnjak — svejedno.',
       'Hobi te vratio u nešto što si bio pre pulta.',
       'Sad si bio neko ko nije DJ. Vrati se sutra sa novim ušima.'
     ],
@@ -374,19 +404,15 @@ export const AFORIZMI = {
       'Spavao si bez slušalica. Sutra ti ne dolazi sa istom težinom.'
     ],
 
-    // -------------------------------------------------------------------------
-    // V9 RECKLESS — signature risk
-    // -------------------------------------------------------------------------
+    // V9 RECKLESS
     action_reckless_signature: [
-      'Crafted si signature ploču. Sutra ćeš znati da li je tvoja ili pozajmica.',
-      'Risk research te je odveo u retku ploču. Sad ti je u torbi — i pitanje.',
+      'Iskovao si signature ploču. Sutra ćeš znati da li je tvoja ili pozajmica.',
+      'Risk-research te je odveo u retku ploču. Sad ti je u torbi — i pitanje.',
       'Sad imaš oružje za sledeću subotu. Možda i protiv sebe.',
       'A/B test ti je rekao šta ne ide. To je veće od šta ide.'
     ],
 
-    // -------------------------------------------------------------------------
-    // GIG NIGHT — dan-of-week success / fail
-    // -------------------------------------------------------------------------
+    // GIG NIGHT — dan-of-week (uto/sre/cet/pet/sub) + miss
     gig_utorak_success: [
       'Utorak. Trideset ljudi. Niko se ne uda za tebe te noći, ali jedan te neće zaboraviti.',
       'Mali kafić ti je dao prvu klimu. Telo zna kad sala diše.',
@@ -394,29 +420,29 @@ export const AFORIZMI = {
     ],
     gig_utorak_fail: [
       'Mali klub, mala očekivanja, manji set. Niko te ne pita za sutra.',
-      'Utorak ti je oduzeo veče za novac koji nije za pivo.'
+      'Utorak ti je oduzeo veče za novac koji nije ni za pivo.'
     ],
     gig_sreda_success: [
       'Sreda, klub C, publika koja sluša prvi takt. Pamti kako si započeo — sutra će neko da pita.',
       'Sredinom nedelje sala ima drugi puls. Ti si ga osetio.',
-      'Bookera te je gledao iz ćoška. Ne mora da prilazi da bi pamtio.'
+      'Booker te je gledao iz ćoška. Ne mora da prilazi da bi pamtio.'
     ],
     gig_sreda_fail: [
       'Sreda nije bila tvoja. Plej-lista ti je bežala iz ruke.',
       'Klub C te je primio i pustio. Razlog ne znaš još.'
     ],
     gig_cetvrtak_success: [
-      'Četvrtak, klub B, crew je seo pored pulta. Sad si bio za njih.',
-      'Reputation ti je radila pre tebe. Posle seta to znaš.',
-      'Četvrtak je tvoj dan. Možda zato što niko drugi ne brani.'
+      'Četvrtak, klub B, krju je seo pored pulta. Sad si bio za njih.',
+      'Reputacija ti je radila pre tebe. Posle seta to znaš.',
+      'Četvrtak je tvoj dan. Možda zato što ga niko drugi ne brani.'
     ],
     gig_cetvrtak_fail: [
-      'Čet je tražio od tebe više nego što si nosio.',
-      'Klub B te primio na pola. Booker neće zvati sledeće dve nedelje.'
+      'Četvrtak je tražio od tebe više nego što si nosio.',
+      'Klub B te je primio na pola. Booker neće zvati sledeće dve nedelje.'
     ],
     gig_petak_success: [
-      'Petak, klub A, dvesta ljudi su znala čije je veče. Tvoje je sad.',
-      'Premium veče ti je dalo cifru koja se pamti.',
+      'Petak, klub A, dvesta ljudi je znalo čije je veče. Tvoje je sad.',
+      'Premijum veče ti je dalo cifru koja se pamti.',
       'Petak ti je dao publiku koju nije morao niko da pozove.'
     ],
     gig_petak_fail: [
@@ -424,25 +450,23 @@ export const AFORIZMI = {
       'A-tier klub te ne uvodi dva puta zaredom. Idi kući i misli.'
     ],
     gig_subota_success: [
-      'Subota. Premium veče. Sad imaš noć koja se pamti dvanaest nedelja.',
+      'Subota. Premijum veče. Sad imaš noć koja se pamti dvanaest nedelja.',
       'Sala te je nosila. Pitanje je da li ti je sutra dala mir ili glad.',
       'Najveća publika ti je dala najveću tišinu posle. Drži se te tišine.',
       'Subota je prošla. Sad si tu kuda si gledao osam nedelja.'
     ],
     gig_subota_fail: [
       'Subota te je iznajmila. Više se ne vraćaš na nju brzo.',
-      'Premium noć je pamtila set koji nije bio tvoj.',
+      'Premijum noć je pamtila set koji nije bio tvoj.',
       'A-tier prime ti je pokazao gde si. Sad piše.'
     ],
     gig_miss: [
       'Telefon nije zvonio. Subota je.',
-      'Sala neće biti tvoja ovaj put. Sutra je ti.',
+      'Sala neće biti tvoja ovaj put. Sutra si ti.',
       'Niko te nije zvao. Pamti ko jeste, ne ko nije.'
     ],
 
-    // -------------------------------------------------------------------------
-    // COOLDOWN GRAY-OUT — spam pokušaj, shake response (free, ne troši sat)
-    // -------------------------------------------------------------------------
+    // COOLDOWN GRAY-OUT — spam pokušaj (free, ne troši sat)
     cooldown_promo_blocked: [
       'Već si objavio. Algoritam te ne voli više.',
       'Insta ti je rekao dosta. Sutra je drugi feed.',
@@ -451,30 +475,28 @@ export const AFORIZMI = {
     ],
     cooldown_izgled_blocked: [
       'Frizer ne radi noću. Sutra.',
-      'Iste pose, iste oči. Sledeća foto je za tri nedelje.',
+      'Iste poze, iste oči. Sledeća fotka je za tri nedelje.',
       'Garderoba ti je sveža. Ne kupuje se ista jakna dva puta u nedelji.',
-      'Fitness ti je telo dao danas. Daj mu jutro.'
+      'Fitnes ti je telo dao danas. Daj mu jutro.'
     ],
     cooldown_money_blocked: [
-      'Money ne magičan dvogled. Ad spend ima krov.',
-      'Sponsor ti se neće javiti dva puta u istoj nedelji.'
+      'Novac nije magični dvogled. Ad spend ima krov.',
+      'Sponzor ti se neće javiti dva puta u istoj nedelji.'
     ],
     cooldown_scene_blocked: [
-      'Već si bio tu večeras. Ekipa te ne čeka tri puta isto veče.',
-      'Guest set ti je odsviran. Sledeći te zovu kad zaborave i sete se.'
+      'Već si bio tu večeras. Ekipa te ne čeka tri puta u istom veče.',
+      'Guest set ti je odsviran. Sledeći te zovu kad zaborave pa se sete.'
     ],
 
-    // -------------------------------------------------------------------------
-    // PATH LEAN THRESHOLD — wk 4 (emerge) + wk 7 (mature) per Nega pacing
-    // -------------------------------------------------------------------------
+    // PATH LEAN THRESHOLD — wk 4 (emerge) + wk 7 (mature)
     path_lean_selektor_wk4: [
-      'Trkaš ka publici sa kompletom koji je već znao kako se zove. Drugi te zovu profesionalcem pre nego što si rekao.'
+      'Trčiš ka publici sa kompletom koji je već znao kako se zove. Drugi te zovu profesionalcem pre nego što si rekao.'
     ],
     path_lean_selektor_wk7: [
       'Imam te u uvu — kažu drugi. Sad znaš zašto te zovu drugi put.'
     ],
     path_lean_faca_wk4: [
-      'Frizer, garderoba, foto. Telo ti je postalo brand. Pitanje koje nećeš sebi.'
+      'Frizer, garderoba, fotka. Telo ti je postalo brend. Pitanje koje nećeš sebi.'
     ],
     path_lean_faca_wk7: [
       'Polako, ti si postao taj koji ulazi prvi u kadar. Sala te gleda pre nego što stigneš za pult.'
@@ -486,42 +508,36 @@ export const AFORIZMI = {
       'Sad si veza koja drugima otvara vrata. Pitanje je ko otvara tebi.'
     ],
     path_lean_promoter_wk4: [
-      'Pare ti se nakupljaju. Pitanje je kojim plate-om plaćaš.'
+      'Pare ti se nakupljaju. Pitanje je kojim ratama plaćaš.'
     ],
     path_lean_promoter_wk7: [
       'Postao si neko ko broji pre nego što pusti. Subota te zove. Pamti šta ne zoveš.'
     ],
     path_lean_andergraund_wk4: [
-      'Skupljaš ploče sporo, ćutiš ih duže. Crna trkačka stezna te traži.'
+      'Skupljaš ploče sporo, ćutiš ih duže. Crna trkačka staza te traži.'
     ],
     path_lean_andergraund_wk7: [
       'Andergraund te primio bez aplauza. Pitanje je da li te primio ili te krije.'
     ],
     path_lean_prkosni_wk4: [
-      'Riskuješ ploču svake nedelje. Sala ti to još oprašta.'
+      'Rizikuješ ploču svake nedelje. Sala ti to još oprašta.'
     ],
     path_lean_prkosni_wk7: [
       'Sad si onaj koji ulazi sa retkim. Pitanje je da li biraš ti ili rizik bira tebe.'
     ],
 
-    // -------------------------------------------------------------------------
     // FIRST-RUN ONBOARDING — prvi 3 klika (Dule Mitigacija D)
-    // Numerik balon overlay paralelno, ovo je telesni layer
-    // -------------------------------------------------------------------------
     onboarding_click_1: [
       'Prvi klik. Sat ti je krenuo. Ono što odeš sad — ne vraća se.'
     ],
     onboarding_click_2: [
-      'Drugi klik. Telo počinje da prati. Stat strune ti se trzaju — to si ti, ne sistem.'
+      'Drugi klik. Telo počinje da prati. Stare strune ti se trzaju — to si ti, ne sistem.'
     ],
     onboarding_click_3: [
       'Treći klik. Sad razumeš kako diše. Brojevi se sklanjaju, sluh ostaje.'
     ],
 
-    // -------------------------------------------------------------------------
     // WALL-CLOCK NUDGE — 25+ akcija u real-time sesiji (Dule Mitigacija E)
-    // Indistractable stil — observation, ne kazna, ne block
-    // -------------------------------------------------------------------------
     wallclock_nudge: [
       'Sat ti se nije pomerio za vodu poslednjih dvadeset i pet poteza.',
       'Igraš dugo. Telo te zove — ne sad, samo da znaš.',
@@ -534,74 +550,97 @@ export const AFORIZMI = {
 };
 
 // =============================================================================
-// CONTEXT-AWARE PICKER
-// =============================================================================
-// Event-trigger format: "event:<key>" — npr. "event:gig_subota_success",
-//   "event:cooldown_promo_blocked", "event:path_lean_andergraund_wk7"
-// Legacy context (v2): direktni ključ (npr. "supportive_phase", "set_high")
+// CONTEXT SELECTOR — Mile sekcija 12.3
 // =============================================================================
 export function selectAforizam(state, context) {
-  const week = state ? state.week : 1;
-  const bank = AFORIZMI;
+  const week = state.week;
+  const bank = PERA_AFORIZMI;
 
-  // Event-trigger prefix routing (v3 immediate action)
+  // EVENT TRIGGER (v3 immediate action) — "event:<key>"
+  // Iskra concept gameplay-loop-rework + Dule Mitigacija C
   if (typeof context === 'string' && context.startsWith('event:')) {
     const key = context.slice(6);
     if (bank.event_triggers && bank.event_triggers[key]) {
       return pick(bank.event_triggers[key]);
     }
-    // Fallback ako event key fali — observation_neutral, ne kazna
-    return pick(bank.observation_neutral);
+    return pick(bank.supportive_phase);
   }
 
-  // Direct context match (v2 legacy)
-  if (bank[context]) return pick(bank[context]);
-
-  // Context-with-zone mapping
-  if (context === 'symptom' && state) {
-    const lowest = lowestSymptom(state);
-    if (lowest.zone === 'red') return pick(bank[`symptom_${lowest.key}_red`] || bank.symptom_health_red);
-    if (lowest.zone === 'yellow') return pick(bank[`symptom_${lowest.key}_yellow`] || bank.symptom_health_yellow);
+  // ORIGIN
+  if (context === 'origin_complete') {
+    const klasa = state.origin?.q1_class || 'custom';
+    if (klasa === 'bogata_deca') return pick(bank.origin_complete_bogata_deca);
+    if (klasa === 'radnicka_klasa') return pick(bank.origin_complete_radnicka);
+    if (klasa === 'posthumna_penzija') return pick(bank.origin_complete_penzija);
+    return pick(bank.origin_complete_custom);
   }
 
-  // Substance — Zovi covika repeat?
-  if (context === 'zovi_covika' && state) {
-    const total = state.substance?.zovi_covika_total || 0;
-    if (total <= 1) return pick(bank.zovi_covika_first);
-    return pick(bank.zovi_covika_repeat);
-  }
+  // MACRO
+  if (context === 'week_start') return pick(bank.week_start);
+  if (context === 'week_recap') return pick(bank.week_recap);
 
-  // Set quality
+  // ACTIVITY FEEDBACK (po vektoru)
+  if (context === 'activity_promo') return pick(bank.activity_promo);
+  if (context === 'activity_music_research') return pick(bank.activity_music_research);
+  if (context === 'activity_networking') return pick(bank.activity_networking);
+  if (context === 'activity_mixing') return pick(bank.activity_mixing);
+  if (context === 'activity_izgled') return pick(bank.activity_izgled);
+  if (context === 'activity_scene_presence') return pick(bank.activity_scene_presence);
+  if (context === 'activity_finansije') return pick(bank.activity_finansije);
+  if (context === 'activity_reckless_selection') return pick(bank.activity_reckless_selection);
+
+  // ŽURKA
+  if (context === 'pre_event') return pick(bank.pre_event);
   if (context === 'set_high') return pick(bank.set_high);
-  if (context === 'set_low')  return pick(bank.set_low);
-  if (context === 'rep_event_positive') return pick(bank.rep_event_positive);
-  if (context === 'rep_event_negative') return pick(bank.rep_event_negative);
+  if (context === 'set_low') return pick(bank.set_low);
+  if (context === 'set_average') return pick(bank.set_average);
 
-  // Drinking
-  if (context === 'alcohol_problem') return pick(bank.alcohol_problem);
-  if (state && state.apstinent && context === 'reflection') return pick(bank.apstinent_reflection);
+  // DRAIN
+  if (context === 'health_low' && state.sacrifice?.health < 30) return pick(bank.health_low_30);
+  if (context === 'health_low') return pick(bank.health_low_50);
+  if (context === 'odnosi_low') return pick(bank.odnosi_low);
+  if (context === 'normalnost_low') return pick(bank.normalnost_low);
 
-  // Phase-based fallback
+  // PATH LEAN
+  if (context === 'path_lean') {
+    const path = state.path_lean?.dominant;
+    if (path === 'pro_set') return pick(bank.path_lean_selektor);
+    if (path === 'peak_maker') return pick(bank.path_lean_faca);
+    if (path === 'networker') return pick(bank.path_lean_vezista);
+    if (path === 'hustler') return pick(bank.path_lean_promoter);
+    if (path === 'underground_craftsman') return pick(bank.path_lean_andergraund);
+    if (path === 'reckless_selector') return pick(bank.path_lean_prkosni);
+    if (path === 'survivor') return pick(bank.path_lean_zilav);
+  }
+
+  // FINALE
+  if (context === 'finale') {
+    const path = state.final_path;
+    if (path === 'pro_set') return pick(bank.finale_selektor);
+    if (path === 'peak_maker') return pick(bank.finale_faca);
+    if (path === 'networker') return pick(bank.finale_vezista);
+    if (path === 'hustler') return pick(bank.finale_promoter);
+    if (path === 'underground_craftsman') return pick(bank.finale_andergraund);
+    if (path === 'reckless_selector') return pick(bank.finale_prkosni);
+    if (path === 'the_lasting_dj') return pick(bank.finale_trajni);
+    if (path === 'the_tragic_genius') return pick(bank.finale_tragicni);
+  }
+
+  // HARD FAIL
+  if (context === 'hard_fail_health') return pick(bank.hard_fail_health);
+  if (context === 'hard_fail_odnosi') return pick(bank.hard_fail_odnosi);
+  if (context === 'hard_fail_finansije') return pick(bank.hard_fail_finansije);
+  if (context === 'hard_fail_normalnost') return pick(bank.hard_fail_normalnost);
+
+  // APSTINENT (q5)
+  if (state.origin?.q5_apstinencija === 'apstinent' && context === 'reflection') {
+    return pick(bank.apstinent_reflection);
+  }
+
+  // PHASE-BASED DEFAULT
   if (week <= 3) return pick(bank.supportive_phase);
-  if (week <= 9) return pick(bank.observation_neutral);
-  if (week <= 12) return pick(bank.brutal_phase || bank.observation_neutral);
 
-  return pick(bank.observation_neutral);
-}
-
-function lowestSymptom(state) {
-  const s = state.sacrifice || {};
-  const arr = [
-    { key: 'health',     val: s.health ?? 100 },
-    { key: 'odnosi',     val: s.odnosi ?? 100 },
-    { key: 'normalnost', val: s.normalnost ?? 100 }
-  ];
-  arr.sort((a, b) => a.val - b.val);
-  const low = arr[0];
-  let zone = 'green';
-  if (low.val < 30) zone = 'red';
-  else if (low.val < 60) zone = 'yellow';
-  return { key: low.key, val: low.val, zone };
+  return pick(bank.week_recap);
 }
 
 function pick(arr) {
@@ -609,13 +648,16 @@ function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// Back-compat alias za stari placeholder import path
-export const AFORIZMI_PLACEHOLDER = AFORIZMI;
+// =============================================================================
+// BACKWARD COMPAT — Mile sistemi i ostali fajlovi import-uju AFORIZMI_PLACEHOLDER.
+// Eksportujemo alias da se ne kvari postojeci kod dok se sve ne prebaci.
+// =============================================================================
+export const AFORIZMI_PLACEHOLDER = PERA_AFORIZMI;
 
-export const TOTAL_COUNT = Object.values(AFORIZMI).reduce((sum, val) => {
+// Stats — nested-aware (event_triggers je object od arrays)
+export const AFORIZMI_COUNT = Object.values(PERA_AFORIZMI).reduce((sum, val) => {
   if (Array.isArray(val)) return sum + val.length;
   if (val && typeof val === 'object') {
-    // nested (event_triggers) — sum over inner arrays
     return sum + Object.values(val).reduce((s, arr) => s + (Array.isArray(arr) ? arr.length : 0), 0);
   }
   return sum;

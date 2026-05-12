@@ -1,169 +1,279 @@
 // =============================================================================
-// data/pera-substance.js — Pera Period S2 bank (substance + 44 dijagnoze)
+// data/pera-substance.js — Pera Period S2 substance bank (~75 linija)
 // =============================================================================
-// Format: po dijagnozi 1 linija. Tier 1 suptilno, Tier 2 vidljivo, Tier 3 brutalno.
+// Autor: Pera Period + Dule Dubina (etička validacija combined), 2026-05-11
+// Reference:
+//   - gdd/mile-gdd-s2-substance.md sekcija 15.9 (60-80 nove linije po brifu)
+//   - concept/s2-substance-dijagnoze.md sekcija 1-5 (single dijagnoze)
+//             sekcija 4.2.6 (compound C1-C8)
+//             sekcija H.4 (Nega 6 imena reset)
+//   - dule-eticki-filter.md sekcija 4 (Pera Pravilnik)
+//
+// Anti-glorifikacija strict za T2/T3 (Sekcija G u substance-dijagnoze):
+//   T1 (blaga) — Pera dozvoljen suptilno pozitivan ton ("ima nešto u tome")
+//   T2 (srednja) — sumnja, "trebao bih da pauziram"
+//   T3 (jaka) — realan, ne PSA. Telo zna pre tebe.
+//
+// Po supstanci × tier × dijagnoza. Plus 8 compound. Plus tier escalation overlay.
 // =============================================================================
 
-export const DIAGNOSES = [
-  // ALKOHOL spectrum (4)
-  { id: 'alc_t1', substance: 'alcohol', tier: 1, label: 'Pivo na pultu',
-    pera: 'Pivo nije izdaja. Pitanje je samo da li ti je još piće.' },
-  { id: 'alc_t2', substance: 'alcohol', tier: 2, label: 'Petlja sa setovima',
-    pera: 'Tri šuljana piva. Onda misliš da si trezan. Onda si druga osoba za pultom.' },
-  { id: 'alc_t3', substance: 'alcohol', tier: 3, label: 'DJ navika',
-    pera: 'Pijan DJ pamti dobre noći. Trezna publika pamti loše setove.' },
-  { id: 'alc_t3b', substance: 'alcohol', tier: 3, label: 'Jutarnji nastavak',
-    pera: 'Sutra ujutru još nije gotovo. To si ti nazvao deo karijere.' },
+export const PERA_SUBSTANCE = {
 
-  // NIKOTIN (3)
-  { id: 'nic_t1', substance: 'nicotine', tier: 1, label: 'Druženje cigara',
-    pera: 'Jedna posle seta. Niko ti ništa.' },
-  { id: 'nic_t2', substance: 'nicotine', tier: 2, label: 'Paklica dnevno',
-    pera: 'Glas ti je niži za pola tona. Setovi to još ne primećuju.' },
-  { id: 'nic_t3', substance: 'nicotine', tier: 3, label: 'Dva paklica + jutarnja',
-    pera: 'Disanje ti je počelo da broji takt sa tebe. Pitanje koliko još.' },
+  // ===========================================================================
+  // MARIHUANA — 7 dijagnoza
+  // T1: M6 (Apetit Kao Sat), M1 (Šuma Između Reči)
+  // T2: M2 (Kvar na Sutra), M3 (Sofa Postaje Mreža), M4 (Smeh Koji Stiže Sam)
+  // T3: M5 (Mama Nedelja), M7 (Pesma Bez Početka)
+  // ===========================================================================
 
-  // KOFEIN (3)
-  { id: 'caf_t1', substance: 'caffeine', tier: 1, label: 'Tri kafe',
-    pera: 'Kafa ti je radni alat. Pitanje je kad ti postane uloga.' },
-  { id: 'caf_t2', substance: 'caffeine', tier: 2, label: 'Pet kafa + energetik',
-    pera: 'Srce ti broji brže nego playlist. Pitanje koje od ova dva pre puca.' },
-  { id: 'caf_t3', substance: 'caffeine', tier: 3, label: 'Kofein kao zamena za san',
-    pera: 'Spavao bi. Ne daš. Sad ti telo plaća kamatu koju nisi zaračunao.' },
+  // T1 — Pera blago pozitivan ("ostrvce u nedelji")
+  M6: 'Gladan si u dva. Ne za hranu. Za sebe pre toga.',
+  M1: 'Reč je tu. Samo treba tri sekunde više da stigne.',
 
-  // MARIHUANA (4)
-  { id: 'mj_t1', substance: 'cannabis', tier: 1, label: 'Vikend joint',
-    pera: 'Vikend, balkon, dva dima. Zovem to balansom.' },
-  { id: 'mj_t2', substance: 'cannabis', tier: 2, label: 'Skoro svaki dan',
-    pera: 'Kratkoročna memorija ti je počela da bira šta pamti. Setlisti to ne vole.' },
-  { id: 'mj_t3', substance: 'cannabis', tier: 3, label: 'Pre seta blunt',
-    pera: 'Sve ti zvuči dobro. Pitanje je da li si ti to čuo ili to drugo.' },
-  { id: 'mj_t3b', substance: 'cannabis', tier: 3, label: 'Self-medikacija anksioznost',
-    pera: 'Lečiš nešto čega nisi siguran. Sad imaš dva problema.' },
+  // T2 — Pera sumnja ("ovo nije isto kao na pocetku")
+  M2: 'Sutra je počelo bez tebe. Stići ćeš ga uveče — ali stiže prvo.',
+  M3: 'Sve je tu gde si ga ostavio. Ti si jedini koji se nije pomerio.',
+  M4: 'Smeješ se istoj šali sa istih troje. Šala se ne menja, troje se ne menja.',
 
-  // STIMULANSI (5) — speed/koks/MDMA
-  { id: 'stim_t1', substance: 'stim', tier: 1, label: 'Liniju na žurci, retko',
-    pera: 'Jednom je probaš. Onda se sećaš kako je bilo.' },
-  { id: 'stim_t2', substance: 'stim', tier: 2, label: 'Svaki vikend',
-    pera: 'Petak postaje obećanje koje ti telo daje pre nego što ga ti daš.' },
-  { id: 'stim_t3', substance: 'stim', tier: 3, label: 'I za pultom',
-    pera: 'Sad ti je set brži od BPM-a. Sala to oseti pre nego što ti vidiš.' },
-  { id: 'stim_t3b', substance: 'stim', tier: 3, label: 'Comedown svuda',
-    pera: 'Utorak ti je nedelja koju ne pamtiš. Pet ti je razlog koji ti ne treba.' },
-  { id: 'mdma_t3', substance: 'stim', tier: 3, label: 'Empatija na pozajmici',
-    pera: 'Voleo si ih sve. U sredu se nisi sećao zašto.' },
+  // T3 — Pera realan ("telo zna pre mene")
+  M5: 'Sve dobre vesti čekaju ponedeljak. Ponedeljak čeka tebe.',
+  M7: 'Producent si već tri meseca jedne pesme. Pesma je dobra. Početak je negde drugde.',
 
-  // PSIHODELICI (4) — LSD/psilocybin
-  { id: 'psy_t1', substance: 'psychedelic', tier: 1, label: 'Mikrodoze, dom',
-    pera: 'Sad ti boje zvuče. Nikad ne znaš kome to kažeš.' },
-  { id: 'psy_t2', substance: 'psychedelic', tier: 2, label: 'Trip vikendom',
-    pera: 'Vratio si se. Ne sasvim. Razlika ti je deo soundscape-a.' },
-  { id: 'psy_t3', substance: 'psychedelic', tier: 3, label: 'Na žurci, za pultom',
-    pera: 'Sad si trip-sitter sebi i sali. Niko nije pristao na ovu ulogu.' },
-  { id: 'psy_t3b', substance: 'psychedelic', tier: 3, label: 'HPPD/flashbacks',
-    pera: 'Sad vidiš stvari koje ne pripadaju. Telo ti se nije setilo da ti kaže kad.' },
+  // ===========================================================================
+  // PSIHODELICI — 6 dijagnoza
+  // T1: P3 (Jedanaest Stvari), P2 (Soba Koja Nije Cela)
+  // T2: P1 (Šuma Između Mene i Mene), P5 (Bukvica Bez Stranica)
+  // T3: P4 (Identitet Kao Soba Ogledala), P6 (Žurka Koja Te Ne Pušta)
+  // ===========================================================================
 
-  // KETAMIN (3)
-  { id: 'ket_t1', substance: 'dissociative', tier: 1, label: 'Mali bump u WC-u',
-    pera: 'Pola sekunde rupa. Niko ti nije primetio. Tebi je bilo dovoljno.' },
-  { id: 'ket_t2', substance: 'dissociative', tier: 2, label: 'K-hole čekanje',
-    pera: 'Sad biraš koliko si tu. Pitanje je da li si te biraš ili ne.' },
-  { id: 'ket_t3', substance: 'dissociative', tier: 3, label: 'Daily ritual',
-    pera: 'Realnost ti je opcija. Sad ti telo plaća bubrege.' },
+  // T1 — pozitivan ton sa cost preview, Dule potvrdio P3
+  P3: 'Pečurke su ti pokazale jedanaest stvari. Sutra je tvoj posao da se setiš. Nije ih jedanaest čekalo.',
+  P2: 'Zid je tu. Samo ne sasvim.',
 
-  // BENZODIAZEPINI / SLEEP MEDS (3)
-  { id: 'benzo_t1', substance: 'depressant', tier: 1, label: 'Xanax pred let',
-    pera: 'Jedan tableta — ok. Pitanje je kad postaje rutina.' },
-  { id: 'benzo_t2', substance: 'depressant', tier: 2, label: 'Spavanje na rec',
-    pera: 'Spavaš jer si pio. Pitanje je da li si ikad više sam spavao.' },
-  { id: 'benzo_t3', substance: 'depressant', tier: 3, label: 'Zavisnost telesna',
-    pera: 'Ne možeš da staneš. Telo ti se navklo. Sad je to drugi problem.' },
+  // T2 — sumnja
+  P1: 'Ogledalo radi. Samo ne odmah.',
+  P5: 'Naučio si nešto važno. Nigde nije zapisano. Sutra je opet važno.',
 
-  // OPIOIDI (3)
-  { id: 'op_t1', substance: 'opioid', tier: 1, label: 'Recept iza povrede',
-    pera: 'Lek koji ti je dobro došao. Sad pitanje kad neće.' },
-  { id: 'op_t2', substance: 'opioid', tier: 2, label: 'Pomaže za bol',
-    pera: 'Boli te nešto drugo, ali ovo radi. Telo te uči da to bira opet.' },
-  { id: 'op_t3', substance: 'opioid', tier: 3, label: 'Off-prescription',
-    pera: 'Sad ti je telo dilirano. Sutra ti je ti dilirano.' },
+  // T3 — realan, eksternalizovan (Dule pravilo: ne dijagnostikovati karakter)
+  P4: 'Bio si pet ljudi sinoć. Pitanje koje ne moraš da odgovoriš: koji je doneo set kući.',
+  P6: 'Žurka je gotova pre tri meseca. Pita te ko si i šta tu radiš.',
 
-  // POLY / COMPOUND (5)
-  { id: 'poly_alc_stim', substance: 'compound', tier: 3, label: 'Alc + stim (kombo)',
-    pera: 'Srce ti broji za dve osobe. Pitanje koja ti je tvoja.' },
-  { id: 'poly_alc_benzo', substance: 'compound', tier: 3, label: 'Alc + benzo (opasno)',
-    pera: 'Telo ti odlučuje za tebe da li dišeš. Niko nije pristao da im veruje.' },
-  { id: 'poly_stim_psy', substance: 'compound', tier: 3, label: 'Stim + trip',
-    pera: 'Brz si i daleko. Niko ti ne stiže da kaže da je predugačko.' },
-  { id: 'poly_alc_cannabis', substance: 'compound', tier: 2, label: 'Alc + trava',
-    pera: 'Mućenje. Set zna. Ti ne.' },
-  { id: 'poly_full_chaos', substance: 'compound', tier: 3, label: 'Sve odjednom',
-    pera: 'Sad si laboratorija. Pitanje koja reakcija prva izađe.' },
+  // ===========================================================================
+  // STIMULANSI — 9 dijagnoza
+  // T1: S3 (Spavanje Kao Strana Rec), S6 (Zubi Koji Sami Pricaju)
+  // T2: S1 (Sat Ti Se Ne Smiruje), S4 (Ogledalo Koje Laze), S8 (Racun)
+  // T3: S5 (Krug Postaze Žica), S2 (Most Koji Ne Drži), S7 (Sve Okusi Isto),
+  //     S9 (Sutra Koje Se Ne Vraca — PERMANENT)
+  // ===========================================================================
 
-  // BEHAVIORAL (4) — sleep deprivation, food, sex, gambling
-  { id: 'beh_sleep', substance: 'behavioral', tier: 2, label: 'Hronična neispavanost',
-    pera: 'San ti je opcija. Telo ti je naplaćuje šest meseci kasnije.' },
-  { id: 'beh_food', substance: 'behavioral', tier: 2, label: 'Junk food rutina',
-    pera: 'Hrana ti je shut-up za telo. Pitanje šta još ćuti pod njom.' },
-  { id: 'beh_sex', substance: 'behavioral', tier: 2, label: 'Posle žurke svaki put',
-    pera: 'Telo ti pamti pre nego što ti kažeš. Pitanje koliko više pamti od tebe.' },
-  { id: 'beh_gambling', substance: 'behavioral', tier: 2, label: 'Klađenje na set fee',
-    pera: 'Stavljaš na sebe kao da si tuđi konj. Sad si i džokej i konj i kuća.' },
+  // T1 — kratak boost ali već imanentni umor; ne glorifikuj
+  S3: 'San je negde. Nisi ti.',
+  S6: 'Vilica radi sama. Ne pita te više.',
 
-  // MENTAL (3)
-  { id: 'mental_anxiety', substance: 'mental', tier: 2, label: 'Anksioznost pred set',
-    pera: 'Tremor ti je sastojak. Tako si rekao. Pitanje koliko više.' },
-  { id: 'mental_burnout', substance: 'mental', tier: 3, label: 'Burnout, niko ti ne veruje',
-    pera: 'Sve ti je teško. Niko ne veruje jer si i dalje na liniji. To je još teže.' },
-  { id: 'mental_dissociation', substance: 'mental', tier: 3, label: 'Disocijacija za pultom',
-    pera: 'Set se odvija. Ti si negde drugde. Nikad ne znaš ko se vraća.' }
-];
+  // T2 — sumnja, "ovo nije ono sto je bilo"
+  S1: 'Srce ti ne čeka muziku. Bilo je tu pre nje.',
+  S4: 'Pričaš o sebi kao da neko drugi piše. Iz tuđe računice.',
+  S8: 'Račun se piše dok ti spavaš. Sutra te čeka u kuhinji.',
 
-// Indeksi za brzu pretragu
-export const DIAGNOSES_BY_ID = DIAGNOSES.reduce((acc, d) => { acc[d.id] = d; return acc; }, {});
-export const DIAGNOSES_BY_SUBSTANCE = DIAGNOSES.reduce((acc, d) => {
-  acc[d.substance] = acc[d.substance] || [];
-  acc[d.substance].push(d);
-  return acc;
-}, {});
+  // T3 — realan, telo zna pre tebe
+  S5: 'Niko ti nije rekao ništa. Ali znaš da su nešto rekli.',
+  S2: 'Most je radio deset godina. Niko nije pitao kako.',
+  S7: 'Doneo si veliki gig kući. Stoji u sobi i čeka da ga osetiš.',
+  S9: 'Vratio si se. Nije se vratilo sve sa tobom.',
 
-// =============================================================================
-// SUPSTANCE META (UI kategorizacija)
-// =============================================================================
-export const SUBSTANCE_META = {
-  alcohol:      { label: 'Alkohol',        color: '#c79a3b', icon: 'wine' },
-  nicotine:     { label: 'Nikotin',        color: '#9a8a6b', icon: 'smoke' },
-  caffeine:     { label: 'Kofein',         color: '#6b4423', icon: 'coffee' },
-  cannabis:     { label: 'Marihuana',      color: '#5b8a4a', icon: 'leaf' },
-  stim:         { label: 'Stimulansi',     color: '#d94e3a', icon: 'bolt' },
-  psychedelic:  { label: 'Psihodelici',    color: '#a64bc4', icon: 'eye' },
-  dissociative: { label: 'Disocijativi',   color: '#3b6dc7', icon: 'circle' },
-  depressant:   { label: 'Depresanti',     color: '#4a4a6b', icon: 'moon' },
-  opioid:       { label: 'Opioidi',        color: '#7a3a3a', icon: 'pill' },
-  compound:     { label: 'Kombinacije',    color: '#ff4040', icon: 'venn' },
-  behavioral:   { label: 'Ponašanje',      color: '#888888', icon: 'cycle' },
-  mental:       { label: 'Mentalno',       color: '#4a7a9a', icon: 'mind' }
+  // ===========================================================================
+  // ALKOHOL — 8 dijagnoza
+  // T1: A1 (Lice Koje Prepoznaje), A7 (Sutra Kao Juce)
+  // T2: A2 (Pre-Noon Resilience), A4 (Unguarded Word), A6 (Misic Koji Zaboravi)
+  // T3: A5 (Krug Koji Se Suzava), A3 (Jetra Sapuce — PERMANENT cap),
+  //     A8 (Telo Drhti Pre Soundcheck — PERMANENT ritual)
+  // ===========================================================================
+
+  // T1 — Nega rename apply-ovan: Hair of the Dog → Pre-Noon Resilience (A2 sinergija u T2)
+  A1: 'Pre nego što kažeš ime, neko ga je već rekao. Ne onako kako bi ti.',
+  A7: 'Sedmica je prošla. Nije bila ovde.',
+
+  // T2 — sumnja; A2 i A4 imena reformulisana po Negi
+  A2: 'Doručak nije obrok. Nastavak je.',
+  A4: 'Reči su otišle pre tebe. Sutra ih vraćaš peške.',
+  A6: 'Ruke pamte. Kažu ti tek kasnije.',
+
+  // T3 — realan, ne PSA
+  A5: 'Krug se nije zatvorio. Samo si stao u jednu njegovu tačku.',
+  A3: 'Tihi organ. Ne viče. Beleži.',
+  A8: 'Pre svake muzike, telo pita za odgovor. Ti biraš koji.',
+
+  // ===========================================================================
+  // NIKOTIN — 6 dijagnoza
+  // T1: N5 (Prsti Koji Sami Brojaju), N3 (Sat Koji Te Ceka Napolju)
+  // T2: N1 (Pet Minuta), N2 (Glas Koji Trci)
+  // T3: N4 (Pluca Sapucu), N6 (Telo Plaća Tihim Racunima — PERMANENT soft cap)
+  // ===========================================================================
+
+  // T1
+  N5: 'Prsti su znali pre tebe. Sad žele drugu naviku.',
+  N3: 'Došao si rano. Cigareta je bila pravi razlog.',
+
+  // T2 — Mile sekcija 3.5 deceptively-benign middle period (suptilan signal)
+  N1: 'Pet minuta. Sve odluke koje se zovu pet minuta.',
+  N2: 'Glas je tu. Stiže promukao.',
+
+  // T3
+  N4: 'Stepenice su iste. Ti si drugačiji.',
+  N6: 'Telo plaća. Tihim računima.',
+
+  // ===========================================================================
+  // COMPOUND — 8 dijagnoza
+  // T2: C1 (M+A Soba Bez Vremena), C2 (M+P Vrata Bez Zakljucavanja — NO PLUS),
+  //     C4 (A+N Disanje U Kolektivu), C5 (S+N Žica I Kafa)
+  // T3: C3 (A+S Srce Na Dva Motora), C6 (P+S Kontrola Iskoči),
+  //     C7 (M+A+N Sva Tri — Normalnost PERMANENT),
+  //     C8 (A+S+N — Health PERMANENT, Nega Flag 7 mitigacija)
+  // ===========================================================================
+
+  // T2 compound — sumnja prevladava
+  C1: 'Soba bez vremena. Pločica ti svira treći put — ili prvi. Pitanje koje ne moraš da odgovoriš.',
+  C2: 'Vrata bez ključa. Niko nije ušao, ali ti se čini da jeste.',
+  C4: 'Disanje u kolektivu. Krug ti pripada — i odbija sve što nije krug.',
+  C5: 'Žica i kafa. Sat se vrti brže, dani prolaze sporije. Telo broji nešto treće.',
+
+  // T3 compound — realan, kratak, ne dramatizovan (Nega Flag 7 strict)
+  C3: 'Srce na dva motora. Jedan ga ubrzava, drugi ga drži budnim.',
+  C6: 'Kontrola koja iskoči. Mesto ostane. Ti se vratiš tek sutra.',
+  C7: 'Sva tri šalju istovremeno. Nedelja te ne čeka. Ti je više ne pratiš.',
+  C8: 'Tri ruke vrte rulet. Srce broji kuglice.',
+
+  // ===========================================================================
+  // COMPOUND RECOVERY — kad jedna supstanca prestane, compound se "razgrada"
+  // Sekcija 14 mile-gdd-s2: standing Pera linija na recovery prelaz
+  // ===========================================================================
+
+  compound_recovery: 'Motor se rasklopio. Delovi su tu, svaki sam.',
+
+  // ===========================================================================
+  // TIER ESCALATION OVERLAY — opšte Pera linije po tier-u (ne po dijagnozi)
+  // Mile sekcija 11 onset cinematic; sekcija 3.5 N2/N1 mid-gradient signal
+  // ===========================================================================
+
+  tier_1_general: [
+    'Ostrvce u nedelji. Ne menja nedelju — samo se vidi.',
+    'Ima nešto u tome. Pitanje koje se otvara kasnije.',
+    'Prvi put bez prebrojavanja. Sledeći će već da prebroji.'
+  ],
+
+  tier_2_general: [
+    'Ovo nije isto kao na početku. Telo to zna pre kalendara.',
+    'Trebao bih da pauziram. Rečenica koja se čuje često, izgovara retko.',
+    'Sumnja je stigla. Ne presuda — samo sumnja.'
+  ],
+
+  tier_3_general: [
+    'Ne mogu sam da se izvučem. To je rečenica koju nije lako reći. Lakša je nego onaj sutra koji dolazi.',
+    'Telo zna pre mene. Čuo sam ga, sad ga slušam.',
+    'Ovo nije faza. Ovo je adresa na koju sam stigao.'
+  ],
+
+  // ===========================================================================
+  // SUBSTANCE ACCESS COUNTER (Mile sekcija 2 — "Zovi covika" friction)
+  // Pera linija kad Numeric Mode OFF, umesto progress bar [Marihuana access: 14/25]
+  // ===========================================================================
+
+  access_early: 'Čovek koga ne znaš te još uvek ne zna. Sledeći put možda.',
+  access_mid: 'Krug ti je sad sve bliži. Pitanje koje ne moraš da odgovoriš: zašto.',
+  access_unlocked: 'Otključalo se. Ne znači da treba da otvoriš.',
+
+  // ===========================================================================
+  // RECOVERY SLOT (Sekcija 6.4 — proaktivni slotovi, ne reward)
+  // Mile sekcija 11 "Telesno stanje" tab — hover Pera linije
+  // ===========================================================================
+
+  slot_tisina: 'Tišina ti je tu. Nedelja od žurki, ne od života.',
+  slot_integration: 'Imaš dva poziva za tišinu. Ostavi ih za pravu nedelju.',
+  slot_reality_check: 'Jednom ti je sopstvena procena bila bliža tuđoj. Sad provera vraća razliku.',
+
+  // ===========================================================================
+  // RELAPSE (Sekcija 7.3 — observation, ne osuda)
+  // ===========================================================================
+
+  relapse_light: 'Vratio si se istom mestu. Nije isto mesto sad.',
+  relapse_medium: 'Pola koraka nazad. Telo broji od pola.',
+  relapse_heavy: 'Vratio si se. Nije se vratilo sve sa tobom.'
 };
 
-// Tier color za UI (T1 gray-zelen, T2 žut, T3 crven)
-export const TIER_COLOR = {
-  1: { name: 'suptilno',  cls: 'tier-1', color: '#6a8a6a' },
-  2: { name: 'vidljivo',  cls: 'tier-2', color: '#c79a3b' },
-  3: { name: 'urgentno',  cls: 'tier-3', color: '#d94e3a' }
-};
+// =============================================================================
+// SELECTOR — koristi se iz systems/pera-period.js ili substance state engine
+// =============================================================================
+export function selectSubstanceLine(dijagnozaId, context) {
+  // Direct lookup po dijagnoza ID (M1-M7, P1-P6, S1-S9, A1-A8, N1-N6, C1-C8)
+  if (dijagnozaId && PERA_SUBSTANCE[dijagnozaId]) {
+    return PERA_SUBSTANCE[dijagnozaId];
+  }
 
-// =============================================================================
-// COMPOUND DETECTION
-// =============================================================================
-// Vraća listu aktivnih compound dijagnoza na osnovu state.substance.active_substances[]
-export function detectCompounds(activeSubstances) {
-  const result = [];
-  const set = new Set(activeSubstances);
-  if (set.has('alcohol') && set.has('stim')) result.push(DIAGNOSES_BY_ID.poly_alc_stim);
-  if (set.has('alcohol') && set.has('depressant')) result.push(DIAGNOSES_BY_ID.poly_alc_benzo);
-  if (set.has('stim') && set.has('psychedelic')) result.push(DIAGNOSES_BY_ID.poly_stim_psy);
-  if (set.has('alcohol') && set.has('cannabis')) result.push(DIAGNOSES_BY_ID.poly_alc_cannabis);
-  if (set.size >= 4) result.push(DIAGNOSES_BY_ID.poly_full_chaos);
-  return result;
+  // Context overlay (tier general, access counter, slot, relapse)
+  if (context === 'tier_1') return pick(PERA_SUBSTANCE.tier_1_general);
+  if (context === 'tier_2') return pick(PERA_SUBSTANCE.tier_2_general);
+  if (context === 'tier_3') return pick(PERA_SUBSTANCE.tier_3_general);
+
+  if (context === 'access_early') return PERA_SUBSTANCE.access_early;
+  if (context === 'access_mid') return PERA_SUBSTANCE.access_mid;
+  if (context === 'access_unlocked') return PERA_SUBSTANCE.access_unlocked;
+
+  if (context === 'slot_tisina') return PERA_SUBSTANCE.slot_tisina;
+  if (context === 'slot_integration') return PERA_SUBSTANCE.slot_integration;
+  if (context === 'slot_reality_check') return PERA_SUBSTANCE.slot_reality_check;
+
+  if (context === 'compound_recovery') return PERA_SUBSTANCE.compound_recovery;
+
+  if (context === 'relapse_light') return PERA_SUBSTANCE.relapse_light;
+  if (context === 'relapse_medium') return PERA_SUBSTANCE.relapse_medium;
+  if (context === 'relapse_heavy') return PERA_SUBSTANCE.relapse_heavy;
+
+  return '';
 }
 
-export const COUNT = DIAGNOSES.length;  // 44
+function pick(arr) {
+  if (!arr || arr.length === 0) return '';
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// =============================================================================
+// Stats — koliko linija sumarno
+// =============================================================================
+export const PERA_SUBSTANCE_COUNT = Object.entries(PERA_SUBSTANCE).reduce(
+  (sum, [key, val]) => sum + (Array.isArray(val) ? val.length : 1),
+  0
+);
+
+// =============================================================================
+// ŠTA ČEKA ŠEFA (Pera nesigurnost — Mile sekcija 15 pattern)
+// =============================================================================
+// Pera linije sa "treba sef approval" tag (5 mesta gde Pera nije siguran):
+//
+//   1. A8 "Pre svake muzike, telo pita za odgovor. Ti birash koji."
+//      → A8 je Dule Flag 6 (najjača i najrizičnija dijagnoza). Pera linija
+//        namerno univerzalna, ali šef da potvrdi da NE prepoznaje konkretnog
+//        DJ-a iz scene. Ako prepozna, zameniti.
+//
+//   2. C8 "Tri ruke vrte ruletu. Srce broji kuglice."
+//      → Nega Flag 7 (poly-use PSA fear-mongering). Mile je vec validirao
+//        ovaj redak. Šef da igra-testira da li je rulet metafora previse
+//        dramatizovana ili je realan.
+//
+//   3. C2 "Vrata bez kljucanice. Niko nije usao, ali ti se cini da jesu."
+//      → Mile C2 odluka = NO PLUS (compound dissociation). Pera linija mora
+//        biti neutralna, ne romantizovana. "cini se" je granica — šef da
+//        potvrdi da NE klizi u "interesantno iskustvo" frame.
+//
+//   4. S9 "Vratio si se. Nije se vratilo sve sa tobom."
+//      → Permanent cap dijagnoza. Linija je 2 puta korišćena (S9 + relapse_heavy).
+//        Šef da odluci: drzati istu liniju za oba ili pisati novu za relapse_heavy.
+//
+//   5. P3 "Pecurke su ti pokazale jedanaest stvari. Sutra je tvoj posao da se setis."
+//      → Dule Flag 1 (insight gain). Linija je iz Dule etickog filtera (4.5.5)
+//        ali je dopuna "Nije ih jedanaest cekalo" Perina dopuna 2026-05-11.
+//        Šef da potvrdi da li dopuna dodaje ili oduzima od originala.
+//
+// Plus indirektno (ne flag, ali za info):
+//   - "tier_3_general" — sve tri linije su nove (nisu iz Mile GDD ili Dule filter).
+//     Pera je improvizovao "ne mogu sam da se izvucem" frame; ako sef misli da
+//     to klizi u PSA, zameniti.

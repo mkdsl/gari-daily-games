@@ -1,31 +1,30 @@
 // =============================================================================
-// data/origin-questions.js — 5 origin pitanja + 9 preseta (v2)
+// data/origin-questions.js — 5 origin pitanja (Mile sekcija 1.3)
 // =============================================================================
-// V2 (Jova 2026-05-11):
-//   - 9 preseta u JEDNOJ listi (NE kategorizovano "Klasični/Mladi")
-//   - 4 klasični: punk_to_dj, classical_kontinuum, migrant_scene, kafanski_muzicar
-//   - 5 mladih:   m1_gamer_producent, m2_net_samouk, m3_soundsystem_klinac,
-//                 m4_stream_native, m5_brat_sestra_nasleduje
-//   - Origin Creator scene-a renderuje sve u single-column scroll (mobile)
-//     ili 2-3 col grid (desktop) — NEMA kategorija visible
+// MOBILE-FIRST REDIZAJN (Jova 2026-05-11):
+//   - SVI inputi su multiple choice (zero text inputs, zero AI/keyword backend)
+//   - Q3 "signature taste" → 6 ponuđenih žanr preset-ova sa stat_mods
+//   - Custom klasa "Tvoja prica" → 4 custom-path preset-a (custom_presets ispod)
+//     umesto free-text paragrafa
 // =============================================================================
+// Klasa je primary (Q1). Q2-Q5 su narativne preferencije + stat tweaks.
 
 export const ORIGIN_QUESTIONS = [
   {
     id: 'q1_class',
     key: 'q1_class',
-    prompt: 'Šta ti je dalo telo da ovo radiš?',
-    type: 'preset_selector',  // posebno se rukuje u sceni
+    prompt: 'Kakav ti je bio kontekst kad si počeo ozbiljno da slušaš muziku?',
+    type: 'class_or_custom',  // special handler — koristi CLASS_UI + CUSTOM_PRESETS
     is_required: true
   },
   {
     id: 'q2_observed_djs',
     key: 'q2_observed_djs',
-    prompt: 'Kako si gledao DJ-eve pre nego što si pomislio da budeš jedan?',
+    prompt: 'Kako si gledao DJ-eve pre nego što si pomislio da budeš jedan od njih?',
     type: 'single_choice',
     options: [
-      { value: 'showman', label: 'Showmen koji drži salu', stat_mods: { visual: 0.3 } },
-      { value: 'craftsman', label: 'Zanatlija — slušao sam mix', stat_mods: { mixing: 0.3, knowledge: 0.2 } },
+      { value: 'showman', label: 'Šoumen koji drži salu', stat_mods: { visual: 0.3 } },
+      { value: 'craftsman', label: 'Zanatlija — slušao sam miks', stat_mods: { mixing: 0.3, knowledge: 0.2 } },
       { value: 'curator', label: 'Kustos — šta pušta', stat_mods: { knowledge: 0.5 } },
       { value: 'host', label: 'Domaćin koji okuplja', stat_mods: { network: 0.4 } },
       { value: 'mystery', label: 'Nisam razumeo, osetio sam', stat_mods: { recognizability: 0.1, mixing: 0.1 } }
@@ -73,27 +72,30 @@ export const ORIGIN_QUESTIONS = [
 ];
 
 // =============================================================================
-// 9 ORIGIN PRESETS — single flat list, no categories (v2)
+// CUSTOM PRESETS — kad igrač izabere klasu "Tvoja prica" (custom)
 // =============================================================================
-// Svaki preset ima:
-//   key, label, tag, tagline, long, stat_mods (start tier deltas),
-//   class_baseline (fallback CLASS_MODIFIERS key u config.js: bogata/radnicka/posthumna/custom),
-//   substance_baseline (S2 starter substances if any).
+// Jova 2026-05-11: zamena za free-text paragraf. 4 predefined paths,
+// svaki sa pre-podešenom stat distribucijom (slično 3 main klase).
+// Šef proverava da li je 4. (kafanski) zadržan ili izbačen — flag-ovano u izveštaju.
+//
+// Stat brojevi su startni pct-ovi (0-100) koji se mapiraju ka tier 0-7,
+// po istom obrascu kao CLASS_MODIFIERS u config.js.
 // =============================================================================
-export const ORIGIN_PRESETS = [
-  // --- 4 KLASIČNI ---
+export const CUSTOM_PRESETS = [
   {
     key: 'punk_to_dj',
     label: 'Punk → DJ',
     tag: 'Iz buke',
-    tagline: 'Došo si iz scene koja ne traži dozvolu.',
+    tagline: 'Došao si iz scene koja ne traži dozvolu.',
     long: 'Distorzija ti je domaća. Glatko još nije.',
-    class_baseline: 'custom',
     stat_mods: {
-      knowledge: 0.4, mixing: 0.3, recognizability: 0.4,
-      network: -0.2, visual: 0.2, reputation: 0.3
-    },
-    substance_baseline: ['alcohol', 'nicotine']
+      knowledge: 0.4,
+      mixing: 0.3,
+      recognizability: 0.4,
+      network: -0.2,
+      visual: 0.2,
+      reputation: 0.3
+    }
   },
   {
     key: 'classical_kontinuum',
@@ -101,12 +103,13 @@ export const ORIGIN_PRESETS = [
     tag: 'Iz note',
     tagline: 'Teorija ti je u uvu pre nego u ploči.',
     long: 'Sve znaš gde ide. Pitanje je da li zvuči toplo.',
-    class_baseline: 'posthumna_penzija',
     stat_mods: {
-      knowledge: 0.6, mixing: 0.5, visual: -0.1,
-      network: -0.2, reputation: 0.1
-    },
-    substance_baseline: ['caffeine']
+      knowledge: 0.6,
+      mixing: 0.5,
+      visual: -0.1,
+      network: -0.2,
+      reputation: 0.1
+    }
   },
   {
     key: 'migrant_scene',
@@ -114,107 +117,37 @@ export const ORIGIN_PRESETS = [
     tag: 'Iz druge zemlje',
     tagline: 'Doneo si zvuk koji ovde niko ne pušta.',
     long: 'Tvoja kutija ploča je neko drugo more. Lokal te još ne zna.',
-    class_baseline: 'custom',
     stat_mods: {
-      knowledge: 0.5, recognizability: 0.5, network: -0.3,
-      mixing: 0.2, reputation: -0.1
-    },
-    substance_baseline: []
+      knowledge: 0.5,
+      recognizability: 0.5,
+      network: -0.3,
+      mixing: 0.2,
+      reputation: -0.1
+    }
   },
   {
     key: 'kafanski_muzicar',
     label: 'Kafanski muzičar → DJ',
     tag: 'Iz benda',
     tagline: 'Čitao si publiku pre nego što si pipnuo deck.',
-    long: 'Stol te sluša kao da pevaš. Pult još nije naučeno.',
-    class_baseline: 'radnicka_klasa',
+    long: 'Sto te sluša kao da pevaš. Pult još nije naučen.',
     stat_mods: {
-      visual: 0.5, network: 0.4, knowledge: 0.1,
-      mixing: -0.1, reputation: 0.2
+      visual: 0.5,
+      network: 0.4,
+      knowledge: 0.1,
+      mixing: -0.1,
+      reputation: 0.2
     },
-    substance_baseline: ['alcohol', 'nicotine']
-  },
-
-  // --- 5 MLADI ---
-  {
-    key: 'm1_gamer_producent',
-    label: 'Gamer → producent → DJ',
-    tag: 'Iz FL Studija',
-    tagline: 'Beat ti je u DAW-u pre nego u salu.',
-    long: 'Sve sample-ove znaš napamet. Pitanje je da li pleješ za salu ili za sebe.',
-    class_baseline: 'bogata_deca',
-    stat_mods: {
-      knowledge: 0.5, mixing: 0.4, network: -0.2,
-      recognizability: 0.2, visual: 0.1
-    },
-    substance_baseline: ['caffeine']
-  },
-  {
-    key: 'm2_net_samouk',
-    label: 'Net-samouk',
-    tag: 'YouTube generacija',
-    tagline: 'Naučio si bez ikoga ko bi te video.',
-    long: 'Sve tutorijale znaš. Niko nije gledao da kaže kad si fakat počeo.',
-    class_baseline: 'custom',
-    stat_mods: {
-      knowledge: 0.4, mixing: 0.3, network: -0.4,
-      recognizability: -0.1, visual: 0.1
-    },
-    substance_baseline: ['caffeine', 'cannabis']
-  },
-  {
-    key: 'm3_soundsystem_klinac',
-    label: 'Soundsystem klinac',
-    tag: 'Iz reggae/dnb sistema',
-    tagline: 'Bas ti je u rebrima pre nego u plejlistama.',
-    long: 'Sistem ti je dao prvi nivo. Sad treba sve ostalo.',
-    class_baseline: 'radnicka_klasa',
-    stat_mods: {
-      recognizability: 0.4, network: 0.4, mixing: 0.2,
-      visual: 0.1, knowledge: -0.1
-    },
-    substance_baseline: ['cannabis']
-  },
-  {
-    key: 'm4_stream_native',
-    label: 'Stream-native (Twitch/IG)',
-    tag: 'Iz online publike',
-    tagline: 'Prvih 200 ljudi koji su te čuli — nikad nije bilo u istoj sobi.',
-    long: 'Imaš metrike. Pitanje je da li imaš salu.',
-    class_baseline: 'bogata_deca',
-    stat_mods: {
-      recognizability: 0.5, visual: 0.4, network: 0.2,
-      mixing: -0.1, knowledge: 0.1
-    },
-    substance_baseline: ['caffeine']
-  },
-  {
-    key: 'm5_brat_sestra_nasleduje',
-    label: 'Brat/sestra naslijeđuje',
-    tag: 'Iz porodičnog pulta',
-    tagline: 'Neko ti je već gradio ime.',
-    long: 'Pitanje je da li je tvoje. I koliko ćeš se boriti da ga ima.',
-    class_baseline: 'custom',
-    stat_mods: {
-      network: 0.5, reputation: 0.3, recognizability: 0.2,
-      mixing: 0.1, knowledge: 0.1
-    },
-    substance_baseline: []
+    pending_approval: true  // šef da potvrdi da li ostaje ili se izbacuje
   }
 ];
 
-// Back-compat alias (stari kod referencirao CUSTOM_PRESETS)
-export const CUSTOM_PRESETS = ORIGIN_PRESETS;
-
-export function findPreset(key) {
-  return ORIGIN_PRESETS.find(p => p.key === key) || null;
-}
-
 export function buildAnswersFromOriginUI(formAnswers) {
+  // formAnswers is plain object {q1_class, q2_observed_djs, q3_signature_taste, q4_first_decks, q5_apstinencija, custom_preset?}
   return { ...formAnswers };
 }
 
-// Apply stat_mods iz Q2/Q3/Q4 + preset
+// Apply stat_mods iz Q2/Q3/Q4 — male tier additions
 export function applyOriginStatMods(state, answers) {
   const mods = [
     findMod(ORIGIN_QUESTIONS[1], answers.q2_observed_djs),
@@ -230,12 +163,14 @@ export function applyOriginStatMods(state, answers) {
     }
   }
 
-  // Preset stat_mods
-  const preset = answers.preset_key ? findPreset(answers.preset_key) : null;
-  if (preset && preset.stat_mods) {
-    for (const [stat, gain] of Object.entries(preset.stat_mods)) {
-      if (state.stats[stat] !== undefined) {
-        state.stats[stat] += gain;
+  // Apply custom preset stat_mods (ako je klasa = custom + preset izabran)
+  if (answers.q1_class === 'custom' && answers.custom_preset) {
+    const preset = CUSTOM_PRESETS.find(p => p.key === answers.custom_preset);
+    if (preset && preset.stat_mods) {
+      for (const [stat, gain] of Object.entries(preset.stat_mods)) {
+        if (state.stats[stat] !== undefined) {
+          state.stats[stat] += gain;
+        }
       }
     }
   }
@@ -246,12 +181,6 @@ export function applyOriginStatMods(state, answers) {
     if (q5opt.flags.apstinent !== undefined) state.apstinent = q5opt.flags.apstinent;
     if (q5opt.flags.pusi !== undefined) state.pusi = q5opt.flags.pusi;
   }
-
-  // Apply preset substance baseline (S2)
-  if (preset && preset.substance_baseline && state.substance) {
-    state.substance.baseline = [...preset.substance_baseline];
-  }
-
   return state;
 }
 

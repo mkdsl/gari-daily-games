@@ -10,13 +10,13 @@ export const PATH_UI = {
   },
   peak_maker: {
     label: 'Faca',
-    tag: 'showman',
-    description: 'Persona ti je porasla pre nego sto si stigao da je objasnis.'
+    tag: 'šoumen',
+    description: 'Persona ti je porasla pre nego što si stigao da je objasniš.'
   },
   survivor: {
     label: 'Žilav',
     tag: 'otpornost',
-    description: 'Drzao si glavu iznad vode i pustio kraj.'
+    description: 'Držao si glavu iznad vode i pustio kraj.'
   },
   networker: {
     label: 'Vezista',
@@ -26,22 +26,22 @@ export const PATH_UI = {
   hustler: {
     label: 'Promoter',
     tag: 'novac + reputacija',
-    description: 'Naplatio si scenu pre nego sto te je scena platila.'
+    description: 'Naplatio si scenu pre nego što te je scena platila.'
   },
   underground_craftsman: {
     label: 'Andergraund',
     tag: 'znanje',
-    description: 'Znas po imenima. Pustas po seciji.'
+    description: 'Znaš po imenima. Puštaš po sekciji.'
   },
   reckless_selector: {
     label: 'Prkosni',
     tag: 'signature',
-    description: 'Pustio si nesto sto niko ne pusta.'
+    description: 'Pustio si nešto što niko ne pušta.'
   },
   the_lasting_dj: {
     label: 'Trajni',
     tag: 'meta',
-    description: 'Stigao do kraja sa kucom koja jos stoji.'
+    description: 'Stigao do kraja sa kućom koja još stoji.'
   },
   the_tragic_genius: {
     label: 'Tragični Genije',
