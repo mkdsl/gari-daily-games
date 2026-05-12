@@ -1,0 +1,42 @@
+{
+  "name": "Tiha Avala",
+  "genre": "Balance Puzzle / Acoustic Simulator",
+  "date": "2026-05-12",
+  "description": "Ti si audio inžinjer Kluboslavija turneje. Pronađi slatku tačku zvuka — da publika bude srećna, a komšije ne zovu inspekciju. 6 nivoa, Avala teren, countdown do 20. juna.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-12-tiha-avala/",
+  "brand_serves": ["kluboslavija"],
+  "stage": "concept",
+  "status": "in_progress",
+  "modules": {
+    "src/main.js": "Boot, scene management (menu/game/win/fail/level-select)",
+    "src/config.js": "Sve konstante: TERRAIN_MOD, LEVEL_DATA ref, SCORE formule, SPL thresholds",
+    "src/state.js": "Game state (slider values, sim state, scores, nivo unlock, wind phase)",
+    "src/input.js": "Slider events (mouse + touch), dugmad click handlers, keyboard shortcuts",
+    "src/render.js": "Canvas renderer (terrain mapa, zvučni talasi, speaker cones, wind leaves)",
+    "src/ui.js": "HUD (merači, slideri, dugmadi, level select UI, score board)",
+    "src/audio.js": "Web Audio: festival ambient, crowd SFX, slider tick, alarm, win jingle, siren",
+    "src/systems/acoustics.js": "compute_Hs(), compute_Kdb(), compute_angle_atten() — sve akustičke formule",
+    "src/systems/wind.js": "Wind state machine, sinus oscilator (period 8s, amp ±4 dB), wind indicator data",
+    "src/systems/sim.js": "Simulation runner: 10s pass timer, real-time meter update, pass/fail dispatch",
+    "src/systems/score.js": "Score kalkulacija (time + margin bonus), localStorage tiha-avala-scores",
+    "src/systems/progression.js": "Nivo unlock logic, current level tracking, level-select state",
+    "src/levels/level_data.js": "6 nivoa kao data objekti (terrain, neighbours array, constants, hints)",
+    "src/content/hints.js": "Tutorial tekstovi po nivou, tooltip sadržaj, error poruke",
+    "src/content/brand.js": "Kluboslavija branding: title, countdown string (39 dana), footer link",
+    "src/entities/map.js": "Terrain map renderer data: tile tipovi, koordinate, canvas draw primitives",
+    "src/entities/speakers.js": "Speaker entity: pozicija, angle vizualizacija (konusni crteż), dual-array za L6",
+    "src/entities/neighbours.js": "Neighbour house entity: pozicija, terrain_path array, trenutni Kdb, boja indikatora",
+    "styles/base.css": "Layout, canvas centar ekrana, mobile-first responsive",
+    "styles/ui.css": "Custom sliders (60px visina, 40px thumb), dugmadi, merači, HUD",
+    "styles/game.css": "Zvučni talas @keyframes, wind leaf animacija, pixel art canvas wrapper",
+    "styles/theme.css": "Kluboslavija brand: tamno zelena, amber bina, crveno upozorenje, tipografija"
+  },
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "beta_score_iter2": null,
+  "post_fix_score": null,
+  "sef_signoff": false
+}
