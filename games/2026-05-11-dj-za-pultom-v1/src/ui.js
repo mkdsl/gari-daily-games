@@ -27,7 +27,7 @@ export function renderHUD(state) {
     renderEnergyMetaphor(state, num),
     renderRSVPSilhouettes(state, num),
     el('div', { className: 'hud-row hud-class' },
-      el('span', { className: 'hud-label' }, 'Origin'),
+      el('span', { className: 'hud-label' }, 'Poreklo'),
       el('span', { className: 'hud-value class-name' }, state.origin.preset_label || state.origin.class_name || '—')
     )
   );
@@ -45,7 +45,7 @@ function renderEnergyMetaphor(state, num) {
   else              { condition = 'broken';   icon = '══···  '; }
 
   return el('div', { className: `hud-row hud-energy condition-${condition}` },
-    el('span', { className: 'hud-label' }, 'Uze'),
+    el('span', { className: 'hud-label' }, 'Uže'),
     el('span', { className: 'hud-rope' }, icon),
     num ? el('span', { className: 'hud-numeric' }, `${Math.round(state.energy)}/100`) : null
   );
@@ -112,7 +112,7 @@ function knowledgeShelf(state, num) {
   for (let i = 0; i < tier; i++) plocas += '◤';
   if (plocas === '') plocas = '·';
   return el('div', { className: 'tier-card tc-knowledge' },
-    el('div', { className: 'tc-label' }, 'Knowledge'),
+    el('div', { className: 'tc-label' }, 'Znanje'),
     el('div', { className: 'tc-icon shelf' }, plocas),
     num ? el('div', { className: 'tc-numeric' }, `${tier}/7`) : null
   );
@@ -124,7 +124,7 @@ function mixingSliderMetaphor(state, num) {
   const dots = ['○', '○', '○', '○', '○', '○', '○'];
   for (let i = 0; i < tier; i++) dots[i] = '●';
   return el('div', { className: 'tier-card tc-mixing' },
-    el('div', { className: 'tc-label' }, 'Mixing'),
+    el('div', { className: 'tc-label' }, 'Miks'),
     el('div', { className: 'tc-icon slider' }, dots.join('')),
     num ? el('div', { className: 'tc-numeric' }, `${tier}/7`) : null
   );
@@ -148,7 +148,7 @@ function networkSilhouettes(state, num) {
   let s = '';
   for (let i = 0; i < tier; i++) s += '☻';
   return el('div', { className: 'tier-card tc-network' },
-    el('div', { className: 'tc-label' }, 'Network'),
+    el('div', { className: 'tc-label' }, 'Mreža'),
     el('div', { className: 'tc-icon people-circle' }, s || '·'),
     num ? el('div', { className: 'tc-numeric' }, `${tier}/7`) : null
   );

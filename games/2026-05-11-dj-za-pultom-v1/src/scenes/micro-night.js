@@ -36,11 +36,11 @@ export function renderMicroNight(mount, state, transition) {
     const recklessReady = isRecklessUnlocked(state);
     return el('div', { className: 'scene micro-scene' },
       renderHUD(state),
-      el('h2', null, `Zurka — nedelja ${state.week}`),
+      el('h2', null, `Žurka — nedelja ${state.week}`),
 
       panel('Tvoj plan za set',
         el('div', null,
-          el('label', null, 'Effort level: '),
+          el('label', null, 'Nivo truda: '),
           el('select', {
             onchange: e => { choices.effort = e.target.value; }
           },
@@ -65,15 +65,15 @@ export function renderMicroNight(mount, state, transition) {
               })
             )
           : el('div', { className: 'hint locked' },
-              'Reckless Selection jos zakljucana.'
+              'Reckless Selection još zaključana.'
             )
       ),
 
       panel('Stanje',
-        infoLine('Health', `${Math.round(state.sacrifice.health)}%`),
+        infoLine('Telo', `${Math.round(state.sacrifice.health)}%`),
         infoLine('Mixing tier', `${Math.floor(state.stats.mixing)}/7`),
-        infoLine('Svezina kataloga', `${Math.round(state.music_catalog.avg_freshness * 100)}%`),
-        infoLine('De-sync timer', `~${getDesyncTimer(state)}s`)
+        infoLine('Svežina kataloga', `${Math.round(state.music_catalog.avg_freshness * 100)}%`),
+        infoLine('De-sync tajmer', `~${getDesyncTimer(state)}s`)
       ),
 
       bigButton('Idi za pult', async () => {
@@ -141,17 +141,17 @@ export function renderMicroNight(mount, state, transition) {
     return el('div', { className: 'scene micro-results' },
       renderHUD(state),
       renderSacrificeBar(state),
-      el('h2', null, setResult.canceled ? 'Zurka otkazana' : 'Set odsviran'),
+      el('h2', null, setResult.canceled ? 'Žurka otkazana' : 'Set odsviran'),
       setResult.canceled
         ? el('div', { className: 'cancel-note' },
             'Telo je odgovorilo umesto tebe.'
           )
         : panel('Rezultat',
-            infoLine('Set quality', Math.round(setResult.quality) + ' / 150'),
-            infoLine('Gig fee', setResult.gigFee + ' RSD'),
-            infoLine('RSVP delta', (setResult.rsvpDelta >= 0 ? '+' : '') + setResult.rsvpDelta),
-            infoLine('Reputation delta', (setResult.reputationDelta >= 0 ? '+' : '') + setResult.reputationDelta.toFixed(2)),
-            infoLine('Recogn. delta', (setResult.recogDelta >= 0 ? '+' : '') + setResult.recogDelta.toFixed(2)),
+            infoLine('Kvalitet seta', Math.round(setResult.quality) + ' / 150'),
+            infoLine('Honorar', setResult.gigFee + ' RSD'),
+            infoLine('RSVP promena', (setResult.rsvpDelta >= 0 ? '+' : '') + setResult.rsvpDelta),
+            infoLine('Reputacija promena', (setResult.reputationDelta >= 0 ? '+' : '') + setResult.reputationDelta.toFixed(2)),
+            infoLine('Prepoznatljivost promena', (setResult.recogDelta >= 0 ? '+' : '') + setResult.recogDelta.toFixed(2)),
             setResult.sigAttempts > 0
               ? infoLine('Signature picks', `${setResult.sigSuccessCount}/${setResult.sigAttempts} uspeh`)
               : null,
@@ -160,7 +160,7 @@ export function renderMicroNight(mount, state, transition) {
 
       peraQuote(peraLine),
 
-      bigButton('Nedelja zakljucena', () => {
+      bigButton('Nedelja zaključena', () => {
         transition('recap', { setResult, peraLine });
       }, 'btn-primary btn-cta')
     );

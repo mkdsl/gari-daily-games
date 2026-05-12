@@ -32,12 +32,12 @@ export function renderOriginCreator(mount, state, transition) {
 
   function buildForm() {
     return el('div', { className: 'scene origin-scene-v2' },
-      el('h2', { className: 'scene-title' }, 'Tvoja prica'),
+      el('h2', { className: 'scene-title' }, 'Tvoja priča'),
       el('div', { className: 'intro-text' }, CLASS_INTRO_TEXT),
 
       // PRESET PICKER — 9 cards u single flat list
       el('div', { className: 'preset-block' },
-        el('div', { className: 'q-label' }, 'Sta ti je dalo telo da ovo radis?'),
+        el('div', { className: 'q-label' }, 'Šta ti je dalo telo da ovo radiš?'),
         el('div', { className: 'preset-grid-v2' },
           ...ORIGIN_PRESETS.map(preset => {
             const sel = formAnswers.preset_key === preset.key;
@@ -68,9 +68,9 @@ export function renderOriginCreator(mount, state, transition) {
 
       // Submit
       el('div', { className: 'scene-cta' },
-        bigButton('Krecem', () => {
+        bigButton('Krećem', () => {
           if (!validate(formAnswers)) {
-            showInlineError(mount, 'Izaberi pocetak i odgovori na pitanja pre nego sto krenes.');
+            showInlineError(mount, 'Izaberi početak i odgovori na pitanja pre nego što kreneš.');
             return;
           }
           processOriginCompletion(state, formAnswers);
@@ -80,7 +80,7 @@ export function renderOriginCreator(mount, state, transition) {
         }, 'btn-primary btn-cta')
       ),
 
-      peraQuote('Sve klase imaju puteve do finala. Razliciti tempovi, ne razliciti ishodi.')
+      peraQuote('Sve klase imaju puteve do finala. Različiti tempovi, ne različiti ishodi.')
     );
   }
 

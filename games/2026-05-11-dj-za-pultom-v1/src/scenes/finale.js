@@ -31,14 +31,14 @@ export function renderFinale(mount, state, transition) {
         ? el('div', { className: 'finale-banner lasting' }, 'Trajni')
         : null,
 
-    panel('Path-finale',
+    panel('Finale puta',
       primary
         ? el('div', { className: 'primary-path' },
             el('h3', null, PATH_UI[primary]?.label || primary),
             el('div', { className: 'path-tag' }, PATH_UI[primary]?.tag || ''),
             el('div', { className: 'path-desc' }, PATH_UI[primary]?.description || '')
           )
-        : el('div', null, 'Nije se zavrsio nijednim putem. Drugi tempo. Drugaciji izbori.')
+        : el('div', null, 'Nije se završio nijednim putem. Drugi tempo. Drugačiji izbori.')
     ),
 
     achieved.length > 1
@@ -50,10 +50,10 @@ export function renderFinale(mount, state, transition) {
       : null,
 
     panel('Sezonski rezime',
-      infoLine('Zurke', state.gigs_played.length),
-      infoLine('Prosecan set', Math.round(getAvgSetQuality(state))),
+      infoLine('Žurke', state.gigs_played.length),
+      infoLine('Prosečan set', Math.round(getAvgSetQuality(state))),
       infoLine('Signature pogodak', `${Math.round(recklessSuccessRate(state) * 100)}%`),
-      infoLine('Pasos pecati', `${pecati.count} / ${pecati.cap}`),
+      infoLine('Pasoš pečati', `${pecati.count} / ${pecati.cap}`),
       infoLine('Reputacijski trenuci', state.path_progress.reputation_events_triggered)
     ),
 
@@ -66,7 +66,7 @@ export function renderFinale(mount, state, transition) {
       }, 'btn-primary'),
       bigButton('Vidi save (debug)', () => {
         console.log('STATE', state);
-        alert('State je u console.');
+        alert('State je u konzoli.');
       }, 'btn-secondary')
     )
   ));

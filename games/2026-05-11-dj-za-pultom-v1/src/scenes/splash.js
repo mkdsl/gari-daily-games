@@ -13,7 +13,7 @@ export function renderSplash(mount, state, transition) {
     el('h1', { className: 'splash-title' }, 'DJ za Pultom'),
     el('div', { className: 'splash-subtitle' }, `Sezona ${SEASON} · v${VERSION}`),
     el('div', { className: 'splash-mantra' },
-      '"DJ ne pocinje za pultom. Pocinje sa onim sto ti zivot da, i sa onim sto ne pristajes da izgubis dok stignes."'
+      '"DJ ne počinje za pultom. Počinje sa onim što ti život da, i sa onim što ne pristaješ da izgubiš dok stigneš."'
     ),
     el('div', { className: 'splash-buttons' },
       existing && !existing.flags?.season_completed && !existing.flags?.season_lost
@@ -24,16 +24,16 @@ export function renderSplash(mount, state, transition) {
         transition('new');
       }, 'btn-primary'),
       existing
-        ? bigButton('Obrisi save', () => {
+        ? bigButton('Obriši save', () => {
             clearSave();
             mount.querySelector('.splash-buttons').remove();
-            mount.appendChild(el('div', { className: 'splash-info' }, 'Save obrisan. Osvezi stranicu.'));
+            mount.appendChild(el('div', { className: 'splash-info' }, 'Save obrisan. Osveži stranicu.'));
           }, 'btn-secondary')
         : null
     ),
     el('div', { className: 'splash-credits' },
       el('div', null, 'GDD: Mile Mehanika'),
-      el('div', null, 'Audio: Ceca Cujka'),
+      el('div', null, 'Audio: Ceca Čujka'),
       el('div', null, 'Kod: Jova jQuery'),
       el('div', null, 'Aforizmi: Pera Period'),
       el('div', null, 'UI: Zoki Piksel'),

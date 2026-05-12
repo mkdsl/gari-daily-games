@@ -71,7 +71,7 @@ export function renderPersonaProfile(mount, state, transition) {
 function renderPregled(state) {
   return el('div', { className: 'tab-pregled' },
     el('div', { className: 'preset-summary' },
-      el('div', { className: 'p-label' }, 'Origin:'),
+      el('div', { className: 'p-label' }, 'Poreklo:'),
       el('div', { className: 'p-value' }, state.origin.preset_label || '—')
     ),
     el('div', { className: 'preset-summary' },
@@ -79,11 +79,11 @@ function renderPregled(state) {
       el('div', { className: 'p-value' }, state.origin.class_name || '—')
     ),
     el('div', { className: 'preset-summary' },
-      el('div', { className: 'p-label' }, 'Recognizability:'),
+      el('div', { className: 'p-label' }, 'Prepoznatljivost:'),
       el('div', { className: 'p-value' }, `Tier ${Math.floor(state.stats.recognizability)}/7`)
     ),
     el('div', { className: 'preset-summary' },
-      el('div', { className: 'p-label' }, 'Reputation:'),
+      el('div', { className: 'p-label' }, 'Reputacija:'),
       el('div', { className: 'p-value' }, `Tier ${Math.floor(state.stats.reputation)}/7`)
     ),
     el('div', { className: 'week-log-preview' },
@@ -116,7 +116,7 @@ function renderTelesnoStanje(state) {
   const wrap = el('div', { className: 'tab-telesno' });
 
   wrap.appendChild(el('div', { className: 'telesno-intro' },
-    'Telo prati. Svetla pokazuju cega ima i koliko. Brojevi: vidi Postavke.'
+    'Telo prati. Svetla pokazuju čega ima i koliko. Brojevi: vidi Postavke.'
   ));
 
   for (const [substance, list] of Object.entries(grouped)) {
@@ -208,14 +208,14 @@ function computeActiveDiagnoses(state, activeSubstances) {
 // =============================================================================
 function renderRecoveryTab(state) {
   const types = [
-    { key: 'tisina',       label: 'Tisina',        desc: 'Bez zvuka 48h. Sluh se vraca.' },
+    { key: 'tisina',       label: 'Tišina',        desc: 'Bez zvuka 48h. Sluh se vraća.' },
     { key: 'integration',  label: 'Integracija',   desc: 'Sam sa sobom 3 dana. Razlika postaje jasna.' },
     { key: 'reality',      label: 'Reality check', desc: 'Razgovor sa nekim van scene. 40 min.' }
   ];
 
   return el('div', { className: 'tab-recovery' },
     el('div', { className: 'recovery-intro' },
-      '3 tipa, 2 koriscenja po sezoni svaki. Aktiviraj preko Macro Week kalendara.'
+      '3 tipa, 2 korišćenja po sezoni svaki. Aktiviraj preko Macro Week kalendara.'
     ),
     el('div', { className: 'recovery-grid' },
       ...types.map(t => {
@@ -246,7 +246,7 @@ function renderCompoundTab(state) {
   const wrap = el('div', { className: 'tab-compound' });
 
   wrap.appendChild(el('div', { className: 'compound-intro' },
-    'Sta se preklapa u tebi. Telo broji cak i kad ti ne brojis.'));
+    'Šta se preklapa u tebi. Telo broji čak i kad ti ne brojiš.'));
 
   if (compounds.length === 0) {
     wrap.appendChild(el('div', { className: 'no-compound' },

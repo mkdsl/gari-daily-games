@@ -29,11 +29,11 @@ export function renderSplashCinematic(mount, state, transition) {
     el('div', { className: 'cinematic-content' },
       el('div', { className: 'cinematic-line', id: 'cine-line' },
         selectAforizam(state, 'cinematic_hook') ||
-          'Niko ne pocinje za pultom. Pocinje od onoga sto mu je zivot ostavio na podu.'
+          'Niko ne počinje za pultom. Počinje od onoga što mu je život ostavio na podu.'
       ),
       el('div', { className: 'cinematic-buttons', id: 'cine-buttons' },
-        bigCineButton('Pojacaj', () => proceed('amplify')),
-        bigCineButton('Slusaj jos', () => proceed('listen_more'))
+        bigCineButton('Pojačaj', () => proceed('amplify')),
+        bigCineButton('Slušaj još', () => proceed('listen_more'))
       )
     ),
     el('div', { className: 'cinematic-version' }, `Sezona ${SEASON} · v${VERSION}`)

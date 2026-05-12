@@ -63,9 +63,9 @@ export function renderMacroPlanner(mount, state, transition) {
         gig
           ? el('div', { className: 'gig-indicator' },
               el('span', { className: 'gig-icon' }, '·'),
-              el('span', null, 'Zurka ove nedelje.')
+              el('span', null, 'Žurka ove nedelje.')
             )
-          : el('div', { className: 'no-gig' }, 'Nema zurke ove nedelje.'),
+          : el('div', { className: 'no-gig' }, 'Nema žurke ove nedelje.'),
         el('div', { className: `pressure-indicator ${pressure.cls}` },
           `Pritisak: ${pressure.label}`
         )
@@ -80,8 +80,8 @@ export function renderMacroPlanner(mount, state, transition) {
       // RECKLESS HINT
       el('div', { className: 'reckless-hint-v2' },
         isRecklessUnlocked(state)
-          ? 'V9 Reckless: otkljucan — aktivira se u zurci.'
-          : 'V9 Reckless: zakljucano dok ne stignes Knowledge tier 2.'
+          ? 'V9 Reckless: otključan — aktivira se u žurci.'
+          : 'V9 Reckless: zaključano dok ne stigneš Knowledge tier 2.'
       ),
 
       // CTA
@@ -94,8 +94,8 @@ export function renderMacroPlanner(mount, state, transition) {
             saveState(state);
             build();
           }
-        }, 'Ocisti'),
-        bigButton('Zavrsi nedelju', () => {
+        }, 'Očisti'),
+        bigButton('Završi nedelju', () => {
           const plan = buildPlanFromGrid(state.macro_grid);
           state.next_week_plan = plan;
           state.gigs_this_week = gig ? 1 : 0;
@@ -243,7 +243,7 @@ function renderSlotCell(state, slot, rerender, getSel, setSel, getDrag, setDrag)
 function renderStickerPalette(state, getSel, setSel, getDrag, setDrag) {
   const palette = el('div', { className: 'sticker-palette' });
   palette.appendChild(el('div', { className: 'palette-hint' },
-    'Selectuj sticker pa tap-uj kvadrat, ili drag-drop. Tap na zauzet kvadrat brise.'));
+    'Selektuj stiker pa tapni kvadrat, ili drag-drop. Tap na zauzet kvadrat briše.'));
 
   const grid = el('div', { className: 'palette-grid' });
   for (const sticker of STICKERS) {
@@ -283,7 +283,7 @@ function renderStickerPalette(state, getSel, setSel, getDrag, setDrag) {
       const totalThisSeason = state.substance.zovi_covika_total || 0;
       const thisWeek = state.substance.zovi_covika_this_week || 0;
       card.appendChild(el('div', { className: 'ps-count' },
-        `${thisWeek}× wk · ${totalThisSeason}× total`));
+        `${thisWeek}× ned. · ${totalThisSeason}× ukupno`));
     }
 
     grid.appendChild(card);
@@ -373,7 +373,7 @@ function pressureForCount(c) {
   if (c <= PRESSURE_THRESHOLDS.light)    return { label: 'lagana nedelja', cls: 'sig-green' };
   if (c <= PRESSURE_THRESHOLDS.full)     return { label: 'puna nedelja',   cls: 'sig-yellow' };
   if (c <= PRESSURE_THRESHOLDS.pressure) return { label: 'pritisak',       cls: 'sig-orange' };
-  return { label: 'pucas',                                                  cls: 'sig-red' };
+  return { label: 'pucaš',                                                  cls: 'sig-red' };
 }
 
 function lowestSymptomZone(state) {

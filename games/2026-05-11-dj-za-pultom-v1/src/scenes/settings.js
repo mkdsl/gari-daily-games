@@ -30,9 +30,9 @@ export function renderSettings(mount, state, transition) {
               rerender();
             }
           }),
-          el('span', { className: 'toggle-label' }, 'Pokazi brojeve'),
+          el('span', { className: 'toggle-label' }, 'Pokaži brojeve'),
           el('span', { className: 'toggle-hint' },
-            'Default OFF — sve sprege su simptomatske (boja, krug, polica). ON otkriva 0-100% za stat-ove.'
+            'Podrazumevano isključeno — sve sprege su simptomatske (boja, krug, polica). Uključeno otkriva 0-100% za statove.'
           )
         )
       ),
@@ -50,8 +50,8 @@ export function renderSettings(mount, state, transition) {
               rerender();
             }
           }),
-          el('span', { className: 'toggle-label' }, 'Audio'),
-          el('span', { className: 'toggle-hint' }, 'Dub bass + set audio (preporuka ON za Cinematic A).')
+          el('span', { className: 'toggle-label' }, 'Zvuk'),
+          el('span', { className: 'toggle-hint' }, 'Dub bass + set zvuk (preporuka uključeno za Cinematic A).')
         )
       ),
 
@@ -67,8 +67,8 @@ export function renderSettings(mount, state, transition) {
               rerender();
             }
           }),
-          el('span', { className: 'toggle-label' }, 'Pera Period subtitle'),
-          el('span', { className: 'toggle-hint' }, 'Bottom-center fade-in posle key event-a.')
+          el('span', { className: 'toggle-label' }, 'Pera Period titl'),
+          el('span', { className: 'toggle-hint' }, 'Pri dnu ekrana, javlja se posle ključnog događaja.')
         )
       ),
 
