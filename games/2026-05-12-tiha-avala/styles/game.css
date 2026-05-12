@@ -1,0 +1,153 @@
+/* game.css — animacije terena, vetar, win/fail overlay */
+
+/* ---- SOUND WAVES (CSS verzija, canvas radi realni) ---- */
+@keyframes wave-expand {
+  0%   { transform: scale(0.1); opacity: 0.7; }
+  100% { transform: scale(3);   opacity: 0; }
+}
+
+.sound-wave {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--accent-amber);
+  animation: wave-expand 2s ease-out infinite;
+  pointer-events: none;
+}
+
+.sound-wave:nth-child(2) { animation-delay: 0.5s; }
+.sound-wave:nth-child(3) { animation-delay: 1s; }
+
+/* ---- WIND LEAVES ---- */
+@keyframes leaf-drift {
+  0%   { transform: translate(0, 0) rotate(0deg);   opacity: 0.8; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(360deg); opacity: 0; }
+}
+
+.wind-leaf {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-green);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  animation: leaf-drift 2s linear infinite;
+}
+
+/* ---- LEVEL SELECT GRID ---- */
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.level-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color 0.1s;
+  border-radius: 2px;
+}
+
+.level-card:hover:not(.locked) { border-color: var(--accent-amber); }
+.level-card.locked { opacity: 0.4; cursor: not-allowed; }
+.level-card.completed { border-color: var(--accent-green); }
+
+.level-num {
+  font-size: 22px;
+  color: var(--accent-amber);
+  font-weight: bold;
+}
+
+.level-name {
+  font-size: 13px;
+  margin: 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.level-best {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ---- WIN / FAIL OVERLAY ---- */
+.result-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px;
+  z-index: 10;
+}
+
+.result-title {
+  font-size: clamp(22px, 6vw, 36px);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.result-title.win  { color: var(--accent-green); }
+.result-title.fail { color: var(--accent-red); }
+
+.result-level {
+  font-size: 14px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.result-score {
+  font-size: clamp(36px, 10vw, 56px);
+  color: var(--accent-amber);
+  font-weight: bold;
+  letter-spacing: 4px;
+}
+
+.result-details {
+  display: flex;
+  gap: 24px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.result-fail-quote {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+.result-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/* ---- CANVAS ---- */
+#game-canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ---- MOBILE TWEAKS ---- */
+@media (max-width: 480px) {
+  .menu-title { letter-spacing: 4px; }
+  .hud-buttons .btn { padding: 8px 10px; font-size: 11px; }
+  .slider-label { width: 80px; font-size: 9px; }
+  .dual-col .slider-label { width: 44px; }
+  .level-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+}
+
+@media (max-height: 600px) {
+  .hud-hint { display: none; }
+  .menu-content { padding: 24px 16px 16px; }
+}

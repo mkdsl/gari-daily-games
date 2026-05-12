@@ -1,0 +1,58 @@
+/* theme.css — Kluboslavija paleta, tipografija */
+
+:root {
+  --bg: #0a1a0a;
+  --surface: #111f11;
+  --surface2: #182818;
+  --accent-amber: #f0a020;
+  --accent-green: #30c030;
+  --accent-red: #e03030;
+  --accent-blue: #2050a0;
+  --text-primary: #e8f4e8;
+  --text-muted: #6a8a6a;
+  --border: #243424;
+  --pixel-font: 'Courier New', monospace;
+}
+
+body {
+  font-family: var(--pixel-font);
+}
+
+h1, h2 {
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--accent-amber);
+}
+
+.btn {
+  background: var(--surface2);
+  color: var(--accent-amber);
+  border: 2px solid var(--accent-amber);
+  padding: 12px 24px;
+  font-family: var(--pixel-font);
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.btn:hover {
+  background: var(--accent-amber);
+  color: var(--bg);
+}
+
+.btn-secondary {
+  border-color: var(--text-muted);
+  color: var(--text-muted);
+}
+
+.btn-secondary:hover {
+  background: var(--text-muted);
+  color: var(--bg);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
