@@ -116,7 +116,7 @@ function renderTelesnoStanje(state) {
   const wrap = el('div', { className: 'tab-telesno' });
 
   wrap.appendChild(el('div', { className: 'telesno-intro' },
-    'Telo prati. Svetla pokazuju čega ima i koliko. Brojevi: vidi Postavke.'
+    'Telo prati. Svetla pokazuju šta ima i koliko. Brojevi: vidi Postavke.'
   ));
 
   for (const [substance, list] of Object.entries(grouped)) {
@@ -215,7 +215,7 @@ function renderRecoveryTab(state) {
 
   return el('div', { className: 'tab-recovery' },
     el('div', { className: 'recovery-intro' },
-      '3 tipa, 2 korišćenja po sezoni svaki. Aktiviraj preko Macro Week kalendara.'
+      '3 tipa, po 2 korišćenja u sezoni. Aktiviraj preko Macro Week kalendara.'
     ),
     el('div', { className: 'recovery-grid' },
       ...types.map(t => {
@@ -250,7 +250,7 @@ function renderCompoundTab(state) {
 
   if (compounds.length === 0) {
     wrap.appendChild(el('div', { className: 'no-compound' },
-      'Nema aktivnih kombinacija. Solo upotreba je svoj prostor.'));
+      'Nema aktivnih kombinacija. Solo upotreba ima svoj prostor.'));
   }
 
   // Venn-style visualization: each active substance = circle

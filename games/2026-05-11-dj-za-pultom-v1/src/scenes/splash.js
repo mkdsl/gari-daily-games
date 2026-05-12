@@ -13,7 +13,7 @@ export function renderSplash(mount, state, transition) {
     el('h1', { className: 'splash-title' }, 'DJ za Pultom'),
     el('div', { className: 'splash-subtitle' }, `Sezona ${SEASON} · v${VERSION}`),
     el('div', { className: 'splash-mantra' },
-      '"DJ ne počinje za pultom. Počinje sa onim što ti život da, i sa onim što ne pristaješ da izgubiš dok stigneš."'
+      '"DJ ne počinje za pultom. Počinje sa onim što ti je život dao, i sa onim što ne pristaješ da izgubiš dok stigneš."'
     ),
     el('div', { className: 'splash-buttons' },
       existing && !existing.flags?.season_completed && !existing.flags?.season_lost

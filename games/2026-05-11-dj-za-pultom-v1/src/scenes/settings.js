@@ -32,7 +32,7 @@ export function renderSettings(mount, state, transition) {
           }),
           el('span', { className: 'toggle-label' }, 'Pokaži brojeve'),
           el('span', { className: 'toggle-hint' },
-            'Podrazumevano isključeno — sve sprege su simptomatske (boja, krug, polica). Uključeno otkriva 0-100% za statove.'
+            'Podrazumevano isključeno — svi pokazatelji su simptomatski (boja, krug, polica). Uključeno otkriva 0-100% za statove.'
           )
         )
       ),

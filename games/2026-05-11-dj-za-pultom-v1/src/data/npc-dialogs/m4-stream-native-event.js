@@ -71,7 +71,7 @@ export const M4_STREAM_NATIVE_EVENT = {
         '[Stream chat overlay, paralelno] "kad ćeš uživo??" / "iz koje fele svira?" / ' +
         '"opet TikTok DJ koji ne zna da pusti uživo lol"',
       pera_observation:
-        'Telefon je topao od koliko ti je u ruci. Ne vidiš vreme jer ti je lista obaveštenja ' +
+        'Telefon ti je topao jer ti je predugo u ruci. Ne vidiš vreme jer ti je lista obaveštenja ' +
         'popunila ceo ekran. Četrnaest ljudi u sali. Sedamdeset i pet posto njih je ' +
         'tu zbog tuđe žurke.',
       auto_advance: true,
@@ -106,7 +106,7 @@ export const M4_STREAM_NATIVE_EVENT = {
           label: '(a) Kriva platforma',
           text:
             'TikTok publika nije klupska publika. Trebalo je da gradim Boiler ' +
-            'snimke od početka, ne rilove.',
+            'snimke od početka, ne Reels.',
           path_push: 'sound_purist',
           stat_mods: {
             knowledge: 0.20,
@@ -175,7 +175,7 @@ export const M4_STREAM_NATIVE_EVENT = {
         'Puštaš set. Četrnaest ljudi. Tri ostaju do kraja. Posle, ne otvaraš ' +
         'TikTok dva dana. Otvoriš SoundCloud, praviš svoj prvi 30-minutni miks bez rezova.',
       pera_observation:
-        'Onlajn si izgubio osamdeset pratilaca. Negde se zatvorila vrata koja ti nisu ni bila tvoja.',
+        'Onlajn si izgubio osamdeset pratilaca. Negde su se zatvorila vrata koja ti nisu ni bila tvoja.',
       stat_summary_text: 'Sound-purist put se otvorio. Promo tier privremeno pao.',
       ending: 'platform'
     },

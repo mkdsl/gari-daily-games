@@ -451,7 +451,7 @@ export const PATHS = {
       reputation_events_min: 4,
       crew_loyalty_min: 0.8
     },
-    pera_finale: '"Pio si sa svima. Sad svi znaju kako si. Pitanje je da li to znaci da te poznaju."'
+    pera_finale: '"Pio si sa svima. Sad svi znaju kakav si. Pitanje je da li to znaci da te poznaju."'
   },
   reckless_selector: {
     name: 'Prkosni',

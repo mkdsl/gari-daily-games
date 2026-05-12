@@ -76,7 +76,7 @@ export const VECTORS = {
     long: 'Bar, krju, nečiji rezidens.',
     sub_choices: {
       mingling_count: { label: 'Mingling izlazaka', min: 0, max: 5, unit: 'x ned.' },
-      atmospheric_count: { label: 'Atmospheric hangouts', min: 0, max: 3, unit: 'x ned.' },
+      atmospheric_count: { label: 'Atmosferska druženja', min: 0, max: 3, unit: 'x ned.' },
       guest_set: { label: 'Gostujući set ovaj put', type: 'bool' }
     }
   },
@@ -88,7 +88,7 @@ export const VECTORS = {
     short: 'Pare, sponzor, knjige.',
     long: 'Side posao, subvencija, sponzor.',
     sub_choices: {
-      sponsor_outreach: { label: 'Sponzor outreach', type: 'bool' },
+      sponsor_outreach: { label: 'Javljanje sponzorima', type: 'bool' },
       bookkeeping: { label: 'Knjigovodstvo', type: 'bool' }
     }
   },

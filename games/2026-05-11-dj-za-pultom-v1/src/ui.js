@@ -69,8 +69,8 @@ function renderRSVPSilhouettes(state, num) {
 export function renderSacrificeBar(state) {
   const num = !!state.settings?.numeric_mode;
   return el('div', { className: 'sacrifice-bar sac-v2' },
-    renderSymptomTile('Telo',       state.sacrifice.health,     'kako se osecas', num),
-    renderSymptomTile('Odnosi',     state.sacrifice.odnosi,     'ko te jos zove', num),
+    renderSymptomTile('Telo',       state.sacrifice.health,     'kako se osećaš', num),
+    renderSymptomTile('Odnosi',     state.sacrifice.odnosi,     'ko te još zove', num),
     renderSymptomTile('Normalnost', state.sacrifice.normalnost, 'svet van muzike', num)
   );
 }
@@ -89,7 +89,7 @@ function renderSymptomTile(label, value, sub, num) {
 function zoneFor(value) {
   if (value > 75) return { id: 'green',  label: 'mir',       icon: '●' };
   if (value > 50) return { id: 'yellow', label: 'pripaze',   icon: '◐' };
-  if (value > 25) return { id: 'orange', label: 'crveno se javlja', icon: '◑' };
+  if (value > 25) return { id: 'orange', label: 'crveno svetli', icon: '◑' };
   return            { id: 'red',    label: 'pucanje',   icon: '◯' };
 }
 

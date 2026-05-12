@@ -21,7 +21,7 @@ export const PATH_UI = {
   networker: {
     label: 'Vezista',
     tag: 'scena',
-    description: 'Pio si sa svima. Sad svi znaju kako si.'
+    description: 'Pio si sa svima. Sad svi znaju kakav si.'
   },
   hustler: {
     label: 'Promoter',
@@ -41,7 +41,7 @@ export const PATH_UI = {
   the_lasting_dj: {
     label: 'Trajni',
     tag: 'meta',
-    description: 'Stigao do kraja sa kućom koja još stoji.'
+    description: 'Stigao si do kraja sa kućom koja još stoji.'
   },
   the_tragic_genius: {
     label: 'Tragični Genije',

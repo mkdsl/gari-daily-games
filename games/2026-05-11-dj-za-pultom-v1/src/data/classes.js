@@ -34,7 +34,7 @@ export const CLASS_UI = {
   },
   posthumna_penzija: {
     label: 'Posthumna penzija + faks',
-    short: 'Tikajući budilnik',
+    short: 'Kucajući budilnik',
     tagline: 'Imaš vremena. Pitanje je da li previše.',
     long: 'Podrška je tu sad. Faks kreće. Već si na ivici monomanije.',
     icon: 'clock'

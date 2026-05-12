@@ -37,7 +37,7 @@ export function renderOriginCreator(mount, state, transition) {
 
       // PRESET PICKER — 9 cards u single flat list
       el('div', { className: 'preset-block' },
-        el('div', { className: 'q-label' }, 'Šta ti je dalo telo da ovo radiš?'),
+        el('div', { className: 'q-label' }, 'Šta ti telo daje da ovo radiš?'),
         el('div', { className: 'preset-grid-v2' },
           ...ORIGIN_PRESETS.map(preset => {
             const sel = formAnswers.preset_key === preset.key;
