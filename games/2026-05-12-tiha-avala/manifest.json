@@ -5,7 +5,7 @@
   "description": "Ti si audio inžinjer Kluboslavija turneje. Pronađi slatku tačku zvuka — da publika bude srećna, a komšije ne zovu inspekciju. 6 nivoa, Avala teren, countdown do 20. juna.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-12-tiha-avala/",
   "brand_serves": ["kluboslavija"],
-  "stage": "concept",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "src/main.js": "Boot, scene management (menu/game/win/fail/level-select)",
@@ -24,7 +24,7 @@
     "src/content/hints.js": "Tutorial tekstovi po nivou, tooltip sadržaj, error poruke",
     "src/content/brand.js": "Kluboslavija branding: title, countdown string (39 dana), footer link",
     "src/entities/map.js": "Terrain map renderer data: tile tipovi, koordinate, canvas draw primitives",
-    "src/entities/speakers.js": "Speaker entity: pozicija, angle vizualizacija (konusni crteż), dual-array za L6",
+    "src/entities/speakers.js": "Speaker entity: pozicija, angle vizualizacija (konusni crtež), dual-array za L6",
     "src/entities/neighbours.js": "Neighbour house entity: pozicija, terrain_path array, trenutni Kdb, boja indikatora",
     "styles/base.css": "Layout, canvas centar ekrana, mobile-first responsive",
     "styles/ui.css": "Custom sliders (60px visina, 40px thumb), dugmadi, merači, HUD",
@@ -32,11 +32,11 @@
     "styles/theme.css": "Kluboslavija brand: tamno zelena, amber bina, crveno upozorenje, tipografija"
   },
   "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+    "total_js": 7500,
+    "total_css": 900
   },
-  "beta_score": null,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
+  "beta_score": 6.0,
+  "beta_score_iter2": 9.0,
+  "post_fix_score": 9.0,
   "sef_signoff": false
 }
