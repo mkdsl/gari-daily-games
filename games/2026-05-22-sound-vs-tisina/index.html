@@ -2,20 +2,121 @@
 <html lang="sr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#0a0a1a">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Sound vs Tišina — Gari Daily Games</title>
   <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/theme.css">
   <link rel="stylesheet" href="styles/ui.css">
   <link rel="stylesheet" href="styles/game.css">
-  <link rel="stylesheet" href="styles/theme.css">
 </head>
 <body>
-  <div id="game-root">
-    <canvas id="game-canvas"></canvas>
-    <div id="hud"></div>
-    <div id="menu" class="menu-overlay"></div>
+  <div id="app">
+    <!-- MENU SCREEN -->
+    <div id="screen-menu" class="screen active">
+      <div class="menu-bg"></div>
+      <div class="menu-content">
+        <div class="menu-logo">
+          <div class="logo-icon">🔊</div>
+          <h1 class="logo-title">Sound vs Tišina</h1>
+          <p class="logo-sub">Promoter Simulator</p>
+        </div>
+        <div class="menu-tagline">
+          <p>Podesi zvuk. Zadrži komšiju mirnim. Noć mora biti savršena.</p>
+        </div>
+        <button id="btn-start" class="btn btn-primary btn-xl">Počni karijeru</button>
+        <button id="btn-continue" class="btn btn-ghost" style="display:none">Nastavi</button>
+        <div class="menu-footer">
+          <span class="menu-credit">Gari Daily Games · 22.05.2026.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VENUE SELECT SCREEN -->
+    <div id="screen-venue-select" class="screen">
+      <div class="screen-header">
+        <h2>Izaberi teren</h2>
+        <div id="career-status" class="career-status"></div>
+      </div>
+      <div id="venue-grid" class="venue-grid"></div>
+    </div>
+
+    <!-- SETUP SCREEN -->
+    <div id="screen-setup" class="screen">
+      <div class="screen-header">
+        <h2 id="setup-title">Pripremi opremu</h2>
+        <div id="setup-budget" class="budget-display"></div>
+      </div>
+      <div id="upgrade-grid" class="upgrade-grid"></div>
+      <div class="setup-footer">
+        <button id="btn-start-event" class="btn btn-primary btn-xl">Kreni na event →</button>
+      </div>
+    </div>
+
+    <!-- RUNNING SCREEN -->
+    <div id="screen-running" class="screen">
+      <!-- HUD TOP -->
+      <div id="hud-top" class="hud-top">
+        <div id="hud-time" class="hud-time">22:00</div>
+        <div id="hud-happiness" class="hud-happiness">
+          <div class="happiness-emoji" id="happiness-emoji">😐</div>
+          <div class="happiness-bar-wrap">
+            <div class="happiness-bar" id="happiness-bar"></div>
+          </div>
+          <span class="happiness-label" id="happiness-label">0%</span>
+        </div>
+        <div id="hud-right" class="hud-right">
+          <div id="hud-budget" class="hud-badge budget-badge">💰 <span id="budget-val">0</span></div>
+          <div id="hud-rep" class="hud-badge rep-badge">⭐ <span id="rep-val">50</span></div>
+        </div>
+      </div>
+
+      <!-- MAIN GAME AREA -->
+      <div id="game-area" class="game-area">
+        <!-- CANVAS + THERMOMETER -->
+        <div id="canvas-wrap" class="canvas-wrap">
+          <canvas id="game-canvas" width="800" height="480"></canvas>
+          <div id="neighbor-thermo" class="neighbor-thermo">
+            <div class="thermo-label">Komšija</div>
+            <div class="thermo-tube">
+              <div id="thermo-fill" class="thermo-fill"></div>
+              <div id="thermo-limit" class="thermo-limit"></div>
+            </div>
+            <div id="thermo-icon" class="thermo-icon">😴</div>
+          </div>
+        </div>
+
+        <!-- SLIDERS PANEL -->
+        <div id="sliders-panel" class="sliders-panel"></div>
+      </div>
+
+      <!-- EVENT FEED -->
+      <div id="event-feed" class="event-feed"></div>
+
+      <!-- COMPLAINT INDICATOR -->
+      <div id="complaint-bar" class="complaint-bar">
+        <span class="complaint-label">Prijave:</span>
+        <div id="complaint-dots" class="complaint-dots"></div>
+      </div>
+    </div>
+
+    <!-- GAME OVER SCREEN -->
+    <div id="screen-gameover" class="screen">
+      <div class="gameover-content">
+        <div id="gameover-title" class="gameover-title">Noć je gotova</div>
+        <div id="gameover-stats" class="gameover-stats"></div>
+        <div id="gameover-quote" class="gameover-quote"></div>
+        <div class="gameover-promo">
+          <p class="promo-text">Avala 20. jun — budi tamo kad to stvarno broji.</p>
+          <a href="https://app.bilet.rs/show/261" target="_blank" class="btn btn-primary btn-xl" id="btn-karta">🎫 Karta</a>
+        </div>
+        <div class="gameover-actions">
+          <button id="btn-replay" class="btn btn-ghost">Igraj ponovo</button>
+          <button id="btn-next-venue" class="btn btn-primary" style="display:none">Sledeći nivo →</button>
+        </div>
+      </div>
+    </div>
   </div>
+
   <script type="module" src="src/main.js"></script>
 </body>
 </html>
