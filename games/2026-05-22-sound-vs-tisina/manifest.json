@@ -1,0 +1,16 @@
+{
+  "name": "Sound vs Tišina",
+  "genre": "Balance Puzzle / Acoustic Simulator / Career Manager",
+  "date": "2026-05-22",
+  "description": "Ti si promoter koji uči zanat — podesi zvuk tako da dance floor živi a susedi spavaju. SPL fizika, 8 terena, karijera od Šumskog Sata do Avala Open-Air.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-22-sound-vs-tisina/",
+  "brand_serves": ["kluboslavija", "mkdslend"],
+  "stage": "concept",
+  "status": "in_progress",
+  "modules": {},
+  "line_counts": { "total_js": 0, "total_css": 0 },
+  "beta_score": null,
+  "beta_score_iter2": null,
+  "post_fix_score": null,
+  "sef_signoff": false
+}
