@@ -1,4 +1,5 @@
-// Game state management
+// state.js — centralni game state + save/load
+import { GRID_W, GRID_H } from './config.js';
 
 const SAVE_KEY = 'svt_save';
 
@@ -8,8 +9,8 @@ export function createInitialState() {
     currentVenue: null,
     currentLevel: 0,
     zones: [],
-    heatmap: new Float32Array(100 * 60),
-    heatmapBack: new Float32Array(100 * 60), // double buffer
+    heatmap: new Float32Array(GRID_W * GRID_H),
+    heatmapBack: new Float32Array(GRID_W * GRID_H),
     neighborSPL: 0,
     happiness: 0,
     complaints: 0,
@@ -18,67 +19,59 @@ export function createInitialState() {
     reputation: { audience: 50, neighbor: 50 },
     xp: 0,
     careerLevel: 0,
-    gameTime: 0,       // real seconds from start
-    dynamicEvents: [], // active events
+    gameTime: 0,         // real seconds elapsed
+    dynamicEvents: [],
     upgrades: new Set(),
     sessionStats: {
       maxHappiness: 0,
       minNeighborSPL: 999,
       complaints: 0,
-      totalTicks: 0,
-      happinessSum: 0
+      totalTicks: 0
     },
-    unlockedVenues: [0], // indices of unlocked venues
-    lastEventTime: 0,
-    nextEventTime: 20,
-    mediaBonus: false
+    pendingWin: false
   };
 }
 
-export function saveState(state) {
+export function saveProgress(state) {
+  const data = {
+    xp: state.xp,
+    careerLevel: state.careerLevel,
+    currentLevel: state.currentLevel,
+    reputation: state.reputation
+  };
   try {
-    const serializable = {
-      phase: 'menu', // always save to menu on reload
-      xp: state.xp,
-      careerLevel: state.careerLevel,
-      budget: state.budget,
-      reputation: state.reputation,
-      upgrades: [...state.upgrades],
-      unlockedVenues: state.unlockedVenues
-    };
-    localStorage.setItem(SAVE_KEY, JSON.stringify(serializable));
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
   } catch (e) {
-    // localStorage might not be available
+    // localStorage might be unavailable
   }
 }
 
-export function loadState(state) {
+export function loadProgress(state) {
   try {
     const raw = localStorage.getItem(SAVE_KEY);
-    if (!raw) return false;
-    const saved = JSON.parse(raw);
-    state.xp = saved.xp || 0;
-    state.careerLevel = saved.careerLevel || 0;
-    state.budget = saved.budget || 0;
-    state.reputation = saved.reputation || { audience: 50, neighbor: 50 };
-    state.upgrades = new Set(saved.upgrades || []);
-    state.unlockedVenues = saved.unlockedVenues || [0];
-    return true;
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (typeof data.xp === 'number') state.xp = data.xp;
+    if (typeof data.careerLevel === 'number') state.careerLevel = data.careerLevel;
+    if (typeof data.currentLevel === 'number') state.currentLevel = data.currentLevel;
+    if (data.reputation) state.reputation = data.reputation;
   } catch (e) {
-    return false;
+    // ignore corrupt save
   }
 }
 
-export function hasSave() {
-  try {
-    return !!localStorage.getItem(SAVE_KEY);
-  } catch (e) {
-    return false;
-  }
-}
-
-export function clearSave() {
-  try {
-    localStorage.removeItem(SAVE_KEY);
-  } catch (e) {}
+export function resetSessionStats(state) {
+  state.sessionStats = {
+    maxHappiness: 0,
+    minNeighborSPL: 999,
+    complaints: 0,
+    totalTicks: 0
+  };
+  state.complaints = 0;
+  state.lastComplaintTime = -999;
+  state.dynamicEvents = [];
+  state.gameTime = 0;
+  state.happiness = 0;
+  state.neighborSPL = 0;
+  state.pendingWin = false;
 }

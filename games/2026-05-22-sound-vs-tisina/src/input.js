@@ -1,82 +1,100 @@
-// Input manager — mouse + touch on canvas
-
+// input.js — mouse + touch handler per canvas
 export class InputManager {
   constructor(canvas) {
     this.canvas = canvas;
-    this.mouse = { x: 0, y: 0, down: false };
-    this.listeners = {};
+    this.mousePos = { x: 0, y: 0 };
+    this.mouseDown = false;
+    this._handlers = [];
     this._bind();
   }
 
   _bind() {
     const c = this.canvas;
 
-    const getPos = (e) => {
+    const onMouseMove = (e) => {
       const rect = c.getBoundingClientRect();
       const scaleX = c.width / rect.width;
       const scaleY = c.height / rect.height;
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return {
-        x: (clientX - rect.left) * scaleX,
-        y: (clientY - rect.top) * scaleY
+      this.mousePos = {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
       };
     };
 
-    c.addEventListener('mousedown', (e) => {
-      const pos = getPos(e);
-      this.mouse = { ...pos, down: true };
-      this._emit('down', pos);
-    });
+    const onMouseDown = (e) => {
+      this.mouseDown = true;
+      const rect = c.getBoundingClientRect();
+      const scaleX = c.width / rect.width;
+      const scaleY = c.height / rect.height;
+      const pos = {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+      };
+      this._dispatch('click', pos);
+    };
 
-    c.addEventListener('mousemove', (e) => {
-      const pos = getPos(e);
-      this.mouse = { ...pos, down: this.mouse.down };
-      if (this.mouse.down) this._emit('drag', pos);
-      this._emit('move', pos);
-    });
+    const onMouseUp = () => { this.mouseDown = false; };
 
-    c.addEventListener('mouseup', (e) => {
-      const pos = getPos(e);
-      this.mouse = { ...pos, down: false };
-      this._emit('up', pos);
-    });
-
-    c.addEventListener('touchstart', (e) => {
+    const onTouchStart = (e) => {
       e.preventDefault();
-      const pos = getPos(e);
-      this.mouse = { ...pos, down: true };
-      this._emit('down', pos);
-    }, { passive: false });
+      this.mouseDown = true;
+      const rect = c.getBoundingClientRect();
+      const scaleX = c.width / rect.width;
+      const scaleY = c.height / rect.height;
+      const t = e.touches[0];
+      const pos = {
+        x: (t.clientX - rect.left) * scaleX,
+        y: (t.clientY - rect.top) * scaleY
+      };
+      this.mousePos = pos;
+      this._dispatch('click', pos);
+    };
 
-    c.addEventListener('touchmove', (e) => {
+    const onTouchMove = (e) => {
       e.preventDefault();
-      const pos = getPos(e);
-      this.mouse = { ...pos, down: true };
-      this._emit('drag', pos);
-      this._emit('move', pos);
-    }, { passive: false });
+      const rect = c.getBoundingClientRect();
+      const scaleX = c.width / rect.width;
+      const scaleY = c.height / rect.height;
+      const t = e.touches[0];
+      this.mousePos = {
+        x: (t.clientX - rect.left) * scaleX,
+        y: (t.clientY - rect.top) * scaleY
+      };
+    };
 
-    c.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      this.mouse.down = false;
-      this._emit('up', this.mouse);
-    }, { passive: false });
+    const onTouchEnd = () => { this.mouseDown = false; };
+
+    c.addEventListener('mousemove', onMouseMove);
+    c.addEventListener('mousedown', onMouseDown);
+    c.addEventListener('mouseup', onMouseUp);
+    c.addEventListener('touchstart', onTouchStart, { passive: false });
+    c.addEventListener('touchmove', onTouchMove, { passive: false });
+    c.addEventListener('touchend', onTouchEnd);
+
+    this._handlers = [
+      [c, 'mousemove', onMouseMove],
+      [c, 'mousedown', onMouseDown],
+      [c, 'mouseup', onMouseUp],
+      [c, 'touchstart', onTouchStart],
+      [c, 'touchmove', onTouchMove],
+      [c, 'touchend', onTouchEnd]
+    ];
   }
 
   on(event, fn) {
-    if (!this.listeners[event]) this.listeners[event] = [];
-    this.listeners[event].push(fn);
-    return this;
+    if (!this._listeners) this._listeners = {};
+    if (!this._listeners[event]) this._listeners[event] = [];
+    this._listeners[event].push(fn);
   }
 
-  off(event, fn) {
-    if (!this.listeners[event]) return;
-    this.listeners[event] = this.listeners[event].filter(f => f !== fn);
+  _dispatch(event, data) {
+    if (!this._listeners || !this._listeners[event]) return;
+    for (const fn of this._listeners[event]) fn(data);
   }
 
-  _emit(event, data) {
-    if (!this.listeners[event]) return;
-    for (const fn of this.listeners[event]) fn(data);
+  destroy() {
+    for (const [el, ev, fn] of this._handlers) {
+      el.removeEventListener(ev, fn);
+    }
   }
 }
