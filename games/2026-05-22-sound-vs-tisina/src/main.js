@@ -4,16 +4,17 @@ import { loadVenue } from './systems/venue.js';
 import { computeHeatmap, getNeighborSPL, computeAverageHappiness } from './systems/spl-engine.js';
 import { tickEvents } from './systems/events.js';
 import { checkComplaint, getEffectiveNeighborLimit } from './systems/economy.js';
-import { triggerComplaint, isShutdown } from './systems/warnings.js';
+import { triggerComplaint } from './systems/warnings.js';
 import { addXP, calculateSessionXP, unlockNextVenue } from './systems/progression.js';
 import { calculateReputation, applyUpgrade } from './systems/economy.js';
 import { startRenderLoop, stopRenderLoop } from './render.js';
 import { updateRunningUI, showScreen, clearFeed, renderVenueSelect } from './ui.js';
-import { initSliders, rebuildSliders } from './ui/sliders.js';
+import { initSliders } from './ui/sliders.js';
 import { showGameOver } from './ui/game-over.js';
 import { resumeAudio, startBeatLoop, stopBeatLoop, happinessChord, gameOverDrone } from './audio.js';
 import { InputManager } from './input.js';
-import { TICK_RATE, GAME_DURATION_REAL_SEC, UPGRADES } from './config.js';
+import { TICK_RATE, GAME_DURATION_REAL_SEC } from './config.js';
+import { UPGRADES } from './content/upgrades.js';
 import { addFeedMessage } from './ui/event-feed.js';
 import { getRandomLine } from './content/dialogue.js';
 
@@ -83,7 +84,7 @@ function showSetupScreen() {
   if (titleEl) titleEl.textContent = `Priprema: ${state.currentVenue.name}`;
 
   const budgetEl = document.getElementById('setup-budget');
-  if (budgetEl) budgetEl.textContent = `💰 ${state.budget.toLocaleString()}`;
+  if (budgetEl) budgetEl.textContent = `\u{1F4B0} ${state.budget.toLocaleString()}`;
 
   renderUpgradesGrid();
 }
@@ -104,7 +105,7 @@ function renderUpgradesGrid() {
     card.innerHTML = `
       <div class="ug-name">${upgrade.name}</div>
       <div class="ug-desc">${upgrade.desc}</div>
-      <div class="ug-cost">${owned ? '✅ Kupljeno' : `💰 ${upgrade.cost.toLocaleString()}`}</div>
+      <div class="ug-cost">${owned ? '✅ Kupljeno' : `\u{1F4B0} ${upgrade.cost.toLocaleString()}`}</div>
     `;
 
     if (!owned && requiresMet && canAfford) {
@@ -112,7 +113,7 @@ function renderUpgradesGrid() {
         if (applyUpgrade(upgrade.id, state)) {
           renderUpgradesGrid();
           const budgetEl = document.getElementById('setup-budget');
-          if (budgetEl) budgetEl.textContent = `💰 ${state.budget.toLocaleString()}`;
+          if (budgetEl) budgetEl.textContent = `\u{1F4B0} ${state.budget.toLocaleString()}`;
         }
       });
     }
@@ -131,12 +132,12 @@ function startRunning() {
 
   // Init sliders
   initSliders(state, (zone) => {
-    // Slider changed — heatmap will recompute on next tick
+    // Slider changed — heatmap recomputes on next tick automatically
   });
 
   // Show mentor start line
   const mentorLine = getRandomLine('venue_start');
-  if (mentorLine) addFeedMessage(mentorLine, '🎭');
+  if (mentorLine) addFeedMessage(mentorLine, '\u{1F3AD}');
 
   // Start render loop
   startRenderLoop(canvas, () => state);
@@ -191,7 +192,7 @@ function gameTick(dt) {
   const newEvent = tickEvents(state, dt);
   if (newEvent) {
     const line = getEventMentorLine(newEvent);
-    if (line) addFeedMessage(line, '🎭');
+    if (line) addFeedMessage(line, '\u{1F3AD}');
   }
 
   // Check complaints
@@ -262,6 +263,12 @@ function endGame(isWin) {
   showGameOver(state, isWin);
 
   clearFeed();
+
+  // Destroy input manager
+  if (inputManager) {
+    inputManager.destroy();
+    inputManager = null;
+  }
 }
 
 // Bootstrap

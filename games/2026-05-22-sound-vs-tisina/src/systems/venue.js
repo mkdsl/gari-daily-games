@@ -1,6 +1,5 @@
 // venue.js — venue loading system
 import { AudioZone } from '../entities/zone.js';
-import { Neighbor } from '../entities/neighbor.js';
 import { VENUES } from '../content/venues.js';
 import { resetSessionStats } from '../state.js';
 
@@ -21,7 +20,7 @@ export function loadVenue(venueIndex, state) {
     isNeighbor: false
   }));
 
-  // Apply upgrade bonuses
+  // Apply upgrade bonuses to zones
   for (const upgradeId of state.upgrades) {
     applyUpgradeBonusToZones(upgradeId, state);
   }
@@ -32,15 +31,17 @@ export function loadVenue(venueIndex, state) {
 }
 
 function applyUpgradeBonusToZones(upgradeId, state) {
-  // Applied during loadVenue after zones are created
   const UPGRADE_ZONE_MAP = {
-    'subwoofer': { zoneId: 'main', dbBonus: 5 },
-    'fill_speaker': { zoneId: 'fill', dbBonus: 8 },
-    'line_array': { zoneId: 'main', dbBonus: 4, maxDbBonus: 3 },
-    'horn_tweeter': { zoneId: 'fill', dbBonus: 3 },
-    'monitor_wedge': { zoneId: 'monitor', dbBonus: 6 },
-    'delay_tower': { zoneId: 'delay', dbBonus: 7 },
-    'cardioid_sub': { zoneId: 'main', dbBonus: 2 }
+    'subwoofer':    { zoneId: 'main',    dbBonus: 5 },
+    'fill_speaker': { zoneId: 'fill',    dbBonus: 8 },
+    'line_array':   { zoneId: 'main',    dbBonus: 4, maxDbBonus: 3 },
+    'horn_tweeter': { zoneId: 'fill',    dbBonus: 3 },
+    'monitor_wedge':{ zoneId: 'monitor', dbBonus: 6 },
+    'delay_tower':  { zoneId: 'delay',   dbBonus: 7 },
+    'cardioid_sub': { zoneId: 'main',    dbBonus: 2 },
+    'amp_upgrade':  { zoneId: 'main',    dbBonus: 4, maxDbBonus: 4 },
+    'line_array_v2':{ zoneId: 'main',    dbBonus: 6, maxDbBonus: 6 },
+    'stage_monitor':{ zoneId: 'monitor', dbBonus: 5 }
   };
   const bonus = UPGRADE_ZONE_MAP[upgradeId];
   if (!bonus) return;
