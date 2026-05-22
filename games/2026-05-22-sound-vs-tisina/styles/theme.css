@@ -1,0 +1,15 @@
+/* theme.css — Kluboslavija palette + CSS variables */
+:root {
+  --primary: #7b2fff;
+  --accent: #00f0ff;
+  --danger: #ff2244;
+  --warn: #ffaa00;
+  --safe: #00ff88;
+  --happy: #00ff88;
+  --bg: #0a0a1a;
+  --bg2: #0d0d20;
+  --bg3: #141428;
+  --text: #e0e0f0;
+  --text-dim: rgba(224,224,240,0.5);
+  --border: rgba(123,47,255,0.3);
+}
