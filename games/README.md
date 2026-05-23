@@ -24,7 +24,8 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-05-08 | Aforizam Generator ⭐ | Generative text toy — Pera Period × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-08-aforizam-generator/) |
 | 2026-05-09 | DJ za Pultom ⭐ | Idle/Incremental — Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-09-dj-za-pultom/) |
 | 2026-05-10 | Kluboslavija Pasoš ⭐ | Meta-collection / Progression — GDG umbrella | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-10-cross-event-pasos/) |
-| 2026-05-22 | Sound vs Tišina ⭐ | Balance Puzzle / Acoustic Simulator — Kluboslavija × MKDSLend | ⬜ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-22-sound-vs-tisina/) |
+| 2026-05-22 | Sound vs Tišina ⭐ | Balance Puzzle / Acoustic Simulator — Kluboslavija × MKDSLend | ◻ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-22-sound-vs-tisina/) |
+| 2026-05-23 | Pakuj Torbu — Avala Edition ⭐ | Spatial Puzzle / Packing — Kluboslavija | ◻ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-23-pakuj-torbu-avala/) |
 
 ## Statusi
 
