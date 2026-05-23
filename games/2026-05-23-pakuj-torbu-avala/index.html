@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0A0E1A">
+  <meta name="description" content="Spakuj torbu za Avala festival za 60 sekundi. Required ili minus bodova. Daily highscore. 5 nivoa, Kluboslavija.">
+  <meta property="og:title" content="Pakuj Torbu — Avala Edition">
+  <meta property="og:description" content="Spakuj torbu za Avala festival za 60 sekundi!">
+  <meta property="og:image" content="https://mkdsl.github.io/gari-daily-games/games/2026-05-23-pakuj-torbu-avala/og-image.png">
+  <meta property="og:url" content="https://mkdsl.github.io/gari-daily-games/games/2026-05-23-pakuj-torbu-avala/">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Pakuj Torbu — Avala Edition</title>
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Start Screen -->
+    <div id="screen-start" class="screen active">
+      <div class="screen-content start-content">
+        <div class="logo-area">
+          <div class="klogo">KLUBOSLAVIJA</div>
+          <h1 class="game-title">PAKUJ TORBU</h1>
+          <div class="game-subtitle">Avala Edition &middot; 20. jun 2026</div>
+          <div class="event-countdown" id="event-countdown"></div>
+        </div>
+        <div class="start-instructions">
+          <p>Spakuj SVE obavezne stvari u torbu pre isteka vremena!</p>
+          <ul>
+            <li>&#128074; Klikni predmet &rarr; klikni ćeliju u torbi</li>
+            <li>&#128260; Taster <kbd>R</kbd> ili dugme za rotaciju</li>
+            <li>&#9203; Vremenski bonus za svaku preostalu sekundu</li>
+          </ul>
+        </div>
+        <div class="highscore-preview" id="hs-preview"></div>
+        <button id="btn-start" class="btn btn-primary btn-large">Kreni na Avala &#127874;</button>
+        <div class="difficulty-select">
+          <span>Nivo teškoće:</span>
+          <button class="btn btn-sm active" data-level="1" id="diff-btn">Normalan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUD (shown while playing) -->
+    <div id="hud" class="hud hidden">
+      <div class="hud-left">
+        <div class="hud-label">NIVO</div>
+        <div class="hud-value" id="hud-level">1</div>
+      </div>
+      <div class="hud-center">
+        <div class="hud-label">VREME</div>
+        <div class="hud-value timer-display" id="hud-timer">60</div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-label">SCORE</div>
+        <div class="hud-value" id="hud-score">0</div>
+      </div>
+    </div>
+
+    <!-- Game Area -->
+    <div id="game-area" class="game-area hidden">
+      <div id="item-panel" class="item-panel">
+        <div class="panel-header">TORBA</div>
+        <div id="items-list" class="items-list"></div>
+        <div class="rotate-hint">
+          <button id="btn-rotate" class="btn btn-rotate">&#8635; Rotiraj (R)</button>
+        </div>
+        <div class="legend">
+          <span class="legend-req">&#9670; Obavezno</span>
+          <span class="legend-bon">&#9671; Bonus</span>
+        </div>
+      </div>
+      <div id="canvas-wrap" class="canvas-wrap">
+        <canvas id="game-canvas"></canvas>
+        <div id="ghost-overlay" class="ghost-overlay"></div>
+      </div>
+    </div>
+
+    <!-- Level Complete Screen -->
+    <div id="screen-level-complete" class="screen hidden">
+      <div class="screen-content">
+        <h2 class="level-complete-title">Nivo &#10003;</h2>
+        <div class="score-breakdown" id="level-breakdown"></div>
+        <div class="score-total">Score ovog nivoa: <span id="lc-level-score">0</span></div>
+        <div class="score-total">Ukupno: <span id="lc-total-score">0</span></div>
+        <button id="btn-next-level" class="btn btn-primary btn-large">Sledeći nivo &#9658;</button>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="screen-game-over" class="screen hidden">
+      <div class="screen-content game-over-content">
+        <div class="grade-title" id="go-grade-title">Savršeno pakovanje</div>
+        <div class="packed-summary" id="go-packed-summary"></div>
+        <div class="score-display">
+          <div class="score-big">Score: <span id="go-score">0</span> bodova</div>
+          <div class="score-breakdown-go" id="go-breakdown"></div>
+        </div>
+        <div class="highscore-section">
+          <h3>&#127942; Daily Highscore</h3>
+          <div id="go-highscore-list" class="hs-list"></div>
+        </div>
+        <div class="cta-section">
+          <div class="cta-text">AVALA RUN. 20. JUN.</div>
+          <a href="https://app.bilet.rs/show/261" target="_blank" class="btn btn-cta">&#127915; Uzmi kartu</a>
+        </div>
+        <div class="go-actions">
+          <button id="btn-share" class="btn btn-secondary">&#128279; Podeli score</button>
+          <button id="btn-restart" class="btn btn-primary">Pakuj ponovo &#128188;</button>
+        </div>
+        <div class="watermark">Kluboslavija &copy; 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+/* Kluboslavija Brand Theme — Pakuj Torbu */
+:root {
+  /* Core palette */
+  --bg-primary: #0A0E1A;
+  --bg-secondary: #111827;
+  --bg-panel: #0F1628;
+  --bg-card: #1A2035;
+  --bg-overlay: rgba(10, 14, 26, 0.92);
+
+  /* Brand accents */
+  --amber: #FFD700;
+  --amber-dark: #FF8C00;
+  --amber-glow: rgba(255, 215, 0, 0.15);
+  --amber-border: rgba(255, 215, 0, 0.4);
+
+  /* Semantic colors */
+  --color-required: #EF5350;
+  --color-bonus: #66BB6A;
+  --color-success: #4CAF50;
+  --color-error: #F44336;
+  --color-warning: #FF9800;
+  --color-info: #29B6F6;
+
+  /* Text */
+  --text-primary: #E8EAED;
+  --text-secondary: #9AA0B0;
+  --text-accent: #FFD700;
+  --text-muted: #4A5568;
+
+  /* Grid */
+  --grid-cell-size: 56px;
+  --grid-border: rgba(255, 215, 0, 0.25);
+  --grid-bg: rgba(15, 22, 40, 0.8);
+  --grid-filled: rgba(255, 215, 0, 0.1);
+
+  /* UI */
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 20px;
+  --shadow-glow: 0 0 20px rgba(255, 215, 0, 0.2);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.4s ease;
+
+  /* Typography */
+  --font-main: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Courier New', monospace;
+  --font-display: 'Impact', 'Arial Black', sans-serif;
+}
+
+/* Dark mode is default */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+}

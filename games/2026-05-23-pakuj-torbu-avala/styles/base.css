@@ -1,0 +1,181 @@
+/* Base Layout — Pakuj Torbu */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Screen management */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-overlay);
+  z-index: 10;
+  transition: opacity var(--transition-normal);
+}
+
+.screen.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.screen-content {
+  position: relative;
+  max-width: 480px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--amber-border);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-glow), var(--shadow-card);
+  scrollbar-width: thin;
+  scrollbar-color: var(--amber-border) transparent;
+}
+
+/* HUD */
+.hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: rgba(10, 14, 26, 0.95);
+  border-bottom: 1px solid var(--amber-border);
+  z-index: 5;
+}
+
+.hud.hidden {
+  display: none;
+}
+
+/* Game Area */
+.game-area {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  overflow: hidden;
+}
+
+.game-area.hidden {
+  display: none;
+}
+
+/* Item Panel */
+.item-panel {
+  width: 160px;
+  min-width: 140px;
+  flex-shrink: 0;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--amber-border);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  overflow: hidden;
+}
+
+/* Canvas Wrap */
+.canvas-wrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#game-canvas {
+  display: block;
+  cursor: pointer;
+}
+
+.ghost-overlay {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--amber-border);
+  border-radius: 2px;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .item-panel {
+    width: 120px;
+    min-width: 110px;
+    padding: 6px;
+  }
+
+  .screen-content {
+    padding: 16px;
+    width: 95%;
+  }
+}
+
+@media (max-height: 600px) {
+  .hud {
+    height: 44px;
+  }
+  .game-area {
+    top: 44px;
+  }
+}
