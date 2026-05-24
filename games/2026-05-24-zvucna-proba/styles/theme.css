@@ -1,0 +1,40 @@
+/* theme.css — CSS vars, Kluboslavija paleta */
+:root {
+  --bg: #0D0D0D;
+  --bg-surface: #1A1A1A;
+  --bg-elevated: #242424;
+  --amber: #F5A623;
+  --amber-dim: #C4821A;
+  --blue: #00CFFF;
+  --blue-dim: #0099CC;
+  --error: #FF3B3B;
+  --error-dim: #CC2222;
+  --ok: #00FF88;
+  --ok-dim: #00CC6A;
+  --text-primary: #F0F0F0;
+  --text-secondary: #999999;
+  --text-dim: #555555;
+  --border: #333333;
+  --border-active: #F5A623;
+
+  /* VU meter zones */
+  --vu-green: #00FF88;
+  --vu-orange: #F5A623;
+  --vu-red: #FF3B3B;
+  --vu-bg: #111111;
+
+  /* Timer */
+  --timer-ok: #00FF88;
+  --timer-warn: #F5A623;
+  --timer-urgent: #FF3B3B;
+
+  /* Radius & spacing */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  /* Typography */
+  --font-main: 'Courier New', Courier, monospace;
+  --font-display: Impact, 'Arial Black', sans-serif;
+}

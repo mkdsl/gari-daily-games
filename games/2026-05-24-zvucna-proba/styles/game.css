@@ -1,0 +1,152 @@
+/* game.css — VU meter, timer bar, streak, animations */
+
+/* Timer bar */
+.timer-bar-container {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: var(--bg-surface);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.timer-bar {
+  height: 100%;
+  width: 100%;
+  background: var(--timer-ok);
+  transform-origin: left center;
+  transition: background 0.3s;
+}
+
+.timer-bar.warn { background: var(--timer-warn); }
+.timer-bar.urgent {
+  background: var(--timer-urgent);
+  animation: timerPulse 0.5s ease-in-out infinite;
+}
+
+.timer-label {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  line-height: 1;
+}
+
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Streak display */
+.streak-display {
+  font-size: 0.75rem;
+  color: var(--amber);
+  letter-spacing: 0.05em;
+  min-height: 16px;
+  text-align: center;
+}
+
+.streak-display.sparkle {
+  animation: streakSparkle 0.4s ease;
+  color: var(--ok);
+}
+
+.streak-display.legendary {
+  color: var(--amber);
+  text-shadow: 0 0 8px var(--amber);
+  animation: streakLegendary 1s ease-in-out infinite;
+}
+
+@keyframes streakSparkle {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+@keyframes streakLegendary {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; text-shadow: 0 0 16px var(--amber); }
+}
+
+/* Waveform animation */
+.waveform-anim {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 40px;
+}
+
+.waveform-anim::before,
+.waveform-anim::after {
+  content: '';
+  display: block;
+}
+
+.waveform-anim {
+  --bar-color: var(--blue);
+  position: relative;
+  width: 48px;
+  height: 40px;
+  overflow: hidden;
+}
+
+/* 5 bars */
+.waveform-anim span {
+  display: inline-block;
+  width: 5px;
+  background: var(--bar-color, var(--blue));
+  border-radius: 3px;
+  animation: waveBar 0.8s ease-in-out infinite alternate;
+}
+
+.waveform-anim span:nth-child(1) { animation-delay: 0s; }
+.waveform-anim span:nth-child(2) { animation-delay: 0.12s; }
+.waveform-anim span:nth-child(3) { animation-delay: 0.24s; }
+.waveform-anim span:nth-child(4) { animation-delay: 0.36s; }
+.waveform-anim span:nth-child(5) { animation-delay: 0.48s; }
+
+@keyframes waveBar {
+  from { height: 8px; }
+  to { height: 36px; }
+}
+
+/* Boss badge */
+.boss-badge {
+  display: inline-block;
+  background: var(--error);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* Score flash */
+@keyframes scoreFlash {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.2); color: var(--ok); }
+  100% { transform: scale(1); }
+}
+
+.score-flash { animation: scoreFlash 0.4s ease; }
+
+/* Win confetti placeholder */
+.win-confetti {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 8px;
+  animation: confettiBounce 0.6s ease-in-out infinite alternate;
+}
+
+.win-confetti::before { content: '🎚️'; }
+
+@keyframes confettiBounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-8px); }
+}

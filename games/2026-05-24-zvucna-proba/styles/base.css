@@ -1,0 +1,88 @@
+/* base.css — Layout, canvas container, font */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 16px;
+  line-height: 1.4;
+  touch-action: manipulation;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 10;
+}
+
+.screen.active {
+  display: flex;
+}
+
+.screen-content {
+  width: 100%;
+  max-width: 480px;
+  padding: 24px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  min-height: 100%;
+  justify-content: center;
+}
+
+#screen-game {
+  display: none;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+#screen-game.active {
+  display: flex;
+}
+
+.vu-canvas {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.hidden { display: none !important; }
+
+a { color: var(--amber); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button { cursor: pointer; border: none; outline: none; }
+button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+.screen-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  opacity: 0.35;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  letter-spacing: 0.3em;
+}

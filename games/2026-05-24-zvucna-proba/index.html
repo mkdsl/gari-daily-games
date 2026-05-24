@@ -2,20 +2,159 @@
 <html lang="sr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0D0D0D">
-  <title>Zvučna Proba — Gari Daily Games</title>
+  <title>Zvučna Proba — Kluboslavija 2026</title>
+  <meta name="description" content="Dijagnostikuj EQ probleme pre nego što Sava zaustavi probu. Rhythm/Reaction igra za Kluboslavija 2026.">
+  <meta property="og:title" content="Zvučna Proba | Kluboslavija 2026">
+  <meta property="og:description" content="10 rundi, 3 Boss probe. Možeš li uhvatiti problem?">
+  <meta property="og:url" content="https://mkdsl.github.io/gari-daily-games/games/2026-05-24-zvucna-proba/">
+  <link rel="stylesheet" href="styles/theme.css">
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/ui.css">
   <link rel="stylesheet" href="styles/game.css">
-  <link rel="stylesheet" href="styles/theme.css">
 </head>
 <body>
-  <div id="game-root">
-    <canvas id="game-canvas"></canvas>
-    <div id="hud"></div>
-    <div id="menu" class="menu-overlay"></div>
+  <!-- Start Screen -->
+  <div id="screen-start" class="screen active">
+    <div class="screen-content">
+      <div class="brand-header">
+        <span class="brand-logo">KLUBOSLAVIJA</span>
+        <span class="brand-countdown" id="avala-countdown"></span>
+      </div>
+      <h1 class="game-title">Zvučna<br><span class="accent">Proba</span></h1>
+      <p class="game-subtitle">Sound Check Simulator</p>
+      <div class="start-description">
+        <p>Dijagnostikuj EQ probleme i ispravi zvuk<br>pre nego što Sava zaustavi probu.</p>
+        <p class="rounds-info">10 rundi &nbsp;·&nbsp; 3 Boss probe &nbsp;·&nbsp; max 3000 bodova</p>
+      </div>
+      <button id="btn-start" class="btn btn-primary btn-large tap-pulse">
+        🎚️ Tapni da počneš
+      </button>
+      <div id="highscore-preview" class="highscore-preview"></div>
+      <footer class="screen-footer">
+        <span class="footer-brand">KLUBOSLAVIJA</span>
+      </footer>
+    </div>
   </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen">
+    <!-- Timer Bar -->
+    <div id="timer-bar-container" class="timer-bar-container">
+      <div id="timer-bar" class="timer-bar"></div>
+      <span id="timer-label" class="timer-label">8s</span>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud" class="hud">
+      <div class="hud-left">
+        <span class="hud-label">RUNDA</span>
+        <span id="hud-round" class="hud-value">1/10</span>
+      </div>
+      <div class="hud-center">
+        <span id="hud-score" class="hud-score">0</span>
+        <span id="streak-display" class="streak-display"></span>
+      </div>
+      <div class="hud-right">
+        <span class="hud-label">ŽIVOTI</span>
+        <span id="hud-lives" class="hud-value lives-display">❤️❤️❤️</span>
+      </div>
+    </div>
+
+    <!-- VU Meter Canvas -->
+    <canvas id="vu-canvas" class="vu-canvas"></canvas>
+
+    <!-- Zone Label -->
+    <div id="zone-label" class="zone-label"></div>
+
+    <!-- Phase: Listening -->
+    <div id="phase-listening" class="phase-panel">
+      <div class="listening-indicator">
+        <div class="waveform-anim"></div>
+        <p id="listening-text" class="listening-text">Slušaj pažljivo...</p>
+      </div>
+    </div>
+
+    <!-- Phase: Diagnosis -->
+    <div id="phase-diagnosis" class="phase-panel hidden">
+      <p class="phase-prompt">Koji je problem?</p>
+      <div id="diagnosis-options" class="options-grid"></div>
+    </div>
+
+    <!-- Phase: Correction -->
+    <div id="phase-correction" class="phase-panel hidden">
+      <p class="phase-prompt" id="correction-prompt">Kako ispraviti?</p>
+      <div id="correction-axes" class="correction-axes"></div>
+    </div>
+
+    <!-- Phase: Verify -->
+    <div id="phase-verify" class="phase-panel hidden">
+      <div class="verify-indicator">
+        <div class="waveform-anim"></div>
+        <p class="listening-text">Proveravamo korekciju...</p>
+      </div>
+    </div>
+
+    <!-- Glossary Bubble -->
+    <div id="glossary-bubble" class="glossary-bubble hidden">
+      <span id="glossary-term" class="glossary-term"></span>
+      <span id="glossary-def" class="glossary-def"></span>
+      <button id="glossary-close" class="glossary-close">✕</button>
+    </div>
+
+    <!-- Round Result Overlay -->
+    <div id="round-result" class="round-result hidden">
+      <div class="result-content">
+        <div id="result-icon" class="result-icon"></div>
+        <div id="result-points" class="result-points"></div>
+        <div id="result-breakdown" class="result-breakdown"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="screen-gameover" class="screen">
+    <div class="screen-content">
+      <div class="gameover-header">
+        <h2 class="gameover-title">Sava je zaustavio probu.</h2>
+      </div>
+      <div id="gameover-stats" class="end-stats"></div>
+      <div id="gameover-rank" class="rank-display"></div>
+      <div id="gameover-highscores" class="highscore-table"></div>
+      <div class="end-actions">
+        <button id="btn-share-gameover" class="btn btn-secondary">📤 Podeli rezultat</button>
+        <button id="btn-restart-gameover" class="btn btn-primary">🔄 Ponovo</button>
+      </div>
+      <div class="brand-cta">
+        <a href="https://bilet.rs/show/261" target="_blank" rel="noopener" class="cta-link">🎟️ Karte → bilet.rs/show/261</a>
+      </div>
+      <footer class="screen-footer"><span class="footer-brand">KLUBOSLAVIJA</span></footer>
+    </div>
+  </div>
+
+  <!-- Win Screen -->
+  <div id="screen-win" class="screen">
+    <div class="screen-content">
+      <div class="win-header">
+        <div class="win-confetti"></div>
+        <h2 class="win-title">Klub je spreman.</h2>
+        <p class="win-subtitle">Tonket kaže: dobar zvuk.</p>
+      </div>
+      <div id="win-stats" class="end-stats"></div>
+      <div id="win-rank" class="rank-display"></div>
+      <div id="win-highscores" class="highscore-table"></div>
+      <div class="end-actions">
+        <button id="btn-share-win" class="btn btn-secondary">📤 Podeli rezultat</button>
+        <button id="btn-restart-win" class="btn btn-primary">🔄 Ponovo</button>
+      </div>
+      <div class="brand-cta">
+        <a href="https://bilet.rs/show/261" target="_blank" rel="noopener" class="cta-link">🎟️ Karte → bilet.rs/show/261</a>
+      </div>
+      <footer class="screen-footer"><span class="footer-brand">KLUBOSLAVIJA</span></footer>
+    </div>
+  </div>
+
   <script type="module" src="src/main.js"></script>
 </body>
 </html>

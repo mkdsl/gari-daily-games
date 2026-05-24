@@ -1,21 +1,51 @@
 {
-  "name": "Zvučna Proba",
-  "genre": "Rhythm / Reaction Puzzle",
+  "id": "zvucna-proba",
+  "title": "Zvučna Proba",
+  "subtitle": "Sound Check Simulator",
   "date": "2026-05-24",
-  "description": "Ti si tonac na probi za Kluboslavija. Slušaš snippet, dijagnostikuješ EQ problem jednim tapom, koriguj — pre nego što publika uđe. 10 rundi, daily highscore, Avala CTA.",
-  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-24-zvucna-proba/",
-  "brand_serves": ["kluboslavija"],
-  "kluboslavija_branded": true,
-  "share_hook_url": "https://app.bilet.rs/show/261",
-  "stage": "concept",
-  "status": "in_progress",
-  "modules": {},
-  "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+  "genre": "Rhythm / Reaction Puzzle",
+  "stage": "impl",
+  "author": "Jova jQuery",
+  "team": "GDG",
+  "version": "1.0.0",
+  "description": "Dijagnostikuj i ispravi EQ probleme pre nego što Sava zaustavi probu. 10 rundi, 3 Boss probe, max 3000 bodova.",
+  "brand": "Kluboslavija 2026",
+  "entry": "index.html",
+  "modules": {
+    "main": "src/main.js",
+    "config": "src/config.js",
+    "state": "src/state.js",
+    "input": "src/input.js",
+    "audio": "src/audio.js",
+    "render": "src/render.js",
+    "ui": "src/ui.js",
+    "share": "src/share.js",
+    "scoring": "src/systems/scoring.js",
+    "timer": "src/systems/timer.js",
+    "progression": "src/systems/progression.js",
+    "highscore": "src/systems/highscore.js",
+    "eq_bank": "src/content/eq_bank.js",
+    "brand_hooks": "src/content/brand_hooks.js",
+    "base_css": "styles/base.css",
+    "ui_css": "styles/ui.css",
+    "game_css": "styles/game.css",
+    "theme_css": "styles/theme.css"
   },
-  "beta_score": null,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
-  "sef_signoff": false
+  "palette": {
+    "background": "#0D0D0D",
+    "amber": "#F5A623",
+    "electric_blue": "#00CFFF",
+    "error": "#FF3B3B",
+    "ok": "#00FF88"
+  },
+  "scoring": {
+    "max_session": 3000,
+    "base_correct": 100,
+    "base_diagnosis_only": 40,
+    "base_miss": 0,
+    "time_bonus_max": 50,
+    "streak_cap": 2.0
+  },
+  "rounds": 10,
+  "lives": 3
 }
