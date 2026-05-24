@@ -24,12 +24,16 @@ export const RANKS = [
 ];
 
 // Round table
+// Bug 5 fix: tolerance is now 0 for rounds 1-5 so the player must pick the
+// exact correction direction. With tolerance:1, direction=0 ("OK") would
+// always pass when target is also 0 — which is never valid since every
+// problem has a non-zero correction. Setting tolerance=0 enforces exactness.
 export const ROUNDS = [
-  { id: 1, zone: 'Bass (80-200 Hz)',    options: 3, timeWindow: 8, tolerance: 1, boss: false },
-  { id: 2, zone: 'Highs (4-12 kHz)',    options: 3, timeWindow: 8, tolerance: 1, boss: false },
-  { id: 3, zone: 'BOSS — Mid+Bass',     options: 3, timeWindow: 7, tolerance: 1, boss: true,  bossType: 'double' },
-  { id: 4, zone: 'Mid (500-2000 Hz)',   options: 3, timeWindow: 7, tolerance: 1, boss: false },
-  { id: 5, zone: 'Sub-bass (40-80 Hz)', options: 3, timeWindow: 6, tolerance: 1, boss: false },
+  { id: 1, zone: 'Bass (80-200 Hz)',    options: 3, timeWindow: 8, tolerance: 0, boss: false },
+  { id: 2, zone: 'Highs (4-12 kHz)',    options: 3, timeWindow: 8, tolerance: 0, boss: false },
+  { id: 3, zone: 'BOSS — Mid+Bass',     options: 3, timeWindow: 7, tolerance: 0, boss: true,  bossType: 'double' },
+  { id: 4, zone: 'Mid (500-2000 Hz)',   options: 3, timeWindow: 7, tolerance: 0, boss: false },
+  { id: 5, zone: 'Sub-bass (40-80 Hz)', options: 3, timeWindow: 6, tolerance: 0, boss: false },
   { id: 6, zone: 'BOSS — Highs+Mid',   options: 4, timeWindow: 6, tolerance: 0, boss: true,  bossType: 'subtle', noTimeBonus: true },
   { id: 7, zone: 'Presence (2-4 kHz)', options: 3, timeWindow: 6, tolerance: 1, boss: false },
   { id: 8, zone: 'Air (12-16 kHz)',    options: 3, timeWindow: 5, tolerance: 1, boss: false },

@@ -1,6 +1,9 @@
-// eq_bank.js — 8 EQ problems + glossary definitions
+// eq_bank.js — EQ problems + glossary definitions
+// Bug 6 fix: 3 distinct boss problems (indices 7, 8, 9 — one per boss round)
+// LOW fix: typo 'preooostre' → 'preooštre'; added 'Mid-bas' to GLOSSARY
 
 export const EQ_PROBLEMS = [
+  // --- Regular problems (indices 0-6) ---
   {
     id: 'boom_bass',
     label: 'Boom Basa',
@@ -125,11 +128,59 @@ export const EQ_PROBLEMS = [
       'Sub-bas preplavljuje mix',
       'Presence frekvencija nedostaje',
     ],
-    glossaryTerms: ['Mid'],
+    glossaryTerms: ['Mid-bas'],
+  },
+  // --- Boss problems (indices 7, 8, 9 — one per boss round) ---
+  {
+    // Boss 3 (round index 2): "Boom + Oštar Vrh"
+    id: 'boss3_boom_sharp',
+    label: 'Boom + Oštar Vrh',
+    filterType: 'double',
+    filters: [
+      { filterType: 'lowshelf', frequency: 120, gain: 9 },
+      { filterType: 'highshelf', frequency: 8000, gain: 10 },
+    ],
+    diagnosis: 'Bas i visoke su preglasni',
+    zone: 'boss',
+    correction: [
+      { axis: 'bas', direction: 'smanjiti' },
+      { axis: 'visoke', direction: 'smanjiti' },
+    ],
+    distractors: [
+      'Bas je preglasan',
+      'Visoke frekvencije su preooštre',
+      'Mid je ugušen',
+      'Sub-bas preplavljuje mix',
+    ],
+    glossaryTerms: ['Bas', 'Visoke'],
   },
   {
-    id: 'double_boost',
-    label: 'Dvostruki Problem',
+    // Boss 6 (round index 5): "Sub + Presence Rupa"
+    id: 'boss6_sub_presence',
+    label: 'Sub + Presence Rupa',
+    filterType: 'double',
+    filters: [
+      { filterType: 'lowshelf', frequency: 60, gain: 12 },
+      { filterType: 'peaking', frequency: 3000, gain: -10, Q: 2.0 },
+    ],
+    diagnosis: 'Sub-bas preplavljuje, presence nedostaje',
+    zone: 'boss',
+    correction: [
+      { axis: 'sub-bas', direction: 'smanjiti' },
+      { axis: 'presence', direction: 'pojacati' },
+    ],
+    distractors: [
+      'Bas je preglasan',
+      'Visoke frekvencije su preooštre',
+      'Mid je ugušen',
+      'Nema zraka u visokim',
+    ],
+    glossaryTerms: ['Sub-bas', 'Presence'],
+  },
+  {
+    // Boss 9 (round index 8): "Smiley" — original double_boost
+    id: 'boss9_smiley',
+    label: 'Smiley EQ',
     filterType: 'double',
     filters: [
       { filterType: 'lowshelf', frequency: 100, gain: 8 },
@@ -158,12 +209,14 @@ export const GLOSSARY = {
   'Sub-bas': 'Sub-bas = ispod 80 Hz — oseća se više nego čuje.',
   'Presence': 'Presence = 2-5 kHz, jasnoća glasu i gitari.',
   'Air': 'Air = iznad 12 kHz — osećaj prostora.',
+  'Mid-bas': 'Mid-bas = 150-300 Hz — punoća zvuka, ali i mulj ako je preglasan.',
 };
 
 // Map round index → which EQ problem to use
+// Rounds 0-6: regular problems (indices 0-6)
+// Boss rounds: index 2 → boss problem 7, index 5 → boss problem 8, index 8 → boss problem 9
 export function getProblemForRound(roundIndex) {
-  // roundIndex is 0-based
-  const mapping = [0, 1, 7, 2, 3, 7, 4, 5, 7, 6];
+  const mapping = [0, 1, 7, 2, 3, 8, 4, 5, 9, 6];
   return EQ_PROBLEMS[mapping[roundIndex] ?? 0];
 }
 

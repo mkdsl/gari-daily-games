@@ -10,7 +10,8 @@ export function buildRoundData(roundIndex) {
   const config = getRoundConfig(roundIndex);
   const problem = getProblemForRound(roundIndex);
   const isTrap = config.bossType === 'trap';
-  const isDouble = config.bossType === 'double';
+  // Bug 1 fix: isDouble is true when bossType is 'double' OR when the problem itself is a double-filter type
+  const isDouble = config.bossType === 'double' || problem.filterType === 'double';
   const options = buildOptions(problem, config.options, isTrap);
 
   return {

@@ -70,6 +70,11 @@ function restartGame() {
   stopTimer();
   stopSnippet();
   stopRenderer();
+  // Bug 4 fix: clear any pending round-result overlay timeout
+  if (state.roundResultTimeout) {
+    clearTimeout(state.roundResultTimeout);
+    state.roundResultTimeout = null;
+  }
   startGame();
 }
 
@@ -152,6 +157,10 @@ function showCorrectionPhase(diagnosisElapsed) {
   const roundData = state.currentRoundData;
   const problem = roundData.problem;
   const isDouble = roundData.isDouble;
+
+  // Bug 3 fix: reset timerStart when entering correction phase so timeBonus
+  // measures only the correction response time, not diagnosis + correction.
+  state.timerStart = performance.now();
 
   // Determine axes
   let axes;

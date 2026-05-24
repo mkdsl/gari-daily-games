@@ -173,6 +173,7 @@ function hideAllPhases() {
 }
 
 // Round result overlay
+// Bug 4 fix: save the timeout ID onto state_ref so restartGame() can clear it
 export function showRoundResult({ correct, points, breakdown, callback, delay = 1800 }) {
   const overlay = document.getElementById('round-result');
   const iconEl = document.getElementById('result-icon');
@@ -185,10 +186,17 @@ export function showRoundResult({ correct, points, breakdown, callback, delay = 
   breakdownEl.textContent = breakdown;
   overlay.classList.remove('hidden');
 
-  setTimeout(() => {
-    overlay.classList.add('hidden');
-    callback && callback();
-  }, delay);
+  if (state_ref) {
+    state_ref.roundResultTimeout = setTimeout(() => {
+      overlay.classList.add('hidden');
+      callback && callback();
+    }, delay);
+  } else {
+    setTimeout(() => {
+      overlay.classList.add('hidden');
+      callback && callback();
+    }, delay);
+  }
 }
 
 // Glossary bubble
