@@ -2,7 +2,7 @@
 
 Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kraju svakog run-a.
 
-## Prethodne žanrove NE PONAVLJATI dva dana za redom
+## Prethodne Žanrove NE PONAVLJATI dva dana za redom
 
 | Datum | Naziv | Žanr | Status | Link |
 |-------|-------|------|--------|------|
@@ -26,9 +26,12 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-05-10 | Kluboslavija Pasoš ⭐ | Meta-collection / Progression — GDG umbrella | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-10-cross-event-pasos/) |
 | 2026-05-22 | Sound vs Tišina ⭐ | Balance Puzzle / Acoustic Simulator — Kluboslavija × MKDSLend | ◻ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-22-sound-vs-tisina/) |
 | 2026-05-23 | Pakuj Torbu — Avala Edition ⭐ | Spatial Puzzle / Packing — Kluboslavija | ◻ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-23-pakuj-torbu-avala/) |
+| 2026-05-24 | Zvučna Proba ⭐ | Rhythm / Reaction Puzzle — Kluboslavija | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-24-zvucna-proba/) |
 
 ## Statusi
 
 - ✅ — Gotovo, prošlo beta test
+- ⏳ — Završeno, čeka šef sign-off
+- ◻ — U reviewu
 - ⚠️ — Delimično (nešto puklo u pipeline-u)
-- 🎯 — Bulls-eye (team dao visoke ocene, vredi igrati)
+- ⚽ — Bulls-eye (team dao visoke ocene, vredi igrati)
