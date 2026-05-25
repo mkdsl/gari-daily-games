@@ -27,6 +27,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-05-22 | Sound vs Tišina ⭐ | Balance Puzzle / Acoustic Simulator — Kluboslavija × MKDSLend | ◻ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-22-sound-vs-tisina/) |
 | 2026-05-23 | Pakuj Torbu — Avala Edition ⭐ | Spatial Puzzle / Packing — Kluboslavija | ◻ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-23-pakuj-torbu-avala/) |
 | 2026-05-24 | Zvučna Proba ⭐ | Rhythm / Reaction Puzzle — Kluboslavija | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-24-zvucna-proba/) |
+| 2026-05-25 | Kluboslavija: Turneja 2026 ⭐ | Strategy Sim / Tour Manager / Deck-builder — Kluboslavija × MKDSLend | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-25-turneja-2026/) |
 
 ## Statusi
 
