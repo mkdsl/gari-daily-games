@@ -1,0 +1,302 @@
+/* game.css — Canvas container, crowd meter, synergy flash, morale */
+
+/* ===================== CANVAS SECTION ===================== */
+.game-canvas-wrap {
+  position: relative;
+  background: var(--color-bg-secondary);
+  border-bottom: 2px solid var(--color-card-border);
+  overflow: hidden;
+}
+
+#block-canvas {
+  display: block;
+  width: 100%;
+  height: 140px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Crowd meter overlay labels */
+.canvas-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 6px 10px;
+}
+
+.canvas-label-left {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.canvas-label-right {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+/* Beat visualizer bars (canvas overlay) */
+.beat-bars {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 0 4px;
+  pointer-events: none;
+}
+
+.beat-bar {
+  flex: 1;
+  background: var(--color-primary);
+  opacity: 0.4;
+  border-radius: 2px 2px 0 0;
+  transition: height 0.1s ease;
+  min-height: 2px;
+}
+
+/* ===================== SYNERGY FLASH ===================== */
+.synergy-flash-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-overlay);
+  background: rgba(46, 204, 113, 0);
+  transition: background 0.2s ease;
+}
+
+.synergy-flash-overlay.active {
+  background: rgba(46, 204, 113, 0.25);
+  animation: synergyFlash 0.6s ease forwards;
+}
+
+.contra-flash-overlay.active {
+  background: rgba(231, 76, 60, 0.2);
+  animation: synergyFlash 0.4s ease forwards;
+}
+
+/* ===================== FAN METER ===================== */
+.fan-meter-wrap {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-card-border);
+}
+
+.fan-meter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.fan-meter-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.fan-meter-value {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+.fan-meter-track {
+  height: 12px;
+  background: var(--color-card-border);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.fan-meter-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.8s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.fan-meter-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.fan-meter-fill.low { background: linear-gradient(90deg, var(--color-text-muted), var(--color-accent)); }
+.fan-meter-fill.med { background: linear-gradient(90deg, var(--color-accent), var(--color-primary)); }
+.fan-meter-fill.high { background: linear-gradient(90deg, var(--color-primary), var(--color-gold)); }
+.fan-meter-fill.max { background: linear-gradient(90deg, var(--color-gold), #ff6b35, var(--color-gold)); animation: pixelGlow 0.5s infinite; }
+
+/* ===================== BLOCK PROGRESS DOTS ===================== */
+.block-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+}
+
+.block-dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.block-dot-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--color-card-border);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  transition: var(--transition-normal);
+}
+
+.block-dot.active .block-dot-circle {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-bg);
+  box-shadow: var(--shadow-glow-primary);
+  animation: crowdBounce 0.8s ease-in-out infinite;
+}
+
+.block-dot.done .block-dot-circle {
+  border-color: var(--color-success);
+  background: var(--color-success);
+  color: var(--color-bg);
+}
+
+.block-dot-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
+}
+
+.block-dot.active .block-dot-label { color: var(--color-primary); }
+
+/* Block connector line */
+.block-connector {
+  width: 32px;
+  height: 2px;
+  background: var(--color-card-border);
+  align-self: center;
+  position: relative;
+  top: -10px;
+}
+
+.block-connector.done { background: var(--color-success); }
+
+/* ===================== PIXEL ART CROWD SILHOUETTE ===================== */
+.crowd-silhouette {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 60px;
+  gap: 1px;
+  padding: 0 4px;
+  overflow: hidden;
+}
+
+.crowd-person {
+  width: 6px;
+  flex-shrink: 0;
+  border-radius: 3px 3px 0 0;
+  transition: height 0.5s ease, background 0.5s ease;
+  position: relative;
+}
+
+.crowd-person::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: inherit;
+}
+
+/* ===================== EVENT CARD ANIMATIONS ===================== */
+.event-incoming {
+  animation: slideUp 0.4s ease;
+}
+
+.event-card-visual {
+  font-size: 48px;
+  display: block;
+  text-align: center;
+  animation: spin 3s linear infinite;
+  display: inline-block;
+}
+
+/* ===================== REPUTATION BAR ===================== */
+.rep-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rep-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--color-card-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.rep-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-primary));
+  transition: width 0.6s ease;
+}
+
+/* Prestige mode glow */
+.prestige-active #app {
+  background: radial-gradient(ellipse at top, rgba(155, 89, 182, 0.1), transparent);
+}
+
+.prestige-active .hud {
+  border-bottom-color: var(--color-purple);
+}
+
+/* ===================== MOBILE RESPONSIVE ===================== */
+@media (max-width: 375px) {
+  .deck-hand {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  #block-canvas {
+    height: 110px;
+  }
+  .card-icon {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 500px) {
+  #block-canvas {
+    height: 160px;
+  }
+}
