@@ -1,5 +1,5 @@
 // ui.js — renderScene(), renderNarration(), renderDialogue(), renderChoices(), renderShareCard(), showEnding()
-import { CHARACTER_COLORS, CHOICE_KEYS, SCENE_LABELS } from './config.js';
+import { CHARACTER_COLORS, CHOICE_KEYS } from './config.js';
 import { startTyping, clearElement } from './render.js';
 import { attachChoiceHandlers, attachContinueHandler } from './input.js';
 import { AudioManager } from './audio.js';
@@ -30,8 +30,9 @@ export function clearScene() {
 export function renderNarration(text, onComplete) {
   const box = els.narration();
   clearElement(box);
+  box.classList.remove('scene-enter');
+  void box.offsetWidth; // reflow
   box.classList.add('scene-enter');
-  setTimeout(() => box.classList.remove('scene-enter'), 400);
   startTyping(box, text, onComplete);
 }
 
@@ -50,7 +51,6 @@ export function renderDialogueLine(speaker, text, container, onComplete) {
   const textEl = document.createElement('span');
   textEl.className = 'dialogue-text';
   line.appendChild(textEl);
-
   container.appendChild(line);
 
   startTyping(textEl, text, onComplete);
@@ -61,6 +61,11 @@ export function renderDialogueSequence(lines, onAllComplete) {
   const box = els.dialogue();
   clearElement(box);
 
+  if (!lines || lines.length === 0) {
+    if (onAllComplete) onAllComplete();
+    return;
+  }
+
   function renderNext(index) {
     if (index >= lines.length) {
       if (onAllComplete) onAllComplete();
@@ -68,7 +73,7 @@ export function renderDialogueSequence(lines, onAllComplete) {
     }
     const { speaker, text } = lines[index];
     renderDialogueLine(speaker, text, box, () => {
-      setTimeout(() => renderNext(index + 1), 80);
+      setTimeout(() => renderNext(index + 1), 120);
     });
   }
 
@@ -101,24 +106,23 @@ export function renderChoices(choices, onChoice) {
     buttons.push(btn);
   });
 
-  attachChoiceHandlers(buttons);
-
-  // Wire to callback
-  const { onChoiceSelected } = require_input_callback(onChoice);
+  // Wire choice callback
+  let chosen = false;
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
-      if (!btn.classList.contains('disabled')) {
-        onChoice(btn.dataset.key);
-      }
-    }, { once: true });
+      if (chosen || btn.classList.contains('disabled')) return;
+      chosen = true;
+      AudioManager.resume();
+      AudioManager.playClick();
+      buttons.forEach(b => b.classList.add('disabled'));
+      onChoice(btn.dataset.key);
+    });
   });
 
-  return buttons;
-}
+  // Also attach keyboard support via attachChoiceHandlers
+  attachChoiceHandlers(buttons);
 
-function require_input_callback(cb) {
-  // Wrapper stub — actual attachment done in attachChoiceHandlers
-  return { onChoiceSelected: cb };
+  return buttons;
 }
 
 export function renderContinueButton(label, callback) {
@@ -169,7 +173,7 @@ export function showEnding(endingData, onRestart, onShare) {
   // Share text
   const shareText = document.createElement('div');
   shareText.className = 'share-card-share-text';
-  shareText.textContent = `"${endingData.shareText}"`;
+  shareText.textContent = `„${endingData.shareText}“`;
 
   // Actions
   const actions = document.createElement('div');
@@ -183,9 +187,7 @@ export function showEnding(endingData, onRestart, onShare) {
   const copyBtn = document.createElement('button');
   copyBtn.className = 'share-btn share-btn-secondary';
   copyBtn.textContent = 'Kopiraj tekst';
-  copyBtn.addEventListener('click', () => {
-    if (onShare) onShare('copy');
-  });
+  copyBtn.addEventListener('click', () => onShare && onShare('copy'));
 
   const restartBtn = document.createElement('button');
   restartBtn.className = 'share-btn share-btn-restart';
@@ -214,9 +216,11 @@ export function showEnding(endingData, onRestart, onShare) {
 }
 
 export function showLoseEnding(onRestart) {
+  clearElement(els.narration());
   const narBox = els.narration();
-  clearElement(narBox);
-  narBox.textContent = 'Gari te gleda kratko. „Procić́aj nam email kad stigneš.“ Niko ne gleda gore. Sastanak se završava bez tebe.';
+  narBox.textContent = 'Gari te gleda kratko. „Pročitaj nam email kad stigneš.“ Niko ne gleda gore. Sastanak se završava bez tebe u centru pažnje.';
+
+  clearElement(els.dialogue());
 
   const box = els.choices();
   clearElement(box);
