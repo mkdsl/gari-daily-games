@@ -3,6 +3,7 @@ import { CHARACTER_COLORS, CHOICE_KEYS } from './config.js';
 import { startTyping, clearElement } from './render.js';
 import { attachChoiceHandlers, attachContinueHandler } from './input.js';
 import { AudioManager } from './audio.js';
+import { SHARE_TEXTS } from './content/share_texts.js';
 
 const els = {
   narration: () => document.getElementById('narration-box'),
@@ -224,9 +225,32 @@ export function showLoseEnding(onRestart) {
 
   const box = els.choices();
   clearElement(box);
-  const btn = document.createElement('button');
-  btn.className = 'continue-btn';
-  btn.textContent = 'Restartuj';
-  btn.addEventListener('click', () => onRestart && onRestart());
-  box.appendChild(btn);
+
+  // Share button for lose state
+  const shareBtn = document.createElement('button');
+  shareBtn.className = 'share-btn share-btn-secondary';
+  shareBtn.textContent = 'Podeli rezultat';
+  shareBtn.addEventListener('click', () => {
+    const loseText = SHARE_TEXTS.lose || 'Pročitaj nam email kad stigneš. #GariTimSimulator';
+    const shareData = {
+      title: 'Gari Tim Simulator',
+      text: loseText,
+      url: 'https://mkdsl.github.io/gari-daily-games/games/2026-05-26-gari-tim-simulator/',
+    };
+    if (navigator.share) {
+      navigator.share(shareData).catch(() => {
+        navigator.clipboard && navigator.clipboard.writeText(loseText + '\n' + shareData.url);
+      });
+    } else {
+      navigator.clipboard && navigator.clipboard.writeText(loseText + '\n' + shareData.url);
+    }
+  });
+
+  const restartBtn = document.createElement('button');
+  restartBtn.className = 'continue-btn';
+  restartBtn.textContent = 'Restartuj';
+  restartBtn.addEventListener('click', () => onRestart && onRestart());
+
+  box.appendChild(shareBtn);
+  box.appendChild(restartBtn);
 }

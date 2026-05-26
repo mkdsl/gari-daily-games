@@ -18,6 +18,7 @@ export function createState() {
       tonket_pitanje: null,        // "A" | "B" | "C"
       gari_finalni: null,          // "struktura" | "ljude" | "teren" | "jezik"
       dule_greska: false,          // true ako napravio fraze gresku
+      dule_micro_done: false,      // guard: Dule micro-scena se ne ponavlja
       scene0_choice: null,         // A/B/C/D — za callback u Scene 3
     },
     ending: null,

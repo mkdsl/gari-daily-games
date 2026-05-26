@@ -127,7 +127,7 @@ export const DIALOGUE_NODES = {
     type: 'dialogue',
     scene: 1,
     lines: [
-      { speaker: 'mici', text: 'Mici se smeška. „Kakvа ekipa.“' },
+      { speaker: 'mici', text: 'Mici se smeška. „Kakva ekipa.“' },
       { speaker: 'gari', text: 'Gari kaže „dobro“ i odmah prelazi dalje.' },
     ],
     next: 'scene2_start',
@@ -235,7 +235,7 @@ export const DIALOGUE_NODES = {
     id: 'scene3_gari_start',
     type: 'narration',
     scene: 3,
-    narration: 'Gari te uhvata za vreme kratke pauze kad svi idu po kafu. Nema nešto posebno da pita — ili tako izgleda. Prve dve sekunde su tišina.',
+    narration: 'Gari te uhvati za vreme kratke pauze kad svi idu po kafu. Nema nešto posebno da pita — ili tako izgleda. Prve dve sekunde su tišina.',
     next: 'scene3_gari_callback',
   },
 
@@ -470,13 +470,13 @@ export const DIALOGUE_NODES = {
       },
       {
         key: 'B',
-        text: '„Nisam upoznat/a, ali zvuci interesantno.“',
+        text: '„Nisam upoznat/a, ali zvuči interesantno.“',
         delta: { mici: 1, pera: 1 },
         next: 'scene3_mici_q2_B',
       },
       {
         key: 'C',
-        text: '„Kako funkcióniše tačno?“',
+        text: '„Kako funkcioniše tačno?“',
         delta: { mici: 3, brana: 1 },
         next: 'scene3_mici_q2_C',
       },
@@ -800,7 +800,7 @@ export const DIALOGUE_NODES = {
       },
       {
         key: 'C',
-        text: '„Preferiram koordinaciju odavde.“',
+        text: '„Preferir am koordinaciju odavde.“',
         delta: { gari: 2 },
         next: 'scene3_tonket_q2_C',
       },
@@ -811,7 +811,7 @@ export const DIALOGUE_NODES = {
     id: 'scene3_tonket_q2_A',
     type: 'dialogue',
     scene: 3,
-    lines: [{ speaker: 'tonket', text: 'Tonket kima jednom. Kratko. „Dobro.“' }],
+    lines: [{ speaker: 'tonket', text: 'Tonket kima jednom. Kratko. „Debro.“' }],
     next: 'scene3_tonket_q3',
   },
   scene3_tonket_q2_B: {
@@ -988,7 +988,7 @@ export const DIALOGUE_NODES = {
     id: 'scene5_start',
     type: 'narration',
     scene: 5,
-    narration: 'Tonket čeka dok ostali raspravljaju oko logistike. Tek kad se soba utiša, kaže ti jednu rečenicu.',
+    narration: 'Tonket čeka dok ostali raspravljaju oko logistike. Tek kad se soba utiša, kaže ti jednu rečenicu. Pera nešto beleži, polako, kao da i ovaj momenat treba da postoji na papiru.',
     next: 'scene5_tonket_pitanje',
   },
 
@@ -1039,7 +1039,7 @@ export const DIALOGUE_NODES = {
     scene: 5,
     lines: [
       { speaker: 'tonket', text: 'Bina u Nišu. Subwoofer koji je bio okrenut prema publici.' },
-      { speaker: 'tonket', text: 'Čuо sam to samo jednom — nije ponovljeno.' },
+      { speaker: 'tonket', text: 'Čuo sam to samo jednom — nije ponovljeno.' },
     ],
     next: 'scene6_start',
   },
@@ -1049,7 +1049,7 @@ export const DIALOGUE_NODES = {
     type: 'dialogue',
     scene: 5,
     lines: [
-      { speaker: 'tonket', text: 'Kad slušaš i nema sta da popraviš. Retko se desi.' },
+      { speaker: 'tonket', text: 'Kad slušaš i nema šta da popraveš. Retko se desi.' },
       { speaker: 'tonket', text: 'Kad se desi, ne kaješ se.' },
     ],
     next: 'scene6_start',
@@ -1096,7 +1096,7 @@ export const DIALOGUE_NODES = {
     choices: [
       {
         key: 'A',
-        text: '„Hoću da vidim kako sistem funkcióniše iznutra.“',
+        text: '„Hoću da vidim kako sistem funkcioniše iznutra.“',
         delta: { gari: 3 },
         flags: { gari_finalni: 'struktura' },
         next: 'scene6_response_A',

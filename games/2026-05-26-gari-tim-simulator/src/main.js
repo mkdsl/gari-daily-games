@@ -97,6 +97,7 @@ function runNode(nodeId) {
     case 'choice':    handleChoiceNode(node);    break;
     case 'auto':      runNode(node.next);        break;
     case 'resolve':   resolveEnding();           break;
+    case 'share':     /* no-op — handled by showEnding() */; break;
     default:
       if (node.next) runNode(node.next);
   }
@@ -106,8 +107,9 @@ function runNode(nodeId) {
 // Resolve next node: checks dule micro-scene trigger
 // ============================================================
 function resolveNext(nextId) {
-  // Dule micro-scene: insert before scene7_resolution if dule >= 9
-  if (nextId === 'scene7_resolution' && state.affinity.dule >= 9) {
+  // Dule micro-scene: insert before scene7_resolution if dule >= 9 AND not already triggered
+  if (nextId === 'scene7_resolution' && state.affinity.dule >= 9 && !state.flags.dule_micro_done) {
+    state.flags.dule_micro_done = true;
     runNode('dule_micro_start');
     return;
   }

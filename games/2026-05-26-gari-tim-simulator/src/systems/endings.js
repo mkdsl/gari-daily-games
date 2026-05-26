@@ -17,8 +17,8 @@ export function calculateEnding(state) {
     }
   }
 
-  // Ending 5 (Dule): dule >= 9 I dule_greska = false
-  if (a.dule >= 9 && !state.flags.dule_greska) {
+  // Ending 5 (Dule): dule >= 9
+  if (a.dule >= 9) {
     return 5;
   }
 
