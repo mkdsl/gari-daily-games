@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Uleteo/la si u MKDSLend sastanak koji vec traje. Imas jedan sastanak da se snades — i mozda zavrsis sa zadatkom koji ti odgovara.">
+  <title>Gari Tim Simulator</title>
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+</head>
+<body>
+  <div id="app">
+    <div id="scene-container">
+      <div id="narration-box" class="narration-box" role="region" aria-label="Naracija"></div>
+      <div id="dialogue-box" class="dialogue-box" role="region" aria-label="Dijalog" aria-live="polite"></div>
+      <div id="choices-box" class="choices-box" role="group" aria-label="Opcije"></div>
+    </div>
+    <div id="share-card" class="share-card hidden" role="dialog" aria-label="Share card"></div>
+    <div id="loading-overlay" class="loading-overlay">
+      <div class="loading-text">Ucitavam...</div>
+    </div>
+  </div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

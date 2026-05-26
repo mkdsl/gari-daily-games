@@ -1,0 +1,323 @@
+/* Gari Tim Simulator — UI Components */
+
+/* Narration Box */
+.narration-box {
+  font-family: var(--font-serif);
+  font-size: var(--font-size-naracija);
+  color: var(--color-naracija);
+  line-height: 1.75;
+  padding: var(--space-lg);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  min-height: 80px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+}
+
+.narration-box:empty {
+  display: none;
+}
+
+/* Dialogue Box */
+.dialogue-box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.dialogue-box:empty {
+  display: none;
+}
+
+.dialogue-line {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
+}
+
+.dialogue-speaker {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-top: 0.15em;
+  min-width: 90px;
+}
+
+.dialogue-speaker::after {
+  content: ':';
+}
+
+.dialogue-text {
+  font-family: var(--font-serif);
+  font-size: var(--font-size-dialogue);
+  color: var(--color-naracija);
+  line-height: 1.65;
+  flex: 1;
+}
+
+/* Character-colored speaker names */
+.speaker-gari { color: var(--color-gari); }
+.speaker-mici { color: var(--color-mici); }
+.speaker-brana { color: var(--color-brana); }
+.speaker-tonket { color: var(--color-tonket); }
+.speaker-dule { color: var(--color-dule); }
+.speaker-pera { color: var(--color-pera); }
+.speaker-player { color: var(--color-naracija); font-style: italic; }
+
+/* Choices Box */
+.choices-box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.choices-box:empty {
+  display: none;
+}
+
+.choice-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  min-height: var(--touch-min);
+  background: var(--color-bg-choice);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-naracija);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-choice);
+  line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition-fast),
+              border-color var(--transition-fast),
+              transform var(--transition-fast);
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.choice-btn:hover,
+.choice-btn:focus-visible {
+  background: var(--color-bg-choice-hover);
+  border-color: var(--color-border-active);
+}
+
+.choice-btn:active {
+  transform: scale(0.99);
+}
+
+.choice-btn.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.choice-key {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  margin-top: 0.1em;
+  min-width: 1.4em;
+}
+
+.choice-text {
+  flex: 1;
+}
+
+/* Scene label */
+.scene-label {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 0 var(--space-sm);
+}
+
+/* Skip hint */
+.skip-hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-dim);
+  text-align: right;
+  padding: var(--space-xs) var(--space-sm);
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+}
+
+.skip-hint.visible {
+  opacity: 1;
+}
+
+/* Continue button */
+.continue-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-lg);
+  min-height: var(--touch-min);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  align-self: flex-end;
+}
+
+.continue-btn:hover {
+  border-color: var(--color-border-active);
+  color: var(--color-naracija);
+}
+
+/* Share Card */
+.share-card {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 17, 23, 0.92);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: 500;
+  opacity: 1;
+  transition: opacity var(--transition-base);
+}
+
+.share-card.hidden {
+  display: none;
+}
+
+.share-card-inner {
+  max-width: 560px;
+  width: 100%;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.share-card-label {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.share-card-ending-title {
+  font-family: var(--font-serif);
+  font-size: var(--font-size-title);
+  line-height: 1.3;
+  font-weight: bold;
+}
+
+.share-card-narration {
+  font-family: var(--font-serif);
+  font-size: var(--font-size-dialogue);
+  color: var(--color-naracija);
+  line-height: 1.75;
+  border-left: 3px solid;
+  padding-left: var(--space-md);
+}
+
+.share-card-share-text {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  background: rgba(0,0,0,0.3);
+  border-radius: 4px;
+  padding: var(--space-sm) var(--space-md);
+  font-style: italic;
+}
+
+.share-card-actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.share-btn {
+  flex: 1;
+  min-width: 120px;
+  min-height: var(--touch-min);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.share-btn-primary {
+  background: rgba(88, 166, 255, 0.15);
+  border-color: var(--color-border-active);
+  color: var(--color-naracija);
+}
+
+.share-btn-primary:hover {
+  background: rgba(88, 166, 255, 0.25);
+}
+
+.share-btn-secondary {
+  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.share-btn-secondary:hover {
+  border-color: var(--color-naracija);
+  color: var(--color-naracija);
+}
+
+.share-btn-restart {
+  background: transparent;
+  border-color: var(--color-text-dim);
+  color: var(--color-text-muted);
+}
+
+.share-btn-restart:hover {
+  border-color: var(--color-border);
+  color: var(--color-naracija);
+}
+
+.copied-feedback {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  color: var(--color-brana);
+  text-align: center;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  min-height: 1.2em;
+}
+
+.copied-feedback.visible {
+  opacity: 1;
+}
+
+/* Affinity debug bar (hidden in prod) */
+.affinity-bar {
+  display: none;
+}

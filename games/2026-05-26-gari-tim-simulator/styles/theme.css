@@ -1,0 +1,49 @@
+/* Gari Tim Simulator — Theme: CSS Custom Properties */
+:root {
+  /* Character colors */
+  --color-gari: #F5A623;
+  --color-mici: #E91E8C;
+  --color-brana: #4CAF50;
+  --color-tonket: #2196F3;
+  --color-dule: #9E9E9E;
+  --color-pera: #D4AF37;
+  --color-naracija: #E8E8E8;
+  --color-bg: #0D1117;
+
+  /* UI colors */
+  --color-bg-card: #161B22;
+  --color-bg-choice: #1A2030;
+  --color-bg-choice-hover: #1E2A3A;
+  --color-border: #30363D;
+  --color-border-active: #58A6FF;
+  --color-text-muted: #8B949E;
+  --color-text-dim: #484F58;
+
+  /* Typography */
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-mono: 'Courier New', 'Lucida Console', monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Animation */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+
+  /* Touch targets */
+  --touch-min: 44px;
+
+  /* Font sizes */
+  --font-size-naracija: clamp(16px, 4vw, 20px);
+  --font-size-dialogue: clamp(15px, 3.5vw, 18px);
+  --font-size-choice: clamp(14px, 3.5vw, 17px);
+  --font-size-title: clamp(20px, 5vw, 28px);
+  --font-size-small: clamp(12px, 2.5vw, 14px);
+}

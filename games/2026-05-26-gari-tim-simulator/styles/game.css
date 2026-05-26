@@ -1,0 +1,133 @@
+/* Gari Tim Simulator — Game Animations & Scene Transitions */
+
+/* Typing cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--color-naracija);
+  vertical-align: text-bottom;
+  margin-left: 1px;
+  animation: blink 0.8s step-end infinite;
+}
+
+/* Scene enter animation */
+@keyframes scene-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scene-enter {
+  animation: scene-enter 0.3s ease forwards;
+}
+
+/* Fade out */
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fade-out {
+  animation: fade-out 0.3s ease forwards;
+}
+
+/* Choice entrance stagger */
+@keyframes choice-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.choice-btn {
+  animation: choice-enter 0.25s ease forwards;
+  opacity: 0;
+}
+
+.choice-btn:nth-child(1) { animation-delay: 0ms; }
+.choice-btn:nth-child(2) { animation-delay: 60ms; }
+.choice-btn:nth-child(3) { animation-delay: 120ms; }
+.choice-btn:nth-child(4) { animation-delay: 180ms; }
+
+/* Dialogue line entrance */
+@keyframes dialogue-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dialogue-line {
+  animation: dialogue-enter 0.2s ease forwards;
+}
+
+/* Share card entrance */
+@keyframes share-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.share-card-inner {
+  animation: share-enter 0.4s ease forwards;
+}
+
+/* Pulse on affinity change (visual feedback) */
+@keyframes pulse-glow {
+  0% { box-shadow: none; }
+  50% { box-shadow: 0 0 12px rgba(245, 166, 35, 0.3); }
+  100% { box-shadow: none; }
+}
+
+/* Scene container transitions */
+#scene-container {
+  transition: opacity var(--transition-base);
+}
+
+#scene-container.fading {
+  opacity: 0;
+}
+
+/* Micro-scene reveal */
+.micro-scene {
+  border-left: 2px solid var(--color-dule);
+  padding-left: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+/* Ending narration highlight */
+.ending-narration {
+  font-size: var(--font-size-naracija);
+  line-height: 1.8;
+}
+
+/* Pera Period — always subtle */
+.pera-aside {
+  opacity: 0.7;
+  font-size: 0.9em;
+  font-style: italic;
+}
