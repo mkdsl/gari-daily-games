@@ -1,60 +1,73 @@
-// state.js — createState, save/load localStorage
-import { LS_KEYS, AFFINITY_KEYS } from './config.js';
+// state.js — createState(), saveToLocalStorage(), loadFromLocalStorage()
+import { LS_KEYS, AFFINITY_CHARACTERS } from './config.js';
 
 export function createState() {
   return {
     scene: 0,
-    affinity: { gari: 0, mici: 0, brana: 0, tonket: 0, dule: 0, pera: 0 },
+    affinity: {
+      gari:   0,
+      mici:   0,
+      brana:  0,
+      tonket: 0,
+      dule:   0,
+      pera:   0,
+    },
     flags: {
-      predstavljanje_tip: null,
-      strana_konfrontacije: null,
-      tonket_pitanje: null,
-      gari_finalni: null,
-      dule_greska: false,
+      predstavljanje_tip: null,    // "sistem" | "ljude" | "humorno" | "tiho"
+      strana_konfrontacije: null,  // "brana" | "mici" | "neutralan" | "preusmeri"
+      tonket_pitanje: null,        // "A" | "B" | "C"
+      gari_finalni: null,          // "struktura" | "ljude" | "teren" | "jezik"
+      dule_greska: false,          // true ako napravio fraze gresku
+      scene0_choice: null,         // A/B/C/D — za callback u Scene 3
     },
     ending: null,
-    scene3_character: null,
-    scene3_q: 0,
-    micro_dule_done: false,
   };
 }
 
-export function saveToLocalStorage(state) {
+export function saveToLocalStorage(state, endingId) {
   try {
-    const count = getPlayCount() + (state.ending !== null ? 1 : 0);
-    if (state.ending !== null && state.ending !== 'lose') {
-      // save highscore
-      const total = AFFINITY_KEYS.reduce((s, k) => s + state.affinity[k], 0);
-      const hs = parseInt(localStorage.getItem(LS_KEYS.highscore) || '0', 10);
-      if (total > hs) localStorage.setItem(LS_KEYS.highscore, String(total));
+    // Play count
+    const playCount = parseInt(localStorage.getItem(LS_KEYS.playCount) || '0') + 1;
+    localStorage.setItem(LS_KEYS.playCount, String(playCount));
 
-      // save endings unlocked
-      let endings = JSON.parse(localStorage.getItem(LS_KEYS.endingsUnlocked) || '[]');
-      if (!endings.includes(state.ending)) {
-        endings.push(state.ending);
-        localStorage.setItem(LS_KEYS.endingsUnlocked, JSON.stringify(endings));
-      }
-
-      localStorage.setItem(LS_KEYS.lastEnding, String(state.ending));
-
-      // flags history
-      let hist = JSON.parse(localStorage.getItem(LS_KEYS.flagsHistory) || '[]');
-      hist.push({ ...state.flags, ts: Date.now() });
-      if (hist.length > 20) hist = hist.slice(-20);
-      localStorage.setItem(LS_KEYS.flagsHistory, JSON.stringify(hist));
+    // Last ending
+    if (endingId) {
+      localStorage.setItem(LS_KEYS.lastEnding, String(endingId));
     }
-    localStorage.setItem(LS_KEYS.playCount, String(count));
+
+    // Endings unlocked
+    const unlocked = JSON.parse(localStorage.getItem(LS_KEYS.endingsUnlocked) || '[]');
+    if (endingId && endingId !== 'lose' && !unlocked.includes(endingId)) {
+      unlocked.push(endingId);
+      localStorage.setItem(LS_KEYS.endingsUnlocked, JSON.stringify(unlocked));
+    }
+
+    // Highscore: total affinity
+    const total = Object.values(state.affinity).reduce((a, b) => a + b, 0);
+    const prev = parseInt(localStorage.getItem(LS_KEYS.highscore) || '0');
+    if (total > prev) {
+      localStorage.setItem(LS_KEYS.highscore, String(total));
+    }
+
+    // Flags history
+    const history = JSON.parse(localStorage.getItem(LS_KEYS.flagsHistory) || '[]');
+    history.push({ ...state.flags, ending: endingId });
+    if (history.length > 10) history.shift();
+    localStorage.setItem(LS_KEYS.flagsHistory, JSON.stringify(history));
   } catch (e) {
-    console.warn('localStorage save failed:', e);
+    // localStorage unavailable
   }
 }
 
-export function getPlayCount() {
-  return parseInt(localStorage.getItem(LS_KEYS.playCount) || '0', 10);
-}
-
-export function getEndingsUnlocked() {
+export function loadFromLocalStorage() {
   try {
-    return JSON.parse(localStorage.getItem(LS_KEYS.endingsUnlocked) || '[]');
-  } catch { return []; }
+    return {
+      playCount:       parseInt(localStorage.getItem(LS_KEYS.playCount) || '0'),
+      endingsUnlocked: JSON.parse(localStorage.getItem(LS_KEYS.endingsUnlocked) || '[]'),
+      lastEnding:      localStorage.getItem(LS_KEYS.lastEnding),
+      highscore:       parseInt(localStorage.getItem(LS_KEYS.highscore) || '0'),
+    };
+  } catch (e) {
+    return { playCount: 0, endingsUnlocked: [], lastEnding: null, highscore: 0 };
+  }
 }

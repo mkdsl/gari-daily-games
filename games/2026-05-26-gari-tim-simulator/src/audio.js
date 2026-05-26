@@ -1,123 +1,138 @@
 // audio.js — AudioManager: Web Audio API, bez .mp3
+
 let ctx = null;
-let ambientOsc = null;
-let ambientNoise = null;
-let ambientGain = null;
-let subBassOsc = null;
-let subBassGain = null;
+let masterGain = null;
+let ambientNodes = [];
 let initialized = false;
 
-export function initAudio() {
-  if (initialized) return;
-  try {
+function getCtx() {
+  if (!ctx) {
     ctx = new (window.AudioContext || window.webkitAudioContext)();
-    _startAmbient();
-    initialized = true;
-  } catch (e) {
-    console.warn('AudioContext failed:', e);
+    masterGain = ctx.createGain();
+    masterGain.gain.value = 0.7;
+    masterGain.connect(ctx.destination);
   }
+  return ctx;
 }
 
-function _startAmbient() {
-  if (!ctx) return;
+export const AudioManager = {
+  init() {
+    if (initialized) return;
+    try {
+      getCtx();
+      initialized = true;
+    } catch (e) {
+      // Audio not available
+    }
+  },
 
-  // Low-frequency oscillator ~60Hz — klima uredjaj
-  ambientGain = ctx.createGain();
-  ambientGain.gain.setValueAtTime(0.02, ctx.currentTime);
-  ambientOsc = ctx.createOscillator();
-  ambientOsc.type = 'sine';
-  ambientOsc.frequency.setValueAtTime(60, ctx.currentTime);
-  ambientOsc.connect(ambientGain);
-  ambientGain.connect(ctx.destination);
-  ambientOsc.start();
+  resume() {
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume();
+    }
+  },
 
-  // White noise buffer
-  const bufferSize = ctx.sampleRate * 2;
-  const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-  const data = noiseBuffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2) - 1;
+  playAmbient() {
+    if (!initialized || !ctx) return;
+    this.stopAmbient();
 
-  const noiseSource = ctx.createBufferSource();
-  noiseSource.buffer = noiseBuffer;
-  noiseSource.loop = true;
+    // Low-frequency oscillator ~60Hz (klima uredjaj)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.value = 60;
+    gain1.gain.value = 0.02;
+    osc1.connect(gain1);
+    gain1.connect(masterGain);
+    osc1.start();
 
-  const noiseGain = ctx.createGain();
-  noiseGain.gain.setValueAtTime(0.008, ctx.currentTime);
+    // White noise (subtle)
+    const bufferSize = ctx.sampleRate * 2;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * 0.012;
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    noise.loop = true;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.value = 0.8;
+    noise.connect(noiseGain);
+    noiseGain.connect(masterGain);
+    noise.start();
 
-  // Low-pass filter na noise
-  const filter = ctx.createBiquadFilter();
-  filter.type = 'lowpass';
-  filter.frequency.setValueAtTime(400, ctx.currentTime);
+    ambientNodes = [osc1, noise];
+  },
 
-  noiseSource.connect(filter);
-  filter.connect(noiseGain);
-  noiseGain.connect(ctx.destination);
-  noiseSource.start();
-  ambientNoise = noiseSource;
-}
+  stopAmbient() {
+    ambientNodes.forEach(node => {
+      try { node.stop(); } catch (e) {}
+    });
+    ambientNodes = [];
+  },
 
-export function setScene(sceneName) {
-  if (!ctx) return;
-  if (sceneName === 'gari') {
-    _addSubBass();
-  } else {
-    _removeSubBass();
-  }
-}
+  setScene(sceneIndex) {
+    if (!initialized || !ctx) return;
+    // Gari scene (scene 6): add sub-bass rumble
+    if (sceneIndex === 6) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 40;
+      gain.gain.value = 0.015;
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start();
+      ambientNodes.push(osc);
+    }
+  },
 
-function _addSubBass() {
-  if (!ctx || subBassOsc) return;
-  subBassGain = ctx.createGain();
-  subBassGain.gain.setValueAtTime(0.015, ctx.currentTime);
-  subBassOsc = ctx.createOscillator();
-  subBassOsc.type = 'sine';
-  subBassOsc.frequency.setValueAtTime(40, ctx.currentTime);
-  subBassOsc.connect(subBassGain);
-  subBassGain.connect(ctx.destination);
-  subBassOsc.start();
-}
+  playClick() {
+    if (!initialized || !ctx) return;
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 800;
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.05);
+    } catch (e) {}
+  },
 
-function _removeSubBass() {
-  if (!subBassOsc) return;
-  try {
-    subBassGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.2);
-    subBassOsc.stop(ctx.currentTime + 0.2);
-  } catch(e) {}
-  subBassOsc = null;
-  subBassGain = null;
-}
+  playDing() {
+    if (!initialized || !ctx) return;
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 1200;
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.8);
+    } catch (e) {}
+  },
 
-export function playClick() {
-  if (!ctx) return;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = 'square';
-  osc.frequency.setValueAtTime(800, ctx.currentTime);
-  gain.gain.setValueAtTime(0.15, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime + 0.05);
-}
-
-export function playDing() {
-  if (!ctx) return;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(1200, ctx.currentTime);
-  gain.gain.setValueAtTime(0.3, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime + 0.8);
-}
-
-export function playSceneFade() {
-  if (!ctx || !ambientGain) return;
-  const now = ctx.currentTime;
-  ambientGain.gain.linearRampToValueAtTime(0.005, now + 0.15);
-  ambientGain.gain.linearRampToValueAtTime(0.02, now + 0.35);
-}
+  fadeScene(callback) {
+    if (!initialized || !ctx || !masterGain) {
+      if (callback) callback();
+      return;
+    }
+    const now = ctx.currentTime;
+    masterGain.gain.setValueAtTime(masterGain.gain.value, now);
+    masterGain.gain.linearRampToValueAtTime(0.2, now + 0.2);
+    setTimeout(() => {
+      if (masterGain) {
+        masterGain.gain.linearRampToValueAtTime(0.7, ctx.currentTime + 0.2);
+      }
+      if (callback) callback();
+    }, 200);
+  },
+};
