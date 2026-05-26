@@ -1,24 +1,20 @@
-// scenes.js — loadScene(n, state) -> first node ID for scene
-import { SCENE3_TIEBREAK } from '../config.js';
-import { getLeader } from './affinity.js';
+// scenes.js — loadScene(n, state) → returns first node ID for scene
+import { getScene3Leader } from './affinity.js';
 
-export function loadScene(n, state) {
-  if (n === 3) {
-    // Dynamičan — ko ima max affinity od [gari, mici, brana, tonket]
-    const leader = getLeader(state.affinity, SCENE3_TIEBREAK);
-    state.scene3_character = leader;
-    state.scene3_q = 0;
-    return `s3_${leader}_intro`;
+export function loadScene(sceneIndex, state) {
+  switch (sceneIndex) {
+    case 0: return 'scene0_start';
+    case 1: return 'scene1_start';
+    case 2: return 'scene2_start';
+    case 3: {
+      const leader = getScene3Leader(state.affinity);
+      return `scene3_${leader}_start`;
+    }
+    case 4: return 'scene4_start';
+    case 5: return 'scene5_start';
+    case 6: return 'scene6_start';
+    case 7: return 'scene7_resolution';
+    case 8: return 'scene8_share';
+    default: return 'scene0_start';
   }
-  const sceneStartMap = {
-    0: 's0_naracija',
-    1: 's1_naracija',
-    2: 's2_naracija',
-    4: 's4_naracija',
-    5: 's5_naracija',
-    6: 's6_naracija',
-    7: 's7_resolution',
-    8: 's8_share',
-  };
-  return sceneStartMap[n] || null;
 }
