@@ -5,30 +5,30 @@
   "description": "Ti si kandidat za Kluboslavija ekipu. Prođi 10 pitanja o zvuku, DJ kulturi i Balkans noćnom životu — od frekvencija sub-basa do Štrand geografije. 10/10 = Head of Sound.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-28-dj-akademija/",
   "brand_serves": ["kluboslavija"],
-  "stage": "impl",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "index.html": "Entry point, ES6 module loader, 4 CSS links, app container",
     "styles/theme.css": "Kluboslavija CSS custom properties — paleta boja",
     "styles/base.css": "Body, app container, box-sizing, 100dvh",
     "styles/ui.css": "Dugmad, timer bar, fact-text, score/title badge, toast",
-    "styles/game.css": "Screen transitions, fadeIn, question/final layout classes, scrollable",
-    "src/config.js": "Konstante: TIMER_MS, FEEDBACK_TRANSITION_MS, QUESTIONS_COUNT, LS_KEY_BEST",
+    "styles/game.css": "Screen transitions, fadeIn, question/final layout classes, timer urgency",
+    "src/config.js": "Konstante: TIMER_MS=20000, FEEDBACK_TRANSITION_MS=2500, QUESTIONS_COUNT=10, LS_KEY_BEST",
     "src/questions.js": "Array[10] pitanja sa options, correct index, fact",
     "src/timer.js": "startTimer/stopTimer sa Date.now() delta drift korekcijom",
     "src/scoring.js": "addAnswer, getScore, getTitle (5 titula)",
     "src/state.js": "loadBestScore/saveBestScore u localStorage",
     "src/input.js": "Keyboard A/B/C/D handler",
-    "src/share.js": "Web Share API + clipboard.writeText fallback + toast",
-    "src/ui.js": "renderIntro/Question/Feedback/Final — DOM manipulation",
-    "src/main.js": "State machine INTRO→QUESTION→FEEDBACK→FINAL, orkestracija svih modula"
+    "src/share.js": "Web Share API + clipboard.writeText fallback + toast + score u share stringu",
+    "src/ui.js": "renderIntro/Question/Feedback/Final — DOM manipulation, @kluboslavija jackpot CTA",
+    "src/main.js": "State machine INTRO→QUESTION→FEEDBACK→FINAL, timer urgency .low klasa"
   },
   "line_counts": {
-    "total_js": 560,
-    "total_css": 192
+    "total_js": 564,
+    "total_css": 198
   },
-  "beta_score": null,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
+  "beta_score": 6.5,
+  "beta_score_iter2": 8.5,
+  "post_fix_score": 9.0,
   "sef_signoff": false
 }
