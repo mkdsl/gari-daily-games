@@ -77,7 +77,7 @@ export function renderFinal(score, title, onShare, best) {
   const screen = document.getElementById('screen-final');
   const jackpotHTML =
     score === 10
-      ? `<div class="jackpot-msg">🏆 Pošalji screenshot Kluboslavija DM-u za backstage akreditaciju!</div>`
+      ? `<div class="jackpot-msg">🏆 Pošalji screenshot na @kluboslavija (IG/FB) DM za backstage akreditaciju!</div>`
       : '';
 
   screen.innerHTML = `

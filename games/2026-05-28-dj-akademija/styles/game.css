@@ -140,3 +140,8 @@
 #screen-intro {
   overflow-y: auto;
 }
+
+/* Timer urgency: below 30% remaining, fill turns solid red */
+.timer-fill.low {
+  background: var(--timer-low);
+}

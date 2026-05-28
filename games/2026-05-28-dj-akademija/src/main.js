@@ -49,7 +49,11 @@ function goFinal() {
 function onTimerTick(remaining) {
   const pct = (remaining / TIMER_MS) * 100;
   const fill = document.querySelector('.timer-fill');
-  if (fill) fill.style.width = pct + '%';
+  if (fill) {
+    fill.style.width = pct + '%';
+    if (pct < 30) fill.classList.add('low');
+    else fill.classList.remove('low');
+  }
   const num = document.querySelector('.timer-num');
   if (num) num.textContent = Math.ceil(remaining / 1000) + 's';
 }
