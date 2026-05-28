@@ -1,0 +1,142 @@
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeIn 150ms ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.progress-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* Intro screen */
+.intro-logo {
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.intro-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  color: var(--accent-gold);
+  margin: 8px 0 4px;
+  line-height: 1.2;
+}
+
+.intro-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.intro-meta {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.intro-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 4px 0;
+}
+
+.intro-spacer {
+  flex: 1;
+}
+
+/* Timer row */
+.timer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timer-num {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  min-width: 28px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.question-text {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--text);
+  margin: 4px 0;
+}
+
+/* Option prefix A/B/C/D */
+.opt-label {
+  color: var(--accent-gold);
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+/* Final screen */
+.final-header {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.best-score {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.jackpot-msg {
+  background: rgba(240, 180, 41, 0.1);
+  border: 1px solid var(--accent-gold);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--accent-gold);
+  line-height: 1.5;
+}
+
+.strand-cta {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text);
+  margin: 4px 0;
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Timeout badge */
+.timeout-badge {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--wrong);
+  letter-spacing: 0.05em;
+}
+
+/* Scrollable areas on small screens */
+#screen-question,
+#screen-final,
+#screen-intro {
+  overflow-y: auto;
+}

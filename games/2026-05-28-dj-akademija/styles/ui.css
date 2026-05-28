@@ -1,0 +1,114 @@
+.screen {
+  display: none;
+  flex-direction: column;
+}
+
+.btn {
+  min-height: 52px;
+  min-width: 100%;
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  text-align: left;
+  line-height: 1.4;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn:hover,
+.btn:focus {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  outline: none;
+}
+
+.btn.correct {
+  border-color: var(--correct);
+  color: var(--correct);
+  background: rgba(56, 161, 105, 0.1);
+}
+
+.btn.wrong {
+  border-color: var(--wrong);
+  color: var(--wrong);
+  background: rgba(229, 62, 62, 0.1);
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.btn:disabled:hover,
+.btn:disabled:focus {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn.correct:disabled {
+  border-color: var(--correct);
+  color: var(--correct);
+}
+
+.btn.wrong:disabled {
+  border-color: var(--wrong);
+  color: var(--wrong);
+}
+
+.timer-bar {
+  width: 100%;
+  height: 6px;
+  background: #1a1a3a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--timer-high), var(--timer-low));
+  transition: none;
+  width: 100%;
+}
+
+.fact-text {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+  min-height: 2.5em;
+}
+
+.score-badge {
+  font-size: 2.5rem;
+  text-align: center;
+  color: var(--accent-gold);
+}
+
+.title-badge {
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+  color: var(--accent-gold);
+  margin: 8px 0;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: none;
+  z-index: 999;
+  white-space: nowrap;
+  font-family: monospace;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+}

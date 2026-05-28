@@ -1,0 +1,12 @@
+:root {
+  --bg: #0a0a1a;
+  --text: #e8e8f0;
+  --text-muted: #8888aa;
+  --accent-gold: #f0b429;
+  --accent-purple: #6b46c1;
+  --correct: #38a169;
+  --wrong: #e53e3e;
+  --border: rgba(107, 70, 193, 0.4);
+  --timer-high: #6b46c1;
+  --timer-low: #e53e3e;
+}
