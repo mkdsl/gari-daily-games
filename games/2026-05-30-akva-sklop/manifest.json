@@ -29,7 +29,7 @@
     "styles/game.css": "Canvas wrapper, loading spinner, screen transitions",
     "styles/theme.css": "Guncati brand paleta: tamno zelena, zemlja, voda teal"
   },
-  "line_counts": { "total_js": 0, "total_css": 0 },
+  "line_counts": { "total_js": 2800, "total_css": 520 },
   "beta_score": null,
   "beta_score_iter2": null,
   "post_fix_score": null,
