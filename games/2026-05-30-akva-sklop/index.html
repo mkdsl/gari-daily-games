@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Akva-Sklop — Guncati Imanje. Tile Planning Puzzle: balansuj 0.4 l/s između 3 jezera, 12 nedelja, stabilan ekosistem." />
+  <meta name="description" content="Ti si Brana, menadžer voda na Guncati permakulturnom imanju. Postavljaj drenaže i biofiltere, balansiraj 0.4 l/s između 3 jezera — 12 nedelja do stabilnog ekosistema." />
   <meta name="theme-color" content="#1a2e1a" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="Akva-Sklop — Guncati Imanje" />
-  <meta property="og:description" content="Postavljaš drenaže i biofiltere, balansiraj vodu između 3 jezera — 12 nedelja do investitora." />
+  <meta property="og:description" content="Puzzle igra: upravljaj vodom na permakulturnom imanju. Gari Daily Games." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://mkdsl.github.io/gari-daily-games/games/2026-05-30-akva-sklop/" />
 
   <title>Akva-Sklop — Guncati Imanje</title>
 
-  <!-- Styles — order matters: base → theme → game → ui -->
+  <!-- CSS — redosled je važan: base → theme → game → ui -->
   <link rel="stylesheet" href="styles/base.css" />
   <link rel="stylesheet" href="styles/theme.css" />
   <link rel="stylesheet" href="styles/game.css" />
@@ -22,17 +22,17 @@
 </head>
 <body>
 
-  <!-- Loading screen -->
-  <div id="loading" class="screen-overlay" aria-live="polite" aria-label="Učitavanje">
+  <!-- Loading screen — prikazuje se dok se moduli inicijalizuju -->
+  <div id="loading" class="screen-overlay" aria-live="polite" aria-label="Učitavanje igre">
     <div class="loading-spinner"></div>
-    <p class="loading-text">Akva-Sklop se učitava…</p>
+    <p class="loading-text">Guncati se priprema…</p>
   </div>
 
-  <!-- Main game wrapper -->
+  <!-- Glavni wrapper igre -->
   <div id="gameWrapper">
 
-    <!-- HUD — top bar -->
-    <div id="hud" role="complementary" aria-label="Informacije o stanju">
+    <!-- HUD — gornji panel -->
+    <div id="hud" role="complementary" aria-label="Status igre">
       <div id="hudRow1">
         <span id="hudFlow"  class="hud-stat">Protok: — / 0.40 l/s</span>
         <span id="hudPH"    class="hud-stat">pH: —</span>
@@ -43,69 +43,78 @@
         <span id="hudTimer" class="hud-stat hud-timer">45s</span>
         <span id="hudAP"    class="hud-stat hud-ap">AP: ●●●</span>
         <span id="hudPhase" class="hud-stat">Planiranje</span>
+        <span id="hudEvent" class="hud-stat hud-event" hidden></span>
       </div>
     </div>
 
-    <!-- Canvas — main game surface -->
+    <!-- Canvas — glavna arena igre, 960×720 (skalira se na mobilnom) -->
     <div id="canvasWrapper">
       <canvas
         id="gameCanvas"
         width="960"
         height="720"
-        aria-label="Akva-Sklop igra — 20x15 tile mreža"
+        aria-label="Akva-Sklop igra — 20×15 tile mreža"
         tabindex="0"
       ></canvas>
 
-      <!-- Debug overlay (D key toggle) -->
-      <div id="debugPanel" class="debug-panel hidden" aria-hidden="true"></div>
+      <!-- Debug overlay — D key toggle (GDD sekcija 4.1) -->
+      <div id="debugPanel" class="debug-panel hidden" aria-hidden="true">
+        <pre id="debugContent"></pre>
+      </div>
     </div>
 
-    <!-- Palette bar — tile picker -->
+    <!-- Palette bar — izbor tile-ova (popunjava src/ui.js) -->
     <div id="palette" role="toolbar" aria-label="Paleta tile-ova">
       <!-- Populated by src/ui.js -->
     </div>
 
-    <!-- Bottom action bar -->
+    <!-- Donji action bar -->
     <div id="actionBar">
-      <div id="weekLog" class="week-log">
-        <!-- Last week summary, populated by src/ui.js -->
+      <div id="weekLog" class="week-log" aria-live="polite">
+        <!-- Log prošle nedelje, popunjava src/ui.js -->
       </div>
-      <button id="simulateBtn" class="btn-simulate" type="button" aria-label="Simuliraj nedelju">
+      <button id="btnSimulate" class="btn-simulate" type="button"
+              aria-label="Simuliraj nedelju" disabled>
         SIMULIRAJ NEDELJU →
       </button>
     </div>
 
   </div><!-- /#gameWrapper -->
 
-  <!-- Guncati Knows — card modal -->
-  <div id="cardModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="cardModalTitle" aria-hidden="true">
+  <!-- Modal: Guncati Knows kartice -->
+  <div id="cardModal" class="modal hidden" role="dialog" aria-modal="true"
+       aria-labelledby="cardModalTitle" aria-hidden="true">
     <div class="modal-backdrop"></div>
     <div class="modal-content">
       <button class="modal-close" id="cardModalClose" aria-label="Zatvori karticu">✕</button>
       <h2 id="cardModalTitle" class="modal-title">Guncati Zna</h2>
       <div id="cardModalBody" class="modal-body">
-        <!-- Card content injected by src/cards.js -->
+        <!-- Sadržaj kartice ubacuje src/cards.js -->
       </div>
       <div id="cardModalActions" class="modal-actions">
-        <button id="cardPinBtn" class="btn-secondary" type="button">Prikvači na HUD</button>
-        <button id="cardNextBtn" class="btn-primary" type="button">Sledeća kartica</button>
+        <button id="cardPinBtn"  class="btn-secondary" type="button">Prikvači na HUD</button>
+        <button id="cardNextBtn" class="btn-primary"   type="button">Sledeća kartica</button>
       </div>
     </div>
   </div>
 
-  <!-- Share overlay — final score / screenshot -->
-  <div id="shareOverlay" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="shareTitle" aria-hidden="true">
+  <!-- Share overlay — finalni rezultat + screenshot -->
+  <div id="shareOverlay" class="modal hidden" role="dialog" aria-modal="true"
+       aria-labelledby="shareTitle" aria-hidden="true">
     <div class="modal-backdrop"></div>
     <div class="modal-content share-content">
       <button class="modal-close" id="shareClose" aria-label="Zatvori">✕</button>
       <h2 id="shareTitle" class="modal-title">Guncati Eco Report</h2>
       <div id="shareScore" class="share-score">
-        <!-- Final score injected by src/share.js -->
+        <!-- Finalni rezultat ubacuje src/share.js -->
       </div>
-      <canvas id="shareCanvas" class="share-canvas" aria-hidden="true"></canvas>
+      <div id="shareRank" class="share-rank"></div>
+      <canvas id="shareCanvas" class="share-canvas"
+              width="600" height="400" aria-hidden="true"></canvas>
       <div class="share-actions">
-        <button id="shareDownloadBtn" class="btn-primary" type="button">Preuzmi PNG</button>
-        <button id="shareWebShareBtn" class="btn-secondary" type="button">Podeli</button>
+        <button id="btnShare"    class="btn-primary"   type="button">Podeli</button>
+        <button id="btnDownload" class="btn-secondary" type="button">Preuzmi PNG</button>
+        <button id="btnRestart"  class="btn-ghost"     type="button">Novi run</button>
       </div>
       <div class="share-cta">
         Brana gradi ovo u stvarnosti →
@@ -114,7 +123,7 @@
     </div>
   </div>
 
-  <!-- ES6 Module entry point -->
+  <!-- ES6 module entry point — src/main.js wire-uje sve module -->
   <script type="module" src="src/main.js"></script>
 
 </body>
