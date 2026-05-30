@@ -1,0 +1,138 @@
+/* ============================================================
+   theme.css — Guncati Imanje brand paleta + tile tematizacija
+   Redosled učitavanja: 2/4 (base → theme → game → ui)
+   ============================================================ */
+
+/* ─── Guncati brand CSS varijable ────────────────────────── */
+
+:root {
+  --guncati-forest:  #1a3a1a;
+  --guncati-earth:   #8B5E3C;
+  --guncati-water:   #4ecdc4;
+  --guncati-duck:    #ff6b35;
+  --guncati-leaf:    #2d8a4e;
+  --guncati-wetland: #8BC34A;
+  --guncati-deep:    #0d5280;
+  --guncati-dam:     #5D4037;
+  --guncati-source:  #FFD700;
+  --guncati-fish:    #a8d8ea;
+  --guncati-biofilm: #2d8a4e;
+  --guncati-drain:   #4ecdc4;
+}
+
+/* ─── Tile palette dugmad — boja bordure po tipu ─────────── */
+
+[data-tile="drainage"] {
+  border-color: var(--guncati-drain) !important;
+}
+[data-tile="biofilter"] {
+  border-color: var(--guncati-leaf) !important;
+}
+[data-tile="wetland"] {
+  border-color: var(--guncati-wetland) !important;
+}
+[data-tile="lake1"] {
+  border-color: #1a6fa0 !important;
+}
+[data-tile="lake2"] {
+  border-color: var(--guncati-deep) !important;
+}
+[data-tile="dam"] {
+  border-color: var(--guncati-dam) !important;
+}
+[data-tile="remove"] {
+  border-color: var(--color-critical) !important;
+}
+
+/* ─── Palette dugmad — pozadinski tint po tipu ───────────── */
+
+[data-tile="drainage"].selected  { background: rgba(78,  205, 196, 0.28) !important; }
+[data-tile="biofilter"].selected { background: rgba(45,  138,  78, 0.28) !important; }
+[data-tile="wetland"].selected   { background: rgba(139, 195,  74, 0.28) !important; }
+[data-tile="lake1"].selected     { background: rgba(26,  111, 160, 0.28) !important; }
+[data-tile="lake2"].selected     { background: rgba(13,   82, 128, 0.28) !important; }
+[data-tile="dam"].selected       { background: rgba(93,   64,  55, 0.28) !important; }
+[data-tile="remove"].selected    { background: rgba(244,  67,  54, 0.22) !important; }
+
+/* ─── Zdravlje indikatora (shared klase) ─────────────────── */
+
+.status-healthy { color: var(--color-healthy); }
+.status-warning { color: var(--color-warning); }
+.status-critical {
+  color: var(--color-critical);
+  animation: criticalPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes criticalPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+/* ─── HUD stat boje po zdravlju ──────────────────────────── */
+
+#hudPH.status-healthy { color: var(--color-healthy); }
+#hudPH.status-warning { color: var(--color-warning); }
+#hudPH.status-critical { color: var(--color-critical); }
+
+/* ─── Guncati link stilovi ───────────────────────────────── */
+
+.guncati-link {
+  color: var(--guncati-water);
+  text-decoration: none;
+  font-size: 0.78rem;
+  transition: opacity 0.15s;
+}
+
+.guncati-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* ─── Species color helpers ──────────────────────────────── */
+
+.species-duck { color: var(--guncati-duck); }
+.species-fish { color: var(--guncati-fish); }
+
+/* ─── Tile type color swatches (za eventualne tooltip-e) ─── */
+
+.tile-color-drainage  { background: var(--guncati-drain);   }
+.tile-color-biofilter { background: var(--guncati-biofilm); }
+.tile-color-wetland   { background: var(--guncati-wetland); }
+.tile-color-lake1     { background: #1a6fa0;                 }
+.tile-color-lake2     { background: var(--guncati-deep);    }
+.tile-color-dam       { background: var(--guncati-dam);     }
+.tile-color-source    { background: var(--guncati-source);  }
+
+/* ─── Guncati share CTA ──────────────────────────────────── */
+
+.guncati-cta {
+  font-size: 0.78rem;
+  opacity: 0.8;
+  margin-top: 0.75rem;
+}
+
+.guncati-cta a {
+  color: var(--guncati-water);
+  font-weight: 600;
+}
+
+/* ─── pH indikatora boja segmenti (za eventualni pH bar) ─── */
+
+.ph-bar-ideal   { background: var(--color-healthy); }
+.ph-bar-ok      { background: var(--color-warning); }
+.ph-bar-danger  { background: var(--color-critical); }
+
+/* ─── Week rank dots na share screen ─────────────────────── */
+
+.rank-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 2px;
+  transition: transform 0.15s;
+}
+
+.rank-dot:hover {
+  transform: scale(1.5);
+}
