@@ -24,6 +24,7 @@ let initUI          = () => {};
 let updateHUD       = () => {};
 let showEventBanner = () => {};
 let showVictoryScreen = () => {};
+let addWeekLog      = () => {};  // BUG-M2: dodato
 let initAudio       = () => {};
 let playTilePlaced  = () => {};
 let playSimStart    = () => {};
@@ -31,14 +32,17 @@ let playWaterAmbient = () => {};
 let initCards       = () => {};
 let unlockNextCard  = () => {};
 let initShare       = () => {};
+let setAnimLerp     = () => {};  // BUG-M1: dodato
+let setPrevLakes    = () => {};  // BUG-M1: dodato
 
 async function loadOptionalModules() {
   try { ({ initInput }                                          = await import('./input.js'));   } catch (_) {}
   try { ({ initRender, renderFrame }                           = await import('./render.js'));  } catch (_) {}
-  try { ({ initUI, updateHUD, showEventBanner, showVictoryScreen } = await import('./ui.js')); } catch (_) {}
+  try { ({ initUI, updateHUD, showEventBanner, showVictoryScreen, addWeekLog } = await import('./ui.js')); } catch (_) {}  // BUG-M2: addWeekLog dodat
   try { ({ initAudio, playTilePlaced, playSimStart, playWaterAmbient } = await import('./audio.js')); } catch (_) {}
   try { ({ initCards, unlockNextCard }                         = await import('./cards.js'));   } catch (_) {}
   try { ({ initShare }                                         = await import('./share.js'));   } catch (_) {}
+  try { ({ setAnimLerp, setPrevLakes }                         = await import('./render.js'));  } catch (_) {}  // BUG-M1: render anim exports
 }
 
 // ---------------------------------------------------------------------------
@@ -76,10 +80,10 @@ function gameLoop(timestamp) {
 }
 
 // ---------------------------------------------------------------------------
-// Simulation trigger
+// Simulation trigger — BUG-C1: export dodat
 // ---------------------------------------------------------------------------
 
-async function triggerSimulation() {
+export async function triggerSimulation() {  // BUG-C1 fix: export
   if (_simLock) return;
   _simLock = true;
 
@@ -97,10 +101,26 @@ async function triggerSimulation() {
   const weekScore = calcWeekScore(newState);
   newState.weeklyScores.push({ week: newState.week, score: weekScore, event: newState.activeEvent });
 
+  // BUG-M2: addWeekLog poziv posle calcWeekScore
+  const activeEvent = getActiveEvent(newState.events, newState.week);
+  addWeekLog(newState.week, weekScore, activeEvent?.type || null);
+
+  // BUG-M1: zapamti pre-sim stanje za lerp animaciju
+  setPrevLakes(state.lakes);
+  const simStart = Date.now();
+  const animInterval = setInterval(() => {
+    const elapsed = (Date.now() - simStart) / 4000;
+    setAnimLerp(Math.min(elapsed, 1.0));
+    if (elapsed >= 1.0) clearInterval(animInterval);
+  }, 16); // ~60fps
+
   // 4s animation window
   lastTime = 0;
   requestAnimationFrame(gameLoop);
   await new Promise(r => setTimeout(r, 4000));
+
+  clearInterval(animInterval);  // BUG-M1: cleanup
+  setAnimLerp(0);               // BUG-M1: reset po završetku animacije
 
   advanceWeek(newState);
   saveToStorage();
@@ -117,8 +137,8 @@ async function triggerSimulation() {
     updateHUD(newState);
   } else {
     startPlanningPhase(newState);
-    const activeEvent = getActiveEvent(newState.events, newState.week);
-    if (activeEvent) showEventBanner(activeEvent);
+    const nextEvent = getActiveEvent(newState.events, newState.week);
+    if (nextEvent) showEventBanner(nextEvent);
     lastTime = 0;
     requestAnimationFrame(gameLoop);
   }
@@ -127,11 +147,11 @@ async function triggerSimulation() {
 }
 
 // ---------------------------------------------------------------------------
-// Simulate button
+// Simulate button — BUG-C2: 'btn-simulate' -> 'btnSimulate'
 // ---------------------------------------------------------------------------
 
 function bindSimulateButton() {
-  const btn = document.getElementById('btn-simulate');
+  const btn = document.getElementById('btnSimulate');  // BUG-C2 fix: ispravljen ID
   if (!btn) return;
   btn.addEventListener('click', () => {
     const state = getState();
@@ -221,7 +241,7 @@ export async function startNewGame(difficultyId = 'fazaA') {
   state.events = scheduleEvents(difficultyId, generateSeed());
 
   const canvas = document.getElementById('gameCanvas');
-  initInput(grid, state);
+  initInput(canvas, grid);  // BUG-C3 fix: canvas (ne grid) je prvi argument
   if (canvas) initRender(canvas);
   initUI();
   initAudio();
@@ -256,3 +276,4 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 window.startNewGame = startNewGame;
+window.triggerSimulation = triggerSimulation;  // BUG-C1: expose za onclick fallback
