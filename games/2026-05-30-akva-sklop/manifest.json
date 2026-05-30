@@ -1,0 +1,16 @@
+{
+  "name": "Akva-Sklop",
+  "genre": "Tile Planning Puzzle / Ekosistem Sim",
+  "date": "2026-05-30",
+  "description": "Ti si Brana, menadžer voda na Guncati imanju. Postavljaš drenaže i biofiltere, balansiraj 0.4 l/s između 3 jezera — 12 nedelja, stabilan ekosistem pre investitora.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-30-akva-sklop/",
+  "brand_serves": ["guncati"],
+  "stage": "concept",
+  "status": "in_progress",
+  "modules": {},
+  "line_counts": { "total_js": 0, "total_css": 0 },
+  "beta_score": null,
+  "beta_score_iter2": null,
+  "post_fix_score": null,
+  "sef_signoff": false
+}
