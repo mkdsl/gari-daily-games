@@ -2,158 +2,162 @@
 
 **Autor:** Nega Negovanović (devil's advocate)
 **Datum:** 2026-05-30
-**Status concept-a:** drži uz korekcije
+**Faza:** Pre-GDD
 
 ---
 
-## Ocena: drži uz korekcije
+## Ocena
 
-Concept ima jasnu premisu, konkretnu brand vezu i potencijal da bude jedna od boljih igara u GDG portfoliju. Ali ima tri mesta gde može da pukne pre nego što bilo šta postane playable — i jedno fundamentalno pitanje o brand utility koje concept još nije iskreno odgovorilo. Mile ne sme da počne GDD dok se ova pitanja ne zatvore.
+**drži uz korekcije**
+
+Concept ima jaku premisu i jasnu brand-utility vezu sa Guncati. Ali ima 3 tačke koje mogu da sruše ceo projekt pre nego što Mile napiše prvi red GDD-a. Ako se te tačke ne razreše eksplicitno — ne isometric CSS-om koji "možda radi", nego odlukama — Mile ulazi u dev sesiju bez tla pod nogama.
 
 ---
 
 ## P1 — Showstopper rizici (blokiraju launch)
 
-### P1.1 — Isometric CSS grid: izvodljivo, ali animirani tok je drugi problem
+### 1. Izometrijski CSS grid sa animiranim česticama vode — nije "medium risk", ovo je high risk
 
-**Severity: HIGH**
+Concept kaže: "isometric CSS box tiles sa izometrijskom transformacijom, bez sprite-ova, bez WebGL." Odmah posle toga kaže: "animirani čestični tok vode može zahtevati Canvas fallback."
 
-Statičan 2.5D izometrijski CSS grid od 24px tile-ova je izvodljiv u jednoj impl sesiji. To je 6–8h posla, ima dovoljno CSS transform precedenata.
+Problem: ovo su dve kontradikcije u istom dokumentu. Ako čestice vode zahtevaju Canvas, onda nisi implementirao igru u čistom CSS-u — implementirao si hybrid koji niko nije testirao u jednoj dev sesiji na ovom projektu. CSS `transform: rotate(45deg) scaleY(0.5)` na grid elementima funkcioniše za statičan layout. Čim počneš da animiraš desine, pedesine, stotine čestica vode koje se gravitaciono kreću po izometrijskom griidu — browser rendering pipeline postaje nepredvidiv na mobilnom.
 
-Problem nije grid. Problem je "animirani čestični tok vode" koji concept opisuje kao centralni vizuelni element. Čestični sistemi u čistom CSS-u su hack — bukvalno `animation-delay` na stotinama div elemenata. Na mobilnom to ubija frame rate. Canvas fallback nije opcija za MVP ako je ceo grid CSS — mešanje rendering konteksta za isti vizuelni prostor je složeno i sklono bug-ovima.
+**Severity:** Kritičan. Ako Mile počne GDD pretpostavljajući "CSS sa Canvas fallback, videćemo", završiće sesiju sa half-baked rešenjem koje ne izgleda ni kao CSS ni kao Canvas.
 
-**Ako tok nije vizualno uverljiv, igra gubi centralni estetski argument.** Mini Metro radi zato što tok vizualno funkcioniše. Akva-Sklop koji "planiraš" bez vizuelnog feedbacka protoka postaje tabela sa slikama.
-
-**Predlog rešenja:** Mile treba da napravi throwaway prototip SAMO toka vode (bez ijedne game mehanike) u prvom 2h sessiona. Ako čestični CSS tok ne radi na mobilnom — odmah na Canvas za tok, CSS za grid. To nije blocker ako se odluči rano. Blocker je ako se otkrije u nedelji 3 implementacije.
+**Predlog rešenja:** Odluka pre GDD-a. Ili: (a) čestice vode su CSS-only, ali su stilizovane i abstraktne — ne realistični fluid, nego pulsing opacity na tile-ovima koji predstavljaju tok; ili (b) cela igra ide u Canvas/PixiJS od starta, isometric transform se radi programski. Hibrid nije opcija za jednu sesiju.
 
 ---
 
-### P1.2 — Hydraulička simulacija: matematika je upravljiva, ali debagovanje nije
+### 2. Hidraulična simulacija 0.4 l/s — matematika koja ne prašta greške u GDD fazi
 
-**Severity: HIGH**
+Sistem zahteva: gravitacioni tok između 3 jezera na različitim visinama, tile troškovi protoka (0.05 / 0.08 / 0.16 l/s), pH dinamiku koja je funkcija pataka + biofiltera + protoka, random event koji privremeno menja izvorni kapacitet na 0.2 l/s.
 
-0.4 l/s hard cap sa tile troškovima (0.05, 0.08, 0.16 l/s) nije matematički kompleksna simulacija — to je sabiranje. Ta logika se piše za sat vremena.
+Ovo su 4 međusobno zavisne varijable koje se menjaju svake "nedelje". Svaka promena jedne utiče na ostale. Concept ne definiše: kojim redosledom se računaju? Je li pH funkcija protoka te nedelje ili akumuliranog stanja prethodnih nedelja? Šta se dešava ako suša (0.2 l/s) dođe u nedelji kad igrač ima tile-ove koji troše 0.31 l/s — da li sistem samo blokira, ili postepeno oduzima vodu od jezera po prioritetu?
 
-Pravi problem je **debagovanje emergentnih stanja** bez vizuelnog bug-checkinga:
+**Severity:** Kritičan. Ovo nije "tuning posle playtestinga." Ovo je state machine koja mora biti definisana pre nego što Mile napiše jednu jedinu funkciju. Ako GDD ostavi ove praznine, implementacija će biti puna `if/else` krpljenja koje niko ne razume posle 48 sati.
 
-- pH fluktuira zbog pataka → biofilter kompenzuje → protok pada → ribe umiru u nedelji 9
-- Ovaj lanac uzročnosti treba biti providan igraču, ali i developeru koji debuguje
-
-Concept kaže igrač može da "pauzira simulaciju i vidi tooltip state svakog tile-a" — ali tooltip implementacija za svaki tile u svakom simulacionom koraku je netrivijalna. Ako tile state nije eksponiran u debug modu od prvog dana, Mile će debugovati simulacione bug-ove slepo.
-
-**Edge case koji concept pominje ali ne rešava:** suša (random event) može da gurne ukupnu potrošnju iznad novog kapaciteta (0.2 l/s), a planning phase to nije blokirala jer je tada limit bio 0.4. Ovo je garantovani game-breaking edge case koji se otkriva tek u playtestingu ako nema debug visibility.
-
-**Predlog rešenja:** Pre bilo kojeg gameplay koda — napraviti tabelu stanja (JSON dump svakog tile-a svakim simulacionim korakom, vidljiv u dev modu). Bez toga, balansiranje je pogađanje.
+**Predlog rešenja:** Sine ili Iskra pišu pseudokod simulation loop pre GDD-a. Jedna stranica. Redosled operacija, šta blokira šta, šta je hard cap a šta soft degradacija. Mile implementira po tom pseudokodu, ne po slobodnoj interpretaciji concept.md-a.
 
 ---
 
-### P1.3 — Multi-layer arhitektura (macro + micro + meta) u jednoj impl sesiji: realan rizik scope creep-a
+### 3. Multi-layer debugovanje bez vizualnog bug-checking nije opcija
 
-**Severity: MEDIUM-HIGH**
+Macro (planning) + Micro (4s simulacija) + Meta (localStorage) = 3 sloja stanja koja moraju biti konzistentna. Concept kaže da igrač "ne može da menja tile tokom simulacije" — što je dobra dizajn odluka. Ali to znači da developer tokom testiranja ne može interaktivno da vidi šta se dešava interno tokom simulacije.
 
-Tri sloja su konceptualno elegantna. Implementaciono, to su tri odvojena state machine-a koja moraju da komuniciraju:
+Ako ribe uginu u nedelji 7, igrač (i developer) vide krajnji rezultat, ne uzrok. Je li pH pao zbog pataka? Zbog zatvorenog biofiltera? Zbog suše random eventa koji se okinio pre nego što je simulacija završena? Concept ne definiše debug mode niti logging.
 
-- Planning Phase (React/JS state): tile placement, action point tracking, live preview
-- Simulation Phase (animation loop): particle flow, animal behavior, pH calculation
-- Meta layer (localStorage): card unlocks, run history, difficulty progression
+**Severity:** Kritičan za dev sesiju. Bugs u simulation logic-u bez visibility alata znači da Mile provodi 60% sesije guessing-om umesto implementacijom.
 
-Svaki od ovih slojeva je samostalna igra. Zajedno, u jednoj impl sesiji od 6–8h, to je rizičan scope.
-
-**Konkretan scenario otkaza:** Mile implementira Planning + Simulation (layers 1+2), ostaje mu 1h u sesiji. Meta layer (Guncati Knows kartice, Faza C unlock) ide "za posle." Posle ne dolazi — igra se pušta bez meta progression i retention hook-a koji je jedini razlog zašto igrač dolazi drugi put.
-
-**Predlog rešenja:** Eksplicitno označiti meta layer kao "post-launch feature" u GDD-u, ne kao MVP. MVP = Planning + Simulation + win/lose stanje. Kartice su v1.1. Ovo mora biti svesna odluka, ne "videćemo."
+**Predlog rešenja:** GDD mora da uključi developer-only debug panel (toggle sa keyboard shortcut) koji prikazuje state svakog tile-a i svake varijable na kraju svakog simulacionog koraka. Ovo nije feature za igrača — ovo je alat bez kojeg se igra ne može testirati.
 
 ---
 
 ## P2 — Ozbiljni rizici (oštećuju iskustvo)
 
-### P2.1 — UI čitljivost na mobilnom: tile grid + HUD zajedno su pretrpan ekran
+### 4. UI čitljivost na mobilnom — izometrijski 24px tile-ovi su nečitljivi
 
-Izometrijski 2.5D grid na mobilnom ekranu (375px širina) sa 24px tile-ovima daje otprilike 15 tile-ova po redu. To je mala površina za "jezero, drenaže, biofiltere, patke i ribe" sve u isto vreme. HUD oduzima dodatnih 60–80px vertikalno.
+24px tile-ovi na izometrijskom gridu. HUD sa live vrednostima: protok, pH, score, nedelja. Plus patke, ribe, animirani tok vode. Na desktop monitoru — možda. Na 375px wide mobilnom ekranu u landscape modu — ne.
 
-Igrač u Planning Phase mora da vidi: mapu, HUD vrednosti, live preview protoka, i action point counter. Na desktopu to je udobno. Na mobilnom je konfuzno.
+Izometrijski grid na mobilnom je poznato graveyard mobilnih web igara. CSS transform koji izgleda dobro na 1920px postaje zamrljana mreža linija na 375px. Tilovi postaju nemogući za tap — 24px tile na izometrijskom griidu ima efektivnu touch surface od ~15px, što je ispod Apple HIG minimuma od 44px.
 
-Concept ne adresira touch targets za tile placement (tap na 24px tile sa prstom = preciznost od 44px minimum po Apple HIG). Ovo nije estetski problem — ovo je funkcionalni problem koji ubija playtestere.
+**Severity:** Ozbiljan. Concept eksplicitno kaže da je QR-kod-na-imanju use case — što znači mobilni je primary. Ako igra ne radi na mobilnom, brand-utility argument pada.
 
-**Konkretan predlog:** Grid ne sme biti manji od 32px tile-ova na mobilnom, ili treba eksplicitno dizajnirati mobile-first layout sa scroll-able mapom i fiksiranim HUD-om. Jedno od dvoje — ne oboje.
-
----
-
-### P2.2 — "12 nedelja" session length: concept kaže 8–12 minuta, ali to nije testirano
-
-Concept tvrdi "jedna igra = 8–12 minuta." Ta procena počiva na:
-- 12 nedelja × (Planning Phase + 4s Simulation) = minimalno 48 sekundi čiste animacije
-- Plus razmišljanje, čitanje tooltipova, random event resolving
-
-Realnost: igrači ne razmišljaju brzo u novim sistemima. Faza 0 tutorial koji "traje 4–5 minuta" može lako biti 12 minuta za igrača koji prvi put vidi izometrijski grid sa flow simulacijom.
-
-**Problem je asimetričan:** Ako sesija traje 20 minuta — daily game format puca. Ovo nije igra za podzemnu železnicu. Ako sesija traje 5 minuta — engagement je premalen za meta progression i brand storytelling.
-
-**Decision needed:** Playtestirati tutorial sa 3 osobe koje nikad nisu videle igru. Ako prosečno vreme prelazi 10 minuta, smanjiti broj nedelja ili ubrzati simulaciju. 12 nedelja je flavor broj, ne mehanička nužnost.
+**Predlog rešenja:** Ili povećaj tile-ove na minimum 48px efektivne touch surface, ili napravi poseban mobilni layout koji nije izometrijski (top-down 2D za mobilne, izometrijski za desktop). GDD mora da specificira koji layout je MVP.
 
 ---
 
-### P2.3 — Random eventi + difficulty balansiranje: nemoguće bez playtesting pipeline-a
+### 5. "12 nedelja" — session length koji nije rezolviran
 
-`SUŠA` na 15%, `PATKA JATO` na 10%, `ŠUMSKA KONTAMINACIJA` na 8% — ovi procenti su izmišljeni. Concept to ne krije (tražen je Nega review), ali GDD ne sme da nasledi ove brojeve kao "gotove."
+Concept kaže: "Jedna igra: 8–12 minuta." Ali ne objašnjava šta se dešava tokom tih 8–12 minuta. 12 × Planning Phase (koliko traje planiranje jedne nedelje?) + 12 × 4s Micro simulacija = 48 sekundi čiste simulacije. Ostatak je na igraču.
 
-Problem: balansiranje random eventa bez playtesting infrastructure nije balansiranje — to je pogađanje. Svaka od tri Faze (0, A, B) ima drugačiji action point budget i drugačiji pH opseg, što znači da isti random event ima drugačiji impact u svakoj Fazi.
+Ako igrač spor i misli — igra traje 25 minuta. Ako je brz i impulsivan — 4 minute. Ni jedno ni drugo nije "daily game format" koji concept obećava. Daily game format znači predvidivo, konzistentno vreme sesije — kao Wordle (2 minuta), ne kao Civilization ("još jedna nedelja").
 
-**Konkretan scenario otkaza:** `SUŠA` u Fazi B (2 akciona poena, striktni pH [7.0, 8.0]) + igrač koji nema pump tile → instant lose bez ijedne greške igrača. Frustration, uninstall.
+**Severity:** Ozbiljan. Daily game format je core value proposition. Ako session length nije bounded, retencija pada i GDG platforma integracija nema smisla.
 
-**Predlog:** Random eventi u MVP idu na fiksne nedelje (scripted events), ne na probability. Probability sistem dolazi u v1.1 kada postoji playtesting data. Scripted eventi su predvidivi, mogu se balansirati bez statistike.
+**Predlog rešenja:** Dodaj timer per Planning Phase — npr. 60 sekundi za odabir akcija, posle čega se automatski pokreće simulacija. Ili eksplicitno reci: igra nije time-bounded, a "daily game" se odnosi samo na calendar unlock, ne na session duration. Jedno od dvoje — ne oboje.
+
+---
+
+### 6. Random events + difficulty balans u jednoj sesiji — matematički nemoguće bez podataka
+
+Concept definiše random event verovatnoće: suša 15%, patka jato 10%, kontaminacija 8%. Ove brojeve niko nije testirao. U 12 nedelja, igrač može da dobije 0 random eventa ili 4 uzastopna. Sa 15% suša šansom, očekivana vrednost je ~0.75 suša po run-u — ali varijansa je visoka. Faza B sa samo 2 akciona poena i striktnijim pH opsegom [7.0, 8.0] u kombinaciji sa suša eventom može biti matematički nepopravljiva situacija.
+
+**Severity:** Ozbiljan. Frustracija iz "mathematically unfair" situacije je najbrži put do uninstall-a (ili u ovom slučaju — nikad više ne otvaranja igre).
+
+**Predlog rešenja:** Implementiraj pseudo-random event scheduling umesto pure random. Npr. garantovano jedna suša između nedelje 4–8, ali njena tačna pozicija je random. Ovo daje consistency bez eliminacije iznenađenja. Concept već pominje event blackout za prve nedelje — proširi tu logiku na ceo event sistem.
 
 ---
 
 ## Brand-utility kritika
 
-### Ključno pitanje: da li je Akva-Sklop zaista utility za Guncati, ili je "themed game" sa Guncati etiketom?
+### Da li je "Akva-Sklop za Guncati" zaista utility — ili je to themed game sa Guncati bojama?
 
-Ovo je najosetljivije mesto concept-a i jedino gde Nega mora biti oštra.
+Ovo je najvažnije pitanje i concept ga ne razrešava direktno.
 
-**Šta concept tvrdi:** Parametri (0.4 l/s, 3 jezera, gravitacioni tok) su direktno iz stvarnog plana. Igrač koji igra 3 puta razume logiku bolje od PDF-a.
+**Šta igra zaista komunicira o Guncati specifično:**
+- 0.4 l/s izvorni kapacitet — ovo je stvarni podatak. Dobar.
+- 3 jezera na različitim visinama — stvarna fizička konfiguracija. Dobar.
+- "Gravitacioni tok, biofiltacija, zatvoreni vodni krugovi" — ovo su principi permakulture generalno, ne Guncati specifično.
 
-**Šta concept ne dokazuje:** Da li igrač koji završi 3 run-a zaista razume nešto specifično o Guncati što ne bi naučio iz bilo koje permakuturne igre sa istom mehanikom?
+Skini Guncati brend sa igre. Ostaje ti: permakulturna farma u neimenovanoj Srbiji, sa generičkim vodnim sistemom koji bi mogao biti bilo koja imanje u regionu. "Brana" je generički karakter bez specifičnog lica ili glasa.
 
-Odgovor zavisi od jednog elementa: **"Guncati Knows" kartice.** Ako su te kartice generičke ("biofilter od šljunka povećava pH") — igra je permakuturna igra sa Guncati logom. Ako su kartice konkretne ("Brana je primetio da pH pada svaki put posle kiše zbog glina na parceli 4") — igra je stvarno Guncati.
+**"Guncati Knows" kartice — problem verifikacije i specifičnosti:**
 
-Concept navodi primer kartice: "Gravitacioni pad od 1m na 10m daje dovoljan pritisak za pasivni tok." To je generički hidrološki fakt. To nije Guncati znanje. To je Wikipedia.
+Concept prikazuje primere kartica:
+- "Patke filtriraju do 2l/h od organskih čestica" — ovo je opšta biologija, ne Guncati.
+- "Biofilter od šljunka povećava pH za 0.2–0.4 u idealnim uslovima" — opšta hidroponija.
+- "Gravitacioni pad od 1m na 10m daje dovoljan pritisak za pasivni tok" — fizika.
+- "Suša smanjuje izvorni protok i do 60% u avgustu" — moguće da je specifično za Guncati lokaciju, ali nije navedeno.
 
-**Šta se gubi ako Guncati postane generic "permakulturno imanje":** Sve. Brand utility pada na nulu. Ostaje igra koja je lepa ali koja ne opravdava partnerstvo, ne gradi Guncati brand, i ne može biti pitching tool za investitore koji ne vide razliku između Guncati i bilo koje druge farme.
+Od 4 primera, 0 su Guncati-specifični. Ako "Guncati Knows" kartice sadrže opštu permakulturnu edukaciju, onda je igra edukativna igra o permakulturi — ne brand asset za Guncati.
 
-**Konkretan test:** Uzmi 5 "Guncati Knows" kartica iz concept-a i pitaj: "Da li ovu karticu mogu da koristim u igri o bilo kojoj permakulturnoj farmi na Balkanu?" Ako je odgovor "da" za više od 2 kartice — igra nema dovoljno brand specifičnosti.
+**Šta se gubi ako Guncati postane generic "permakulturno imanje":**
 
-**Predlog:** Pre GDD-a, Sine/Iskra moraju da sednu sa Branom i izvuku minimum 8 kartica koje su nedvosmisleno Guncati-specifične. Ne generički principi — konkretne opservacije, konkretni brojevi sa konkretnih parcela, konkretni propusti i naučene lekcije. Bez toga, brand utility je marketing copy, ne stvarnost.
+Izgubi se: investitor narativ ("12 nedelja do stabilnog ekosistema" kao pitching tool), QR kod na imanju use case (zašto bi posetilac skenirao QR kod koji vodi na generičku igru?), i lead magnet veza sa guncati.rs.
+
+Ostaje: edukativna igra o vodnom menadžmentu koja može da se rebranduje za bilo koji permakulturni projekat.
+
+**Zaključak o brand-utilityu:**
+
+Igra može biti genuine Guncati asset, ali samo ako "Guncati Knows" kartice sadrže informacije koje posetilac imanja ne može da nađe na Wikipedia-u. Konkretno: stvarni pH merenja sa Guncati jezera u različitim godišnjim dobima, stvarni flow rate podatak Guncati izvora po mesecima, specifični biofilter dizajn koji Brana koristi sa real-world rezultatima. Bez toga — igra je permakultura edukacija sa Guncati logom.
+
+**Ovo je korekcija koju Sine/Iskra moraju da urade pre GDD-a.** Concept.md mora da specificira minimum 8 "Guncati Knows" kartica sa konkretnim, verifikovanim, Guncati-specifičnim podacima. Ako Brana ne može da isporuči te podatke — igra se rebranduje kao generic, ili se ne pravi.
 
 ---
 
 ## Preporuke za Mile (GDD)
 
-1. **Throwaway prototip toka vode pre ijedne linije gameplay koda.** 2h, samo vizualizacija protoka na izometrijskom gridu, na mobilnom uređaju. Ako ne radi u CSS-u — Canvas za animacije, CSS za grid tiles. Ova odluka mora biti doneta pre GDD-a, ne tokom implementacije.
+1. **Ne počinjaj GDD dok nema simulation loop pseudokoda.** Jedan dokument, jedna stranica, koji definiše redosled računanja pH, protoka, health-a — po nedelji. Mile implementira taj pseudokod, ne interpretira concept.
 
-2. **Meta layer (Guncati Knows kartice, Faza C vizualizacija) eksplicitno izvan MVP scope-a.** GDD označava ove feature-e kao "v1.1 — post-launch." MVP = Planning Phase + Simulation Phase + win/lose screen. Sve ostalo je bonus.
+2. **Odluči renderer pre prvog reda koda.** CSS-only (abstraktne animacije, bez čestica) ili Canvas (realistični tok, više dev vremena). Nema hibrid opcije u jednoj sesiji. Preporuka: CSS-only za MVP, Canvas kao post-launch enhancement.
 
-3. **Scripted eventi umesto probability sistema za MVP.** `SUŠA` se okida u nedelji 6, tačno. `PATKA JATO` u nedelji 8. Ovo je testabilno i balansirabilno bez playtesting pipeline-a. Probability sistem dolazi kada postoji data.
+3. **Implementiraj debug panel od dana 1.** Keyboard toggle koji prikazuje state svakog tile-a, svake varijable, na kraju svakog simulacionog koraka. Bez ovoga — bugovanje simulation logic-a je guessing game.
 
-4. **Tile veličina na mobilnom minimum 32px, ne 24px.** Touch target problem je deal-breaker za daily game format — igra se igra u podzemnoj, u redu za kafu, jednom rukom. Ili dizajnirati scroll-able mapu sa fiksiranim HUD-om, ili povećati tile-ove. Ne oboje, ne kompromis.
+4. **Bounded Planning Phase.** Ili timer (60s po nedelji), ili eksplicitno odustati od "daily game" pozicioniranja. Bez ovoga — session length je undefined i GDG platforma integracija nema smisla.
 
-5. **Session length playtesting pre finalizacije 12-nedelja formata.** Dati tutorial-u 3 prve osobe koje ne znaju ništa o igri. Ako prosek prelazi 10 minuta — smanjiti na 8 nedelja ili ubrzati simulaciju na 2s. 12 nedelja je narrativno motivisan broj. Mehanički, 8 nedelja radi isti posao sa manjim rizikom od session fatigue.
-
----
-
-## Verdict: drži uz korekcije
-
-**Šta Sine/Iskra mora da koriguje pre nego što Mile počne GDD:**
-
-1. **CSS flow vizualizacija feasibility** — dobiti eksplicitnu potvrdu od Mile da li je čestični tok u CSS-u izvodljiv na mobilnom, ili dokumentovati Canvas fallback kao plan A.
-
-2. **Meta layer scope** — eksplicitno isključiti iz MVP i napisati to u concept-u, ne ostaviti kao "videćemo."
-
-3. **Guncati-specifične kartice** — sedeti sa Branom, izvući minimum 8 kartica koje su nedvosmisleno Guncati, ne generički permakulturni fakti. Bez ovog koraka, igra nije brand utility tool — to je lepa igra sa pogrešnim logom.
-
-Ako ove tri tačke budu zatvorene — Mile dobija čist GDD brief. Igra ima potencijal da bude flagship GDG naslov za 2026. Ali samo ako se brand utility dokaže, ne pretpostavi.
+5. **Pseudo-random event scheduling umesto pure random.** Definiši event slots unapred (npr. jedna suša garantovano između nedelje 4–8), randomizuj samo poziciju unutar slota. Ovo je implementirano za jedno popodne i eliminiše "mathematically unfair" frustraciju.
 
 ---
 
-*Nega Negovanović*
-*Gari Daily Games — Devil's Advocate*
+## Verdict
+
+**drži uz korekcije**
+
+Concept ima solidnu kosti: jasan win/lose sistem, dobro definisan macro/micro loop, legitimna brand-utility veza sa Guncati. Nije prazna ideja.
+
+Ali ne sme da ide u GDD dok se ne razreše sledeće tačke:
+
+**Sine/Iskra moraju da isporuče pre nego što Mile počne GDD:**
+
+1. **Simulation loop pseudokod** — redosled operacija, šta blokira šta, edge cases za suša + prekoračenje protoka. Jedna stranica, nije opciono.
+2. **Renderer odluka** — CSS-only ili Canvas. Napisati eksplicitno u concept reviziji.
+3. **Minimum 8 Guncati-specifičnih "Guncati Knows" kartica** — verifikovani, konkretni, ne-Wikipedia podaci koje Brana potvrdi. Ako ovo nije moguće → rebrand na generic ili cancel.
+4. **Session length odluka** — timer po Planning Phase, ili eksplicitno odustajanje od "daily game" formata.
+5. **Mobile layout odluka** — izometrijski na mobilnom (sa većim tile-ovima) ili top-down 2D fallback za mobilne. QR-kod use case zahteva jasan odgovor.
+
+Ako ove 5 tačaka budu razrešene — igra je gradiva u jednoj solid dev sesiji i ima pravi brand-utility potencijal. Bez njih — Mile gubi sesiju na odluke koje su trebale biti donesene pre.
+
+---
+
+*Nega Negovanović, devil's advocate*
+*Gari Daily Games tim*
