@@ -1,5 +1,6 @@
 import { GUNCATI_CARDS } from './config.js';
-import { saveToStorage } from './state.js';
+// BUG-M3 fix: saveToStorage je bila importovana ali se ne koristi —
+// lokalna saveCardsToStorage direktno piše u localStorage, bez potrebe za state.js
 
 const LS_KEY = 'akvasklop_cards';
 
