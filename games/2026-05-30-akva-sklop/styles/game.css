@@ -1,0 +1,202 @@
+/* ============================================================
+   game.css — Canvas animacije, simulacioni efekti, in-game stanja
+   Redosled učitavanja: 3/4 (base → theme → game → ui)
+   ============================================================ */
+
+/* ─── Canvas — osnovno i tranzicioni efekti ──────────────── */
+
+#gameCanvas {
+  transition: box-shadow 0.3s ease, outline 0.15s ease;
+  image-rendering: pixelated;        /* oštri piksel-art edge-ovi */
+  image-rendering: crisp-edges;
+}
+
+/* Pulsiranje tokom simulacione faze */
+#gameCanvas.simulating {
+  animation: simPulse 0.55s ease-in-out infinite alternate;
+}
+
+@keyframes simPulse {
+  from { box-shadow: 0 0 0 2px rgba(78, 205, 196, 0);   }
+  to   { box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.65); }
+}
+
+/* Greška pri postavljanju tile-a */
+#gameCanvas.error-flash {
+  animation: errFlash 0.35s ease forwards;
+}
+
+@keyframes errFlash {
+  0%   { box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.9); }
+  100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+}
+
+/* ─── Debug panel ─────────────────────────────────────────── */
+
+.debug-panel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 270px;
+  background: rgba(0, 0, 0, 0.92);
+  overflow-y: auto;
+  padding: 0.5rem;
+  z-index: 50;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  /* Glassmorphism touch */
+  backdrop-filter: blur(2px);
+}
+
+.debug-panel:not(.hidden) {
+  animation: slideInLeft 0.18s ease forwards;
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+#debugContent {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.62rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #7eff7e;
+  line-height: 1.5;
+}
+
+/* ─── Loading screen — fade out animacija ─────────────────── */
+
+#loading {
+  transition: opacity 0.5s ease;
+}
+
+#loading.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ─── Canvas wrapper — safe area na mobilnom ─────────────── */
+
+#canvasWrapper {
+  padding-top: var(--hud-height, 52px);
+  padding-bottom: calc(var(--palette-height, 72px) + var(--action-bar-h, 52px));
+}
+
+/* ─── Game Over overlay ───────────────────────────────────── */
+
+#gameOverOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(0, 0, 0, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInOverlay 0.4s ease forwards;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+#gameOverOverlay .game-over-box {
+  background: #1a2e1a;
+  border: 2px solid var(--color-critical);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 360px;
+  text-align: center;
+}
+
+#gameOverOverlay h2 {
+  color: var(--color-critical);
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+#gameOverOverlay p {
+  opacity: 0.85;
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+/* ─── AP bulets animacija (HUD) ───────────────────────────── */
+
+#hudAP {
+  transition: color 0.3s;
+}
+
+/* Trepće kad AP = 0 */
+#hudAP.ap-empty {
+  animation: apEmpty 1s ease-in-out infinite;
+  color: var(--color-critical);
+}
+
+@keyframes apEmpty {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* ─── Timer warning ───────────────────────────────────────── */
+
+.hud-timer-warn {
+  color: var(--color-warning) !important;
+  animation: timerWarn 0.8s ease-in-out infinite;
+}
+
+@keyframes timerWarn {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ─── Palette btn error flash ─────────────────────────────── */
+
+.palette-btn.btn-error {
+  animation: btnErr 0.4s ease forwards;
+}
+
+@keyframes btnErr {
+  0%   { background: rgba(244, 67, 54, 0.55); }
+  100% { background: rgba(255, 255, 255, 0.05); }
+}
+
+/* ─── Responsive — mobilni ────────────────────────────────── */
+
+@media (max-width: 600px) {
+  :root {
+    --hud-height:     44px;
+    --palette-height: 64px;
+    --action-bar-h:   44px;
+  }
+
+  #gameCanvas {
+    cursor: default; /* Na touch-u crosshair ne radi */
+  }
+
+  /* Debug panel manji na mobilnom */
+  .debug-panel {
+    width: 200px;
+    font-size: 0.55rem;
+  }
+}
+
+/* ─── Scrollbar stilovi (week log i debug panel) ──────────── */
+
+.debug-panel::-webkit-scrollbar,
+#weekLog::-webkit-scrollbar {
+  width: 4px;
+}
+
+.debug-panel::-webkit-scrollbar-track,
+#weekLog::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.debug-panel::-webkit-scrollbar-thumb,
+#weekLog::-webkit-scrollbar-thumb {
+  background: rgba(78, 205, 196, 0.38);
+  border-radius: 2px;
+}
