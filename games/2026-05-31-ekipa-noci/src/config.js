@@ -235,3 +235,16 @@ export const ABILITY = Object.freeze({
   SEC_BOBAN_HYPE_BONUS: 6,
   SEC_BOBAN_NO_HYPE_PENALTY: -4,
 });
+
+// ---------------------------------------------------------------------------
+// ROLE LABELS
+// ---------------------------------------------------------------------------
+
+/** @type {{ [role: string]: string }} Display labels for each role key */
+export const ROLE_LABELS = {
+  dj: 'DJ',
+  host: 'Host',
+  sound: 'Sound',
+  video: 'Video',
+  security: 'Security'
+};

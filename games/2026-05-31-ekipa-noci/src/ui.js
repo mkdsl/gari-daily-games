@@ -181,6 +181,7 @@ export function showMessage(text, type = 'info') {
 
 /**
  * Prikazuje stinger overlay (pun ekran flash za event result).
+ * Sadrži setTimeout fallback za slučaj kad su animacije isključene (prefers-reduced-motion).
  *
  * @param {'success'|'fail'} variant  — success (zeleni) ili fail (crveni)
  * @param {Function} [onDone]         — callback posle animacije
@@ -197,8 +198,18 @@ export function showStinger(variant, onDone) {
   void overlay.offsetWidth;
   overlay.classList.add('stinger--active');
 
-  overlay.addEventListener('animationend', () => {
+  const STINGER_FALLBACK_MS = 600; // malo više od max animacije
+  const fallback = setTimeout(() => {
+    overlay.removeEventListener('animationend', onAnimEnd);
     overlay.className = 'stinger';
     if (onDone) onDone();
-  }, { once: true });
+  }, STINGER_FALLBACK_MS);
+
+  function onAnimEnd() {
+    clearTimeout(fallback);
+    overlay.className = 'stinger';
+    if (onDone) onDone();
+  }
+
+  overlay.addEventListener('animationend', onAnimEnd, { once: true });
 }

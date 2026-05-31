@@ -37,7 +37,7 @@ import { calcEventScore } from './systems/scoring.js';
 import { resolveEvent } from './systems/progression.js';
 import { calcTourScore, finalizeTour } from './systems/tour.js';
 import { getLoyalCardIds } from './systems/crew.js';
-import { generateFinalePreferredTags, buildFinaleSeed } from './systems/grand_finale.js';
+import { generateFinalePreferredTags } from './systems/grand_finale.js';
 
 import { renderDraftPhase, clearDraftPhase } from './ui/phase_display.js';
 import { renderEventResult } from './ui/event_result.js';
@@ -55,12 +55,16 @@ import { shareTourCard } from './share.js';
 
 /**
  * Ceka custom DOM event — koristi se da bridguje user input sa async flowom.
+ * Timeout od 5 minuta tiho nastavlja (ne baci grešku) — bezbednost bez frustriranja aktivnog igrača.
  * @param {string} eventName
+ * @param {number} [timeoutMs=300_000]
  * @returns {Promise<void>}
  */
-function waitForEvent(eventName) {
-  return new Promise(resolve => {
-    document.addEventListener(eventName, resolve, { once: true });
+function waitForEvent(eventName, timeoutMs = 300_000) {
+  return new Promise((resolve, reject) => {
+    const ac = new AbortController();
+    document.addEventListener(eventName, () => { ac.abort(); resolve(); }, { once: true, signal: ac.signal });
+    setTimeout(() => { ac.abort(); resolve(); /* tiho nastavi */ }, timeoutMs);
   });
 }
 
@@ -134,7 +138,6 @@ async function runDraftPhase(eventIndex) {
   if (eventIndex === 4) {
     const state = getState();
     if (!state.finale_preferred_tags) {
-      const seed = buildFinaleSeed('2026-05-31', state.cumulative_xp);
       const tags = generateFinalePreferredTags(state);
       setState({ finale_preferred_tags: tags });
     }
@@ -300,11 +303,11 @@ async function runEventResolve(eventIndex) {
     event_score: eventScore,
     xp_earned: progressionResult.xp_earned,
     budget_bonus: progressionResult.budget_bonus,
-    synergy_log: scoreBreakdown.synergy_report?.active_effects?.map(e => e.description) || [],
+    synergy_log: scoreBreakdown.synergy_report?.active_effects?.map(e => e.flavor || e.description || '') || [],
   };
 
   showPhase('resolve');
-  renderEventResult(eventResult, crewChanges, () => runCrewUpdate(eventIndex));
+  renderEventResult(eventResult, crewChanges, () => runCrewUpdate(eventIndex, crewChanges));
 }
 
 // ---------------------------------------------------------------------------
@@ -314,33 +317,31 @@ async function runEventResolve(eventIndex) {
 /**
  * Prikaz ekrana za crew update, zatim prelaz na sledeci event ili tour end.
  * @param {number} eventIndex
+ * @param {{ staying: Object[], leaving: Object[] }} crewChanges  Card objekti za ovaj event
  */
-async function runCrewUpdate(eventIndex) {
+async function runCrewUpdate(eventIndex, crewChanges) {
   showPhase('crew_update');
 
   // Popuni crew update screen
-  const state = getState();
   const stayingEl = document.getElementById('crew-staying');
   const leavingEl = document.getElementById('crew-leaving');
 
   if (stayingEl) {
     stayingEl.innerHTML = '';
-    (state.crew.retained || []).forEach(id => {
+    (crewChanges.staying || []).forEach(card => {
       const div = document.createElement('div');
       div.classList.add('crew-member', 'crew-member--staying');
-      div.textContent = id;
+      div.textContent = `${card.name} (${ROLE_LABELS[card.role] || card.role})`;
       stayingEl.appendChild(div);
     });
   }
 
   if (leavingEl) {
     leavingEl.innerHTML = '';
-    // departed cards added since last resolved event would be in state.crew.departed
-    // prikazujemo poslednjih N dodatih — nema direktan signal, prikazujemo sve departed
-    (state.crew.departed || []).slice(-5).forEach(id => {
+    (crewChanges.leaving || []).forEach(card => {
       const div = document.createElement('div');
       div.classList.add('crew-member', 'crew-member--leaving');
-      div.textContent = id;
+      div.textContent = `${card.name} (${ROLE_LABELS[card.role] || card.role})`;
       leavingEl.appendChild(div);
     });
   }
@@ -453,7 +454,6 @@ async function startGame() {
   // Grand Finale tags — generiraj unapred ali ne otkrivaj
   const state = getState();
   if (!state.finale_preferred_tags) {
-    const seed = buildFinaleSeed('2026-05-31', state.cumulative_xp);
     const tags = generateFinalePreferredTags(state);
     setState({ finale_preferred_tags: tags });
   }

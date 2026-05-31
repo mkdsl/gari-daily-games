@@ -135,7 +135,7 @@ function _renderCodexCards(gridEl, allCards, unlockedIds, cumXP, filter) {
     const bUnlocked = unlockedIds.includes(b.id);
     if (aUnlocked && !bUnlocked) return -1;
     if (!aUnlocked && bUnlocked) return 1;
-    return (a.unlock_xp || 0) - (b.unlock_xp || 0);
+    return (a.locked_until_xp || 0) - (b.locked_until_xp || 0);
   });
 
   sorted.forEach(card => {
@@ -153,7 +153,7 @@ function _renderCodexCards(gridEl, allCards, unlockedIds, cumXP, filter) {
       const lockOverlay = document.createElement('div');
       lockOverlay.classList.add('card__lock-overlay');
 
-      const xpNeeded = (card.unlock_xp || 0) - cumXP;
+      const xpNeeded = (card.locked_until_xp || 0) - cumXP;
       lockOverlay.innerHTML = `
         <span class="lock-overlay__icon">🔒</span>
         <span class="lock-overlay__text">Treba ${Math.max(0, xpNeeded)} XP</span>
@@ -164,7 +164,7 @@ function _renderCodexCards(gridEl, allCards, unlockedIds, cumXP, filter) {
     // Tooltip sa više info
     cardEl.title = isUnlocked
       ? `${card.name} — ${card.role} — Baza: ${card.base_score}`
-      : `Zaključano — potrebno ${card.unlock_xp || 0} XP`;
+      : `Zaključano — potrebno ${card.locked_until_xp || 0} XP`;
 
     wrapper.appendChild(cardEl);
     gridEl.appendChild(wrapper);

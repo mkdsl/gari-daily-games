@@ -130,7 +130,7 @@ export function renderDraftPhase(state, onCardSelected, onConfirm) {
         <span class="preview__label">Cena:</span>
         <span class="preview__value">${card.cost ?? '?'} BP</span>
       </div>
-      ${card.description ? `<p class="preview__desc">${card.description}</p>` : ''}
+      ${card.special ? `<p class="preview__desc">${card.special}</p>` : ''}
       ${card.synergy_tags && card.synergy_tags.length
         ? `<div class="preview__tags">${card.synergy_tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}</div>`
         : ''}

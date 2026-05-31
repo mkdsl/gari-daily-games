@@ -159,7 +159,6 @@
    ======================================== */
 
 #screen-draft {
-  display: none;
   flex-direction: column;
   align-items: center;
   padding: 0 1rem 1rem;
@@ -641,3 +640,14 @@
 .btn--share    { min-width: 180px; }
 .btn--bilet    { min-width: 220px; }
 .btn--play-again { min-width: 180px; }
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .screen, #stinger-overlay, .card-hand {
+    animation: none !important;
+    transition: none !important;
+  }
+}

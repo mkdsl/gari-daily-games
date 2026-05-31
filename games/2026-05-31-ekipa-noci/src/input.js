@@ -5,7 +5,7 @@
  * Caller (main.js) must invoke initInput(callbacks) once the DOM is ready.
  */
 
-import { getState, setState, selectCardForRole, advanceDraftRole, updateDraft } from './state.js';
+import { getState, setState, selectCardForRole, updateDraft } from './state.js';
 import { ROLES, HAND_SIZE } from './config.js';
 
 /**
@@ -182,7 +182,8 @@ function _selectHandIndex(idx) {
 }
 
 /**
- * Commit a card selection for the current role, advance or complete draft.
+ * Commit a card selection for the current role.
+ * Does NOT advance the draft role — that is handled by main.js after game:confirm.
  * @param {string} role
  * @param {Object} card  Card instance or plain object with id
  */
@@ -194,10 +195,11 @@ function _applyCardSelection(role, card) {
 
   _callbacks?.onCardSelected();
 
-  // Advance to next role or signal draft complete
-  const newIndex = advanceDraftRole();
-  if (newIndex >= ROLES.length) {
-    _callbacks?.onDraftComplete();
+  // Enable Confirm button by updating its disabled state
+  const btn = document.getElementById('btn-confirm');
+  if (btn) {
+    btn.disabled = false;
+    btn.classList.remove('btn--disabled');
   }
 }
 
