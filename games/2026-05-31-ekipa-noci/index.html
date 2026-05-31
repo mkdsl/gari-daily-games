@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#050510">
+  <meta name="description" content="Ekipa Noći — Gari Daily Games. Prava ekipa pravi noć. 5 evenata, 5 uloga, jedna karijera.">
+  <meta property="og:title" content="Ekipa Noći — Gari Daily Games">
+  <meta property="og:description" content="Ti si Crew Manager Kluboslavija turneje 2026. Odaberi ekipu, osvoji scenu.">
+  <meta property="og:type" content="website">
+  <title>Ekipa Noći — Gari Daily Games</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+</head>
+<body>
+  <div id="game-root">
+
+    <!-- ================================================================ -->
+    <!-- HUD                                                               -->
+    <!-- ================================================================ -->
+    <div id="hud" role="banner">
+      <span id="hud-event-name" class="hud__event-name">Štrand (1/5)</span>
+      <div id="hud-center" class="hud__center">
+        <span id="hud-budget" class="hud__budget">💰 60 BP</span>
+        <span id="hud-rep"    class="hud__rep">⭐ 0 XP</span>
+      </div>
+      <button id="btn-codex" class="btn btn--ghost hud__codex-btn" data-action="codex-open" aria-label="Otvori Codex">
+        Codex
+      </button>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- INTRO SCREEN                                                      -->
+    <!-- ================================================================ -->
+    <div id="screen-intro" class="screen screen--active" role="main">
+      <div class="screen-content centered">
+        <div class="intro-logo">
+          <h1 class="game-title">EKIPA NOĆI</h1>
+          <p class="game-subtitle">Prava ekipa pravi noć — ili je uništi.</p>
+        </div>
+
+        <div class="intro-desc">
+          <p class="game-desc">
+            Ti si Crew Manager Kluboslavija turneje 2026.<br>
+            5 evenata. 5 uloga. Jedna karijera.
+          </p>
+          <ul class="intro-features">
+            <li>🎵 DJ &amp; Sound ekipa bira atmosferu</li>
+            <li>🎤 Host drži publiku na ivici</li>
+            <li>📹 Video ekipa beleži svaki momenat</li>
+            <li>🛡 Security drži sve pod kontrolom</li>
+          </ul>
+        </div>
+
+        <button id="btn-start" class="btn btn--primary btn--large">Počni turneju</button>
+
+        <p class="meta-info" id="meta-runs">Prethodnih rundi: 0 | Rekord: —</p>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- DRAFT SCREEN                                                      -->
+    <!-- ================================================================ -->
+    <div id="screen-draft" class="screen screen--hidden" role="main">
+
+      <!-- Role progress tabs -->
+      <div id="role-tabs" class="role-tabs" role="tablist" aria-label="Draft role-ovi"></div>
+
+      <div id="draft-content" class="draft-content">
+
+        <!-- Role header — popunjava phase_display.js -->
+        <div id="role-header" class="role-header">
+          <span id="current-role-label" class="role-header__label">DJ</span>
+          <span id="budget-remaining"   class="role-header__budget">60 BP</span>
+        </div>
+
+        <!-- Card hand — popunjava render.js -->
+        <div id="card-hand" class="card-hand" role="list" aria-label="Karte za odabir"></div>
+
+        <!-- Selected card preview — popunjava phase_display.js -->
+        <div id="selected-preview" class="selected-preview" aria-live="polite"></div>
+
+        <!-- Confirm button -->
+        <button
+          id="btn-confirm"
+          class="btn btn--primary btn--confirm"
+          disabled
+          data-action="confirm"
+          aria-label="Potvrdi odabir karte"
+        >
+          Potvrdi odabir
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- RESOLVE SCREEN                                                    -->
+    <!-- ================================================================ -->
+    <div id="screen-resolve" class="screen screen--hidden" role="main">
+      <!-- Popunjava event_result.js -->
+      <div id="resolve-content" class="resolve-content"></div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- CREW UPDATE SCREEN                                                -->
+    <!-- ================================================================ -->
+    <div id="screen-crew-update" class="screen screen--hidden" role="main">
+      <div id="crew-update-content" class="crew-update-content">
+        <h2 class="crew-update__title">Ekipa posle eventa</h2>
+
+        <div class="crew-update__columns">
+          <div class="crew-update__col crew-update__col--staying">
+            <h3 class="crew-update__col-title">✓ Ostaju</h3>
+            <div id="crew-staying" class="crew-list"></div>
+          </div>
+          <div class="crew-update__col crew-update__col--leaving">
+            <h3 class="crew-update__col-title">✗ Odlaze</h3>
+            <div id="crew-leaving" class="crew-list"></div>
+          </div>
+        </div>
+
+        <p class="crew-update__hint" aria-live="polite">Sledeći event se učitava…</p>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- TOUR END SCREEN                                                   -->
+    <!-- ================================================================ -->
+    <div id="screen-tour-end" class="screen screen--hidden" role="main">
+      <!-- Popunjava tour_end.js -->
+      <div id="tour-end-content" class="tour-end-content"></div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- CODEX MODAL                                                       -->
+    <!-- ================================================================ -->
+    <div
+      id="modal-codex"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="codex-title"
+    >
+      <div class="modal-backdrop" data-action="codex-close" aria-hidden="true"></div>
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2 id="codex-title" class="modal-header__title">Codex — sve karte</h2>
+          <button
+            class="btn btn--ghost btn--close"
+            data-action="codex-close"
+            aria-label="Zatvori Codex"
+          >✕</button>
+        </div>
+        <div id="codex-filters" class="codex-filters" role="toolbar" aria-label="Filteri za Codex"></div>
+        <div id="codex-grid"    class="codex-grid"    role="list"   aria-label="Karte u Codex-u"></div>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- TOAST CONTAINER                                                   -->
+    <!-- ================================================================ -->
+    <div id="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- ================================================================ -->
+    <!-- STINGER OVERLAY                                                   -->
+    <!-- ================================================================ -->
+    <div id="stinger-overlay" class="hidden" aria-hidden="true"></div>
+
+  </div><!-- /#game-root -->
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
