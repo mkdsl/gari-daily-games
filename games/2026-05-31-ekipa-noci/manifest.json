@@ -1,0 +1,16 @@
+{
+  "name": "Ekipa Noći",
+  "genre": "Card / Kombinator — Multi-Layer Crew Builder",
+  "date": "2026-05-31",
+  "description": "Ti si Crew Manager Kluboslavija turneje. Za svaki event draftuješ ekipu iz karata — DJ, Host, Sound, Video, Security. Hemija pravi noć. Slaba ekipa = prazna bina.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-31-ekipa-noci/",
+  "brand_serves": ["kluboslavija", "mkdslend"],
+  "stage": "concept",
+  "status": "in_progress",
+  "modules": {},
+  "line_counts": { "total_js": 0, "total_css": 0 },
+  "beta_score": null,
+  "beta_score_iter2": null,
+  "post_fix_score": null,
+  "sef_signoff": false
+}
