@@ -1,0 +1,49 @@
+/*
+ * theme.css — Kluboslavija tamna paleta za Ekipa Noći
+ * Sve custom properties koje koriste ostali CSS fajlovi
+ */
+
+:root {
+  /* ---- POZADINE ---- */
+  --bg-deep:    #050510;          /* skoro crna sa plavim tonom */
+  --bg-surface: #0d0d2b;          /* tamno plava */
+  --bg-card:    #1a1a3e;          /* karta baza */
+
+  /* ---- ACCENT ---- */
+  --accent-purple:      #7c3aed;  /* neon ljubičasta */
+  --accent-purple-glow: #a855f7;  /* svetlija za glow */
+  --accent-teal:        #0d9488;  /* teal */
+  --accent-teal-glow:   #14b8a6;  /* svetliji teal */
+  --accent-gold:        #d97706;  /* zlato za legendary karte */
+
+  /* ---- TEKST ---- */
+  --text-primary:   #f1f5f9;      /* belo-siva */
+  --text-secondary: #94a3b8;      /* siva */
+  --text-dim:       #475569;      /* tamna siva */
+
+  /* ---- STATUS ---- */
+  --danger:  #ef4444;
+  --success: #22c55e;
+
+  /* ---- BORDERS ---- */
+  --border: rgba(124, 58, 237, 0.3);  /* providna ljubičasta */
+
+  /* ---- TIER REFERENTNE BOJE (za JS) ---- */
+  --tier-1: var(--accent-teal-glow);
+  --tier-2: var(--accent-purple-glow);
+  --tier-3: var(--accent-gold);
+}
+
+/* Tamna tema je jedina tema — nema prefers-color-scheme override */
+
+/* Globalni neon glow na fokusiranim interaktivnim elementima */
+:focus-visible {
+  outline: 2px solid var(--accent-purple-glow);
+  outline-offset: 2px;
+}
+
+/* Selection boja */
+::selection {
+  background-color: rgba(124, 58, 237, 0.4);
+  color: var(--text-primary);
+}

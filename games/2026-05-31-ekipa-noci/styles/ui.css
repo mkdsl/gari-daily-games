@@ -1,0 +1,628 @@
+/*
+ * ui.css — HUD, buttons, modals, card element, tag pills, trait badges
+ * Ekipa Noći — Gari Daily Games
+ */
+
+/* ========================================
+   HUD — TOP BAR
+   ======================================== */
+
+#hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.75rem;        /* 12px */
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 0.04em;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+#hud-event-name {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  flex: 1;
+}
+
+#hud-budget {
+  color: var(--accent-teal-glow);
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--accent-teal);
+  border-radius: 4px;
+  transition: color 200ms, border-color 200ms;
+}
+
+#hud-budget.hud__budget--low {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+#hud-budget.hud__budget--critical {
+  color: var(--danger);
+  border-color: var(--danger);
+  animation: budget-pulse 1s ease-in-out infinite;
+}
+
+@keyframes budget-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+#hud-rep {
+  color: var(--accent-gold);
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+}
+
+#btn-codex {
+  color: var(--accent-purple-glow);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background-color 150ms, color 150ms, border-color 150ms;
+}
+
+#btn-codex:hover {
+  background-color: var(--accent-purple);
+  color: var(--text-primary);
+  border-color: var(--accent-purple);
+}
+
+/* ========================================
+   ROLE TABS
+   ======================================== */
+
+#role-tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.5rem 0;
+  flex-wrap: wrap;
+}
+
+.role-tab {
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  background: transparent;
+  transition: background-color 150ms, color 150ms, border-color 150ms;
+  cursor: default;
+}
+
+.role-tab--active {
+  background-color: var(--accent-purple);
+  color: var(--text-primary);
+  border-color: var(--accent-purple);
+}
+
+.role-tab--done {
+  background-color: transparent;
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.role-tab__check {
+  font-size: 0.65rem;
+}
+
+.role-tab--future {
+  opacity: 0.4;
+}
+
+/* ========================================
+   CARD ELEMENT
+   ======================================== */
+
+.card {
+  position: relative;
+  width: 140px;
+  height: 200px;
+  border-radius: 8px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out, border-color 150ms;
+  flex-shrink: 0;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.45);
+  border-color: var(--accent-purple-glow);
+}
+
+.card--selected {
+  transform: translateY(-16px) !important;
+  border-color: var(--accent-gold) !important;
+  box-shadow: 0 12px 32px rgba(217, 119, 6, 0.55) !important;
+}
+
+.card--locked {
+  filter: brightness(0.5) saturate(0.3);
+}
+
+.card--retained {
+  border-color: var(--accent-teal);
+}
+
+/* Portrait area — gornja polovina */
+.card__portrait {
+  width: 100%;
+  height: 110px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Arhetip boje pozadine */
+.portrait-veteran     { background: linear-gradient(160deg, #1a1206 0%, #3d2b06 60%, #5c3d0a 100%); }
+.portrait-rookie      { background: linear-gradient(160deg, #06141a 0%, #0a2a3d 60%, #0d3d5c 100%); }
+.portrait-wildcard    { background: linear-gradient(135deg, #1a062a 0%, #2a0a4a 40%, #0a1a3d 100%); }
+.portrait-heavyhitter { background: linear-gradient(160deg, #100606 0%, #2a0808 60%, #3d0d0d 100%); }
+.portrait-extrovert   { background: linear-gradient(160deg, #061a06 0%, #0a3d1a 60%, #0d5c28 100%); }
+.portrait-introvert   { background: linear-gradient(160deg, #06061a 0%, #0a0a3d 60%, #0d0d5c 100%); }
+
+/* Pixel-art silueta */
+.card__silhouette {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 80px;
+  background: rgba(0, 0, 0, 0.6);
+  /* Clip-path daje pixel-art feel — gruba silueta */
+  clip-path: polygon(
+    30% 0%, 70% 0%,
+    75% 10%, 80% 10%,
+    80% 30%, 75% 30%,
+    75% 40%, 100% 50%,
+    100% 100%, 0% 100%,
+    0% 50%, 25% 40%,
+    25% 30%, 20% 30%,
+    20% 10%, 25% 10%
+  );
+}
+
+.portrait-veteran .card__silhouette {
+  background: linear-gradient(180deg, #c47c00 0%, #7a4d00 100%);
+}
+.portrait-rookie .card__silhouette {
+  background: linear-gradient(180deg, #3ad4f5 0%, #1a90b5 100%);
+}
+.portrait-wildcard .card__silhouette {
+  background: linear-gradient(135deg, #a855f7 0%, #14b8a6 50%, #d97706 100%);
+}
+.portrait-heavyhitter .card__silhouette {
+  background: linear-gradient(180deg, #ef4444 0%, #7f1d1d 100%);
+  width: 70px;
+  height: 90px;
+}
+.portrait-extrovert .card__silhouette {
+  background: linear-gradient(180deg, #22c55e 0%, #166534 100%);
+}
+.portrait-introvert .card__silhouette {
+  background: linear-gradient(180deg, #818cf8 0%, #3730a3 100%);
+}
+
+.card__role-chip {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 3px;
+  padding: 1px 4px;
+  line-height: 1;
+}
+
+/* Card name */
+.card__name {
+  padding: 4px 6px 2px;
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+/* Traits */
+.card__traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 0 5px;
+  flex: 1;
+  align-content: flex-start;
+  overflow: hidden;
+}
+
+/* Bottom row */
+.card__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 3px 6px 5px;
+  flex-shrink: 0;
+}
+
+.card__cost {
+  font-size: 0.625rem; /* 10px */
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.card__score {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.card__score.tier-teal   { color: var(--accent-teal-glow); }
+.card__score.tier-purple { color: var(--accent-purple-glow); }
+.card__score.tier-gold   { color: var(--accent-gold); }
+
+/* Loyalty overlay */
+.card__loyalty-overlay {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.75);
+  color: var(--accent-gold);
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--accent-gold);
+}
+
+/* Retained banner */
+.card__retained-banner {
+  position: absolute;
+  bottom: 22px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--accent-teal-glow);
+  background: rgba(13, 148, 136, 0.2);
+  padding: 1px 0;
+}
+
+/* Lock overlay (Codex) */
+.card__lock-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 5, 16, 0.75);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 8px;
+}
+
+.lock-overlay__icon { font-size: 1.5rem; }
+.lock-overlay__text {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* ========================================
+   TRAIT BADGES
+   ======================================== */
+
+.trait-badge {
+  font-size: 0.5rem; /* 9px aprox */
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.trait-veteran     { background: rgba(180, 120, 0, 0.3); color: #f5c842; border: 1px solid rgba(180, 120, 0, 0.5); }
+.trait-rookie      { background: rgba(14, 165, 233, 0.2); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.4); }
+.trait-wildcard    { background: rgba(168, 85, 247, 0.25); color: var(--accent-purple-glow); border: 1px solid var(--border); }
+.trait-extrovert   { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+.trait-introvert   { background: rgba(129, 140, 248, 0.2); color: #a5b4fc; border: 1px solid rgba(129, 140, 248, 0.4); }
+.trait-heavyhitter { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+.trait-default     { background: rgba(100, 116, 139, 0.2); color: var(--text-secondary); border: 1px solid rgba(100, 116, 139, 0.3); }
+
+/* ========================================
+   TAG PILLS
+   ======================================== */
+
+.tag-pill {
+  display: inline-block;
+  font-size: 0.5625rem;
+  padding: 1px 6px;
+  border-radius: 20px;
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--accent-purple-glow);
+  border: 1px solid var(--border);
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 5px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 150ms, color 150ms, border-color 150ms, transform 100ms;
+  text-decoration: none;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  background-color: var(--accent-purple);
+  color: var(--text-primary);
+  border-color: var(--accent-purple);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background-color: var(--accent-purple-glow);
+  border-color: var(--accent-purple-glow);
+}
+
+.btn--accent {
+  background-color: var(--accent-teal);
+  color: var(--text-primary);
+  border-color: var(--accent-teal);
+}
+
+.btn--accent:hover:not(:disabled) {
+  background-color: var(--accent-teal-glow);
+  border-color: var(--accent-teal-glow);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.btn--disabled,
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Potvrdi button */
+#btn-confirm {
+  align-self: center;
+  margin-top: 1rem;
+  padding: 0.625rem 2rem;
+  font-size: 0.875rem;
+}
+
+.btn--pulse {
+  animation: btn-pulse 300ms ease-out;
+}
+
+@keyframes btn-pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* ========================================
+   TOAST
+   ======================================== */
+
+#toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.toast {
+  padding: 0.5rem 1.25rem;
+  border-radius: 5px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1px solid transparent;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 250ms, transform 250ms;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.toast--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast--info    { background: var(--bg-surface); color: var(--text-primary);  border-color: var(--border); }
+.toast--success { background: rgba(34, 197, 94, 0.15); color: var(--success); border-color: var(--success); }
+.toast--error   { background: rgba(239, 68, 68, 0.15); color: var(--danger);  border-color: var(--danger); }
+
+/* ========================================
+   MODAL
+   ======================================== */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 16, 0.75);
+  z-index: 200;
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+.modal-backdrop--visible {
+  opacity: 1;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 201;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  width: min(90vw, 680px);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Codex modal */
+.codex-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.codex-header__title {
+  flex: 1;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  color: var(--accent-purple-glow);
+}
+
+.codex-header__xp {
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+}
+
+.codex-header__close {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.codex-filters {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.codex-filter-btn {
+  padding: 0.2rem 0.625rem;
+  border-radius: 3px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: transparent;
+  transition: background-color 120ms, color 120ms;
+}
+
+.codex-filter-btn--active {
+  background: var(--accent-purple);
+  color: var(--text-primary);
+  border-color: var(--accent-purple);
+}
+
+.codex-stats {
+  display: flex;
+  gap: 1rem;
+  padding: 0.375rem 1rem;
+  font-size: 0.6875rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.codex-stats__item strong {
+  color: var(--text-primary);
+}
+
+.codex-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem;
+  overflow-y: auto;
+  justify-content: flex-start;
+  align-content: flex-start;
+}
+
+.codex-card-wrapper {
+  flex-shrink: 0;
+}
+
+.codex-card {
+  width: 120px;
+  height: 170px;
+  cursor: default;
+}
+
+.codex-empty {
+  width: 100%;
+  text-align: center;
+  color: var(--text-dim);
+  padding: 2rem 0;
+}
