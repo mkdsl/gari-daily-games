@@ -29,6 +29,10 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-05-24 | Zvučna Proba ⭐ | Rhythm / Reaction Puzzle — Kluboslavija | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-24-zvucna-proba/) |
 | 2026-05-25 | Kluboslavija: Turneja 2026 ⭐ | Strategy Sim / Tour Manager / Deck-builder — Kluboslavija × MKDSLend | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-25-turneja-2026/) |
 | 2026-05-26 | Gari Tim Simulator ⭐ | Mini-RPG / Dialogue — MKDSLend | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-26-gari-tim-simulator/) |
+| 2026-05-28 | DJ Akademija ⭐ | Trivia / Quiz — Kluboslavija Štrand | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-28-dj-akademija/) |
+| 2026-05-30 | Akva-Sklop ⭐ | Tile Planning Puzzle / Ekosistem Sim — Guncati | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-30-akva-sklop/) |
+| 2026-05-31 | Ekipa Noći ⭐ | Card / Kombinator — Multi-Layer Crew Builder — Kluboslavija × MKDSLend | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-31-ekipa-noci/) |
+| 2026-06-01 | Niš Fuga ⭐ | Point-and-click Mini Avantura — Kluboslavija | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-01-nis-fuga/) |
 
 ## Statusi
 
