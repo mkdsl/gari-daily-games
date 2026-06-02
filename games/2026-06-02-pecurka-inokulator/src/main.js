@@ -16,6 +16,7 @@ import { render, triggerScreenShake } from './render.js';
 import { UI } from './ui.js';
 import {
   initAudio,
+  resumeAudio,
   playTick,
   playHit,
   playFail,
@@ -23,6 +24,8 @@ import {
   playStreakActivation,
   playLevelClear,
   playGameOver,
+  playBlink,
+  playPerfect,
 } from './audio.js';
 import { GUNCATI_FACTS_GAMEOVER, GUNCATI_FACTS_LEVELCLEAR, getRandomFact } from './content/facts.js';
 import { shareScore } from './share.js';
@@ -234,6 +237,7 @@ function levelClear() {
     const bonus      = calcPerfectBonus(levelCfg);
     state.score     += bonus;
     state.levelScore += bonus;
+    if (audioReady) playPerfect();
   }
 
   if (audioReady) playLevelClear();
@@ -301,10 +305,13 @@ function gameLoop(timestamp) {
   lastTime  = timestamp;
 
   if (state.screen === 'playing') {
-    const { tick } = timing.update(dt);
+    const { tick, blinkToggled } = timing.update(dt);
 
     if (tick && audioReady) {
       playTick(CONFIG.LEVELS[state.level - 1].speed);
+    }
+    if (blinkToggled && audioReady) {
+      playBlink();
     }
 
     // Bag animacije
@@ -327,6 +334,11 @@ function gameLoop(timestamp) {
 }
 
 // ─── Init ────────────────────────────────────────────────────────────────
+
+// iOS: AudioContext se suspenduje na blur — oporavi ga na fokus
+document.addEventListener('visibilitychange', () => {
+  if (audioReady && document.visibilityState === 'visible') resumeAudio();
+});
 
 inputCleanup = initInput(canvas, handleAction);
 showStart();

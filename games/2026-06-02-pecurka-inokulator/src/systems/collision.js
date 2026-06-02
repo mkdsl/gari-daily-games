@@ -30,8 +30,11 @@ export function checkClick(clickXNorm, timingState) {
     }
   }
 
-  // 3. Zeleni prozor (uvijek aktivan bez obzira na blink — pogodak na slepo važi)
+  // 3. Zeleni prozor — ako je blink OFF (nevidljiv), klik ne važi (miss)
   if (windowBounds) {
+    if (timingState.blinkState === false) {
+      return { hit: false, type: 'miss' };
+    }
     if (clickXNorm >= windowBounds.left && clickXNorm <= windowBounds.right) {
       return { hit: true, type: 'green' };
     }

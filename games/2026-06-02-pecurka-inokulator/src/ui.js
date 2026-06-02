@@ -176,6 +176,8 @@ export class UI {
       <button class="btn-primary" id="btn-next-level">
         ${level >= 10 ? 'FINALE!' : `Nivo ${level + 1} →`}
       </button>
+      <div class="lc-countdown-bar"><div class="lc-countdown-fill"></div></div>
+      <div class="lc-countdown-label">nastavlja se automatski...</div>
     `;
 
     const btn = document.getElementById('btn-next-level');

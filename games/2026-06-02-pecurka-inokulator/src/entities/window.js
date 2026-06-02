@@ -61,7 +61,8 @@ export class TimingWindow {
 
     // Ukupno proticanje vremena (za sinusoidu)
     this.elapsed = 0;
-    this.usesSinusoid = (sp === 'direction_change' || sp === 'tutorial');
+    // direction_change koristi linearni mod — random smjer promjene je relevantan samo tamo
+    this.usesSinusoid = (sp === 'tutorial');
   }
 
   // ── Privatne metode ───────────────────────────────────────────────────────

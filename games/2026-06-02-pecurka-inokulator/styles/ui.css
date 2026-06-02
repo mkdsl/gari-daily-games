@@ -614,3 +614,31 @@
   from { opacity: 0; transform: translateX(-50%) translateY(8px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0);   }
 }
+
+/* ── Level-clear countdown bar ── */
+.lc-countdown-bar {
+  width: 80%;
+  height: 4px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+  margin: 12px auto 4px;
+  overflow: hidden;
+}
+.lc-countdown-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--guncati-green);
+  border-radius: 2px;
+  animation: lc-drain 3s linear forwards;
+  transform-origin: left;
+}
+@keyframes lc-drain {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+.lc-countdown-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  letter-spacing: 0.03em;
+}

@@ -27,15 +27,17 @@ export class TimingManager {
    * @returns {{ tick: boolean }} - shouldTick flag za audio
    */
   update(dt) {
-    if (!this.window) return { tick: false };
+    if (!this.window) return { tick: false, blinkToggled: false };
 
+    const prevBlink = this.window.blinkState;
     this.window.update(dt);
+    const blinkToggled = this.window.blinkState !== prevBlink;
 
     this.tickTimer += dt;
     const tick = this.tickTimer >= this.tickInterval;
     if (tick) this.tickTimer = 0;
 
-    return { tick };
+    return { tick, blinkToggled };
   }
 
   /**

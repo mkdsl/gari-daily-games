@@ -13,7 +13,7 @@ export const CONFIG = {
     { id: 7,  windowMs: 350, speed: 2.5, scorePerHit: 300, bags: 4, speciality: 'multi_bag_2', multiCount: 2 },
     { id: 8,  windowMs: 300, speed: 2.8, scorePerHit: 350, bags: 4, speciality: 'fake_and_golden' },
     { id: 9,  windowMs: 260, speed: 3.2, scorePerHit: 400, bags: 3, speciality: 'multi_bag_3', multiCount: 3 },
-    { id: 10, windowMs: 220, speed: 3.6, scorePerHit: 500, bags: 4, speciality: 'all_combined' },
+    { id: 10, windowMs: 220, speed: 3.6, scorePerHit: 500, bags: 4, speciality: 'all_combined', multiCount: 2 },
   ],
 
   // Brand paleta — svi canvas fillStyle dolaze odavde

@@ -117,7 +117,7 @@ export function createBagsForLevel(levelConfig, canvasW, canvasH) {
   // Koliko vreca istovremeno leži na stolu (vidljive odjednom)
   // Za multi_bag_2: 2, multi_bag_3: 3, sve ostalo: 1 (sekvencijalno)
   let simultaneous = 1;
-  if (speciality === 'multi_bag_2' && multiCount) simultaneous = 2;
+  if ((speciality === 'multi_bag_2' || speciality === 'all_combined') && multiCount) simultaneous = 2;
   if (speciality === 'multi_bag_3' && multiCount) simultaneous = 3;
 
   if (simultaneous > 1) {
