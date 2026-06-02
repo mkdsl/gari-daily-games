@@ -1,26 +1,57 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html, body {
-  width: 100%;
-  height: 100%;
+body {
+  background: var(--guncati-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
   overflow: hidden;
-  background: #0a0a0f;
-  color: #e5e5e5;
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  -webkit-tap-highlight-color: transparent;
+  font-family: var(--font-pixel);
+  color: var(--guncati-white);
+  touch-action: none;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #game-root {
-  position: fixed;
-  inset: 0;
+  position: relative;
+  width: 480px;
+  max-width: 100vw;
+  aspect-ratio: 3 / 4;
+  max-height: 100vh;
 }
 
 #game-canvas {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
   display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
   touch-action: none;
 }
+
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  padding: var(--hud-padding);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 10;
+}
+
+#menu {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#menu.hidden { display: none; }

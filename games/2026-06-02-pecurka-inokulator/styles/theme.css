@@ -1,0 +1,57 @@
+:root {
+  /* Primarne Guncati boje */
+  --guncati-dark:        #1a3a2a;
+  --guncati-darker:      #0f2a1a;
+  --guncati-green:       #7bc67a;
+  --guncati-light-green: #95d5b2;
+  --guncati-mid-green:   #2d6a4f;
+  --guncati-mycelium:    #d8f3dc;
+
+  /* Akcenti */
+  --guncati-gold:        #f1c40f;
+  --guncati-gold-dark:   #d4ac0d;
+  --guncati-red:         #c0392b;
+  --guncati-orange:      #e67e22;
+
+  /* Neutralne */
+  --guncati-cream:       #f5f0e8;
+  --guncati-fake:        #7f8c8d;
+  --guncati-mold:        #6c757d;
+  --guncati-white:       #ffffff;
+
+  /* Drvo */
+  --guncati-wood:        #8b5e3c;
+  --guncati-wood-dark:   #5c3d1e;
+  --guncati-wood-light:  #a0724a;
+
+  /* Bar */
+  --guncati-bar-bg:      #0d1f17;
+  --guncati-bar-border:  #3a6a4a;
+
+  /* Overlay */
+  --overlay-bg:   rgba(10, 30, 18, 0.92);
+  --overlay-blur: blur(12px);
+
+  /* Tipografija */
+  --font-mono:    ui-monospace, 'SF Mono', 'Cascadia Code', 'Courier New', Menlo, monospace;
+  --font-pixel:   'Courier New', Courier, monospace;
+  --font-ui:      system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-mono);
+
+  /* Spacing */
+  --hud-padding: 12px;
+  --btn-radius:  6px;
+}
+
+body {
+  background:    var(--guncati-dark);
+  font-family:   var(--font-mono);
+}
+
+a {
+  color:           var(--guncati-light-green);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
