@@ -33,6 +33,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-05-30 | Akva-Sklop ⭐ | Tile Planning Puzzle / Ekosistem Sim — Guncati | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-30-akva-sklop/) |
 | 2026-05-31 | Ekipa Noći ⭐ | Card / Kombinator — Multi-Layer Crew Builder — Kluboslavija × MKDSLend | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-31-ekipa-noci/) |
 | 2026-06-01 | Niš Fuga ⭐ | Point-and-click Mini Avantura — Kluboslavija | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-01-nis-fuga/) |
+| 2026-06-02 | Pečurka Inokulator ⭐ | Timing / Precision Arcade — Guncati | ⏳ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-02-pecurka-inokulator/) |
 
 ## Statusi
 

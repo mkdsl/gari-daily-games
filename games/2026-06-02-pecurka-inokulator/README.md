@@ -1,27 +1,66 @@
-# Standard Game Template
+# Pečurka Inokulator
 
-Ova skela je startna tačka svake dnevne igre. Jova (dev) kopira ovaj folder, preimenuje ga u `games/YYYY-MM-DD-naziv-igre/`, pa popunjava modul po modul.
+**Žanr:** Timing / Precision Arcade  
+**Datum:** 2026-06-02  
+**Brand:** Guncati — permakultura i pečurkarstvo  
+**Status:** ⏳ Čeka šef sign-off
 
-## Šta radi van kutije
+---
 
-- ES6 moduli (import/export)
-- responsive full-screen canvas
-- game loop sa delta time
-- save/load u localStorage (ključ `gari-daily-game`, versioned)
-- input handling (kbd + mouse + touch, sa pressed/released detekcijom)
-- HUD + menu overlay sa CSS-om
-- ima mesto za audio, systems, entities, levels
+## O igri
 
-## Šta Jova MORA da uradi
+Ti si inokulant u Guncati laboratoriji. Supstrat je sterilisan, sprej je spreman — ali sterilni prozor se zatvara svakog trenutka. Klikni u pravi momenat ili kontaminacija preuzima sve.
 
-1. Kopira folder, preimenuje u `games/YYYY-MM-DD-slug/`
-2. Preimenuje `manifest.json.template` u `manifest.json` i popuni vrednosti
-3. Ažurira `index.html` title + meta
-4. Popunjava config konstante iz Miletovog GDD-a
-5. Proširi `state.js` shape po GDD-u
-6. Implementira systems, entities, render po konceptu
-7. Brend-ira UI preko Perinog CSS-a
+**Core loop:** Gledaj timing bar → klikni dok je zeleni pas aktivan → micelij se širi → nastavi na sledeću vreću.
 
-## Pravilo
+**10 nivoa** — brzina raste od 800ms window-a (nivo 1) do 220ms (nivo 10). Svaki nivo donosi novu mehaniku: fake zone, blink window, zlatni bonus, simultane vreće.
 
-Ako modul nije potreban za ovaj konkretan žanr igre — **obriši ga**. Manifest.json mora da reflektuje šta STVARNO postoji u folderu.
+---
+
+## Gameplay
+
+| Akcija | Rezultat |
+|--------|----------|
+| Klik u zelenoj zoni | Uspešna inokulacija — score + micelij animacija |
+| Klik van zone / u fake zone | Kontaminacija — -1 život + screen shake |
+| Zlatni prozor (2× bonus) | Double score za taj hit |
+| Streak 3+ | 1.5× multiplier |
+| Streak 6+ | 2.0× multiplier |
+| Perfect nivo (nula grešaka) | Bonus score + perfect fanfare |
+
+**Kontrole:** Klik (desktop) / Tap (mobile). Touch-first design.
+
+---
+
+## Guncati Brand Integration
+
+Game over ekran rotira 4 edukativna fakta o miceliju i inokulaciji:
+- Kako micelij ulazi u supstrat
+- Zašto sterilnost nije opcija
+- Pleurotus rok rasta (~14 dana)
+- Guncati radionice jesen 2026
+
+Link ka `guncati.rs` na svakom game over ekranu. **Lead gen asset** — ko razume igru, spremniji je za pravu radionicu.
+
+---
+
+## Tehnički detalji
+
+- **Engine:** Canvas + DOM overlay, Vanilla JS ES6 moduli
+- **Audio:** Web Audio API (bez .wav fajlova)
+- **Storage:** LocalStorage — daily highscore top 3, tutorial flag, first-run seed
+- **Mobile:** Touch-first, responsive canvas skaliranje
+- **Moduli:** 19 fajlova, 2488 JS + ~900 CSS linija
+
+---
+
+## Beta rezultati
+
+| Iter | Ocena | CRITICAL | MEDIUM | LOW |
+|------|-------|----------|--------|-----|
+| Iter 1 | 6.3/10 | 3 | 5 | 7 |
+| Iter 2 | 7.5/10 | 0 | 1 | 2 |
+
+Post-fix score: **9.0/10**
+
+**Play:** https://mkdsl.github.io/gari-daily-games/games/2026-06-02-pecurka-inokulator/
