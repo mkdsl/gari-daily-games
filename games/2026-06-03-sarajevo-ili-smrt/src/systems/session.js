@@ -208,6 +208,22 @@ function _tickCrowd(state, sess, mods, in_vibe) {
   sess._crowd_frac = Math.max(crowd_floor, Math.min(crowd_cap, sess._crowd_frac));
   sess.crowd_level = Math.floor(sess._crowd_frac);
 
+  // --- Crowd reaction trigger (every 10s when threshold crossed) ---
+  if (sess.reaction_timer <= 0 && sess.elapsed_sec > 5) {
+    let mood = null;
+    if (sess.crowd_level > 70) mood = 'good';
+    else if (sess.crowd_level < 30) mood = 'bad';
+    if (mood === 'good' && sess.crowd_level >= 90) mood = 'legend';
+
+    if (mood) {
+      const arr = CROWD_REACTIONS[sess.kvart]?.[mood];
+      if (arr?.length) {
+        sess.reaction_text = arr[Math.floor(Math.random() * arr.length)];
+        sess.reaction_timer = 8.0; // new reaction max every 8s
+      }
+    }
+  }
+
   // --- Grbavica instant fail check ---
   if (sess.kvart === 'grbavica' && sess._crowd_frac < CROWD_FAIL_THRESHOLD) {
     const fail_chance = getGrbavicaFailChance(state);
@@ -333,7 +349,6 @@ export function endSession(state, forced_fail = false) {
   // Post-session: leave active_session populated for results screen,
   // but mark it as done so updateSession stops ticking.
   sess.done = true;
-  state.current_screen = 'macro';
 
   // Reset next_night_income_modifier
   ks.next_night_income_modifier = 1.0;

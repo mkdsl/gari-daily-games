@@ -15,7 +15,7 @@ import { generateDailyChallenge, isDailyCompleted } from './systems/daily_challe
 import { getDJStatus } from './entities/dj.js';
 import { getAllKlubData } from './entities/klub.js';
 import { AVALA_CTA, WIN_SCREEN, PRESTIGE_AD } from './content/brand_hooks.js';
-import { UNLOCK_TEXTS, ACHIEVEMENT_TEXTS, PRESTIGE_FLAVORS } from './content/aforizmi.js';
+import { UNLOCK_TEXTS, ACHIEVEMENT_TEXTS, PRESTIGE_FLAVORS, SESSION_INTROS } from './content/aforizmi.js';
 import { shareResult } from './share.js';
 import { canPrestige1, canPrestige2, idleLPPerHour } from './state.js';
 
@@ -81,7 +81,7 @@ function _buildDOM() {
             <div class="kvart-label">Grbavica</div>
             <div class="kvart-rep-bar"><div class="kvart-rep-fill" id="rep-grbavica"></div></div>
             <div class="kvart-info" id="info-grbavica"></div>
-            <div class="kvart-lock-overlay" id="lock-overlay-grbavica">🔒 Baščaršija + MD rep 50+</div>
+            <div class="kvart-locked-overlay" id="lock-overlay-grbavica">🔒 Baščaršija + MD rep 50+</div>
           </div>
         </div>
 
@@ -218,6 +218,15 @@ export function showScreen(screen_name) {
 
   if (screen_name === 'session') {
     if (canvas) canvas.style.display = 'block';
+    // Show motivational intro text for current kvart
+    const sess = _state?.active_session;
+    if (sess?.kvart) {
+      const intros = SESSION_INTROS[sess.kvart];
+      if (intros?.length) {
+        const txt = intros[Math.floor(Math.random() * intros.length)];
+        showToast(txt, 3000);
+      }
+    }
     return;
   }
 
