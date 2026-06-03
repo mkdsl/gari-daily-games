@@ -5,7 +5,7 @@
   "description": "DJ bez reputacije osvaja Sarajevo noć po noć — slider mehanika, 3 kvarta, prestige reset, Avala Headliner terminal goal.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-06-03-sarajevo-ili-smrt/",
   "brand_serves": ["kluboslavija", "mkdslend"],
-  "stage": "impl",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "src/main.js": "Bootstrap, wire sve module, game loop",
