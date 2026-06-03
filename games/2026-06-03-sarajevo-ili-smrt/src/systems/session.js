@@ -272,6 +272,7 @@ function _isInVibeZone(slider_pos, wave_pos, state) {
 export function endSession(state, forced_fail = false) {
   const sess = state.active_session;
   if (!sess) return;
+  if (sess.done || sess.failed) return;  // double-call guard (frame spike na mobilnom)
 
   sess.failed = forced_fail;
 
