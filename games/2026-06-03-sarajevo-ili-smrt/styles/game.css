@@ -1,17 +1,407 @@
-/* Pera: dodaj particle animacije, screen shake, damage flash ovde */
+/* ==========================================================
+   GAME.CSS — Sarajevo ili Smrt
+   Animacije, particle efekti, screen shake, vibe wave, crowd bar,
+   fog of war, LP float, prestige cinematic, unlock flash
+   ========================================================== */
 
-@keyframes shake {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(-2px, 1px); }
-  50% { transform: translate(2px, -1px); }
-  75% { transform: translate(-1px, 2px); }
+/* ----------------------------------------------------------
+   Screen shake — legenda moment, crowd peak
+   ---------------------------------------------------------- */
+@keyframes screen-shake {
+  0%   { transform: translate(0, 0); }
+  10%  { transform: translate(-4px, 2px); }
+  20%  { transform: translate(4px, -2px); }
+  30%  { transform: translate(-5px, 1px); }
+  40%  { transform: translate(5px, -1px); }
+  50%  { transform: translate(-3px, 3px); }
+  60%  { transform: translate(3px, -3px); }
+  70%  { transform: translate(-2px, 2px); }
+  80%  { transform: translate(2px, -1px); }
+  90%  { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
 }
 
-.shake { animation: shake 0.3s ease-in-out; }
+.shaking {
+  animation: screen-shake 0.3s ease-in-out 1;
+  /* Pozivamo sa JS: element.classList.add('shaking'); */
+}
 
+/* Uklanjamo klasu na animationend (JS) */
+.shaking-light {
+  animation: screen-shake 0.2s ease-out 1;
+}
+
+/* ----------------------------------------------------------
+   LP popup float — pojavljuje se i plovi gore
+   ---------------------------------------------------------- */
+@keyframes lp-float {
+  0%   { opacity: 0;    transform: translateY(0) scale(0.8); }
+  15%  { opacity: 1;    transform: translateY(-8px) scale(1.1); }
+  80%  { opacity: 1;    transform: translateY(-36px) scale(1); }
+  100% { opacity: 0;    transform: translateY(-44px) scale(0.9); }
+}
+
+.lp-popup {
+  animation: lp-float 0.85s ease-out 1 forwards;
+}
+
+/* Negativni LP — crvena boja */
+.lp-popup.lp-negative {
+  color: var(--color-primary);
+  text-shadow: 0 0 6px var(--color-primary-glow);
+}
+
+/* Legenda LP — zlatna + veće */
+.lp-popup.lp-legend {
+  color: var(--color-gold);
+  font-size: var(--font-size-lg);
+  text-shadow: 0 0 10px var(--color-gold-glow);
+}
+
+/* ----------------------------------------------------------
+   Crowd bar fill transition
+   JS direktno setuje width i po potrebi klasu .crowd-danger
+   ---------------------------------------------------------- */
+.crowd-bar-fill {
+  /* Transition je definisan u ui.css, ovde dodajemo state varijante */
+  will-change: width;
+}
+
+/* Ispod 30% — opasna zona, crveno */
+.crowd-bar-fill.crowd-danger {
+  background: linear-gradient(
+    to right,
+    #6b0000 0%,
+    var(--color-primary) 100%
+  );
+  animation: crowd-danger-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes crowd-danger-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+
+/* Iznad 80% — legenda zona, teal + gold */
+.crowd-bar-fill.crowd-legend {
+  background: linear-gradient(
+    to right,
+    var(--color-teal)    0%,
+    var(--color-gold)    100%
+  );
+}
+
+/* ----------------------------------------------------------
+   Unlock flash — kad se kvart otključa
+   ---------------------------------------------------------- */
+@keyframes unlock-flash {
+  0%   { transform: scale(1);    filter: brightness(1); }
+  20%  { transform: scale(1.04); filter: brightness(1.6) saturate(1.5); }
+  40%  { transform: scale(0.98); filter: brightness(1.2); }
+  60%  { transform: scale(1.03); filter: brightness(1.4); }
+  80%  { transform: scale(0.99); filter: brightness(1.1); }
+  100% { transform: scale(1);    filter: brightness(1); }
+}
+
+.unlocking {
+  animation: unlock-flash 0.55s ease-out 1;
+  /* Boja border-a treba da se mijenja po kvartu — JS dodaje per-kvart klasu */
+}
+
+/* Unlock border pulse — odvojen, traje malo duže */
+@keyframes unlock-border-pulse {
+  0%   { box-shadow: 0 0 0 0 var(--unlock-color, rgba(0, 255, 204, 0.8)); }
+  50%  { box-shadow: 0 0 0 8px var(--unlock-color, rgba(0, 255, 204, 0)); }
+  100% { box-shadow: 0 0 0 0 var(--unlock-color, rgba(0, 255, 204, 0)); }
+}
+
+.unlock-pulse {
+  animation: unlock-border-pulse 0.6s ease-out 2;
+}
+
+/* ----------------------------------------------------------
+   Prestige reset cinematic — full-screen color flash + fade
+   JS toggler: document.body.classList.add('prestige-sweep')
+   ---------------------------------------------------------- */
+@keyframes prestige-sweep {
+  0%   {
+    opacity: 0;
+    background-color: transparent;
+  }
+  15%  {
+    opacity: 1;
+    background-color: var(--color-gold);
+    filter: brightness(2);
+  }
+  40%  {
+    opacity: 1;
+    background-color: var(--color-primary);
+    filter: brightness(1.5);
+  }
+  70%  {
+    opacity: 0.9;
+    background-color: #0a0a14;
+    filter: brightness(1);
+  }
+  100% {
+    opacity: 0;
+    background-color: transparent;
+  }
+}
+
+/* Pseudo-overlay montiran u #game-root::after (JS toggleuje klasu) */
+#game-root.prestige-active::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+  animation: prestige-sweep 1.5s ease-in-out 1 forwards;
+}
+
+/* ----------------------------------------------------------
+   Fog of war pulse — na locked kvartovima
+   ---------------------------------------------------------- */
+@keyframes fog-pulse {
+  0%, 100% { opacity: 0.80; }
+  50%       { opacity: 0.95; }
+}
+
+.kvart-locked-overlay {
+  animation: fog-pulse 2.2s ease-in-out infinite;
+}
+
+/* Kad je kvart upravo otključan — animacija se prekida */
+.kvart-zone.unlocked .kvart-locked-overlay {
+  animation: none;
+}
+
+/* ----------------------------------------------------------
+   Particle CSS — JS kontroliše position, size, color
+   ---------------------------------------------------------- */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: var(--z-toast);
+  will-change: transform, opacity;
+}
+
+/* Nota particle — muzička nota shape (kvadratni pixel art) */
+.particle-note {
+  border-radius: var(--radius-none);
+  width: 4px;
+  height: 4px;
+  background-color: var(--color-teal);
+  box-shadow: 0 0 4px var(--color-teal-glow);
+}
+
+/* Star burst particle */
+.particle-star {
+  width: 3px;
+  height: 3px;
+  background-color: var(--color-gold);
+  box-shadow: 0 0 6px var(--color-gold-glow);
+}
+
+/* Legenda particle — veće */
+.particle-legend {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-primary);
+  box-shadow: 0 0 8px var(--color-primary-glow);
+}
+
+/* Particle keyframe — JS može override-ovati trajanje i putanju */
+@keyframes particle-burst {
+  0%   { opacity: 1;   transform: translate(0, 0)                 scale(1); }
+  100% { opacity: 0;   transform: translate(var(--dx), var(--dy)) scale(0.3); }
+}
+
+/* ----------------------------------------------------------
+   Vibe wave CSS fallback (za non-canvas okruženja)
+   U igri Canvas crta wave — ovo je pure CSS utility
+   ---------------------------------------------------------- */
+.vibe-wave-bar {
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--color-teal);
+  transform-origin: bottom center;
+  will-change: height;
+  transition: height 0.05s linear;
+}
+
+@keyframes vibe-wave-idle {
+  0%   { transform: scaleY(0.3); }
+  25%  { transform: scaleY(0.7); }
+  50%  { transform: scaleY(1.0); }
+  75%  { transform: scaleY(0.6); }
+  100% { transform: scaleY(0.3); }
+}
+
+/* ----------------------------------------------------------
+   Damage flash — screen vane crvenom kad crowd pada kritično
+   ---------------------------------------------------------- */
+@keyframes damage-flash {
+  0%   { background-color: rgba(255, 51, 102, 0); }
+  20%  { background-color: rgba(255, 51, 102, 0.22); }
+  100% { background-color: rgba(255, 51, 102, 0); }
+}
+
+#game-root.crowd-hit::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-overlay);
+  animation: damage-flash 0.4s ease-out 1;
+}
+
+/* ----------------------------------------------------------
+   Session end overlay — fade in/out
+   ---------------------------------------------------------- */
+@keyframes session-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes session-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.fade-in  { animation: session-fade-in  0.35s ease-in  1 forwards; }
+.fade-out { animation: session-fade-out 0.35s ease-out 1 forwards; }
+
+/* ----------------------------------------------------------
+   LP burst ring — legenda moment ring efekt
+   ---------------------------------------------------------- */
+@keyframes lp-burst-ring {
+  0%   { transform: scale(0.5); opacity: 0.8; border-width: 3px; }
+  100% { transform: scale(2.5); opacity: 0;   border-width: 1px; }
+}
+
+.lp-burst-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 3px solid var(--color-teal);
+  pointer-events: none;
+  z-index: var(--z-toast);
+  animation: lp-burst-ring 0.6s ease-out 1 forwards;
+}
+
+/* Legenda ring — zlatna */
+.lp-burst-ring.ring-legend {
+  border-color: var(--color-gold);
+}
+
+/* ----------------------------------------------------------
+   Crowd bounce dots — ikonice publike koje skakuću u HUD-u
+   ---------------------------------------------------------- */
+@keyframes crowd-dot-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-4px); }
+}
+
+.crowd-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background-color: var(--color-teal);
+  border-radius: var(--radius-none);
+  animation: crowd-dot-bounce 0.5s ease-in-out infinite;
+}
+
+.crowd-dot:nth-child(2) { animation-delay: 0.1s; }
+.crowd-dot:nth-child(3) { animation-delay: 0.2s; }
+.crowd-dot:nth-child(4) { animation-delay: 0.3s; }
+.crowd-dot:nth-child(5) { animation-delay: 0.4s; }
+
+/* ----------------------------------------------------------
+   Idle LP ticker — broj raste, mali pulse
+   ---------------------------------------------------------- */
+@keyframes stat-tick {
+  0%   { transform: scale(1);    color: inherit; }
+  30%  { transform: scale(1.15); color: var(--color-teal); }
+  100% { transform: scale(1);    color: inherit; }
+}
+
+.stat-ticking {
+  animation: stat-tick 0.25s ease-out 1;
+  display: inline-block;
+}
+
+/* ----------------------------------------------------------
+   Legenda moment — veliki overlay tekst
+   ---------------------------------------------------------- */
+@keyframes legend-text-in {
+  0%   { opacity: 0;   transform: scale(0.7) translateY(20px); letter-spacing: 8px; }
+  50%  { opacity: 1;   transform: scale(1.05) translateY(0);   letter-spacing: 6px; }
+  100% { opacity: 1;   transform: scale(1) translateY(0);       letter-spacing: 4px; }
+}
+
+@keyframes legend-text-out {
+  0%   { opacity: 1;   transform: scale(1) translateY(0); }
+  100% { opacity: 0;   transform: scale(0.9) translateY(-10px); }
+}
+
+.legend-moment-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: var(--z-overlay);
+  pointer-events: none;
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-title);
+  text-transform: uppercase;
+  color: var(--color-gold);
+  text-shadow:
+    0 0 20px var(--color-gold),
+    0 0 60px var(--color-gold-glow),
+    0 0 100px rgba(255, 215, 0, 0.2);
+  white-space: nowrap;
+  animation: legend-text-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1 forwards;
+}
+
+.legend-moment-text.leaving {
+  animation: legend-text-out 0.3s ease-in 1 forwards;
+}
+
+/* ----------------------------------------------------------
+   Pulse utility — generički, koristi se i za HUD i za ikonice
+   ---------------------------------------------------------- */
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50%       { opacity: 0.5; }
 }
 
-.pulse { animation: pulse 1.2s ease-in-out infinite; }
+.pulse {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+/* Brži pulse za urgentne poruke */
+.pulse-fast {
+  animation: pulse 0.6s ease-in-out infinite;
+}
+
+/* ----------------------------------------------------------
+   Neon flicker — za retro ambient, JS toggleuje
+   ---------------------------------------------------------- */
+@keyframes neon-flicker {
+  0%   { opacity: 1; }
+  3%   { opacity: 0.8; }
+  6%   { opacity: 1; }
+  9%   { opacity: 0.6; }
+  12%  { opacity: 1; }
+  50%  { opacity: 1; }
+  52%  { opacity: 0.9; }
+  54%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+.neon-flicker {
+  animation: neon-flicker 4s linear infinite;
+}

@@ -5,7 +5,7 @@
   "description": "DJ bez reputacije osvaja Sarajevo noć po noć — slider mehanika, 3 kvarta, prestige reset, Avala Headliner terminal goal.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-06-03-sarajevo-ili-smrt/",
   "brand_serves": ["kluboslavija", "mkdslend"],
-  "stage": "concept",
+  "stage": "impl",
   "status": "in_progress",
   "modules": {
     "src/main.js": "Bootstrap, wire sve module, game loop",
@@ -24,12 +24,12 @@
     "src/systems/reputation.js": "Mahala rep per kvart, bad rep events, kicked out logic, decay",
     "src/systems/season.js": "Sezona planning UI, noć scheduling, resource carry-over",
     "src/systems/daily_challenge.js": "LCG seed po datumu, daily score, localStorage LB",
-    "src/systems/kvartovi/bascarsija.js": "Wave speed modifier, sevdah bonus logic",
-    "src/systems/kvartovi/marijin_dvor.js": "Clean tech bonus trigger i check",
-    "src/systems/kvartovi/grbavica.js": "Underground risk/reward, instant fail, legend bonus",
-    "src/entities/crowd.js": "Crowd entity: level, decay per tick, floor, reactions, bad rep trigger",
-    "src/entities/dj.js": "DJ entity: brend nivo, upgrades reference, share data generator",
-    "src/entities/klub.js": "Klub entity: tier, capacity, genre_affinity, booking_fee calc",
+    "src/systems/kvartovi/bascarsija.js": "Wave speed modifier (B<2→1.5×), sevdah bonus logic",
+    "src/systems/kvartovi/marijin_dvor.js": "Clean tech bonus trigger: crowd>70→LP×1.20",
+    "src/systems/kvartovi/grbavica.js": "Underground: instant fail 20% chance (reduced by E), legend bonus×1.50",
+    "src/entities/crowd.js": "Crowd entity: tier/color calc, reaction picker, bar data",
+    "src/entities/dj.js": "DJ entity: title by prestige/D, share data builder, status",
+    "src/entities/klub.js": "Klub entity: tier, capacity, booking_fee calc per kvart",
     "src/content/aforizmi.js": "Per-kvart crowd reactions, unlock texts, prestige flavor",
     "src/content/brand_hooks.js": "Avala CTA string-ovi, Kluboslavija overlay data, share copy",
     "styles/base.css": "Layout, full-screen canvas, mobile viewport",
@@ -38,8 +38,8 @@
     "styles/theme.css": "Sarajevo paleta (#0a0a14, #FF3366, #00FFCC, #FFD700), kvart boje"
   },
   "line_counts": {
-    "total_js": null,
-    "total_css": null
+    "total_js": 5116,
+    "total_css": 1976
   },
   "beta_score": null,
   "beta_score_iter2": null,

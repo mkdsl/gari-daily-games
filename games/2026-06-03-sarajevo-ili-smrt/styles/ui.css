@@ -1,55 +1,838 @@
-#hud {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  right: 16px;
-  display: flex;
-  gap: 16px;
-  z-index: 10;
-  pointer-events: none;
+/* ==========================================================
+   UI.CSS — Sarajevo ili Smrt
+   HUD, upgrade shop, sarajevo mapa, kvart zone, modali, dugmad
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   Macro screen — Sarajevo mapa layout
+   ---------------------------------------------------------- */
+#screen-macro {
+  padding: var(--space-md);
+  gap: var(--space-md);
+  background-color: var(--color-bg);
 }
 
-.stat {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  backdrop-filter: blur(8px);
+/* Mapa kontejner — 3 kvart zone u grid-u */
+.sarajevo-map {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
 }
 
-.menu-overlay {
-  position: absolute;
-  inset: 0;
+/* ----------------------------------------------------------
+   Kvart zone — klikkabilni blokovi
+   ---------------------------------------------------------- */
+.kvart-zone {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 16px;
-  background: rgba(10, 10, 15, 0.85);
-  backdrop-filter: blur(12px);
-  z-index: 20;
-}
-
-.menu-overlay.hidden { display: none; }
-
-.menu-overlay h2 {
-  font-size: 48px;
-  color: #ff4d6d;
-  letter-spacing: 4px;
-}
-
-.menu-overlay button {
-  padding: 12px 24px;
-  background: #ff4d6d;
-  color: #0a0a0f;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  font-family: inherit;
+  justify-content: flex-end;
+  min-height: 140px;
+  padding: var(--space-sm) var(--space-sm) var(--space-xs);
+  border: 2px solid var(--color-border);
+  background-color: var(--color-bg-card);
   cursor: pointer;
-  font-weight: bold;
+  overflow: hidden;
+  transition:
+    border-color var(--transition-mid),
+    box-shadow   var(--transition-mid),
+    transform    var(--transition-fast);
+}
+
+.kvart-zone:active {
+  transform: scale(0.97);
+}
+
+/* Hover glow per kvart boja */
+.kvart-bascarsija {
+  border-color: var(--color-bascarsija-dim);
+}
+
+.kvart-bascarsija:hover {
+  border-color: var(--color-bascarsija);
+  box-shadow:
+    0 0 8px var(--color-bascarsija-glow),
+    inset 0 0 16px rgba(200, 134, 10, 0.08);
+}
+
+.kvart-marijin-dvor {
+  border-color: var(--color-marijin-dvor-dim);
+}
+
+.kvart-marijin-dvor:hover {
+  border-color: var(--color-marijin-dvor);
+  box-shadow:
+    0 0 8px var(--color-marijin-dvor-glow),
+    inset 0 0 16px rgba(74, 144, 217, 0.08);
+}
+
+.kvart-grbavica {
+  border-color: var(--color-grbavica-dim);
+}
+
+.kvart-grbavica:hover {
+  border-color: var(--color-grbavica);
+  box-shadow:
+    0 0 8px var(--color-grbavica-glow),
+    inset 0 0 16px rgba(139, 69, 160, 0.08);
+}
+
+/* Naziv kvartu — overlay na dnu */
+.kvart-name {
+  position: relative;
+  z-index: 2;
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-text);
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  white-space: nowrap;
+}
+
+.kvart-bascarsija  .kvart-name { color: var(--color-bascarsija); }
+.kvart-marijin-dvor .kvart-name { color: var(--color-marijin-dvor); }
+.kvart-grbavica    .kvart-name { color: var(--color-grbavica); }
+
+/* ----------------------------------------------------------
+   Kvart locked overlay — fog of war
+   ---------------------------------------------------------- */
+.kvart-locked-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(10, 10, 20, 0.82);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0.9;
+  pointer-events: none; /* JS toggler kontroliše pointer-events */
+}
+
+.kvart-locked-overlay::after {
+  content: "???";
+  font-size: var(--font-size-xl);
+  letter-spacing: var(--letter-spacing-title);
+  color: var(--color-text-muted);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(100, 100, 130, 0.5);
+}
+
+/* Kad je kvart otključan — sakrij overlay */
+.kvart-zone.unlocked .kvart-locked-overlay {
+  display: none;
+}
+
+/* ----------------------------------------------------------
+   Kvart rep bar — progress bar (0-100% reputacija)
+   ---------------------------------------------------------- */
+.kvart-rep-bar {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 4px;
+  background-color: var(--color-border);
+  overflow: hidden;
+  border-radius: var(--radius-none);
+}
+
+.kvart-rep-fill {
+  height: 100%;
+  width: 0%;
+  background-color: var(--color-text-dim);
+  transition: width var(--transition-slow), background-color var(--transition-mid);
+  will-change: width;
+}
+
+/* Rep fill boja po kvartu */
+.kvart-bascarsija  .kvart-rep-fill { background-color: var(--color-bascarsija); }
+.kvart-marijin-dvor .kvart-rep-fill { background-color: var(--color-marijin-dvor); }
+.kvart-grbavica    .kvart-rep-fill { background-color: var(--color-grbavica); }
+
+/* ----------------------------------------------------------
+   Stats panel — makro HUD (LP, DK, Prestige)
+   ---------------------------------------------------------- */
+.stats-panel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  width: 100%;
+  max-width: 640px;
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+}
+
+.stats-panel > span {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.hud-lp {
+  color: var(--color-primary);
+  text-shadow: 0 0 8px var(--color-primary-glow);
+}
+
+.hud-dk {
+  color: var(--color-teal);
+  text-shadow: 0 0 8px var(--color-teal-glow);
+}
+
+.hud-prestige {
+  color: var(--color-gold);
+  text-shadow: 0 0 8px var(--color-gold-glow);
+}
+
+/* ----------------------------------------------------------
+   Session screen HUD — canvas overlay
+   ---------------------------------------------------------- */
+.session-hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-hud);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 20, 0.85) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.hud-timer {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-teal);
+  letter-spacing: var(--letter-spacing-wide);
+  text-shadow: 0 0 10px var(--color-teal-glow);
+  min-width: 48px;
+  text-align: center;
+}
+
+.hud-kvart-name {
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  flex: 1;
+  text-align: right;
+}
+
+/* Crowd bar — na dnu session ekrana */
+.crowd-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-color: rgba(10, 10, 20, 0.6);
+  z-index: var(--z-hud);
+  overflow: hidden;
+}
+
+.crowd-bar-fill {
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(
+    to right,
+    var(--color-primary-dim) 0%,
+    var(--color-primary)     50%,
+    var(--color-teal)        100%
+  );
+  transition:
+    width            0.1s ease,
+    background-color 0.3s ease;
+  will-change: width;
+}
+
+/* Slider kontejner — za JS manipulaciju */
+.slider-container {
+  position: absolute;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-hud);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(320px, 90vw);
+  height: 48px;
+  pointer-events: auto;
+}
+
+/* ----------------------------------------------------------
+   Dugmad — pixel art stil, bez border-radius
+   ---------------------------------------------------------- */
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  border: 2px solid;
+  border-radius: var(--radius-none);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    color            var(--transition-fast),
+    box-shadow       var(--transition-fast),
+    transform        var(--transition-fast);
+  /* Pixel art shadow — svetli ugao, bez corner radius */
+  box-shadow: 2px 2px 0 rgba(255, 255, 255, 0.2);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #0a0a14;
+}
+
+.btn-primary:hover {
+  background-color: #ff5580;
+  border-color: #ff5580;
+  box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border-color: var(--color-teal);
+  color: var(--color-teal);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(0, 255, 204, 0.1);
+  box-shadow: 3px 3px 0 rgba(0, 255, 204, 0.2);
+}
+
+.btn-secondary:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.btn-upgrade {
+  /* Specifičan za macro ekran */
+  width: 100%;
+  max-width: 640px;
+}
+
+/* Disabled stanje */
+.btn-disabled,
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: no-drop;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+/* ----------------------------------------------------------
+   Modal — backdrop + content
+   ---------------------------------------------------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(10, 10, 20, 0.8);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer; /* klik zatvara */
+}
+
+.modal-content {
+  position: relative;
+  z-index: 1;
+  width: min(540px, 96vw);
+  max-height: 80vh;
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border-bright);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(255, 51, 102, 0.1);
+}
+
+.modal-header {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.modal-header .modal-title {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-teal);
+}
+
+.modal-close {
+  background: none;
+  border: 1px solid var(--color-border-bright);
+  color: var(--color-text-dim);
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.modal-close:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-bright) transparent;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: var(--color-border-bright);
+}
+
+/* ----------------------------------------------------------
+   Upgrade grid — kartica za upgrade shop
+   ---------------------------------------------------------- */
+.upgrade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.upgrade-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  transition:
+    border-color var(--transition-mid),
+    box-shadow   var(--transition-mid),
+    opacity      var(--transition-mid);
+  cursor: pointer;
+}
+
+.upgrade-card:hover {
+  border-color: var(--color-border-bright);
+}
+
+.upgrade-tier {
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.upgrade-name {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-pixel);
+  color: var(--color-text);
+  text-transform: uppercase;
+}
+
+.upgrade-effect {
+  font-size: var(--font-size-xs);
+  color: var(--color-teal);
+  letter-spacing: var(--letter-spacing-pixel);
+}
+
+.upgrade-cost {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  margin-top: var(--space-xs);
+}
+
+/* Upgrade priuštivo — teal glow border */
+.upgrade-card-affordable {
+  border-color: var(--color-teal-dim);
+  box-shadow:
+    0 0 6px var(--color-teal-glow),
+    inset 0 0 8px rgba(0, 255, 204, 0.05);
+}
+
+.upgrade-card-affordable:hover {
+  border-color: var(--color-teal);
+  box-shadow:
+    0 0 12px var(--color-teal-glow),
+    inset 0 0 12px rgba(0, 255, 204, 0.08);
+}
+
+/* Upgrade zaključano — dimmed, desaturated */
+.upgrade-card-locked {
+  opacity: 0.35;
+  filter: saturate(0.2);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Upgrade kupljeno */
+.upgrade-card-purchased {
+  opacity: 0.5;
+  border-color: var(--color-gold-dim);
+  cursor: default;
+}
+
+.upgrade-card-purchased .upgrade-cost {
+  color: var(--color-gold);
+}
+
+.upgrade-card-purchased .upgrade-cost::before {
+  content: "✓ ";
+}
+
+/* ----------------------------------------------------------
+   Prestige ekran
+   ---------------------------------------------------------- */
+#screen-prestige {
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  background-color: var(--color-bg);
+}
+
+.prestige-title {
+  font-size: var(--font-size-2xl);
+  letter-spacing: var(--letter-spacing-title);
+  text-transform: uppercase;
+  color: var(--color-gold);
+  font-weight: 700;
+  text-shadow:
+    0 0 12px var(--color-gold),
+    0 0 40px var(--color-gold-glow);
+}
+
+.prestige-dk-reward {
+  font-size: var(--font-size-xl);
+  color: var(--color-teal);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.prestige-flavor {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  max-width: 380px;
+  text-align: center;
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+/* ----------------------------------------------------------
+   Win screen — Avala Headliner
+   ---------------------------------------------------------- */
+#screen-win {
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  background-color: var(--color-bg);
+}
+
+.win-title {
+  font-size: var(--font-size-2xl);
+  letter-spacing: var(--letter-spacing-title);
+  text-transform: uppercase;
+  color: var(--color-gold);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.win-subtitle {
+  font-size: var(--font-size-md);
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-teal);
+  text-transform: uppercase;
+}
+
+.win-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  text-align: left;
+  min-width: 260px;
+}
+
+.win-stat-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-xs);
+}
+
+.win-stat-value {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* Kluboslavija CTA blok */
+.cta-block {
+  margin-top: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-primary);
+  background-color: rgba(255, 51, 102, 0.08);
+  max-width: 400px;
+  text-align: center;
+}
+
+.cta-block p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  margin-bottom: var(--space-sm);
+}
+
+.cta-block strong {
+  color: var(--color-primary);
+}
+
+/* ----------------------------------------------------------
+   LP popup — animirani float (JS appenduje)
+   ---------------------------------------------------------- */
+.lp-popup {
+  position: absolute;
+  z-index: var(--z-toast);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-teal);
+  text-shadow: 0 0 6px var(--color-teal-glow);
+  pointer-events: none;
+  letter-spacing: var(--letter-spacing-wide);
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------
+   Season planner grid — makro sezona view
+   ---------------------------------------------------------- */
+.season-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-xs);
+  width: 100%;
+  max-width: 640px;
+}
+
+.season-day {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  padding: var(--space-xs);
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.season-day:hover {
+  border-color: var(--color-border-bright);
+}
+
+.season-day.day-scheduled {
+  border-color: var(--color-teal-dim);
+}
+
+.season-day.day-completed {
+  border-color: var(--color-gold-dim);
+  opacity: 0.7;
+}
+
+.season-day.day-failed {
+  border-color: var(--color-primary-dim);
+  opacity: 0.6;
+}
+
+.day-number {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-.menu-overlay button:hover { background: #fff; }
+.day-kvart-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 1px 3px;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ----------------------------------------------------------
+   Toast / notifikacija (kratke poruke)
+   ---------------------------------------------------------- */
+.toast {
+  position: fixed;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-toast);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border-bright);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-pixel);
+  color: var(--color-text);
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--transition-mid);
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+/* ----------------------------------------------------------
+   Responsive — mobile (max 768px)
+   ---------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Mapa vertikalno stacked na mobilnom */
+  .sarajevo-map {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, auto);
+    max-width: 100%;
+  }
+
+  .kvart-zone {
+    min-height: 80px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .kvart-name {
+    margin-bottom: 0;
+  }
+
+  .kvart-rep-bar {
+    width: 100px;
+    height: 6px;
+  }
+
+  /* Sva dugmad full width na mobilnom */
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Modal full width na mobilnom */
+  .modal-content {
+    width: 100vw;
+    max-height: 90vh;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    align-self: flex-end;
+  }
+
+  /* Upgrade grid jednokolonski na mobilnom */
+  .upgrade-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Season grid skupljeniji na mobilnom */
+  .season-grid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  .season-day {
+    min-height: 44px;
+    padding: 2px;
+  }
+
+  /* Stats panel kompaktnan */
+  .stats-panel {
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .stats-panel > span {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Touch-friendly — minimum 44px tap target */
+@media (max-width: 480px) {
+  .btn-primary,
+  .btn-secondary {
+    min-height: 44px;
+    font-size: var(--font-size-md);
+  }
+
+  .kvart-zone {
+    min-height: 72px;
+  }
+
+  .session-hud {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .slider-container {
+    bottom: var(--space-md);
+    width: 94vw;
+  }
+}

@@ -3,18 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#000">
-  <title>GAME_TITLE — Gari Daily Games</title>
+  <meta name="theme-color" content="#0a0a14">
+  <meta name="description" content="Sarajevo ili Smrt — Idle/Incremental DJ Sim. Osvoji 3 mahale, prestige, headliner Avala. Gari Daily Games × Kluboslavija.">
+  <meta property="og:title" content="Sarajevo ili Smrt — DJ Idle Sim">
+  <meta property="og:description" content="Tri mahale. Dva prestige-a. Jedan cilj — Avala. #Kluboslavija">
+  <meta property="og:url" content="https://mkdsl.github.io/gari-daily-games/games/2026-06-03-sarajevo-ili-smrt/">
+  <title>Sarajevo ili Smrt — Gari Daily Games</title>
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/ui.css">
   <link rel="stylesheet" href="styles/game.css">
+  <link rel="stylesheet" href="styles/theme.css">
 </head>
 <body>
-  <div id="game-root">
-    <canvas id="game-canvas"></canvas>
-    <div id="hud"></div>
-    <div id="menu" class="menu-overlay"></div>
-  </div>
+  <!-- JS wires everything via initUI() — DOM is built in ui.js -->
+  <div id="game-root"></div>
+
+  <!-- Session canvas lives here, moved into game-root by ui.js -->
+  <canvas id="session-canvas"
+    style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;touch-action:none;z-index:10;">
+  </canvas>
+
   <script type="module" src="src/main.js"></script>
 </body>
 </html>
