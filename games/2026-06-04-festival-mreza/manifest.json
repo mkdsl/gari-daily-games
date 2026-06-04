@@ -1,0 +1,19 @@
+{
+  "name": "Festival Mreža",
+  "genre": "multi-layer-social-sim-strategy",
+  "date": "2026-06-04",
+  "description": "Ti si promoter koji vodi Kluboslavija turneju kroz 5 gradova. Makro: budžet, koordinatori, promo talasi. Mikro: real-time crowd routing 3-5 min po eventu. Carry-over buzz × 0.7. Cilj: Avala 20.jun sa satisfaction ≥ 90%.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-06-04-festival-mreza/",
+  "brand_serves": ["kluboslavija", "mkdslend"],
+  "stage": "concept",
+  "status": "in_progress",
+  "modules": {},
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "beta_score_iter2": null,
+  "post_fix_score": null,
+  "sef_signoff": false
+}
