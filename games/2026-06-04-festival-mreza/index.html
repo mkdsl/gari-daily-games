@@ -2,19 +2,188 @@
 <html lang="sr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#000">
-  <title>GAME_TITLE — Gari Daily Games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1b2e">
+  <meta name="description" content="Festival Mreža — multi-layer social sim. Ti si promoter Kluboslavija turneje kroz 5 gradova.">
+  <meta property="og:title" content="Festival Mreža — Kluboslavija 2026">
+  <meta property="og:description" content="Vodi Kluboslavija turneju kroz Niš, Sarajevo, Štrand, Guncati i Avalu.">
+  <title>Festival Mreža — Gari Daily Games</title>
+  <link rel="stylesheet" href="styles/theme.css">
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/ui.css">
   <link rel="stylesheet" href="styles/game.css">
 </head>
 <body>
   <div id="game-root">
-    <canvas id="game-canvas"></canvas>
-    <div id="hud"></div>
-    <div id="menu" class="menu-overlay"></div>
-  </div>
-  <script type="module" src="src/main.js"></script>
+
+    <!-- ── LOADING SCREEN ────────────────── -->
+    <div id="loading-screen" class="screen">
+      <div id="loading-title">FESTIVAL MREŽA</div>
+      <div class="loading-spinner"></div>
+      <div id="loading-aforizam"></div>
+    </div>
+
+    <!-- ── MACRO SCREEN ───────────────────── -->
+    <div id="macro-screen" class="screen hidden">
+
+      <!-- Top HUD bar -->
+      <div id="macro-hud">
+        <span id="hud-budget">2000 EUR</span>
+        <span style="color:rgba(255,255,255,0.2)">|</span>
+        <span id="hud-current-city">Niš</span>
+        <span style="color:rgba(255,255,255,0.2)">|</span>
+        <span id="hud-career-tier">ROOKIE PROMOTER</span>
+      </div>
+
+      <!-- Network graph canvas -->
+      <div id="macro-canvas-wrapper">
+        <canvas id="macro-canvas"></canvas>
+      </div>
+
+      <!-- City detail + promo panel -->
+      <div id="city-panel">
+        <div class="city-info-card">
+          <div class="city-name" style="color:var(--accent-purple)">Niš</div>
+          <div class="city-desc">Učitavanje...</div>
+        </div>
+      </div>
+
+      <!-- Action panel (right) -->
+      <div id="action-panel">
+        <div class="budget-display">
+          <div class="budget-label">Budžet</div>
+          <div class="budget-value" id="action-budget">2000 EUR</div>
+        </div>
+      </div>
+
+      <!-- Coordinator panel (inside city-panel) -->
+      <div id="coordinator-panel" style="display:none"></div>
+
+      <!-- Upgrades panel (overlay) -->
+      <div id="upgrades-panel" class="hidden"></div>
+    </div><!-- /macro-screen -->
+
+    <!-- ── MICRO SCREEN ───────────────────── -->
+    <div id="micro-screen" class="screen hidden">
+
+      <!-- Top HUD bar -->
+      <div id="micro-hud">
+        <div class="hud-bar-wrapper">
+          <span class="hud-bar-label">SAT</span>
+          <div class="hud-bar-track">
+            <div class="hud-bar-fill" id="hud-satisfaction-bar" style="width:0%;background:#4a7c59"></div>
+          </div>
+          <span class="hud-bar-value" id="hud-satisfaction-pct">0%</span>
+        </div>
+
+        <div class="hud-bar-wrapper">
+          <span class="hud-bar-label">DEBT</span>
+          <div class="hud-bar-track">
+            <div class="hud-bar-fill" id="hud-energy-debt-bar" style="width:0%;background:#4a7c59"></div>
+          </div>
+          <span class="hud-bar-value" id="hud-energy-debt-pct">0</span>
+        </div>
+
+        <span style="color:rgba(255,255,255,0.2)">|</span>
+        <span id="hud-bpm-value" style="color:#4df5ff">90</span>
+        <span style="font-size:9px;color:var(--text-muted)">BPM</span>
+        <span style="color:rgba(255,255,255,0.2)">|</span>
+        <span id="hud-floor-temp" style="color:#4df5ff">0°</span>
+        <span style="font-size:9px;color:var(--text-muted)">TEMP</span>
+        <span style="color:rgba(255,255,255,0.2)">|</span>
+        <span id="hud-timer" style="font-size:20px;font-weight:bold">3:00</span>
+        <span style="color:rgba(255,255,255,0.2)">|</span>
+        <span style="font-size:9px;color:var(--text-muted)">CROWD</span>
+        <span id="hud-crowd-total">0</span>
+
+        <div id="hud-incident-indicator" style="display:none"></div>
+      </div>
+
+      <!-- Venue canvas -->
+      <div id="micro-canvas-wrapper">
+        <canvas id="micro-canvas"></canvas>
+        <!-- Text cue overlay -->
+        <div id="hud-text-cue" style="opacity:0"></div>
+      </div>
+
+      <!-- Sidebar (right) -->
+      <div id="micro-sidebar">
+        <div class="section-title">Zona Status</div>
+        <!-- Updated dynamically by HUD renderer -->
+      </div>
+
+      <!-- Controls (bottom) -->
+      <div id="micro-controls">
+        <!-- BPM Slider -->
+        <div class="bpm-row">
+          <span style="font-size:9px;color:var(--text-muted);flex-shrink:0">BPM</span>
+          <div id="bpm-slider" style="flex:1;position:relative">
+            <div id="bpm-slider-track">
+              <div id="bpm-slider-fill" style="width:0%;height:100%;background:#4df5ff;transition:width 0.05s"></div>
+            </div>
+            <div class="bpm-labels">
+              <span>90</span>
+              <span>104</span>
+              <span>122</span>
+              <span>138</span>
+            </div>
+          </div>
+          <span class="bpm-value-display" id="bpm-display-val" style="color:#4df5ff">90</span>
+        </div>
+
+        <!-- Redirect buttons -->
+        <div class="redirect-row">
+          <button class="redirect-btn" id="redirect-btn-0" title="Dance Floor → Chill">
+            Dance→Chill
+          </button>
+          <button class="redirect-btn" id="redirect-btn-1" title="Bar → Dance Floor">
+            Bar→Dance
+          </button>
+          <button class="redirect-btn" id="redirect-btn-2" title="Chill → Stage Front">
+            Chill→Stage
+          </button>
+          <button class="redirect-btn" id="redirect-btn-3" title="Stage Front → Bar">
+            Stage→Bar
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /micro-screen -->
+
+    <!-- ── META SCREEN ────────────────────── -->
+    <div id="meta-screen" class="screen hidden">
+      <div style="text-align:center;padding:var(--gap-xl)">
+        <div style="font-size:24px;color:var(--accent-purple);margin-bottom:var(--gap-lg)">Karijera</div>
+        <div id="meta-content"></div>
+      </div>
+    </div>
+
+    <!-- ── VICTORY SCREEN ─────────────────── -->
+    <div id="victory-screen" class="screen hidden">
+      <div class="victory-content">
+        <div class="victory-title">Turneja Završena!</div>
+      </div>
+    </div>
+
+    <!-- ── PRESTIGE SCREEN ────────────────── -->
+    <div id="prestige-screen" class="screen hidden">
+      <div class="prestige-content">
+        <div class="prestige-title">Veteran Insights</div>
+      </div>
+    </div>
+
+    <!-- ── INCIDENT MODAL ─────────────────── -->
+    <div id="incident-modal" class="hidden">
+      <div class="incident-content">
+        <div class="incident-title">Incident</div>
+      </div>
+    </div>
+
+    <!-- ── SHARE CARD CONTAINER ───────────── -->
+    <div id="share-card-container"></div>
+
+  </div><!-- /game-root -->
+
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>

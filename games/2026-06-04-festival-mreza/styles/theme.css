@@ -1,0 +1,61 @@
+/* Festival Mreža — Kluboslavija brand palette + Guncati variant */
+/* Pera Piksel / brand theme */
+
+:root {
+  /* Core brand */
+  --bg-deep:    #0d1b2e;
+  --bg-black:   #08080f;
+  --bg-surface: #111827;
+  --bg-card:    rgba(17, 24, 39, 0.9);
+
+  /* Accent colors */
+  --accent-purple:  #c44dff;  /* Kluboslavija primary */
+  --accent-amber:   #ffb830;  /* energija, buzz, carry-over gosti */
+  --accent-ice:     #4df5ff;  /* crowd particles, mreža linije */
+  --accent-green:   #4a7c59;  /* Guncati / satisfaction OK */
+
+  /* Text */
+  --text-white:  #f0f0f5;
+  --text-muted:  #6a6a9a;
+  --text-dim:    #4a4a6a;
+
+  /* Functional */
+  --overflow-warn:      #ffb830;
+  --overflow-critical:  #ff4444;
+  --floor-warm:         #ff8c42;
+  --floor-hot:          #ff5500;
+  --floor-overheated:   #ff0022;
+  --guncati-green:      #4a7c59;
+
+  /* Satisfaction */
+  --sat-high:    #4df5ff;
+  --sat-ok:      #4a7c59;
+  --sat-low:     #ffb830;
+  --sat-fail:    #ff4444;
+
+  /* Typography */
+  --font-mono:  'Courier New', 'SF Mono', ui-monospace, monospace;
+  --font-sans:  system-ui, -apple-system, sans-serif;
+
+  /* Spacing */
+  --gap-xs:  4px;
+  --gap-sm:  8px;
+  --gap-md: 16px;
+  --gap-lg: 24px;
+  --gap-xl: 32px;
+
+  /* Border radius */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* Transitions */
+  --transition: 0.15s ease;
+}
+
+/* Guncati variant override (applied when .theme-guncati on body) */
+.theme-guncati {
+  --accent-purple: #4a7c59;
+  --bg-deep:       #1a3a1a;
+  --bg-surface:    #0f2010;
+}

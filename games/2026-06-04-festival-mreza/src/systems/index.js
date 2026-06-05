@@ -1,10 +1,10 @@
-// Jova: ovaj fajl wire-uje sve systeme. Importuj iz ./physics.js, ./collision.js itd.
-// i zovi ih po redu u updateSystems.
+/**
+ * @module systems/index — System registry
+ * All systems are imported directly in main.js and micro_engine.js.
+ * This file exists as a compatibility shim.
+ */
 
-export function updateSystems(state, input, dt) {
-  if (state.paused || state.gameOver) return;
-  // updatePhysics(state, dt);
-  // updateCollisions(state);
-  // updateAI(state, dt);
-  // updateProgression(state, dt);
-}
+// Re-export key update functions for convenience
+export { updateMicro } from './micro_engine.js';
+export { getCurrentCityInfo, advanceToNextCity } from './macro_engine.js';
+export { checkAchievements, checkCareerTierUpgrade } from './progression.js';
