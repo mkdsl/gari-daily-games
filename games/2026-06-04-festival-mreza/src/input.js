@@ -37,15 +37,28 @@ export function initInput(gameState) {
     macroScreen.addEventListener('click', onMacroClick);
   }
 
-  // Start event button
-  const startBtn = document.getElementById('btn-start-event');
-  if (startBtn) {
-    startBtn.addEventListener('click', () => {
-      if (_gameState && _gameState.onStartEvent) {
-        _gameState.onStartEvent();
-      }
-    });
-  }
+  // Victory and prestige screen button delegation — these screens rebuild innerHTML
+  // and add their own click listeners, but those listeners don't have gameState access.
+  // Add a document-level delegate to catch data-action buttons from any screen.
+  document.addEventListener('click', (e) => {
+    // Skip if event already handled by #macro-screen delegation
+    if (e.target.closest('#macro-screen')) return;
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    onMacroClick(e);
+  });
+
+  // Start event button — use event delegation on macro-screen because
+  // renderMacroScreen rebuilds innerHTML and the old #btn-start-event element is replaced.
+  // The macro-screen listener already registered above via onMacroClick handles data-action,
+  // but btn-start-event may not carry data-action; add a dedicated delegated handler here.
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('#btn-start-event');
+    if (!btn) return;
+    if (_gameState && _gameState.onStartEvent) {
+      _gameState.onStartEvent();
+    }
+  });
 
   // Touch: prevent double-tap zoom
   document.addEventListener('touchend', e => e.preventDefault(), { passive: false });

@@ -252,6 +252,25 @@ function updateRedirectButtons(micro, macro) {
     btn.disabled = !state.enabled;
     btn.classList.toggle('disabled', !state.enabled);
     btn.title = state.reason || '';
+
+    // Show visible reason text below button (mobile-friendly, title attr not shown on mobile)
+    let reasonEl = btn.parentElement?.querySelector(`.redirect-reason-${i}`);
+    if (!reasonEl) {
+      reasonEl = document.createElement('span');
+      reasonEl.className = `redirect-reason redirect-reason-${i}`;
+      reasonEl.style.cssText = 'font-size:9px;color:#ffb830;display:none;position:absolute;bottom:-14px;left:0;right:0;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
+      if (btn.parentElement) {
+        btn.parentElement.style.position = 'relative';
+        btn.parentElement.appendChild(reasonEl);
+      }
+    }
+    if (btn.disabled && state.reason) {
+      reasonEl.textContent = state.reason;
+      reasonEl.style.display = 'block';
+    } else {
+      reasonEl.textContent = '';
+      reasonEl.style.display = 'none';
+    }
   });
 }
 

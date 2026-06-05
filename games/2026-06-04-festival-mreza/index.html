@@ -116,7 +116,10 @@
       <div id="micro-controls">
         <!-- BPM Slider -->
         <div class="bpm-row">
-          <span style="font-size:9px;color:var(--text-muted);flex-shrink:0">BPM</span>
+          <div class="bpm-label-col" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px">
+            <span class="bpm-title" style="font-size:10px;color:var(--text-muted)">BPM</span>
+            <span class="bpm-hint" style="font-size:9px;color:var(--text-muted);opacity:0.7;white-space:nowrap">ritam muzike</span>
+          </div>
           <div id="bpm-slider" style="flex:1;position:relative">
             <div id="bpm-slider-track">
               <div id="bpm-slider-fill" style="width:0%;height:100%;background:#4df5ff;transition:width 0.05s"></div>

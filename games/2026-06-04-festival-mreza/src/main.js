@@ -42,6 +42,8 @@ let layer = 'macro';  // 'macro' | 'micro' | 'meta'
 let lastSaveTimer = 0;
 let lastTime = null;
 let _upgradeEffects = computeUpgradeEffects(macro.upgrades_purchased);
+let _macroRenderTimer = 0;
+const MACRO_RENDER_INTERVAL = 0.5; // max 2fps for macro HTML rebuild
 
 // Shared game state object passed to input system
 const gameState = {
@@ -105,8 +107,13 @@ function gameLoop(now) {
 
   if (layer === 'macro') {
     render('macro', macro, micro, meta, now);
-    // Periodic macro UI refresh (every 500ms)
-    renderMacroScreen(macro, meta);
+    // Throttled macro UI refresh (max 2fps) — prevents innerHTML rebuild on every frame
+    // which caused event listener leaks and broken "Počni Event" button
+    _macroRenderTimer += dt;
+    if (_macroRenderTimer >= MACRO_RENDER_INTERVAL) {
+      _macroRenderTimer = 0;
+      renderMacroScreen(macro, meta);
+    }
   }
 
   if (layer === 'micro') {

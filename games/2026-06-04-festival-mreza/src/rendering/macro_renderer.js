@@ -157,10 +157,24 @@ function getNodePos(cityId, w, h) {
 }
 
 function getCityBuzzSimple(macro, cityId) {
-  const now = macro.current_city_index;
+  const currentDay = macro.current_city_index;
   let total = 0;
   for (const p of macro.promo_investments) {
-    if (p.cityId === cityId && p.active) total += p.currentBuzz(now);
+    if (p.cityId !== cityId) continue;
+    if (p.active === false) continue;
+    // Inline buzz calculation — avoids calling class method on plain JSON object after reload
+    if (typeof p.currentBuzz === 'function') {
+      total += p.currentBuzz(currentDay);
+    } else {
+      const t = currentDay - (p.dayPlaced ?? currentDay);
+      if (t < 0) {
+        total += (p.initialBuzz ?? 0);
+      } else {
+        const halfLife = p.halfLife ?? 2;
+        const remaining = (p.initialBuzz ?? 0) * Math.pow(0.5, t / halfLife);
+        total += remaining > 0.5 ? remaining : 0;
+      }
+    }
   }
   return Math.min(70, total);
 }

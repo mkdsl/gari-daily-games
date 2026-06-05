@@ -2,6 +2,21 @@
 
 import { CONFIG } from './config.js';
 import { CITY_ORDER } from './content/cities_data.js';
+import { COORDINATORS, getLoyaltyTier } from './content/coordinators_data.js';
+
+/**
+ * Get active ability id for coordinator based on static data and loyalty tier
+ * @param {object} staticData
+ * @param {number} tier 1-5
+ * @returns {string|null}
+ */
+function getActiveAbility(staticData, tier) {
+  if (tier >= 5 && staticData.tier5Ability) return staticData.tier5Ability;
+  if (tier >= 4 && staticData.tier4Ability) return staticData.tier4Ability;
+  if (tier >= 3 && staticData.tier3Ability) return staticData.tier3Ability;
+  if (tier >= 2 && staticData.tier2Ability) return staticData.tier2Ability;
+  return staticData.tier1Ability || null;
+}
 
 // ─────────────────────────────────────────
 // MACRO STATE (persisted)
@@ -118,7 +133,24 @@ export function loadMacroState(careerTier) {
       parsed.promo_investments = parsed.promo_investments.filter(p => p.active !== false);
     }
 
-    // Migrate: restore Coordinator objects (we store plain data, restore to plain objects)
+    // Migrate: restore Coordinator objects — merge saved data with static COORDINATORS data
+    if (parsed.active_coordinators && Array.isArray(parsed.active_coordinators)) {
+      parsed.active_coordinators = parsed.active_coordinators.map(c => {
+        const staticData = COORDINATORS[c.id];
+        if (!staticData) return c;
+        const loyalty = c.loyalty ?? 0;
+        const loyaltyTier = getLoyaltyTier(loyalty);
+        return {
+          ...staticData,
+          id: c.id,
+          loyalty,
+          usedThisCity: c.usedThisCity ?? false,
+          loyaltyTier,
+          activeAbility: getActiveAbility(staticData, loyaltyTier),
+        };
+      });
+    }
+
     return parsed;
   } catch (e) {
     return createMacroState(careerTier);
