@@ -7,7 +7,7 @@
   "brand_serves": ["kluboslavija", "mkdslend"],
   "kluboslavija_branded": true,
   "share_hook_url": "https://bilet.rs/show/261",
-  "stage": "impl",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "src/main.js": "Entry point, screen manager, game flow wire, all ability handlers",

@@ -81,6 +81,23 @@ function renderRosterHeader(state) {
         ` : ''}
       </div>
     </div>
+    ${state.completedNights === 0 ? `
+    <div class="how-to-play">
+      <div class="htp-title">🎓 Kako se igra?</div>
+      <div class="htp-grid">
+        <div class="htp-item"><span class="htp-icon">👥</span><span>Beri 5 članova ekipe iz levog panela</span></div>
+        <div class="htp-item"><span class="htp-icon">🎭</span><span>Dodeli uloge — svaka pojačava različite statove (E/S/P/L)</span></div>
+        <div class="htp-item"><span class="htp-icon">✨</span><span>Gledaj sinergije desno — dobri parovi daju bonus</span></div>
+        <div class="htp-item"><span class="htp-icon">🌙</span><span>Kreni u noć — 10 festivalskih scenarija te čeka</span></div>
+      </div>
+      <div class="htp-stats">
+        <span><strong>E</strong> Energija</span>
+        <span><strong>S</strong> Socijal</span>
+        <span><strong>P</strong> Ples</span>
+        <span><strong>L</strong> Logistika</span>
+      </div>
+    </div>
+    ` : ''}
   `;
 }
 
@@ -241,6 +258,7 @@ function renderSelectedSlots(state, callbacks) {
                 </option>
               `).join('')}
             </select>
+            ${isPrimaryRole ? `<div class="good-fit-label">★ Prirodna uloga (+10%)</div>` : ''}
           </div>
           <button class="slot-remove" data-member-id="${slot.memberId}" data-action="remove-member" title="Ukloni iz ekipe">×</button>
         </div>

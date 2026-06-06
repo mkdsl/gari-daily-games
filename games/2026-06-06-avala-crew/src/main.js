@@ -8,7 +8,6 @@ import { createState, loadState, saveState, resetNightSession, getNightOutcome,
 import { NIGHT_SCORE_CAP, PHASE_COMPLETION_BONUSES, CREW_INTEGRITY_BONUS, TICKETING_URL } from './config.js';
 import { initInput, buildActionHandlers } from './input.js';
 import { showScreen, initScreen, showToast, showModal, closeModal, showPrestigePrompt } from './ui.js';
-import { renderIntroScreen } from './render.js';
 import { initAudio, playAmbient, playCardSound, crossfadeTo } from './audio.js';
 import { generateShareCard, shareCrewCard } from './share.js';
 import { renderRosterScreen } from './rendering/roster_renderer.js';
@@ -278,6 +277,21 @@ function resolveCurrentScenario() {
 
   // Build applied abilities map (abilities used this scenario via pre-resolution)
   const appliedAbilities = {};
+
+  // Consume pre-set ability flags
+  if (state.bojanAutoWin && _currentScenario && _currentScenario.type === 'P') {
+    appliedAbilities['bojan'] = { forceOutcome: 'win' };
+    state.bojanAutoWin = false;
+  } else if (state.bojanAutoWin) {
+    state.bojanAutoWin = false; // consumed on wrong type, silently
+  }
+
+  if (state.anaOverridePending && _currentScenario && _currentScenario.type === 'S') {
+    appliedAbilities['ana'] = { overrideOutcome: 'partial' };
+    state.anaOverridePending = false;
+  } else if (state.anaOverridePending) {
+    state.anaOverridePending = false;
+  }
 
   const result = resolveScenario(
     _crew,
