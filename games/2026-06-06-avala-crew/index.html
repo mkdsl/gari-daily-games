@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0d1f0d">
+  <meta name="description" content="Sastaviš ekipu od 5 ljudi za Avala festival noć. Sinergije, Aftermath efekti, Kluboslavija 20. jun 2026.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Avala Crew">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Avala Crew — Gari Daily Games">
+  <meta property="og:description" content="Sastaviš ekipu za Avala festival noć. Sinergije, scenariji, share karta.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mkdsl.github.io/gari-daily-games/games/2026-06-06-avala-crew/">
+
+  <title>Avala Crew — Gari Daily Games</title>
+
+  <!-- CSS — theme first (defines custom properties used by others) -->
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+
+  <style>
+    /* Inline critical: prevent flash of unstyled content */
+    #game-root { background: #0d1f0d; min-height: 100vh; }
+    .screen--hidden { display: none !important; }
+    /* Initial loading state */
+    #loading-screen {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #0d1f0d;
+      color: #39ff14;
+      font-family: system-ui, sans-serif;
+      font-size: 14px;
+      letter-spacing: 2px;
+      z-index: 999;
+      transition: opacity 0.3s ease;
+    }
+    #loading-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading screen (hidden when JS runs) -->
+  <div id="loading-screen">AVALA CREW...</div>
+
+  <!-- Game root — card game format, max 480px, centered on desktop -->
+  <div id="game-root" role="main">
+
+    <!-- Screen: Intro -->
+    <div id="screen-intro"
+         class="screen--hidden"
+         role="region"
+         aria-label="Intro ekran">
+      <!-- Rendered by renderIntroHTML() in main.js -->
+    </div>
+
+    <!-- Screen: Roster selection -->
+    <div id="screen-roster"
+         class="screen--hidden"
+         role="region"
+         aria-label="Izbor ekipe">
+      <!-- Rendered by renderRosterScreen() -->
+    </div>
+
+    <!-- Screen: Scenario gameplay -->
+    <div id="screen-scenario"
+         class="screen--hidden"
+         role="region"
+         aria-label="Scenario ekran">
+      <!-- Rendered by renderScenarioScreen() -->
+    </div>
+
+    <!-- Screen: Outro / results -->
+    <div id="screen-outro"
+         class="screen--hidden"
+         role="region"
+         aria-label="Rezultati noći">
+      <!-- Rendered by renderOutroScreen() -->
+    </div>
+
+  </div>
+
+  <!-- Entry point (ES6 module) -->
+  <script type="module" src="src/main.js"></script>
+
+  <!-- Remove loading screen after main.js runs -->
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        var ls = document.getElementById('loading-screen');
+        if (ls) {
+          ls.classList.add('hidden');
+          setTimeout(function() { ls.remove(); }, 350);
+        }
+      }, 200);
+    });
+  </script>
+</body>
+</html>

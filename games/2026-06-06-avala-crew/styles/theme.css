@@ -1,0 +1,127 @@
+/**
+ * theme.css — Avala Crew brand palette
+ * Dark green/night blue/neon green/amber/electric blue
+ * Pera Piksel @ Gari Daily Games 2026-06-06
+ */
+
+:root {
+  /* ── Core palette ─────────────────────────────── */
+  --forest-dark: #0d1f0d;
+  --night-blue: #0e1a2e;
+  --neon-green: #39ff14;
+  --amber: #ff8c42;
+  --electric-blue: #4df5ff;
+
+  /* ── Surface colors ───────────────────────────── */
+  --surface: #1a2e1a;
+  --surface-elevated: #243d24;
+  --surface-card: #1c2c1c;
+  --surface-overlay: rgba(13, 31, 13, 0.95);
+
+  /* ── Text ─────────────────────────────────────── */
+  --text-primary: #e8f5e8;
+  --text-secondary: #9dbc9d;
+  --text-muted: #5a7a5a;
+  --text-link: #4df5ff;
+
+  /* ── State colors ─────────────────────────────── */
+  --success: #39ff14;
+  --warning: #ff8c42;
+  --danger: #ff4444;
+  --neutral: #94a3b8;
+  --info: #4df5ff;
+
+  /* ── Outcome colors ───────────────────────────── */
+  --legendary: #ffd700;
+  --good-night: #39ff14;
+  --survived: #ff8c42;
+  --kaos: #ff4444;
+
+  /* ── Stat colors ──────────────────────────────── */
+  --stat-e: #ff8c42;       /* Energy */
+  --stat-s: #4df5ff;       /* Social */
+  --stat-p: #a855f7;       /* Dance/Performance */
+  --stat-l: #22c55e;       /* Logistics */
+
+  /* ── Aftermath colors ─────────────────────────── */
+  --aftermath-buff: #39ff14;
+  --aftermath-debuff: #ff4444;
+  --aftermath-neutral: #94a3b8;
+
+  /* ── Interactive ──────────────────────────────── */
+  --btn-primary-bg: #39ff14;
+  --btn-primary-text: #0d1f0d;
+  --btn-secondary-bg: transparent;
+  --btn-secondary-border: #4df5ff;
+  --btn-secondary-text: #4df5ff;
+  --btn-disabled-bg: #2a3a2a;
+  --btn-disabled-text: #5a7a5a;
+
+  /* ── Borders ──────────────────────────────────── */
+  --border-subtle: rgba(57, 255, 20, 0.1);
+  --border-card: rgba(57, 255, 20, 0.2);
+  --border-active: #39ff14;
+
+  /* ── Shadows ──────────────────────────────────── */
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.5);
+  --shadow-active: 0 0 20px rgba(57, 255, 20, 0.3);
+  --shadow-legendary: 0 0 30px rgba(255, 215, 0, 0.4);
+
+  /* ── Typography ───────────────────────────────── */
+  --font-main: 'system-ui', '-apple-system', 'Segoe UI', sans-serif;
+  --font-mono: 'ui-monospace', 'monospace';
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-base: 15px;
+  --font-size-md: 17px;
+  --font-size-lg: 20px;
+  --font-size-xl: 26px;
+  --font-size-2xl: 34px;
+  --font-size-3xl: 48px;
+
+  /* ── Spacing ──────────────────────────────────── */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-base: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* ── Radii ────────────────────────────────────── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+
+  /* ── Transitions ──────────────────────────────── */
+  --transition-fast: 120ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 350ms ease;
+  --transition-ambient: 500ms ease;
+
+  /* ── Z-indexes ────────────────────────────────── */
+  --z-base: 1;
+  --z-elevated: 10;
+  --z-overlay: 100;
+  --z-modal: 200;
+  --z-toast: 300;
+}
+
+/* Dark theme is default */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--night-blue);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
