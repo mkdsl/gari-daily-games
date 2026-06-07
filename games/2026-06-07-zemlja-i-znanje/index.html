@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#000">
-  <title>GAME_TITLE — Gari Daily Games</title>
+  <meta name="theme-color" content="#1A2416">
+  <meta name="description" content="Zemlja i Znanje — Guncati Masterclass Simulator. Vodi imanje prirodnih zanata kroz tri sloja: planiranje sezone, izvedba sesije, reputacija.">
+  <title>Zemlja i Znanje — Guncati Masterclass</title>
   <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/theme.css">
   <link rel="stylesheet" href="styles/ui.css">
   <link rel="stylesheet" href="styles/game.css">
+  <link rel="stylesheet" href="styles/macro.css">
 </head>
 <body>
-  <div id="game-root">
+  <div id="game-container">
     <canvas id="game-canvas"></canvas>
-    <div id="hud"></div>
-    <div id="menu" class="menu-overlay"></div>
+    <div id="ui-overlay"></div>
+    <div id="main-screen"></div>
   </div>
   <script type="module" src="src/main.js"></script>
 </body>

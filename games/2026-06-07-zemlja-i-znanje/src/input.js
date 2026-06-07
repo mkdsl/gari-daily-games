@@ -1,35 +1,76 @@
-const keys = new Set();
-const pointer = { x: 0, y: 0, down: false, pressed: false, released: false };
-let _pressedBuffer = false;
-let _releasedBuffer = false;
+/**
+ * input.js — Click/touch/keyboard handlers
+ * Forwarduje canvas klick kroz event bus
+ */
+
+import { bus, EVT } from './events.js';
+
+const _keys = new Set();
+const _pointer = { x: 0, y: 0, down: false };
 
 export function initInput(canvas) {
-  window.addEventListener('keydown', e => keys.add(e.key.toLowerCase()));
-  window.addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
+  // Keyboard
+  window.addEventListener('keydown', e => {
+    _keys.add(e.key.toLowerCase());
+    if (e.key === ' ' || e.key === 'Escape') {
+      e.preventDefault();
+    }
+    if (e.key === ' ') bus.emit(EVT.SESSION_PAUSE);
+    if (e.key === 'Escape') bus.emit(EVT.MODAL_CLOSE);
+  });
 
-  const setPointer = (e, down) => {
+  window.addEventListener('keyup', e => {
+    _keys.delete(e.key.toLowerCase());
+  });
+
+  // Mouse/Touch on canvas
+  function getCanvasPos(e) {
     const rect = canvas.getBoundingClientRect();
     const t = e.touches?.[0] ?? e;
-    pointer.x = (t.clientX - rect.left);
-    pointer.y = (t.clientY - rect.top);
-    if (down === true) { pointer.down = true; _pressedBuffer = true; }
-    if (down === false) { pointer.down = false; _releasedBuffer = true; }
-  };
+    return {
+      x: (t.clientX - rect.left) * (canvas.width / rect.width),
+      y: (t.clientY - rect.top) * (canvas.height / rect.height)
+    };
+  }
 
-  canvas.addEventListener('mousedown', e => setPointer(e, true));
-  canvas.addEventListener('mousemove', e => setPointer(e));
-  canvas.addEventListener('mouseup', e => setPointer(e, false));
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); setPointer(e, true); }, { passive: false });
-  canvas.addEventListener('touchmove', e => { e.preventDefault(); setPointer(e); }, { passive: false });
-  canvas.addEventListener('touchend', e => { setPointer(e, false); });
+  canvas.addEventListener('click', e => {
+    const pos = getCanvasPos(e);
+    bus.emit(EVT.CANVAS_CLICK, pos);
+  });
+
+  canvas.addEventListener('mousedown', e => {
+    Object.assign(_pointer, getCanvasPos(e), { down: true });
+    bus.emit(EVT.AUDIO_PLAY, { sound: 'ui_click' });
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    Object.assign(_pointer, getCanvasPos(e));
+  });
+
+  canvas.addEventListener('mouseup', e => {
+    _pointer.down = false;
+  });
+
+  canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    Object.assign(_pointer, getCanvasPos(e), { down: true });
+    bus.emit(EVT.CANVAS_CLICK, getCanvasPos(e));
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    Object.assign(_pointer, getCanvasPos(e));
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', e => {
+    _pointer.down = false;
+  });
 }
 
-export function readInput() {
-  const snapshot = {
-    keys: new Set(keys),
-    pointer: { ...pointer, pressed: _pressedBuffer, released: _releasedBuffer }
-  };
-  _pressedBuffer = false;
-  _releasedBuffer = false;
-  return snapshot;
+export function isKeyDown(key) {
+  return _keys.has(key.toLowerCase());
+}
+
+export function getPointer() {
+  return { ..._pointer };
 }

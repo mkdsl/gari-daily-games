@@ -1,0 +1,95 @@
+/* theme.css — Guncati paleta */
+
+:root {
+  --guncati-green: #4A6741;
+  --guncati-earth: #C4956A;
+  --guncati-clay: #A0522D;
+  --guncati-stone: #E8E0D0;
+  --guncati-water: #2C5F6E;
+  --guncati-gold: #F4C430;
+  --guncati-dark: #1A2416;
+  --guncati-text: #F2EDE4;
+  --guncati-bg2: #2A3A1E;
+  --guncati-bg3: #3A5031;
+  --guncati-success: #5aad5a;
+  --guncati-danger: #cc3333;
+  --guncati-warning: #E8A020;
+}
+
+/* Apply themed focus ring */
+*:focus-visible {
+  outline: 2px solid var(--guncati-gold);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background: var(--guncati-green);
+  color: var(--guncati-text);
+}
+
+/* Section card overrides with theme */
+.section-card {
+  border-color: var(--guncati-green);
+}
+
+.section-card:hover {
+  border-color: rgba(244, 196, 48, 0.4);
+}
+
+/* Achievement colors */
+.ach-item.unlocked .ach-icon { filter: none; }
+.ach-item.locked .ach-icon  { filter: grayscale(1) opacity(0.4); }
+.ach-item.unlocked { border-color: var(--guncati-gold); }
+
+/* Prestige prompt */
+.prestige-prompt {
+  background: linear-gradient(135deg, rgba(244,196,48,0.1), rgba(74,103,65,0.2));
+  border: 2px solid var(--guncati-gold);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  text-align: center;
+}
+
+.btn-prestige {
+  background: var(--guncati-gold);
+  color: var(--guncati-dark);
+  border: none;
+  padding: 10px 24px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+  transition: all 0.2s;
+}
+
+.btn-prestige:hover { filter: brightness(1.1); transform: scale(1.02); }
+
+/* Season grades */
+.grade-S { color: var(--guncati-gold); }
+.grade-A { color: var(--guncati-success); }
+.grade-B { color: var(--guncati-green); }
+.grade-C { color: var(--guncati-earth); }
+.grade-D { color: var(--guncati-clay); }
+.grade-F { color: var(--guncati-danger); }
+
+/* Themed inputs */
+select, input[type="number"], input[type="text"] {
+  background: rgba(42, 58, 30, 0.8);
+  border: 1px solid var(--guncati-green);
+  color: var(--guncati-text);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: 'Georgia', serif;
+}
+
+select:focus, input:focus {
+  border-color: var(--guncati-gold);
+  outline: none;
+}
+
+option {
+  background: var(--guncati-dark);
+}

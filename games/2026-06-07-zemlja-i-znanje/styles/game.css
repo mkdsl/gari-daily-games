@@ -1,17 +1,301 @@
-/* Pera: dodaj particle animacije, screen shake, damage flash ovde */
+/* game.css — Session UI animacije, timeline, figurice, energy bars, incident card, aforizem */
 
+/* ========== SESSION TIMELINE STRIP ========== */
+.session-timeline-strip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  background: rgba(26,36,22,0.92);
+  border-bottom: 2px solid #4A6741;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.micro-timeline {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.micro-slot {
+  flex: 1;
+  border-left: 3px solid #4A6741;
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #888;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.micro-slot:first-child { border-left: none; }
+
+.micro-slot.active {
+  background: rgba(74,103,65,0.25);
+  color: #F2EDE4;
+}
+
+.micro-slot.completed {
+  background: rgba(42,58,30,0.5);
+  color: #4A6741;
+}
+
+.ms-time { font-size: 9px; color: #888; }
+.ms-icon { font-size: 16px; margin: 1px 0; }
+.ms-name { font-size: 9px; text-align: center; line-height: 1.2; }
+
+.ms-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(74,103,65,0.3);
+}
+
+.ms-progress-fill {
+  height: 100%;
+  background: #F4C430;
+  transition: width 0.3s linear;
+}
+
+/* ========== HUD LEFT ========== */
+.hud-left {
+  position: fixed;
+  left: 0;
+  top: 64px;
+  width: 150px;
+  background: rgba(26,36,22,0.88);
+  border-right: 1px solid #4A6741;
+  border-bottom: 1px solid #4A6741;
+  padding: 10px;
+  z-index: 40;
+  border-radius: 0 0 8px 0;
+}
+
+.hud-time {
+  font-size: 22px;
+  font-weight: bold;
+  color: #F4C430;
+  font-family: 'Courier New', monospace;
+}
+
+.hud-activity {
+  font-size: 13px;
+  color: #C4956A;
+  margin: 4px 0;
+}
+
+.hud-sat {
+  font-size: 14px;
+  color: #E8E0D0;
+  margin: 4px 0;
+}
+
+.hud-slot-info {
+  font-size: 11px;
+  color: #555;
+}
+
+/* ========== ENERGY BARS RIGHT ========== */
+.energy-bars-panel {
+  position: fixed;
+  right: 0;
+  top: 64px;
+  width: 160px;
+  background: rgba(26,36,22,0.88);
+  border-left: 1px solid #4A6741;
+  padding: 8px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+.energy-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ebar-portrait { font-size: 16px; flex-shrink: 0; }
+
+.ebar-bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ebar-track {
+  height: 6px;
+  background: rgba(74,103,65,0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.ebar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease, background 0.5s;
+}
+
+.ebar-sat-fill { background: #4A6741 !important; }
+
+.ebar-mood { font-size: 14px; }
+
+/* ========== SPEED CONTROLS ========== */
+.speed-controls {
+  position: fixed;
+  top: 70px;
+  right: 170px;
+  display: flex;
+  gap: 4px;
+  z-index: 40;
+}
+
+.speed-btn {
+  background: rgba(26,36,22,0.88);
+  border: 1px solid #4A6741;
+  color: #888;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.speed-btn.active {
+  background: #4A6741;
+  color: #F4C430;
+  border-color: #F4C430;
+}
+
+.btn-pause-session {
+  background: rgba(26,36,22,0.88);
+  border: 1px solid #C4956A;
+  color: #C4956A;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-pause-session:hover { background: rgba(196,149,106,0.1); }
+
+/* ========== AFORIZEM STRIP ========== */
+.aforizem-strip {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 600px;
+  text-align: center;
+  font-style: italic;
+  color: rgba(74,103,65,0.7);
+  font-size: 13px;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.aforizem-strip.fade-in { opacity: 1; }
+
+/* ========== GUIDED MODE ========== */
+.guided-mode #ui-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  border: 3px solid #F4C430;
+  pointer-events: none;
+  z-index: 5;
+  box-shadow: inset 0 0 20px rgba(244,196,48,0.1);
+  animation: guidedPulse 2s ease-in-out infinite;
+}
+
+@keyframes guidedPulse {
+  0%, 100% { box-shadow: inset 0 0 20px rgba(244,196,48,0.1); }
+  50% { box-shadow: inset 0 0 40px rgba(244,196,48,0.2); }
+}
+
+/* ========== PARTICLE ANIMATIONS ========== */
 @keyframes shake {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(-2px, 1px); }
-  50% { transform: translate(2px, -1px); }
-  75% { transform: translate(-1px, 2px); }
+  0%, 100% { transform: translate(0); }
+  25% { transform: translate(-3px, 2px); }
+  50% { transform: translate(3px, -2px); }
+  75% { transform: translate(-2px, 3px); }
 }
 
-.shake { animation: shake 0.3s ease-in-out; }
+.screen-shake { animation: shake 0.4s ease-in-out; }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+/* ========== FIGURICE GLOW ========== */
+@keyframes figureHappy {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(90,173,90,0.5)); }
+  50% { filter: drop-shadow(0 0 8px rgba(90,173,90,0.8)); }
 }
 
-.pulse { animation: pulse 1.2s ease-in-out infinite; }
+/* Active slot highlight */
+.micro-slot.active .ms-icon {
+  animation: slotBounce 0.5s ease-out;
+}
+
+@keyframes slotBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* Timeline slot active glow */
+.micro-slot.active {
+  box-shadow: inset 0 0 12px rgba(244,196,48,0.15);
+}
+
+.micro-slot.active::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: #F4C430;
+  border-radius: 50%;
+  animation: dotPulse 1s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.5; transform: translateX(-50%) scale(0.5); }
+}
+
+/* Active slot for planning timeline */
+.timeline-slot.active-slot {
+  border-left-width: 4px !important;
+  background: rgba(244,196,48,0.1);
+  box-shadow: inset 0 0 8px rgba(244,196,48,0.15);
+}
+
+/* Slide animations */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-in { animation: slideIn 0.3s ease-out; }
+.fade-in { animation: fadeIn 0.5s ease-out; }

@@ -1,0 +1,345 @@
+/* macro.css — Planning screen specifični stilovi */
+
+/* ========== PLANNING WRAPPER ========== */
+.planning-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.planning-screen-wrap {
+  overflow-y: auto;
+  background: #1A2416;
+}
+
+.planning-header {
+  text-align: center;
+  padding: 20px 0 16px;
+  border-bottom: 1px solid rgba(74,103,65,0.4);
+  margin-bottom: 16px;
+}
+
+.planning-title {
+  font-size: clamp(28px, 5vw, 48px);
+  color: #F4C430;
+}
+
+.planning-subtitle {
+  color: #C4956A;
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.rep-display {
+  display: inline-block;
+  background: rgba(244,196,48,0.1);
+  border: 1px solid rgba(244,196,48,0.3);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #F4C430;
+  margin-top: 8px;
+}
+
+.rep-val { font-weight: bold; }
+
+/* Two-column layout */
+.planning-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .planning-body { grid-template-columns: 1fr; }
+}
+
+/* ========== THEME SELECTOR ========== */
+.theme-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.theme-card {
+  background: rgba(42,58,30,0.5);
+  border: 2px solid #4A6741;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.theme-card:hover:not(.locked) {
+  border-color: #F4C430;
+  background: rgba(74,103,65,0.3);
+}
+
+.theme-card.selected {
+  border-color: #F4C430;
+  background: rgba(244,196,48,0.08);
+  box-shadow: 0 0 12px rgba(244,196,48,0.2);
+}
+
+.theme-card.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.theme-icon { font-size: 28px; flex-shrink: 0; }
+
+.theme-info { flex: 1; }
+.theme-name { font-size: 15px; color: #F2EDE4; font-weight: bold; }
+.theme-desc { font-size: 12px; color: #888; margin-top: 2px; line-height: 1.3; }
+
+.theme-meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.theme-days { font-size: 12px; color: #C4956A; }
+.theme-complexity { color: #F4C430; font-size: 12px; }
+
+.theme-lock {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  font-size: 11px;
+  color: #cc3333;
+}
+
+/* ========== PARTICIPANT SELECTOR ========== */
+.participant-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.btn-count {
+  background: rgba(74,103,65,0.3);
+  border: 1px solid #4A6741;
+  color: #F4C430;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-count:hover { background: #4A6741; }
+
+.count-display {
+  font-size: 28px;
+  color: #F2EDE4;
+  font-weight: bold;
+  min-width: 30px;
+  text-align: center;
+}
+
+.candidates-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.candidate-card {
+  background: rgba(42,58,30,0.4);
+  border: 1px solid rgba(74,103,65,0.3);
+  border-radius: 6px;
+  padding: 6px;
+  text-align: center;
+  transition: all 0.2s;
+  cursor: default;
+}
+
+.candidate-card.selected {
+  border-color: #4A6741;
+  background: rgba(74,103,65,0.2);
+}
+
+.candidate-portrait { font-size: 20px; display: block; }
+.candidate-name { font-size: 9px; color: #C4956A; display: block; margin-top: 2px; }
+
+.candidate-stats { margin-top: 3px; }
+
+.mini-bar {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.energy-bar { background: #5aad5a; }
+
+/* ========== STAFF SELECTOR ========== */
+.staff-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.staff-card {
+  background: rgba(42,58,30,0.4);
+  border: 1px solid rgba(74,103,65,0.3);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.staff-card:hover {
+  border-color: #4A6741;
+  background: rgba(74,103,65,0.2);
+}
+
+.staff-card.hired {
+  border-color: #F4C430;
+  background: rgba(244,196,48,0.07);
+}
+
+.staff-emoji { font-size: 24px; flex-shrink: 0; padding-top: 2px; }
+
+.staff-info { flex: 1; }
+.staff-name { font-size: 14px; color: #F2EDE4; font-weight: bold; }
+.staff-role { font-size: 12px; color: #C4956A; }
+.staff-desc { font-size: 11px; color: #888; margin-top: 2px; line-height: 1.3; }
+.staff-cost { font-size: 11px; color: #cc3333; margin-top: 3px; }
+
+.staff-toggle {
+  font-size: 12px;
+  color: #4A6741;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.staff-card.hired .staff-toggle { color: #F4C430; }
+
+/* ========== BUDGET PREVIEW ========== */
+.budget-preview { }
+.budget-rows { }
+
+.budget-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(74,103,65,0.15);
+  color: #E8E0D0;
+}
+
+.budget-row:last-child { border-bottom: none; }
+.budget-row.total { font-weight: bold; font-size: 14px; }
+.budget-row.budget-available { color: #F4C430; }
+
+/* ========== CURRICULUM BUILDER ========== */
+.curriculum-info {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.timeline-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.timeline-slot {
+  background: rgba(42,58,30,0.5);
+  border: 1px solid rgba(74,103,65,0.3);
+  border-left: 4px solid #4A6741;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.timeline-slot:hover:not(.locked) {
+  background: rgba(74,103,65,0.2);
+}
+
+.slot-time { font-size: 12px; color: #888; width: 40px; flex-shrink: 0; }
+.slot-icon { font-size: 18px; }
+.slot-name { font-size: 13px; color: #E8E0D0; flex: 1; }
+.slot-lock { font-size: 12px; color: #555; }
+
+.timeline-slot.locked { opacity: 0.7; cursor: default; }
+
+/* Activity palette */
+.activity-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.act-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #F2EDE4;
+  transition: all 0.15s;
+  font-family: 'Georgia', serif;
+}
+
+.act-btn:hover { filter: brightness(1.2); transform: translateY(-1px); }
+
+/* Plan validation */
+.plan-validation {
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.plan-validation.valid { background: rgba(90,173,90,0.1); color: #5aad5a; }
+.plan-validation.invalid { background: rgba(204,51,51,0.1); color: #cc3333; }
+
+/* ========== WEATHER PANEL ========== */
+.weather-panel { }
+
+.weather-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.weather-icon { font-size: 28px; }
+.weather-name { font-size: 16px; color: #F2EDE4; }
+.weather-effect { font-size: 13px; color: #C4956A; }
+
+/* ========== PLANNING ACTIONS ========== */
+.planning-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 480px) {
+  .candidates-grid { grid-template-columns: repeat(3, 1fr); }
+  .planning-title { font-size: 24px; }
+  .timeline-slot { padding: 6px 8px; }
+  .slot-time { width: 32px; font-size: 10px; }
+}
