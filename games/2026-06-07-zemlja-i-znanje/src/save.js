@@ -9,7 +9,7 @@ import { bus, EVT } from './events.js';
 // === MACRO STATE ===
 export function saveMacro(macroState) {
   try {
-    localStorage.setItem(SAVE_KEYS.MACRO, JSON.stringify(macroState));
+    localStorage.setItem(SAVE_KEYS.MACRO, JSON.stringify({ ...macroState, version: 1 }));
     return true;
   } catch (e) {
     console.warn('[save] macro save failed:', e.message);
@@ -41,7 +41,7 @@ export function clearMacro() {
 // === MICRO TEMP STATE (atomarna sesija) ===
 export function saveMicro(microState) {
   try {
-    localStorage.setItem(SAVE_KEYS.MICRO, JSON.stringify(microState));
+    localStorage.setItem(SAVE_KEYS.MICRO, JSON.stringify({ ...microState, version: 1 }));
     return true;
   } catch (e) {
     return false;

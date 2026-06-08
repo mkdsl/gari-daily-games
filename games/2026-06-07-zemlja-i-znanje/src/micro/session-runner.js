@@ -28,6 +28,7 @@ let _realSecondsAccumulated = 0;
 let _autoSaveTimer = 0;
 let _macroStateRef = null;
 let _metaStateRef = null;
+let _rainActive = false;
 
 /**
  * Pokreće sesiju
@@ -131,9 +132,13 @@ function loop(timestamp) {
       return;
     }
 
-    // Rain check for render
-    if (weather.rain) {
+    // Rain check for render — debounced with flag to avoid per-frame events
+    if (weather.rain && !_rainActive) {
+      _rainActive = true;
       bus.emit(EVT.RAIN_START);
+    } else if (!weather.rain && _rainActive) {
+      _rainActive = false;
+      bus.emit(EVT.RAIN_STOP);
     }
   }
 
@@ -159,9 +164,7 @@ function endSession(micro) {
   const seasonMult = getSeasonMultiplier(_macroStateRef?.currentSeason || 1);
   const repGained = Math.round(result.participantsFinished * avgSat * 100 * satMod * seasonMult);
 
-  bus.emit(EVT.SESSION_END, { result, repGained });
-
-  // Show evaluation screen overlay
+  // Show evaluation screen overlay — SESSION_END is emitted from "Nastavi →" click
   showEvaluationOverlay(result, repGained);
 }
 
@@ -186,7 +189,7 @@ function showEvaluationOverlay(result, repGained) {
   if (btnContinue) {
     btnContinue.addEventListener('click', () => {
       evalEl.parentNode?.removeChild(evalEl);
-      bus.emit(EVT.SCREEN_CHANGE, { screen: 'season_summary' });
+      bus.emit(EVT.SESSION_END, { result, repGained });
     });
   }
 
@@ -210,6 +213,7 @@ function getSeasonMultiplier(season) {
 
 export function stopSessionRunner() {
   _running = false;
+  _rainActive = false;
   if (_animFrame) cancelAnimationFrame(_animFrame);
 }
 

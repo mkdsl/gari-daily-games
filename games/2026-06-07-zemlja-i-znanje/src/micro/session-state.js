@@ -46,7 +46,7 @@ export function clearMicroState() {
  * Returns minutes elapsed this tick
  */
 export function tickClock(deltaMs, speed = 1) {
-  if (!_micro || _micro.isPaused || _micro.sessionEnded) return 0;
+  if (!_micro || _micro.isPaused || _micro.sessionEnded) return { minutesElapsed: 0, slotChanged: false, newSlot: _micro ? _micro.currentSlot : 0 };
 
   // 1 game minute = 1 real second at speed 1
   const minutesElapsed = (deltaMs / 1000) * speed;

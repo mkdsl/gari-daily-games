@@ -343,9 +343,10 @@ function refreshTimeline() {
   const builder = el('#timeline-builder', _container);
   if (!builder) return;
 
-  builder.querySelectorAll('.timeline-slot:not(.locked)').forEach((slotEl, i) => {
-    const slot = _state.plan[i];
-    if (!slot || slot.locked) return;
+  let planIdx = 0;
+  builder.querySelectorAll('.timeline-slot').forEach((slotEl) => {
+    const slot = _state.plan[planIdx++];
+    if (!slot || slot.locked || slotEl.classList.contains('locked')) return;
     const act = ACTIVITY_TYPES[slot.activity] || ACTIVITY_TYPES.teorija;
     slotEl.style.borderLeftColor = act.color;
     const nameEl = slotEl.querySelector('.slot-name');
