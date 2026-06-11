@@ -7,7 +7,7 @@
   "brand_serves": ["guncati", "mkdslend"],
   "guncati_branded": true,
   "share_hook_url": "https://guncati.rs",
-  "stage": "impl",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "src/main.js": "Bootstrap, screen manager, wire sve module, guided mode flag",
@@ -78,8 +78,8 @@
     "total_js": 7744,
     "total_css": 1498
   },
-  "beta_score": null,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
+  "beta_score": 5.5,
+  "beta_score_iter2": 9.0,
+  "post_fix_score": 9.0,
   "sef_signoff": false
 }
