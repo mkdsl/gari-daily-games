@@ -46,6 +46,22 @@ GDG nije više "dnevni eksperiment". Strateški je povezan sa:
 
 **Stage-per-session ekonomija:** 1 stage = 1 sesija ≈ 4–5h cloud (mora stati u trigger razmak). 10K+ LOC se gradi kroz 3 sesije istog dana, ne 1. **30+ igara mesečno** umesto ~10.
 
+**KORAK 0a — Manifest/docs drift self-check (PRE routing tabele, svaki trigger):**
+
+Pre primene routing tabele iz KORAK 0, proveri da li `docs/` artefakti najnovije igre
+"prestižu" `manifest.json`:
+
+- Ako `docs/beta_report_2.md` postoji ALI `manifest.stage != "polish"`:
+  - Upiši `stage: "polish"`, `beta_score` (iz beta_report.md), `beta_score_iter2` i
+    `post_fix_score` (iz beta_report_2.md / sef_signoff.md) u manifest.
+  - Commit: `fix(<naziv-igre>): manifest/docs sync (KORAK 0a)`, push.
+  - `sef_signoff` i `status` ostaju netaknuti — KORAK 6.75/7 i dalje čekaju šefa.
+- Ako `docs/sef_signoff.md` ima čekirano "OK za release" ALI `manifest.sef_signoff != true`:
+  - Tretiraj kao odobren KORAK 6.75 — nastavi na KORAK 7 (Finale) bez obzira na trigger tip.
+- Ako nijedan drift nije nađen — preskoči, idi na routing tabelu ispod.
+
+Ovaj korak je idempotentan i ne zahteva šef-test — sinhronizuje POSTOJEĆE rezultate, ne kreira nove.
+
 ## Arhitektura za Token Economy (KLJUČNO)
 
 Svaka igra ima **modularnu strukturu sa manifest fajlom**. Agenti ne čitaju celu igru — čitaju samo module koji ih zanimaju. Pipeline korak X ne sme da učita fajlove koje ne menja.
