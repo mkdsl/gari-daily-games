@@ -82,6 +82,12 @@ export function showSplash(state) {
   // Click to close
   el.addEventListener('click', () => hideSplash(state), { once: true });
 
+  // Close splash on any HUD interaction
+  const hud = document.getElementById('hud');
+  if (hud) {
+    hud.addEventListener('click', () => hideSplash(state), { once: true });
+  }
+
   return true;
 }
 

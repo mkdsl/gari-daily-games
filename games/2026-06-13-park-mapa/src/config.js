@@ -49,6 +49,7 @@ export const CONFIG = {
   // ─── Egg hunt ──────────────────────────────────────────────────────────────
   EGGS_PER_DAY: 7,
   EGG_HOTSPOTS: 40,
+  EGG_HIT_RADIUS: 24,
 
   // ─── Rank thresholds (total PT earned) ────────────────────────────────────
   PARK_RANKS: [
@@ -94,6 +95,10 @@ export const CONFIG = {
       flavor: 'Đorđe luta između Pulta i Šume. Nosi uvek neku semenku u džepu.',
     },
   ],
+
+  // ─── Zone progression caps ─────────────────────────────────────────────────
+  STORIES_PER_ZONE: 5,
+  ZONE_MAX_LEVEL: 5,
 
   // ─── Zone sets ─────────────────────────────────────────────────────────────
   ACTIVE_ZONES: ['pult', 'bina', 'suma'],

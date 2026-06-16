@@ -58,7 +58,7 @@ export function completeDailyLight(state, emit) {
   if (state.dailyLight.completed) return 0;
 
   // Daily light bonus = total daily-light PT minus the base check-in PT
-  const bonus = (CONFIG.ZONE_CHECKIN_DAILY_LIGHT || 25) - (CONFIG.ZONE_CHECKIN || 15);
+  const bonus = (CONFIG.PT_REWARDS.ZONE_CHECKIN_DAILY_LIGHT || 25) - (CONFIG.PT_REWARDS.ZONE_CHECKIN || 15);
   state.dailyLight.completed = true;
   state.dailyLight.bonusEarned = bonus;
 

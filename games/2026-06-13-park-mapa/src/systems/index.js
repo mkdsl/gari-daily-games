@@ -1,10 +1,3 @@
-// Jova: ovaj fajl wire-uje sve systeme. Importuj iz ./physics.js, ./collision.js itd.
-// i zovi ih po redu u updateSystems.
-
-export function updateSystems(state, input, dt) {
-  if (state.paused || state.gameOver) return;
-  // updatePhysics(state, dt);
-  // updateCollisions(state);
-  // updateAI(state, dt);
-  // updateProgression(state, dt);
-}
+// Deprecated: Park Mapa uses direct imports from individual system modules.
+// This file is kept as a placeholder only.
+export {};

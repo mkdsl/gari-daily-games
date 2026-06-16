@@ -58,14 +58,14 @@ export function renderHUD(state, emit) {
     <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
       <!-- Park name + season -->
       <div>
-        <span style="font-size:13px; font-weight:bold; color:#E8DCC8;">MKDSLend Park</span>
+        <span style="font-size:13px; font-weight:bold; color:var(--text);">MKDSLend Park</span>
         <span style="font-size:9px; color:#444; margin-left:6px;">S${state.season || 1}</span>
       </div>
 
       <!-- PT Balance -->
       <div style="display:flex; align-items:center; gap:4px;">
         <span style="font-size:10px; color:#888;">PT</span>
-        <span id="pt-balance" style="font-size:16px; font-weight:bold; color:#FFD700;">${formatPT(state.pt)}</span>
+        <span id="pt-balance" style="font-size:16px; font-weight:bold; color:var(--gold);">${formatPT(state.pt)}</span>
       </div>
 
       <!-- Rank -->
@@ -83,7 +83,7 @@ export function renderHUD(state, emit) {
 
       <!-- Eggs today -->
       <div style="font-size:10px; color:#555;">
-        Eggs: <span style="color:#FFD700;">${eggsToday}/7</span>
+        Eggs: <span style="color:var(--gold);">${eggsToday}/7</span>
       </div>
 
       <!-- Nav buttons -->

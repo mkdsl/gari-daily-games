@@ -1,6 +1,16 @@
 let cachedSetlist = null;
 let fetchPromise = null;
 
+const SETLIST_FALLBACK = {
+  season: 'Kluboslavija 2026',
+  dates: [
+    { date: '2026-06-20', venue: 'Avala', city: 'Beograd', url: 'https://app.bilet.rs/show/261', avala_exclusive: true },
+    { date: '2026-07-15', venue: 'Štrand', city: 'Novi Sad', url: null },
+    { date: '2026-08-10', venue: 'TBD', city: 'Sarajevo', url: null },
+    { date: '2026-09-20', venue: 'Guncati', city: 'Guncati', url: null, grand_finale: true }
+  ]
+};
+
 export async function fetchSetlist() {
   if (cachedSetlist) return cachedSetlist;
   if (fetchPromise) return fetchPromise;
@@ -20,9 +30,14 @@ export async function fetchSetlist() {
       return cachedSetlist;
     })
     .catch(err => {
-      console.warn('[SetlistLoader] Could not load setlist:', err);
+      console.warn('[SetlistLoader] Could not load setlist, using fallback:', err);
       fetchPromise = null;
-      return null;
+      cachedSetlist = SETLIST_FALLBACK;
+      cachedSetlist.parsedDates = SETLIST_FALLBACK.dates.map(d => ({
+        ...d,
+        dateObj: new Date(d.date)
+      }));
+      return cachedSetlist;
     });
 
   return fetchPromise;
