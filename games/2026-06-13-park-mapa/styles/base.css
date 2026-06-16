@@ -1,26 +1,63 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* Park Mapa — Base Layout */
 
 html, body {
-  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono, 'Courier New', monospace);
   height: 100%;
   overflow: hidden;
-  background: #0a0a0f;
-  color: #e5e5e5;
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  -webkit-tap-highlight-color: transparent;
   user-select: none;
+  -webkit-user-select: none;
 }
 
 #game-root {
-  position: fixed;
-  inset: 0;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* HUD bar - top strip */
+#hud {
+  position: relative;
+  z-index: var(--z-hud, 100);
+  background: rgba(10, 21, 32, 0.97);
+  border-bottom: 1px solid var(--border, #1a2d42);
+  padding: 8px 16px;
+  flex-shrink: 0;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+/* Canvas wrapper — fills remaining space */
+#canvas-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
 }
 
 #game-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
   display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: crosshair;
   touch-action: none;
+}
+
+/* Overlay base (panels, modals etc use position: fixed, so no special styles needed here) */
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  #hud {
+    padding: 6px 10px;
+    min-height: 36px;
+  }
 }

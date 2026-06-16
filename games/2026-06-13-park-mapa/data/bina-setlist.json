@@ -1,0 +1,9 @@
+{
+  "season": "Kluboslavija 2026",
+  "dates": [
+    { "date": "2026-06-20", "venue": "Avala", "city": "Beograd", "url": "https://app.bilet.rs/show/261", "avala_exclusive": true },
+    { "date": "2026-07-15", "venue": "Štrand", "city": "Novi Sad", "url": null },
+    { "date": "2026-08-10", "venue": "TBD", "city": "Sarajevo", "url": null },
+    { "date": "2026-09-20", "venue": "Guncati", "city": "Guncati", "url": null, "grand_finale": true }
+  ]
+}

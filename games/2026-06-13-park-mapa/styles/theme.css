@@ -1,0 +1,83 @@
+/* Park Mapa — MKDSLend Theme
+   CSS Custom Properties for brand palette and season theming
+*/
+
+:root {
+  /* Core palette */
+  --bg: #0D1B2A;
+  --bg-panel: #0a1520;
+  --bg-card: #0d1825;
+
+  /* Zone accents */
+  --pult-accent: #BF5FFF;
+  --bina-accent: #FFB830;
+  --suma-accent: #40C87E;
+  --locked-gray: #2A3040;
+
+  /* Special */
+  --gold: #FFD700;
+  --text: #E8DCC8;
+  --text-dim: #667788;
+  --text-muted: #445566;
+  --border: #1a2d42;
+  --border-dim: #111c28;
+
+  /* Star and cloud colors (season-swappable) */
+  --star-color: #E8DCC8;
+  --cloud-color: #4a6080;
+
+  /* Semantic */
+  --success: #40C87E;
+  --error: #FF4444;
+  --info: #5BA4CF;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-s: 8px;
+  --spacing-m: 16px;
+  --spacing-l: 24px;
+  --spacing-xl: 32px;
+
+  /* Radius */
+  --radius-s: 3px;
+  --radius-m: 6px;
+  --radius-l: 10px;
+
+  /* Font */
+  --font-mono: 'Courier New', Courier, monospace;
+  --font-size-xs: 9px;
+  --font-size-s: 11px;
+  --font-size-m: 13px;
+  --font-size-l: 16px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 28px;
+
+  /* Z-index layers */
+  --z-canvas: 0;
+  --z-hud: 100;
+  --z-panel: 400;
+  --z-overlay: 600;
+  --z-modal: 700;
+  --z-toast: 800;
+  --z-splash: 1000;
+}
+
+/* Monospace everywhere */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}

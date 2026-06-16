@@ -1,55 +1,147 @@
+/* Park Mapa — UI Styles: HUD, panels, overlays, toasts */
+
+/* ─── HUD ─────────────────────────────────────────────────────────────── */
 #hud {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  right: 16px;
-  display: flex;
-  gap: 16px;
-  z-index: 10;
+  font-size: var(--font-size-s, 11px);
+}
+
+#hud button {
+  font-family: var(--font-mono);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+#hud button:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: #555;
+  color: var(--text);
+}
+
+#hud button:active {
+  background: rgba(255,255,255,0.1);
+}
+
+/* PT balance pulse animation */
+@keyframes ptPulse {
+  0%   { transform: scale(1); color: var(--gold); }
+  40%  { transform: scale(1.25); color: #fff; }
+  100% { transform: scale(1); color: var(--gold); }
+}
+
+#pt-balance {
+  display: inline-block;
+  transition: color 0.2s;
+}
+
+/* ─── Panels (logbook, npc) ───────────────────────────────────────────── */
+#logbook-panel,
+#npc-panel {
+  font-size: var(--font-size-s, 11px);
+  /* Colors handled inline via JS for now; just ensure font */
+}
+
+/* Category tabs */
+.lb-tab {
+  font-family: var(--font-mono) !important;
+  transition: background 0.15s, color 0.15s;
+}
+
+.lb-tab:hover {
+  opacity: 0.85;
+}
+
+/* NPC cards */
+.npc-card {
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.npc-card:hover {
+  transform: translateX(2px);
+}
+
+/* Claim button */
+.npc-claim-btn {
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.npc-claim-btn:hover {
+  opacity: 0.9;
+}
+
+.npc-claim-btn:active {
+  transform: scale(0.97);
+}
+
+/* ─── Flavor overlay ──────────────────────────────────────────────────── */
+#flavor-overlay {
+  font-family: var(--font-mono);
+}
+
+#flavor-overlay button {
+  font-family: var(--font-mono);
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+#flavor-overlay button:hover {
+  opacity: 0.9;
+}
+
+#flavor-overlay button:active {
+  transform: scale(0.98);
+}
+
+/* ─── Upgrade modal ───────────────────────────────────────────────────── */
+#upgrade-confirm {
+  transition: opacity 0.15s;
+}
+
+#upgrade-confirm:hover {
+  opacity: 0.9;
+}
+
+/* ─── Toast container ─────────────────────────────────────────────────── */
+#toast-container {
   pointer-events: none;
 }
 
-.stat {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  backdrop-filter: blur(8px);
+/* ─── Splash screen ───────────────────────────────────────────────────── */
+#splash-screen {
+  font-family: var(--font-mono);
 }
 
-.menu-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  background: rgba(10, 10, 15, 0.85);
-  backdrop-filter: blur(12px);
-  z-index: 20;
+/* ─── Closure screen ──────────────────────────────────────────────────── */
+#closure-screen {
+  font-family: var(--font-mono);
 }
 
-.menu-overlay.hidden { display: none; }
-
-.menu-overlay h2 {
-  font-size: 48px;
-  color: #ff4d6d;
-  letter-spacing: 4px;
+#closure-dismiss {
+  font-family: var(--font-mono) !important;
+  transition: opacity 0.15s, transform 0.1s;
 }
 
-.menu-overlay button {
-  padding: 12px 24px;
-  background: #ff4d6d;
-  color: #0a0a0f;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  font-family: inherit;
-  cursor: pointer;
-  font-weight: bold;
-  letter-spacing: 1px;
+#closure-dismiss:hover {
+  opacity: 0.85;
 }
 
-.menu-overlay button:hover { background: #fff; }
+/* ─── Scrollbars in panels ────────────────────────────────────────────── */
+#logbook-entries,
+#npc-panel > div:last-child {
+  scrollbar-width: thin;
+  scrollbar-color: #1a2d42 #0a1520;
+}
+
+/* ─── Focus styles (accessibility) ───────────────────────────────────── */
+button:focus-visible {
+  outline: 2px solid var(--gold, #FFD700);
+  outline-offset: 2px;
+}
+
+/* ─── Mobile responsive adjustments ──────────────────────────────────── */
+@media (max-width: 600px) {
+  #logbook-panel {
+    width: 100vw !important;
+  }
+
+  #npc-panel {
+    width: 100vw !important;
+  }
+}

@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-06-13-park-mapa/",
   "brand_serves": ["mkdslend", "kluboslavija", "guncati"],
   "kluboslavija_branded": true,
-  "stage": "concept",
+  "stage": "impl",
   "status": "in_progress",
   "modules": {
     "src/main.js": "Bootstrap: inicijalizuje sve module, wires event loop, učitava state",
@@ -45,8 +45,8 @@
     "styles/theme.css": "MKDSLend/Kluboslavija paleta, sezonske CSS varijable, brand font"
   },
   "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+    "total_js": 4826,
+    "total_css": 392
   },
   "beta_score": null,
   "beta_score_iter2": null,
