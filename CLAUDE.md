@@ -62,6 +62,35 @@ Pre primene routing tabele iz KORAK 0, proveri da li `docs/` artefakti najnovije
 
 Ovaj korak je idempotentan i ne zahteva šef-test — sinhronizuje POSTOJEĆE rezultate, ne kreira nove.
 
+**KORAK 0b — Backlog cap pre nove igre (PRE routing tabele, samo 03:00 trigger):**
+
+KORAK 0 routing gleda "najnoviji manifest po datumu fajla" — kad nova igra uđe u pipeline, starije
+završene igre koje čekaju sef_signoff trajno ispadaju iz vidokruga (nijedan trigger ih više ne
+pominje, ne postoje u routing tabeli jer nisu "najnovije"). Od 2026-05-21 do 2026-06-17 ovo je
+proizvelo 9 igara zaglavljenih u `stage: "polish"` sa `sef_signoff: false` (najstarija 36 dana —
+vidi `tim/retrospektiva/2026-06-17.md` u ajajaj repo, Nalaz #1). Pipeline je nastavljao da pravi
+NOVE igre dok je red rastao, umesto da stane i traži test postojećih.
+
+Pre nego što 03:00 trigger pokrene NOVU igru (uslov: `status == "released"` ili `games/` prazan),
+prebroj sve postojeće manifeste koji NISU released:
+
+```bash
+count=0
+for m in games/*/manifest.json; do
+  grep -q '"status": *"released"' "$m" || count=$((count+1))
+done
+echo "$count"
+```
+
+- Ako je `count >= 2` → **ne kreni novu igru.** Umesto toga, regeneriši/osveži JEDAN konsolidovan
+  signoff-test paket (lista svih čekajućih igara sortirana od najstarije, sa play_url za svaku) i
+  commit-uj samo to (`chore: signoff backlog refresh, N igara čekaju`). Sesija se završava ovde —
+  ne trošiti token budžet na koncept za igru #N+1 dok već N >= 2 čekaju test.
+- Ako je `count < 2` → nastavi normalno na routing tabelu ispod.
+
+Ovaj korak ne dira sef_signoff/release logiku niti postojeće igre — samo zaustavlja STVARANJE nove
+zaglavljene igre dok red ne padne ispod 2. Šef revertuje jednim `git revert` ako se ne slaže.
+
 ## Arhitektura za Token Economy (KLJUČNO)
 
 Svaka igra ima **modularnu strukturu sa manifest fajlom**. Agenti ne čitaju celu igru — čitaju samo module koji ih zanimaju. Pipeline korak X ne sme da učita fajlove koje ne menja.
