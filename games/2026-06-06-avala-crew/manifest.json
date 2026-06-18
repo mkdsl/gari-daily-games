@@ -41,8 +41,8 @@
     "total_js": 6775,
     "total_css": 2430
   },
-  "beta_score": null,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
+  "beta_score": 7.8,
+  "beta_score_iter2": 8.3,
+  "post_fix_score": 9.0,
   "sef_signoff": false
 }
