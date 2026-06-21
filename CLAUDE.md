@@ -91,6 +91,31 @@ echo "$count"
 Ovaj korak ne dira sef_signoff/release logiku niti postojeće igre — samo zaustavlja STVARANJE nove
 zaglavljene igre dok red ne padne ispod 2. Šef revertuje jednim `git revert` ako se ne slaže.
 
+**KORAK 0c — Cross-game registry drift check (PRE routing tabele, svaki trigger):**
+
+Cross-game mehanizmi (npr. Kluboslavija Pasoš — `games/2026-05-10-cross-event-pasos/`)
+imaju svoj registar (`SLUG_WHITELIST` u `pasos-sdk.js`, `STAMPS` u `config.js`) koji niko
+ne osvežava automatski kad nova igra bude `released` — KORAK 0/0a/0b prate samo
+`manifest.json` polja (`stage`, `status`, `sef_signoff`), ne i ove sekundarne registre.
+2026-06-21 (vidi `tim/retrospektiva/2026-06-21.md` u ajajaj repo, Iskra nalaz) ovo je
+nađeno tek slučajno — Pasoš je imao 3/28 igara registrovanih, netaknut od 10.05, 6+ nedelja
+niko nije primetio jer nijedan trigger nije gledao taj fajl.
+
+Pre routing tabele, prebroj:
+
+```bash
+released=$(for m in games/*/manifest.json; do grep -q '"status": *"released"' "$m" && echo x; done | wc -l)
+registered=$(grep -c "slug:" games/2026-05-10-cross-event-pasos/src/config.js 2>/dev/null || echo 0)
+```
+
+- Ako je `released - registered >= 5` → dodaj jedan red u `docs/signoff_backlog.md` (ili
+  ekvivalentni dnevni artefakt): "Pasoš registry drift: N released igara nije u SLUG_WHITELIST/STAMPS
+  — vidi `games/2026-05-10-cross-event-pasos/src/config.js`." Ne dodaješ slugove sam (to je
+  Jovin posao, brand/copy odluka po igri) — samo flaguješ da gap postoji i koliko je velik.
+- Ako je gap `< 5` → preskoči, idi na routing tabelu ispod.
+
+Ovaj korak je idempotentan, samo izveštava (ne piše u config.js/manifest), ne dira release logiku.
+
 ## Arhitektura za Token Economy (KLJUČNO)
 
 Svaka igra ima **modularnu strukturu sa manifest fajlom**. Agenti ne čitaju celu igru — čitaju samo module koji ih zanimaju. Pipeline korak X ne sme da učita fajlove koje ne menja.
