@@ -308,9 +308,16 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
   ```
   CRITICAL_count = broj iz oba beta_report.md
   MEDIUM_count   = broj iz oba beta_report.md
-  post_fix_score = beta_score_iter2 + (CRITICAL_count × 1.0) + (MEDIUM_count × 0.5)
-  post_fix_score = min(post_fix_score, 9.0)
+  fix_bonus      = min((CRITICAL_count × 1.0) + (MEDIUM_count × 0.5), 1.0)
+  post_fix_score = min(beta_score_iter2 + fix_bonus, 9.0)
   ```
+  Bonus je capovan na +1.0 PRE dodavanja — bez ovog cap-a, bonus iz dva beta_report.md kruga
+  skoro uvek prelazi razliku do 9.0 i score saturira na 9.0 za svaku igru bez obzira na
+  `beta_score_iter2` (nađeno 06-19, ponovljeno 06-20/06-21/06-22 — 14/14 igara u
+  `docs/signoff_backlog.md` su `post_fix_score: 9.0` iako `beta_score_iter2` ide od 7.4 do 9.0).
+  **Ne retroaktivno** — postojeći manifest.json brojevi se ne prepisuju, formula važi za igre
+  koje tek ulaze u KORAK 7 od ove izmene nadalje. Ako šef želi retroaktivni rekalkulacija,
+  to je zaseban, eksplicitan zadatak (menja postojeće podatke u 14+ fajlova, veći rizik od greške).
 - Napiši `games/YYYY-MM-DD-naziv/README.md`
 - Dodaj red u `games/README.md` index
 - `git add games/YYYY-MM-DD-naziv/ games/README.md`
