@@ -1,9 +1,9 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Generisano:** 2026-06-26, trigger (KORAK 0b)
-**Status:** 14 igara u `stage: "polish"` čekaju šefov 5-minutni test. Najstarija (Tiha Avala) čeka 45 dana. Avala event (20.06) je prošao bez ijedne od 6 countdown-igara — prozor ostaje trajno zatvoren.
+**Generisano:** 2026-06-27, trigger (KORAK 0b)
+**Status:** 14 igara u `stage: "polish"` čekaju šefov 5-minutni test. Najstarija (Tiha Avala) čeka 46 dana. Avala event (20.06) je prošao bez ijedne od 6 countdown-igara — prozor ostaje trajno zatvoren.
 
-**KORAK 0b je aktivan:** broj igara koje NISU `released` je 20 (≫ 2). Trigger danas NIJE pokrenuo novu igru — isti 14-igara backlog, samo +1 dan po stavci. **0 sign-off-ova primljeno otkad praćenje postoji (KORAK 0b aktiviran 2026-06-17) — 9 uzastopnih dana, 0 progresa.** Red ne raste više (impl/concept su zamrznuti od 06-13), ali i ne opada — pipeline je u potpunosti zaglavljen na jednoj tački: šefov test.
+**KORAK 0b je aktivan:** broj igara koje NISU `released` je 20 (≫ 2). Trigger danas NIJE pokrenuo novu igru — isti 14-igara backlog, samo +1 dan po stavci. **0 sign-off-ova primljeno otkad praćenje postoji (KORAK 0b aktiviran 2026-06-17) — 10 uzastopnih dana, 0 progresa.** Red ne raste više (impl/concept su zamrznuti od 06-13), ali i ne opada — pipeline je u potpunosti zaglavljen na jednoj tački: šefov test. Ajajaj retrospektiva (06-26) flaguje da je auto-signoff politika pitanje otvoreno 26 dana i predlaže timeout-default na 2026-06-30 ako šef ne odgovori — vidi `tim/retrospektiva/2026-06-26.md` i `tim/retrospektiva/backlog.md` u ajajaj repo.
 
 ## ⚠️ Avala prozor je zatvoren — potvrđen promašaj
 
@@ -15,20 +15,20 @@ Otvori, odigraj 2-5 min, javi "OK [ime]" ili "vrati u fix [ime]: [šta]".
 
 | # | Igra | Dana čeka | Score (post-fix) | Brand | Napomena | Play |
 |---|------|-----------|-------------------|-------|----------|------|
-| 1 | **Tiha Avala** | 45 | 9.0/10 | kluboslavija | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-12-tiha-avala/) |
-| 2 | Sound vs Tišina | 35 | 9.0/10 | kluboslavija × mkdslend | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-22-sound-vs-tisina/) |
-| 3 | **Zvučna Proba** | 33 | 9.0/10 | kluboslavija | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-24-zvucna-proba/) |
-| 4 | **Kluboslavija: Turneja 2026** | 32 | 9.0/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-25-turneja-2026/) |
-| 5 | Gari Tim Simulator | 31 | 9.0/10 | mkdslend | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-26-gari-tim-simulator/) |
-| 6 | DJ Akademija | 29 | 9.0/10 | kluboslavija | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-28-dj-akademija/) |
-| 7 | Akva-Sklop | 27 | 9.0/10 | guncati | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-30-akva-sklop/) |
-| 8 | **Ekipa Noći** | 26 | 9.0/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-31-ekipa-noci/) |
-| 9 | Pečurka Inokulator | 24 | 9.0/10 | guncati | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-02-pecurka-inokulator/) |
-| 10 | Sarajevo ili Smrt | 23 | 9.0/10 | kluboslavija × mkdslend | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-03-sarajevo-ili-smrt/) |
-| 11 | **Festival Mreža** ⚠️ najjača Avala-sprega (grand-win uslov) | 22 | 9.0/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-04-festival-mreza/) |
-| 12 | **Avala Crew** | 20 | 9.0/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-06-avala-crew/) |
-| 13 | Zemlja i Znanje | 19 | 9.0/10 | guncati × mkdslend | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-07-zemlja-i-znanje/) |
-| 14 | Park Mapa | 13 | 9.0/10 | mkdslend × kluboslavija × guncati | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-13-park-mapa/) |
+| 1 | **Tiha Avala** | 46 | 9.0/10 | kluboslavija | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-12-tiha-avala/) |
+| 2 | Sound vs Tišina | 36 | 9.0/10 | kluboslavija × mkdslend | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-22-sound-vs-tisina/) |
+| 3 | **Zvučna Proba** | 34 | 9.0/10 | kluboslavija | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-24-zvucna-proba/) |
+| 4 | **Kluboslavija: Turneja 2026** | 33 | 9.0/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-25-turneja-2026/) |
+| 5 | Gari Tim Simulator | 32 | 9.0/10 | mkdslend | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-26-gari-tim-simulator/) |
+| 6 | DJ Akademija | 30 | 9.0/10 | kluboslavija | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-28-dj-akademija/) |
+| 7 | Akva-Sklop | 28 | 9.0/10 | guncati | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-30-akva-sklop/) |
+| 8 | **Ekipa Noći** | 27 | 9.0/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-31-ekipa-noci/) |
+| 9 | Pečurka Inokulator | 25 | 9.0/10 | guncati | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-02-pecurka-inokulator/) |
+| 10 | Sarajevo ili Smrt | 24 | 9.0/10 | kluboslavija × mkdslend | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-03-sarajevo-ili-smrt/) |
+| 11 | **Festival Mreža** ⚠️ najjača Avala-sprega (grand-win uslov) | 23 | 9.0/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-04-festival-mreza/) |
+| 12 | **Avala Crew** | 21 | 9.0/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-06-avala-crew/) |
+| 13 | Zemlja i Znanje | 20 | 9.0/10 | guncati × mkdslend | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-07-zemlja-i-znanje/) |
+| 14 | Park Mapa | 14 | 9.0/10 | mkdslend × kluboslavija × guncati | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-13-park-mapa/) |
 
 Svaka igra ima `docs/sef_signoff.md` u svom folderu sa konkretnom test checklistom (5-6 koraka, <5 min). Sve ocenjene `post_fix_score: 9.0` (cap) — Beta Trio smatra sve playable i bez first-impression blokera. Ovo NE zamenjuje šefov test (KORAK 6.75 je obavezan bez obzira na score).
 
@@ -44,7 +44,7 @@ Gari prolazi kroz svih 14 redom, radi KORAK 7 (manifest finalize + README + rele
 
 | Igra | Stage | Status |
 |------|-------|--------|
-| Niš Fuga (06-01) | concept | čeka impl (09:00 trigger) — 25 dana stoji, nikad nije ušla u impl |
+| Niš Fuga (06-01) | concept | čeka impl (09:00 trigger) — 26 dana stoji, nikad nije ušla u impl |
 | Park Mapa (05-21, original) | concept | napuštena, zamenjena retry-em 06-13 koji je gore u tabeli |
 
 ## Napuštene/legacy stavke (pre-KORAK-0a šema, van scope-a ovog paketa)
