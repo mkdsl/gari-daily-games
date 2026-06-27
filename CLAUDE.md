@@ -116,6 +116,39 @@ registered=$(grep -c "slug:" games/2026-05-10-cross-event-pasos/src/config.js 2>
 
 Ovaj korak je idempotentan, samo izveštava (ne piše u config.js/manifest), ne dira release logiku.
 
+**KORAK 0d — Orphaned concept/impl rescue (PRE routing tabele, svaki trigger):**
+
+KORAK 0 routing bira SAMO najnoviji `manifest.json` po datumu fajla — svaka igra koja
+ostane u `concept` ili `impl` stage-u kad novija igra preuzme "najnoviji" slot postaje
+trajno nevidljiva nijednom trigeru. Niš Fuga (`games/2026-06-01-nis-fuga/`) je ovako
+stajala u `concept` 26 dana, 0 commit-a od kreiranja — nađeno 06-18 (Nega), ponovo 06-25,
+nikad strukturno popravljeno (vidi `tim/retrospektiva/2026-06-18.md` i `2026-06-25.md`
+u ajajaj repo, Nalaz #2 oba puta).
+
+Pre routing tabele, prebroj sve manifeste sa `stage` u `concept` ili `impl` koji NISU
+najnoviji po datumu fajla:
+
+```bash
+latest=$(ls -t games/*/manifest.json | head -1)
+for m in games/*/manifest.json; do
+  [ "$m" = "$latest" ] && continue
+  stage=$(grep -o '"stage": *"[^"]*"' "$m" | cut -d'"' -f4)
+  if [ "$stage" = "concept" ] || [ "$stage" = "impl" ]; then
+    echo "$m: orphaned at $stage"
+  fi
+done
+```
+
+- Ako orphan postoji → **trigger čijem stage-u orphan odgovara (09:00 za concept→impl,
+  17:00 za impl→polish) radi NA ORPHAN-U umesto na najnovijem manifestu**, jedan po
+  trigeru dok ne stigne do `polish`. Najnoviji manifest čeka svoj red (ne gubi se —
+  ostaje na svom trenutnom stage-u do sledeće prilike).
+- Ako više orphan-a postoji → najstariji po datumu fajla ide prvi.
+- Ako orphan nema → nastavi normalno na routing tabelu ispod.
+
+Ovaj korak ne dira manifest/release logiku — samo bira KOJI manifest trigger sledeći
+obrađuje. Šef revertuje jednim `git revert` ako se ne slaže.
+
 ## Arhitektura za Token Economy (KLJUČNO)
 
 Svaka igra ima **modularnu strukturu sa manifest fajlom**. Agenti ne čitaju celu igru — čitaju samo module koji ih zanimaju. Pipeline korak X ne sme da učita fajlove koje ne menja.
