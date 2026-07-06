@@ -8,7 +8,7 @@
   "guncati_branded": true,
   "share_hook_url": "https://guncati.rs",
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Bootstrap, screen manager, wire sve module, guided mode flag",
     "src/config.js": "Sve konstante — cene, formule, staff bonusi, weather verovatnoce",
@@ -81,5 +81,5 @@
   "beta_score": 5.5,
   "beta_score_iter2": 9.0,
   "post_fix_score": 9.0,
-  "sef_signoff": false
+  "sef_signoff": true
 }

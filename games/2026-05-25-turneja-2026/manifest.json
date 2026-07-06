@@ -8,7 +8,7 @@
   "kluboslavija_branded": true,
   "share_hook_url": "https://app.bilet.rs/show/261",
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "index.html": "HTML shell, meta viewport, app div, module script entry",
     "src/main.js": "Game loop state machine: TUTORIAL → MACRO → EVENT_INTRO → BLOCK_PHASE → BLOCK_RESULT → EVENT_RESULT → WIN/GAMEOVER",
@@ -40,5 +40,5 @@
   "beta_score": 6.4,
   "beta_score_iter2": 9.0,
   "post_fix_score": 9.0,
-  "sef_signoff": false
+  "sef_signoff": true
 }

@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-26-gari-tim-simulator/",
   "brand_serves": ["mkdslend"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "index.html": "Entry point, linka sve CSS i main.js modul",
     "manifest.json": "Metadata igre",
@@ -45,5 +45,5 @@
   "beta_score": 5.8,
   "beta_score_iter2": 8.5,
   "post_fix_score": 9.0,
-  "sef_signoff": false
+  "sef_signoff": true
 }

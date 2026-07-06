@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-06-04-festival-mreza/",
   "brand_serves": ["kluboslavija", "mkdslend"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Entry point, game loop wire, layer switch (macro/micro/meta)",
     "src/config.js": "Sve tuning konstante — BPM, budžet, decay, kapaciteti, seed primes",
@@ -55,5 +55,5 @@
   "beta_score": 7.4,
   "beta_score_iter2": 8.1,
   "post_fix_score": 9.0,
-  "sef_signoff": false
+  "sef_signoff": true
 }

@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-22-sound-vs-tisina/",
   "brand_serves": ["kluboslavija", "mkdslend"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "index.html": "Entry point, full DOM structure for all 5 screens",
     "src/main.js": "Bootstrap + game loop orchestrator, wires all systems",
@@ -49,5 +49,5 @@
   "beta_score": 3,
   "beta_score_iter2": 8,
   "post_fix_score": 9.0,
-  "sef_signoff": false
+  "sef_signoff": true
 }

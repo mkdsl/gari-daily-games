@@ -27,7 +27,7 @@ Direktno Avala-brendirana (festival crew builder, 5 crew pills, `#AvalaCrew`, `b
 
 ## Sign-Off (popuni)
 
-- [ ] OK za release
+- [x] OK za release — šef: 2026-07-05
 - [ ] Vrati u fix: ________________________
 
 **Napomene:** _(opcionalno)_

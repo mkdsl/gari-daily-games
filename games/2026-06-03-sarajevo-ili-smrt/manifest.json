@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-06-03-sarajevo-ili-smrt/",
   "brand_serves": ["kluboslavija", "mkdslend"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Bootstrap, wire sve module, game loop",
     "src/config.js": "BASE_LP, prestige multipliers, wave params, KVART audio configs",
@@ -44,5 +44,5 @@
   "beta_score": 4.5,
   "beta_score_iter2": 6.8,
   "post_fix_score": 9.0,
-  "sef_signoff": false
+  "sef_signoff": true
 }

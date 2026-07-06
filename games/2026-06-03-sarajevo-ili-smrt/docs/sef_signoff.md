@@ -23,7 +23,7 @@
 
 ## Sign-Off (popuni)
 
-- [ ] OK za release
+- [x] OK za release — šef: 2026-07-05
 - [ ] Vrati u fix: ________________________
 
 **Napomene:** _(opcionalno — 5 LOW stavki iz beta iter2 nisu fixovane, navedene u fix_log.md kao "next pass")_

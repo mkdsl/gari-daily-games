@@ -21,7 +21,7 @@ Testiraj 5+ minuta pre sign-off-a.
 
 **Da li je OK za Kluboslavija publikaciju?**
 
-- [ ] OK za release — `status: released`, Mici može da share-uje
+- [x] OK za release — šef: 2026-07-05 — `status: released`, Mici može da share-uje
 - [ ] Vrati u fix — [navedi šta ne valja]
 
 ---

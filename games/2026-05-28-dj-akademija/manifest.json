@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-28-dj-akademija/",
   "brand_serves": ["kluboslavija"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "index.html": "Entry point, ES6 module loader, 4 CSS links, app container",
     "styles/theme.css": "Kluboslavija CSS custom properties — paleta boja",
@@ -30,5 +30,5 @@
   "beta_score": 6.5,
   "beta_score_iter2": 8.5,
   "post_fix_score": 9.0,
-  "sef_signoff": false
+  "sef_signoff": true
 }

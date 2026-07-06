@@ -1,6 +1,6 @@
 # Šef Sign-Off — Pečurka Inokulator
 
-**Status:** ⏳ ČEKA ŠEFOVU POTVRDU
+**Status:** ✅ OK ZA RELEASE — šef: 2026-07-05
 
 ---
 

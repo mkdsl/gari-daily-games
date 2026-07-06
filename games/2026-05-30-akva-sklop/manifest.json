@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-30-akva-sklop/",
   "brand_serves": ["guncati"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Game loop, bootstrap, wire sve module",
     "src/config.js": "Sve konstante — tile types, AP costs, flow rates, pH thresholds",
@@ -33,5 +33,5 @@
   "beta_score": 6.2,
   "beta_score_iter2": 7.4,
   "post_fix_score": 9.0,
-  "sef_signoff": false
+  "sef_signoff": true
 }

@@ -7,7 +7,7 @@
   "brand_serves": ["mkdslend", "kluboslavija", "guncati"],
   "kluboslavija_branded": true,
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Bootstrap: inicijalizuje sve module, wires event loop, učitava state",
     "src/config.js": "Sve tuning konstante: PT vrednosti, cooldown trajanja, level cene, seeding formule",
@@ -51,5 +51,5 @@
   "beta_score": 6.5,
   "beta_score_iter2": 7.8,
   "post_fix_score": 9.0,
-  "sef_signoff": false
+  "sef_signoff": true
 }

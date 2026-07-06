@@ -22,7 +22,7 @@ Testiraj 5+ minuta pre sign-off-a (makar jednu macro planning fazu + jednu micro
 
 **Da li je OK za release?**
 
-- [ ] OK za release — `status: released`
+- [x] OK za release — šef: 2026-07-05 — `status: released`
 - [ ] Vrati u fix — [navedi šta ne valja]
 
 ---

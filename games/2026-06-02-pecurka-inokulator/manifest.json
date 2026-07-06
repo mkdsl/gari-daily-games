@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-06-02-pecurka-inokulator/",
   "brand_serves": ["guncati"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Bootstrap, game loop (requestAnimationFrame), wire svih modula",
     "src/config.js": "Sve konstante: 10-nivo tabela (window duration, speed, score), palette hex, breakpoints",
@@ -34,5 +34,5 @@
   "beta_score": 6.3,
   "beta_score_iter2": 7.5,
   "post_fix_score": 9.0,
-  "sef_signoff": false
+  "sef_signoff": true
 }
