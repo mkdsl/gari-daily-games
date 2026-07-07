@@ -6,7 +6,8 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-05-21-park-mapa/",
   "brand_serves": ["mkdslend", "kluboslavija", "guncati"],
   "stage": "concept",
-  "status": "in_progress",
+  "status": "failed",
+  "failed_reason": "Superseded by games/2026-06-13-park-mapa/ (isti koncept, potpuno implementiran i released 2026-07-05). KORAK 0d: zatvoreno 2026-07-07.",
   "modules": {
     "src/main.js": "Bootstrap: inicijalizuje sve module, wires event loop, učitava state",
     "src/config.js": "Sve tuning konstante: PT vrednosti, cooldown trajanja, level cene, seeding formule",

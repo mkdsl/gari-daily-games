@@ -1,7 +1,15 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
+## ✅ 2026-07-05 — Šef sign-off: sve 14 igara released
+
+Šef je dao OK za sve 14 igara. Commit: `53e302e Released: 14 igara — šef sign-off 2026-07-05`. Backlog koji je čekao 19-55 dana je u potpunosti rešen. KORAK 0b blokada skinuta.
+
+**Trenutno stanje (2026-07-07):** Orphan 2026-05-21-park-mapa zatvorena (superseded). Niš Fuga impl pokrenuta (KORAK 0d + KORAK 4).
+
+---
+
 **Generisano:** 2026-07-06, trigger (KORAK 0b) — D+36 (KORAK 0b aktivan od 2026-06-17)
-**Status:** 14 igara u `stage: "polish"` čekaju šefov 5-minutni test. Najstarija (Tiha Avala) čeka 55 dana. Avala event (20.06) je prošao bez ijedne od 6 countdown-igara — prozor ostaje trajno zatvoren.
+**Status arhiva:** 14 igara je čekalo šefov test (resolved).
 
 **KORAK 0b je aktivan:** broj igara koje NISU `released` je 20 (≫ 2). Trigger danas NIJE pokrenuo novu igru. **0 sign-off-ova primljeno otkad praćenje postoji (KORAK 0b aktiviran 2026-06-17) — 19 uzastopnih dana, 0 progresa.** Red ne raste više (impl/concept su zamrznuti od 06-13), ali i ne opada — pipeline je u potpunosti zaglavljen na jednoj tački: šefov test.
 
