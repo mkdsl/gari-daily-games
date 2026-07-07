@@ -1,0 +1,76 @@
+{
+  "achievements": [
+    {
+      "id": "dragoljubova_milost",
+      "name": "Dragoljubova Milost",
+      "desc": "Ubedio si parking inspektora bez i jednog poznanstva u Nišu. Talent.",
+      "condition": "scene1_option_a_rep0",
+      "hidden": false,
+      "icon": "badge"
+    },
+    {
+      "id": "bacamile_zna_sve",
+      "name": "Baca Mile Zna Sve",
+      "desc": "Kiosk Bace Mileta je tačka gde se sve ukrštaju. I čokolada je bila odlična.",
+      "condition": "scene2_option_a",
+      "hidden": false,
+      "icon": "kiosk"
+    },
+    {
+      "id": "soundcheck_objasnjenje",
+      "name": "Soundcheck Objašnjenje",
+      "desc": "Uspeo si da objasniš soundcheck čoveku od 1987. Tri razmene. Strpljenje na delu.",
+      "condition": "scene3_full_explain",
+      "hidden": false,
+      "icon": "mic"
+    },
+    {
+      "id": "nis_logika",
+      "name": "Niš Logika",
+      "desc": "Pušteni ste unutra. Ali nemojte da kažete da je Nenad pustio. Ovo je kvintesencija niških rešenja.",
+      "condition": "scene5_nenad_secret",
+      "hidden": false,
+      "icon": "key"
+    },
+    {
+      "id": "tajni_gost",
+      "name": "Tajni Gost",
+      "desc": "Bojan je posvetio pesmu vašoj ekipi. Niš vas je primio.",
+      "condition": "ending_s2",
+      "hidden": false,
+      "icon": "guitar"
+    },
+    {
+      "id": "i_ovako_nekad_bude",
+      "name": "I Ovako Nekad Bude",
+      "desc": "Stigli ste u 14:47. Soundcheck je bio u 14:00. Goran to neće zaboraviti.",
+      "condition": "ending_hard_fail",
+      "hidden": false,
+      "icon": "clock"
+    },
+    {
+      "id": "rimska_logistika",
+      "name": "Rimska Logistika",
+      "desc": "Zaustavio si se na Tvrđavi usred haosa. Ko kaže da organizacija logistike nije istorijska umetnost?",
+      "condition": "tvrdjava_zid_hotspot",
+      "hidden": true,
+      "icon": "wall"
+    },
+    {
+      "id": "epson_legenda",
+      "name": "Epson Legenda",
+      "desc": "Ko još štampa setliste na papiru 2026. godine? Ti. I to te spasilo.",
+      "condition": "scene5_print_access",
+      "hidden": true,
+      "icon": "printer"
+    },
+    {
+      "id": "niva_do_petka",
+      "name": "Niva Do Petka",
+      "desc": "Jedan točak. Majstor kaže do petka. Danas je ponedeljak. Nisam rekao ništa.",
+      "condition": "scene4_option_c",
+      "hidden": true,
+      "icon": "car"
+    }
+  ]
+}

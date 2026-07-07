@@ -1,0 +1,163 @@
+{
+  "scenes": [
+    {
+      "id": "bulevar",
+      "name": "Parking na Bulevaru Nemanjića",
+      "background": "bg-bulevar",
+      "time": "09:00",
+      "npc": "dragoljub",
+      "startDialog": "s1_start",
+      "ambientTrack": "bulevar",
+      "hotspots": [
+        {
+          "id": "hs_van",
+          "label": "Kombi",
+          "x": 20, "y": 55, "w": 18, "h": 25,
+          "flavor": "Svira Đole Balašević iz prozora — Računam na tebe. U 09:00 ujutro. Normalno.",
+          "once": true
+        },
+        {
+          "id": "hs_sign",
+          "label": "Znak zabrane parkinga",
+          "x": 75, "y": 30, "w": 8, "h": 20,
+          "flavor": "P sa crtom. Dragoljub gleda ka vama dok čitate znak. Jasno.",
+          "once": true
+        },
+        {
+          "id": "hs_npc",
+          "label": "Dragoljub",
+          "x": 55, "y": 35, "w": 20, "h": 45,
+          "action": "dialog",
+          "dialog": "s1_start",
+          "once": false
+        }
+      ]
+    },
+    {
+      "id": "kiosk",
+      "name": "Kiosk Medijana",
+      "background": "bg-kiosk",
+      "time": "10:00",
+      "npc": "bacamile",
+      "startDialog": "s2_start",
+      "ambientTrack": "kiosk",
+      "hotspots": [
+        {
+          "id": "hs_kiosk_front",
+          "label": "Izlog kioska",
+          "x": 30, "y": 20, "w": 40, "h": 40,
+          "flavor": "Kiosci su konstanta srpske civilizacije — menjali su se predsednici, valute i telefoni, ali Baca Mile je uvek bio tu.",
+          "once": true
+        },
+        {
+          "id": "hs_red",
+          "label": "Red ispred kioska",
+          "x": 10, "y": 50, "w": 20, "h": 35,
+          "flavor": "Penzioner, majka sa detetom, tinejdžer sa slušalicama. Svi čekaju. Pola Medijane.",
+          "once": true
+        },
+        {
+          "id": "hs_npc",
+          "label": "Baca Mile",
+          "x": 35, "y": 30, "w": 30, "h": 50,
+          "action": "dialog",
+          "dialog": "s2_start",
+          "once": false
+        }
+      ]
+    },
+    {
+      "id": "kafana",
+      "name": "Kafana Kod Pante",
+      "background": "bg-kafana",
+      "time": "11:00",
+      "npc": "panta",
+      "startDialog": "s3_start",
+      "ambientTrack": "kafana",
+      "hotspots": [
+        {
+          "id": "hs_sank",
+          "label": "Šank",
+          "x": 10, "y": 40, "w": 30, "h": 40,
+          "flavor": "Dve džezve, tri flajse, i Pantova beležnica. Cene se nisu menjale od 2019.",
+          "once": true
+        },
+        {
+          "id": "hs_prozor",
+          "label": "Prozor prema Tvrđavi",
+          "x": 65, "y": 15, "w": 25, "h": 35,
+          "flavor": "Niška Tvrđava se vidi kroz prozor. Rimska, vizantijska, srpska, otomanska — sve u jednom zidu.",
+          "once": true
+        },
+        {
+          "id": "hs_npc",
+          "label": "Panta",
+          "x": 20, "y": 35, "w": 25, "h": 50,
+          "action": "dialog",
+          "dialog": "s3_start",
+          "once": false
+        }
+      ]
+    },
+    {
+      "id": "tvrdjava",
+      "name": "Niška Tvrđava",
+      "background": "bg-tvrdjava",
+      "time": "12:00",
+      "npc": "bojan",
+      "startDialog": "s4_start",
+      "ambientTrack": "tvrdjava",
+      "hotspots": [
+        {
+          "id": "hs_zid",
+          "label": "Tvrđava zid",
+          "x": 5, "y": 20, "w": 35, "h": 60,
+          "flavor": "Rimski temelji, vizantijska nadogradnja, srpska rekonstrukcija, otomanski završetak. Svaki osvajač je dodao sloj. Jutros — vi.",
+          "once": true,
+          "achievement": "rimska_logistika"
+        },
+        {
+          "id": "hs_klupa",
+          "label": "Klupa pored zida",
+          "x": 55, "y": 60, "w": 20, "h": 20,
+          "flavor": "Bojanova gitara fudlada stoji pored klupe. Na dnu piše Marker-om: 'Do petka — Darko M.'",
+          "once": true
+        },
+        {
+          "id": "hs_npc",
+          "label": "Bojan",
+          "x": 55, "y": 30, "w": 25, "h": 50,
+          "action": "dialog",
+          "dialog": "s4_start",
+          "once": false
+        }
+      ]
+    },
+    {
+      "id": "kapija",
+      "name": "Kapija Kluba Tonika",
+      "background": "bg-kapija",
+      "time": "13:30",
+      "npc": "nenad",
+      "startDialog": "s5_start",
+      "ambientTrack": "kapija",
+      "hotspots": [
+        {
+          "id": "hs_vrata",
+          "label": "Ulazna vrata",
+          "x": 35, "y": 25, "w": 30, "h": 55,
+          "flavor": "Čelična vrata sa neon natpisom 'TONIKA'. Muzika se nazire iznutra — neko proverava bas.",
+          "once": true
+        },
+        {
+          "id": "hs_npc",
+          "label": "Nenad",
+          "x": 62, "y": 35, "w": 22, "h": 50,
+          "action": "dialog",
+          "dialog": "s5_start",
+          "once": false
+        }
+      ]
+    }
+  ]
+}

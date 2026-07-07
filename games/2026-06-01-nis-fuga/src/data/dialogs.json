@@ -1,0 +1,526 @@
+{
+  "nodes": {
+    "s1_start": {
+      "id": "s1_start",
+      "speaker": "Dragoljub",
+      "portrait": "dragoljub_stern",
+      "text": "Mladi čoveče! Ovo je zabranjena zona za parkiranje. Vaš kombi blokira trotoar od 07:15. Imam puno pravo da nalepim kaznu.",
+      "choices": [
+        {
+          "id": "s1_a",
+          "text": "Oprostite, mi smo Kluboslavija ekipa — večeras sviramo u Toniku...",
+          "next": "s1_diplomatic",
+          "requires": null,
+          "effects": { "time": -5, "reputation": 2, "morale": 1 },
+          "tooltip": null
+        },
+        {
+          "id": "s1_b",
+          "text": "U redu, platimo odmah. Koliko košta?",
+          "next": "s1_pay",
+          "requires": null,
+          "effects": { "time": -2, "morale": -1 },
+          "tooltip": null
+        },
+        {
+          "id": "s1_c",
+          "text": "[Tiho pomaknuti kombi bez objašnjenja]",
+          "next": "s1_sneak",
+          "requires": null,
+          "effects": { "time": -20, "patience": -2, "morale": -2 },
+          "tooltip": null
+        }
+      ]
+    },
+    "s1_diplomatic": {
+      "id": "s1_diplomatic",
+      "speaker": "Dragoljub",
+      "portrait": "dragoljub_curious",
+      "text": "Kluboslavija? E, čuo sam za vas. Moj sin ide večeras. Dobro, pomičite se, ali sledeći put zovite unapred gradski event servis.",
+      "choices": [
+        {
+          "id": "s1_d_end",
+          "text": "Hvala puno! Ostavite kontakt, poklanjamo vam kartu za sledeći put.",
+          "next": "s1_flavor_van",
+          "requires": null,
+          "effects": {},
+          "tooltip": null
+        }
+      ]
+    },
+    "s1_pay": {
+      "id": "s1_pay",
+      "speaker": "Dragoljub",
+      "portrait": "dragoljub_neutral",
+      "text": "Dve hiljade i trista. Jeste rekli Kluboslavija? Čuo sam. Kazna je kazna.",
+      "choices": [
+        {
+          "id": "s1_p_end",
+          "text": "Platimo i idemo.",
+          "next": "s1_flavor_van",
+          "requires": null,
+          "effects": {},
+          "tooltip": null
+        }
+      ]
+    },
+    "s1_sneak": {
+      "id": "s1_sneak",
+      "speaker": "Dragoljub",
+      "portrait": "dragoljub_stern",
+      "text": "Hej! Stani! Gde misliš bez da se javljaš?! Pišem prijavu — ime i prezime vozača!",
+      "choices": [
+        {
+          "id": "s1_s_end",
+          "text": "Jurimo kao ludi da nađemo novo mesto za parkiranje...",
+          "next": "s1_flavor_van",
+          "requires": null,
+          "effects": {},
+          "tooltip": null
+        }
+      ]
+    },
+    "s1_flavor_van": {
+      "id": "s1_flavor_van",
+      "speaker": "Jovanka",
+      "portrait": "jovanka_neutral",
+      "text": "[Iz kombija dopire Đole Balašević — Računam na tebe. U 09:00 ujutro. Dragoljub se osmehuje uprkos sebi.]",
+      "choices": [
+        {
+          "id": "s1_van_next",
+          "text": "Idemo do kioska — treba nam print setliste.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "next_scene"
+        }
+      ]
+    },
+    "s2_start": {
+      "id": "s2_start",
+      "speaker": "Baca Mile",
+      "portrait": "bacamile_busy",
+      "text": "Čekajte, čekajte — pola Medijane čeka na štampu. Jesi rezervisao termin? Ko rezerviše termin kod mene?! Šta ti treba?",
+      "choices": [
+        {
+          "id": "s2_a",
+          "text": "Strpljivo čekati u redu kao svi.",
+          "next": "s2_wait",
+          "requires": null,
+          "effects": { "time": -10, "morale": 2, "reputation": 1, "flag_set": "setlista_printovana" },
+          "tooltip": null
+        },
+        {
+          "id": "s2_b",
+          "text": "Oprostite, može li nas propustiti — hitno je, event večeras...",
+          "next": "s2_skip",
+          "requires": null,
+          "effects": { "time": -4, "patience": -1, "morale": -1 },
+          "tooltip": null
+        },
+        {
+          "id": "s2_c",
+          "text": "Odložiti print za posle — verovatno ne treba.",
+          "next": "s2_skip_print",
+          "requires": null,
+          "effects": { "time": -2 },
+          "tooltip": null
+        }
+      ]
+    },
+    "s2_wait": {
+      "id": "s2_wait",
+      "speaker": "Baca Mile",
+      "portrait": "bacamile_friendly",
+      "text": "Eto, vidite — strpljenje se isplati! Jeste rekli Kluboslavija? Evo vašeg printa, i uzmi čokoladu — nije čovek od posla ko ne voli čokoladu.",
+      "choices": [
+        {
+          "id": "s2_w_end",
+          "text": "Hvala, Baca Mile! Nema vas kao vas.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "next_scene",
+          "achievement": "bacamile_zna_sve"
+        }
+      ]
+    },
+    "s2_skip": {
+      "id": "s2_skip",
+      "speaker": "Baca Mile",
+      "portrait": "bacamile_skeptical",
+      "text": "Svako ima hitno. Dobro, daj mi fajl. Ali ovi ovde čekaju duže... Neka. Evo.",
+      "choices": [
+        {
+          "id": "s2_sk_end",
+          "text": "Hvala, idemo.",
+          "next": null,
+          "requires": null,
+          "effects": { "flag_set": "setlista_printovana" },
+          "tooltip": null,
+          "action": "next_scene"
+        }
+      ]
+    },
+    "s2_skip_print": {
+      "id": "s2_skip_print",
+      "speaker": "Jovanka",
+      "portrait": "jovanka_worried",
+      "text": "[Bez printa. Zvuk telefona — Goran pita za setlistu. Hvataš se za glavu.]",
+      "choices": [
+        {
+          "id": "s2_sp_end",
+          "text": "Idemo dalje. Rešiće se nekako.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "next_scene"
+        }
+      ]
+    },
+    "s3_start": {
+      "id": "s3_start",
+      "speaker": "Panta",
+      "portrait": "panta_neutral",
+      "text": "Lozinka za WiFi? Pa imam je negde... A zašto vam WiFi treba u 10 ujutro? Za soundcheck ste rekli?",
+      "choices": [
+        {
+          "id": "s3_a",
+          "text": "Objasniti šta je soundcheck — korak po korak.",
+          "next": "s3_explain_1",
+          "requires": null,
+          "effects": {},
+          "tooltip": null
+        },
+        {
+          "id": "s3_b",
+          "text": "Izaći napolje da uhvatim signal.",
+          "next": "s3_outside",
+          "requires": null,
+          "effects": { "time": -12, "patience": -2 },
+          "tooltip": null
+        },
+        {
+          "id": "s3_c",
+          "text": "Odložiti poziv za posle.",
+          "next": "s3_delay",
+          "requires": null,
+          "effects": { "time": 0, "complication": 20 },
+          "tooltip": null
+        }
+      ]
+    },
+    "s3_explain_1": {
+      "id": "s3_explain_1",
+      "speaker": "Jovanka",
+      "portrait": "jovanka_explaining",
+      "text": "Soundcheck je proba pre koncerta — moramo proveriti da svi mikrofoni i zvučnici rade.",
+      "choices": [
+        {
+          "id": "s3_e1_next",
+          "text": "Nastaviti objašnjenje.",
+          "next": "s3_panta_react1",
+          "requires": null,
+          "effects": {},
+          "tooltip": null
+        }
+      ]
+    },
+    "s3_panta_react1": {
+      "id": "s3_panta_react1",
+      "speaker": "Panta",
+      "portrait": "panta_interested",
+      "text": "Pa naravno, mora se probati. Al' sat vremena za to? Koliko vi imate mikrofona?",
+      "choices": [
+        {
+          "id": "s3_p1_next",
+          "text": "Malo je kompleksnije — sat-dva za akustiku i monitoring miks.",
+          "next": "s3_explain_2",
+          "requires": null,
+          "effects": {},
+          "tooltip": null
+        }
+      ]
+    },
+    "s3_explain_2": {
+      "id": "s3_explain_2",
+      "speaker": "Jovanka",
+      "portrait": "jovanka_explaining",
+      "text": "Akustika svakog prostora je različita — zvuk se odbija od zidova drukčije. Mora se podesiti da muzičari čuju sebe na bini.",
+      "choices": [
+        {
+          "id": "s3_e2_next",
+          "text": "Sačekati Pantinu reakciju.",
+          "next": "s3_panta_react2",
+          "requires": null,
+          "effects": {},
+          "tooltip": null
+        }
+      ]
+    },
+    "s3_panta_react2": {
+      "id": "s3_panta_react2",
+      "speaker": "Panta",
+      "portrait": "panta_amused",
+      "text": "Akustiku?! Moja kafana ima odličnu akustiku! Ovde sviraju od 1987. A vi dolazite sa nekim soundcheck-om...",
+      "choices": [
+        {
+          "id": "s3_p2_next",
+          "text": "Upravo zato — 1987. je bio analogni miks, sad je digitalni. Drugačije se podešava.",
+          "next": "s3_panta_resolve",
+          "requires": null,
+          "effects": {},
+          "tooltip": null
+        }
+      ]
+    },
+    "s3_panta_resolve": {
+      "id": "s3_panta_resolve",
+      "speaker": "Panta",
+      "portrait": "panta_convinced",
+      "text": "A dobro, vi to zovete soundcheck. Evo ti lozinka: Niska2019. Ali dođi večeras da nam popiješ piće posle — da vidimo šta to 'digitalno' može.",
+      "choices": [
+        {
+          "id": "s3_res_end",
+          "text": "Dogovoreno! Hvala, Panta!",
+          "next": null,
+          "requires": null,
+          "effects": { "time": -8, "reputation": 2, "morale": 1, "flag_set": "tonika_potvrdjeno" },
+          "tooltip": null,
+          "action": "next_scene",
+          "achievement": "soundcheck_objasnjenje"
+        }
+      ]
+    },
+    "s3_outside": {
+      "id": "s3_outside",
+      "speaker": "Jovanka",
+      "portrait": "jovanka_frustrated",
+      "text": "[Stojite na Obrenovićevoj, signal dolazi i odlazi. Konačno uspevate da se javite Goranu — ali izgubili ste 12 minuta i živce.]",
+      "choices": [
+        {
+          "id": "s3_out_end",
+          "text": "Idemo na Tvrđavu — tu je Bojan.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "next_scene"
+        }
+      ]
+    },
+    "s3_delay": {
+      "id": "s3_delay",
+      "speaker": "Jovanka",
+      "portrait": "jovanka_worried",
+      "text": "[Niste potvrdili soundcheck. Beleška: Goran će pitati za potvrdu — komplikacija +20min u Sceni 5.]",
+      "choices": [
+        {
+          "id": "s3_del_end",
+          "text": "Idemo. Nadamo se da će se srediti.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "next_scene"
+        }
+      ]
+    },
+    "s4_start": {
+      "id": "s4_start",
+      "speaker": "Bojan",
+      "portrait": "bojan_sheepish",
+      "text": "Jovanka! Baš dobro. Imaš li mesta u kombiju? Moja Niva je kod majstora zbog... točka. Jedan točak. Majstor kaže do petka. Danas je ponedeljak.",
+      "choices": [
+        {
+          "id": "s4_a",
+          "text": "Naravno, ima mesta! Uskoro idemo, ajde.",
+          "next": "s4_yes",
+          "requires": null,
+          "effects": { "morale": 2, "reputation": 1, "time": -10, "flag_set": "bojan_happy" },
+          "tooltip": null
+        },
+        {
+          "id": "s4_b",
+          "text": "Nema mesta u kombiju, ali može taxi — naručimo ti.",
+          "next": "s4_taxi",
+          "requires": null,
+          "effects": { "morale": 1, "time": -3 },
+          "tooltip": null
+        },
+        {
+          "id": "s4_c",
+          "text": "Žao mi je, Bojane — kombi je pun do vrha.",
+          "next": "s4_lie",
+          "requires": null,
+          "effects": { "morale": -2, "reputation": -1, "patience": -1 },
+          "tooltip": null,
+          "achievement_hidden": "niva_do_petka"
+        }
+      ]
+    },
+    "s4_yes": {
+      "id": "s4_yes",
+      "speaker": "Bojan",
+      "portrait": "bojan_grateful",
+      "text": "Ekipa! Znaš šta, imam gitaru u futroli i tri pedala. Može? Odlično. Znaš, Tvrđava nas gleda — ovde su svim muzičarima davali snagu, od Rimljana do danas.",
+      "choices": [
+        {
+          "id": "s4_y_end",
+          "text": "Idemo na Kapiju — soundcheck nas čeka.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "next_scene"
+        }
+      ]
+    },
+    "s4_taxi": {
+      "id": "s4_taxi",
+      "speaker": "Bojan",
+      "portrait": "bojan_okay",
+      "text": "Okej, naruči mi, hvala. Sretnu se na soundchecku. Kaži Goranu da idem.",
+      "choices": [
+        {
+          "id": "s4_t_end",
+          "text": "Idemo.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "next_scene"
+        }
+      ]
+    },
+    "s4_lie": {
+      "id": "s4_lie",
+      "speaker": "Bojan",
+      "portrait": "bojan_hurt",
+      "text": "Pun... a vidim da ima mesta. Okej. Razumem. Naći ću se nekako — autostop do Tvrđave, pa razgovor sa klupama.",
+      "choices": [
+        {
+          "id": "s4_l_end",
+          "text": "Odlazimo. Osećaj krivice ostaje u kombiju.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "next_scene"
+        }
+      ]
+    },
+    "s5_start": {
+      "id": "s5_start",
+      "speaker": "Nenad",
+      "portrait": "nenad_official",
+      "text": "Dobar dan. To je privatni event. Morate imati akreditaciju ili da vas neko pusti.",
+      "choices": [
+        {
+          "id": "s5_a",
+          "text": "Pošaljemo mejl potvrdu i reference — mi smo organizatori.",
+          "next": "s5_email",
+          "requires": { "reputation": 3 },
+          "effects": { "time": -5 },
+          "tooltip": "Treba reputacija ≥ 3"
+        },
+        {
+          "id": "s5_b",
+          "text": "Čekati da Goran siđe i pusti nas.",
+          "next": "s5_wait_goran",
+          "requires": null,
+          "effects": { "time": -15 },
+          "tooltip": null
+        },
+        {
+          "id": "s5_c",
+          "text": "[Pokazati print setliste od Bace Mileta]",
+          "next": "s5_print",
+          "requires": { "flag": "setlista_printovana" },
+          "effects": { "time": -2, "reputation": 1 },
+          "tooltip": "Treba setlista printovana"
+        },
+        {
+          "id": "s5_d",
+          "text": "[Bojan izlazi i garantuje za vas]",
+          "next": "s5_bojan_saves",
+          "requires": { "flag": "bojan_happy" },
+          "effects": { "time": 0 },
+          "tooltip": "Treba Bojanova podrška"
+        }
+      ]
+    },
+    "s5_email": {
+      "id": "s5_email",
+      "speaker": "Nenad",
+      "portrait": "nenad_checking",
+      "text": "Čekajte da proverim telefon... Da, vidim mejl. Dobro. Uđite. Ali nemojte da kažete da sam ja pustio — to je između nas.",
+      "choices": [
+        {
+          "id": "s5_e_end",
+          "text": "Ulazimo. Dobro jutro, Nišu!",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "ending",
+          "achievement": "nis_logika"
+        }
+      ]
+    },
+    "s5_wait_goran": {
+      "id": "s5_wait_goran",
+      "speaker": "Nenad",
+      "portrait": "nenad_neutral",
+      "text": "Goran... znam Gorana. On je uvek negde gore, ne spušta se do 14:00. Čekajte ovde.",
+      "choices": [
+        {
+          "id": "s5_wg_end",
+          "text": "Čekamo. I čekamo. Konačno Goran silazi.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "ending"
+        }
+      ]
+    },
+    "s5_print": {
+      "id": "s5_print",
+      "speaker": "Nenad",
+      "portrait": "nenad_impressed",
+      "text": "Setlista? Na papiru? Ko još štampa setliste na papiru?! To je ili jako profesionalno ili jako nostalgično. Uđite.",
+      "choices": [
+        {
+          "id": "s5_p_end",
+          "text": "Klasika se vraća, kažem vam.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "ending"
+        }
+      ]
+    },
+    "s5_bojan_saves": {
+      "id": "s5_bojan_saves",
+      "speaker": "Bojan",
+      "portrait": "bojan_grateful",
+      "text": "Ej, Nenade! To su naši. Pusti ih, ja garantujem. Ovo je Jovanka — tour manager. Svi znaju Jovanku.",
+      "choices": [
+        {
+          "id": "s5_b_end",
+          "text": "Nenad se osmehuje i pravi korak u stranu.",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "ending"
+        }
+      ]
+    }
+  }
+}
