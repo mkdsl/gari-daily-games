@@ -221,12 +221,7 @@ function renderSceneBackground(sceneDef) {
   const bg = document.createElement('div');
   bg.className = `scene-bg ${sceneDef.background}`;
   bg.setAttribute('aria-label', sceneDef.name);
-
-  // NPC element
-  const npcEl = document.createElement('div');
-  npcEl.className = `scene-npc npc-${sceneDef.npc}`;
-  npcEl.setAttribute('aria-hidden', 'true');
-  bg.appendChild(npcEl);
+  // NPC element is created by each scene module (SceneBulevar, etc.) — not duplicated here
 
   gameContainer.insertBefore(bg, gameContainer.firstChild);
 }

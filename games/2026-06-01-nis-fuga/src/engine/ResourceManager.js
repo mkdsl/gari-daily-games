@@ -145,9 +145,13 @@ export function applyScene3Complication() {
   if (minutes > 0) {
     const tokaPotvrdjen = getFlag('tonika_potvrdjeno');
     const actualMinus = tokaPotvrdjen ? 5 : minutes;
+    const before = GameState.getResource('time');
     GameState.applyResourceDelta({ time: -actualMinus });
+    const after = GameState.getResource('time');
     EventBus.emit(EVENTS.RESOURCE_CHANGED, {
       resource: 'time',
+      from: before,
+      to: after,
       delta: -actualMinus,
       reason: 'scene3_complication'
     });

@@ -10,7 +10,7 @@ import EventBus, { EVENTS } from '../engine/EventBus.js';
 // Listen for SFX events
 EventBus.on(EVENTS.AUDIO_SFX_PLAY, ({ sfx }) => play(sfx));
 EventBus.on(EVENTS.DIALOG_CHOICE_SELECT, () => play('click'));
-EventBus.on(EVENTS.DIALOG_START, () => play('dialog_open'));
+// Note: dialog_open SFX is played directly in DialogRenderer.showNode() — no listener here
 EventBus.on(EVENTS.RESOURCE_CHANGED, ({ delta }) => {
   if (delta > 0) play('resource_gain');
   else if (delta < 0) play('resource_lose');

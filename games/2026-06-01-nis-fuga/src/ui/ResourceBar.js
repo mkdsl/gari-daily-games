@@ -27,7 +27,6 @@ export function init(parent) {
   parent.appendChild(container);
 
   // Cache element references
-  els.clock = container.querySelector('.rb-clock-hands');
   els.clockMinute = container.querySelector('.rb-clock-minute');
   els.clockHour = container.querySelector('.rb-clock-hour');
   els.timeVal = container.querySelector('.rb-time-value');

@@ -98,9 +98,6 @@ export function checkTrigger(trigger, ctx = {}) {
     case 'scene2_option_a':
       unlock('bacamile_zna_sve');
       break;
-    case 'scene3_full_explain':
-      unlock('soundcheck_objasnjenje');
-      break;
     case 'scene5_nenad_secret':
       unlock('nis_logika');
       break;

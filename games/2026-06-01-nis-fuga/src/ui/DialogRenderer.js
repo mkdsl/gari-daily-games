@@ -25,6 +25,12 @@ let textEl = null;
 /** @type {number|null} Typing interval */
 let typingTimer = null;
 
+/** @type {string} Full text of the current dialog node */
+let currentFullText = '';
+
+/** @type {Function|null} Completion callback for current typing animation */
+let currentOnComplete = null;
+
 /**
  * Initialize dialog renderer
  * @param {HTMLElement} parent
@@ -107,10 +113,14 @@ export function showNode(node) {
 
   SfxPlayer.play('dialog_open');
 
-  // Start typing animation
-  typeText(node.text ?? '', () => {
+  // Save full text and completion callback in closure for skipTyping()
+  currentFullText = node.text ?? '';
+  currentOnComplete = () => {
     if (hint) hint.style.opacity = '0.6';
-  });
+  };
+
+  // Start typing animation
+  typeText(currentFullText, currentOnComplete);
 }
 
 /**
@@ -146,12 +156,10 @@ function skipTyping() {
   if (typingTimer !== null) {
     clearTimeout(typingTimer);
     typingTimer = null;
-    // Show full text
-    const currentText = textEl?.textContent ?? '';
-    // We stored the full text in the node — need to recover it
-    // Instead we'll just finish via a re-emit pattern
-    // For simplicity: we mark typing as done, component handles it
-    EventBus.emit(EVENTS.DIALOG_NODE + ':skip', {});
+    // Show full text immediately
+    if (textEl) textEl.textContent = currentFullText;
+    // Fire completion callback (shows "Klikni za nastavak..." hint)
+    currentOnComplete?.();
   }
 }
 
