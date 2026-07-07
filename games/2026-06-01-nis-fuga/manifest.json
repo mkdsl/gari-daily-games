@@ -24,7 +24,7 @@
     "src/utils/Analytics.js": "Simple event logger",
     "src/audio/AudioEngine.js": "AudioContext wrapper (POSTOJI)",
     "src/audio/AmbientPlayer.js": "Scena-specifični ambijent (POSTOJI)",
-    "src/audio/SfxPlayer.js": "NEDOSTAJE",
+    "src/audio/SfxPlayer.js": "SFX zvukovi (POSTOJI)",
     "src/scenes/SceneBulevar.js": "NEDOSTAJE",
     "src/scenes/SceneKiosk.js": "NEDOSTAJE",
     "src/scenes/SceneKafana.js": "NEDOSTAJE",
@@ -45,7 +45,7 @@
     "index.html": "Postoji (stub)"
   },
   "line_counts": {
-    "total_js": 2301,
+    "total_js": 2577,
     "total_css": 0
   },
   "beta_score": null,
