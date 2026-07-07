@@ -5,7 +5,7 @@
   "description": "Vodiš Jovanku, tour managera Kluboslavija ekipe, kroz Niš u jutro pred event. Pet autentičnih niških scena, dijaloški izbori, resursi koji se prenose — stigni na soundcheck na vreme.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-06-01-nis-fuga/",
   "brand_serves": ["kluboslavija"],
-  "stage": "impl",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "index.html": "Ulazna tačka, ES6 module loader, 4 CSS importa, game-root DOM",
@@ -51,8 +51,8 @@
     "total_js": 6932,
     "total_css": 1090
   },
-  "beta_score": null,
-  "beta_score_iter2": null,
+  "beta_score": 8.2,
+  "beta_score_iter2": 9.7,
   "post_fix_score": null,
   "sef_signoff": false
 }
