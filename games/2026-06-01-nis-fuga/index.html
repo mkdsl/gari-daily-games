@@ -2,21 +2,75 @@
 <html lang="sr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Niš Fuga — Kluboslavija</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+  <meta name="description" content="Niš Fuga — Point-and-click mini avantura. Vodiš Jovanku kroz Niš jutro pred Kluboslavija event. 5 scena, 7 završnica, 9 dostignuća.">
+  <meta name="theme-color" content="#0D0020">
+  <meta property="og:title" content="Niš Fuga — Kluboslavija 2026">
+  <meta property="og:description" content="Stigne li Jovanka na soundcheck na vreme?">
+  <meta property="og:type" content="game">
+  <title>Niš Fuga — Kluboslavija 2026</title>
+
+  <!-- Game styles -->
+  <link rel="stylesheet" href="./styles/base.css">
+  <link rel="stylesheet" href="./styles/ui.css">
+  <link rel="stylesheet" href="./styles/game.css">
+  <link rel="stylesheet" href="./styles/theme.css">
+
   <style>
-    body { margin: 0; background: #1a0a2e; color: #e8a24a; font-family: monospace; display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; }
-    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-    p { opacity: 0.7; margin: 0.25rem 0; }
-    .badge { display: inline-block; margin-top: 1rem; padding: 0.4rem 1rem; border: 1px solid #e8a24a; border-radius: 4px; font-size: 0.8rem; opacity: 0.6; }
+    /* Inline critical styles to prevent FOUC */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #0D0020;
+      color: #F5E6C8;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
-  <div>
-    <h1>Niš Fuga</h1>
-    <p>Point-and-click mini avantura — Kluboslavija turneja 2026</p>
-    <p><small>Implementacija u toku — uskoro</small></p>
-    <div class="badge">⏳ Concept stage</div>
+
+  <!-- Loading screen -->
+  <div id="loading-screen">
+    <div class="loading-title">Niš Fuga</div>
+    <div class="loading-sub">Učitavanje...</div>
+    <div class="loading-bar-wrap">
+      <div class="loading-bar"></div>
+    </div>
+    <div class="loading-sub" style="margin-top:8px; font-size:0.75rem; opacity:0.5;">Kluboslavija Niš 2026</div>
   </div>
+
+  <!-- Main menu -->
+  <div id="main-menu" class="hidden">
+    <!-- Populated by main.js -->
+  </div>
+
+  <!-- Game root -->
+  <div id="game-root">
+    <!-- HUD injected by ResourceBar.init() -->
+    <!-- Game container -->
+    <div id="game-container">
+      <!-- Scene backgrounds injected by SceneManager -->
+      <!-- Dialog/choice overlays injected by DialogRenderer/ChoiceMenu -->
+    </div>
+  </div>
+
+  <!-- Bootstrap -->
+  <script type="module" src="./src/main.js"></script>
+
+  <!-- Noscript fallback -->
+  <noscript>
+    <div style="
+      position:fixed;inset:0;background:#0D0020;color:#F5E6C8;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:12px;text-align:center;padding:20px;font-family:sans-serif;
+    ">
+      <h1 style="color:#E8A24A">Niš Fuga</h1>
+      <p>Ova igra zahteva JavaScript.</p>
+      <p style="font-size:0.85rem;opacity:0.6">Kluboslavija Niš 2026</p>
+    </div>
+  </noscript>
 </body>
 </html>

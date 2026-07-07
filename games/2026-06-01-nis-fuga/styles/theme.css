@@ -1,0 +1,149 @@
+/* theme.css — Kluboslavija brand palette, Niš jutarnje boje */
+
+/*
+  Kluboslavija paleta:
+  - Jutarnja narandžasta:   #E8A24A
+  - Nebo boja:              #4A7FA5
+  - Niš krem:               #F5E6C8
+  - Tvrđava cigla:          #8B3A2A
+  - Noćna kapija:           #1A1A2E
+  - Neon pink:              #FF6B9D
+  - Klub tamno:             #0D0020
+*/
+
+:root {
+  --kluboslavija-orange:  #E8A24A;
+  --kluboslavija-blue:    #4A7FA5;
+  --nis-creme:            #F5E6C8;
+  --tvrdjava-brick:       #8B3A2A;
+  --night-deep:           #1A1A2E;
+  --neon-pink:            #FF6B9D;
+  --klub-dark:            #0D0020;
+  --morning-sky:          #87CEEB;
+  --park-green:           #5A8C30;
+  --kafana-wood:          #8B5E3C;
+}
+
+/* ===== GLOBAL BRAND ACCENTS ===== */
+a { color: var(--kluboslavija-orange); }
+a:hover { color: var(--nis-creme); }
+
+/* Brand text */
+.brand-text {
+  color: var(--kluboslavija-orange);
+  font-weight: 700;
+}
+
+/* Kluboslavija logo / brand mark */
+.kluboslavija-brand {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(232,162,74,0.6);
+}
+
+/* ===== SCENE-SPECIFIC THEMING ===== */
+
+/* Bulevar: morning warmth */
+.bg-bulevar .scene-name-badge { background: rgba(232,162,74,0.15); }
+.bg-bulevar + .dialog-container .dialog-bubble {
+  border-color: rgba(232,162,74,0.5);
+}
+
+/* Kafana: warm wood tones */
+.bg-kafana .scene-name-badge { background: rgba(139,94,60,0.3); }
+
+/* Kapija: neon night */
+.bg-kapija .scene-name-badge {
+  background: rgba(255,107,157,0.15);
+  border-color: rgba(255,107,157,0.3);
+  color: rgba(255,107,157,0.8);
+}
+
+.bg-kapija .dialog-bubble {
+  border-color: rgba(255,107,157,0.4);
+}
+
+/* ===== BUTTON STATES ===== */
+button:focus-visible {
+  outline: 2px solid var(--kluboslavija-orange);
+  outline-offset: 3px;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(232,162,74,0.4);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(232,162,74,0.7);
+}
+
+/* ===== TYPOGRAPHY ===== */
+.text-orange { color: var(--kluboslavija-orange); }
+.text-blue { color: var(--kluboslavija-blue); }
+.text-creme { color: var(--nis-creme); }
+.text-muted { color: rgba(245,230,200,0.5); }
+.text-bold { font-weight: 700; }
+.text-italic { font-style: italic; }
+.text-center { text-align: center; }
+
+/* ===== RESOURCE BAR THEMING ===== */
+.rb-section-time { --rb-accent: var(--kluboslavija-orange); }
+.rb-section-morale { --rb-accent: var(--kluboslavija-orange); }
+.rb-section-reputation { --rb-accent: #E84A7A; }
+.rb-section-patience { --rb-accent: var(--kluboslavija-blue); }
+
+/* ===== CLUBBING NEON GLOW (used in kapija scene) ===== */
+.neon-glow {
+  text-shadow:
+    0 0 5px var(--neon-pink),
+    0 0 10px var(--neon-pink),
+    0 0 20px var(--neon-pink);
+}
+
+.neon-border {
+  box-shadow:
+    0 0 5px var(--neon-pink),
+    inset 0 0 5px rgba(255,107,157,0.1);
+  border-color: var(--neon-pink);
+}
+
+/* ===== RESPONSIVE TOUCH TARGETS ===== */
+@media (pointer: coarse) {
+  .choice-btn {
+    min-height: 52px;
+    padding: 14px 16px;
+  }
+
+  .menu-btn {
+    min-height: 52px;
+  }
+
+  .ending-btn {
+    min-height: 52px;
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .scene-npc,
+  .bg-van,
+  .rb-time-value.critical,
+  .rb-patience-fill.critical {
+    animation: none;
+  }
+
+  .choice-btn {
+    transition: none;
+  }
+}

@@ -1,0 +1,408 @@
+/* ui.css — HUD, dialog, choice menu, resource bar */
+
+/* ===== RESOURCE BAR ===== */
+.resource-bar {
+  position: relative;
+  z-index: 100;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: rgba(10, 0, 20, 0.9);
+  border-bottom: 2px solid rgba(232,162,74,0.3);
+  padding: 8px 12px;
+  flex-shrink: 0;
+  height: 72px;
+}
+
+.rb-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  padding: 0 6px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.3s;
+}
+
+.rb-section:last-child { border-right: none; }
+
+.rb-label {
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: rgba(245,230,200,0.5);
+  text-transform: uppercase;
+}
+
+/* Resource change flash */
+.rb-flash-up {
+  animation: rbFlashUp 0.5s ease;
+}
+
+.rb-flash-down {
+  animation: rbFlashDown 0.5s ease;
+}
+
+@keyframes rbFlashUp {
+  0% { background: transparent; }
+  30% { background: rgba(39,174,96,0.25); }
+  100% { background: transparent; }
+}
+
+@keyframes rbFlashDown {
+  0% { background: transparent; }
+  30% { background: rgba(192,57,43,0.25); }
+  100% { background: transparent; }
+}
+
+/* Clock */
+.rb-clock {
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+
+.rb-clock-face {
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(232,162,74,0.6);
+  border-radius: 50%;
+  position: relative;
+  background: rgba(0,0,0,0.4);
+}
+
+.rb-clock-hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  border-radius: 2px;
+}
+
+.rb-clock-hour {
+  width: 2px;
+  height: 8px;
+  background: #F5E6C8;
+  margin-left: -1px;
+  transform: rotate(270deg);
+}
+
+.rb-clock-minute {
+  width: 1.5px;
+  height: 11px;
+  background: #E8A24A;
+  margin-left: -0.75px;
+  transform: rotate(0deg);
+}
+
+.rb-clock-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 4px; height: 4px;
+  background: #E8A24A;
+  border-radius: 50%;
+}
+
+.rb-time-value {
+  font-size: 11px;
+  font-weight: 700;
+  color: #F5E6C8;
+  font-variant-numeric: tabular-nums;
+}
+
+.rb-time-value.critical {
+  color: #E84A4A;
+  animation: criticalPulse 1s ease-in-out infinite;
+}
+
+@keyframes criticalPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Morale figures */
+.rb-morale-figures {
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+}
+
+.rb-figure {
+  width: 10px;
+  height: 22px;
+  border-radius: 5px 5px 2px 2px;
+  position: relative;
+  transition: background 0.3s, opacity 0.3s;
+}
+
+.rb-figure.active { background: #E8A24A; opacity: 1; }
+.rb-figure.inactive { background: rgba(255,255,255,0.15); opacity: 0.4; }
+
+.rb-figure::before {
+  content: '';
+  position: absolute;
+  top: -7px; left: 50%;
+  transform: translateX(-50%);
+  width: 8px; height: 8px;
+  background: inherit;
+  border-radius: 50%;
+}
+
+/* Reputation hearts */
+.rb-reputation-hearts {
+  display: flex;
+  gap: 1px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 60px;
+}
+
+.rb-heart {
+  font-size: 11px;
+  transition: color 0.3s, opacity 0.3s;
+  line-height: 1;
+}
+
+.rb-heart.filled { color: #E84A7A; opacity: 1; }
+.rb-heart.empty { color: rgba(255,255,255,0.2); opacity: 0.5; }
+
+/* Patience thermometer */
+.rb-patience-bar {
+  width: 12px;
+  height: 32px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.rb-patience-fill {
+  width: 100%;
+  background: linear-gradient(0deg, #4A7FA5, #7ABEE8);
+  transition: height 0.4s ease, background 0.3s;
+  border-radius: 4px;
+}
+
+.rb-patience-fill.critical {
+  background: linear-gradient(0deg, #C0392B, #E84A4A);
+  animation: criticalPulse 1s ease-in-out infinite;
+}
+
+.rb-patience-value {
+  font-size: 11px;
+  font-weight: 700;
+  color: #F5E6C8;
+}
+
+/* ===== DIALOG SYSTEM ===== */
+.dialog-container {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 12px;
+  z-index: 200;
+  transform: translateY(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.dialog-container.dialog-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
+
+.dialog-container.dialog-hiding {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.dialog-container.dialog-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.dialog-portrait-wrap {
+  flex-shrink: 0;
+}
+
+.dialog-portrait {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid rgba(232,162,74,0.6);
+  background: #3D3D3D;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.dialog-bubble {
+  flex: 1;
+  background: rgba(10, 0, 20, 0.92);
+  border: 2px solid rgba(232,162,74,0.4);
+  border-radius: 12px 12px 12px 4px;
+  padding: 12px 14px;
+  position: relative;
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.dialog-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: 12px; left: -10px;
+  border: 8px solid transparent;
+  border-right-color: rgba(232,162,74,0.4);
+  border-left: 0;
+}
+
+.dialog-speaker {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.dialog-text {
+  font-size: 14px;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.dialog-continue-hint {
+  font-size: 10px;
+  color: rgba(245,230,200,0.4);
+  text-align: right;
+  margin-top: 6px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-style: italic;
+}
+
+/* ===== CHOICE MENU ===== */
+.choice-menu {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 150px;
+  padding: 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 300;
+  max-height: 55%;
+  overflow-y: auto;
+}
+
+.choices-entering .choice-btn {
+  animation: choiceSlideIn 0.2s ease both;
+}
+
+.choice-btn:nth-child(1) { animation-delay: 0ms; }
+.choice-btn:nth-child(2) { animation-delay: 60ms; }
+.choice-btn:nth-child(3) { animation-delay: 120ms; }
+.choice-btn:nth-child(4) { animation-delay: 180ms; }
+
+@keyframes choiceSlideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.choice-btn {
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  background: rgba(20, 5, 40, 0.92);
+  border: 1px solid rgba(232,162,74,0.35);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 48px;
+  position: relative;
+}
+
+.choice-btn:hover:not(:disabled) {
+  background: rgba(232,162,74,0.12);
+  border-color: rgba(232,162,74,0.7);
+  transform: translateX(4px);
+}
+
+.choice-btn:active:not(:disabled) {
+  transform: translateX(2px) scale(0.99);
+}
+
+.choice-btn.choice-selected {
+  background: rgba(232,162,74,0.2);
+  border-color: var(--color-accent);
+}
+
+.choice-btn:disabled,
+.choice-btn.choice-gated {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: rgba(255,255,255,0.1);
+}
+
+.choice-btn:disabled .choice-text {
+  color: rgba(245,230,200,0.5);
+}
+
+.choice-text {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.choice-requirement {
+  font-size: 11px;
+  color: rgba(192,57,43,0.9);
+  font-style: italic;
+}
+
+.choice-tooltip {
+  font-size: 11px;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.choice-effects {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 11px;
+}
+
+.effect-pos { color: #4A9A4A; }
+.effect-neg { color: #C0392B; }
+
+/* Scene name indicator */
+.scene-name-badge {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10,0,20,0.7);
+  border: 1px solid rgba(232,162,74,0.3);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 11px;
+  color: rgba(245,230,200,0.6);
+  pointer-events: none;
+  z-index: 50;
+  white-space: nowrap;
+}
