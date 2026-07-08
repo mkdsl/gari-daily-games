@@ -1,66 +1,77 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-## ✅ 2026-07-05 — Šef sign-off: sve 14 igara released
+**Generisano:** 2026-07-08, trigger (KORAK 0b) — 6 igara nije released (≥ 2 prag)
 
-Šef je dao OK za sve 14 igara. Commit: `53e302e Released: 14 igara — šef sign-off 2026-07-05`. Backlog koji je čekao 19-55 dana je u potpunosti rešen. KORAK 0b blokada skinuta.
-
-**Trenutno stanje (2026-07-07):** Orphan 2026-05-21-park-mapa zatvorena (superseded). Niš Fuga impl pokrenuta (KORAK 0d + KORAK 4).
+**KORAK 0b je aktivan:** Trigger danas NIJE pokrenuo novu igru. Pipeline čeka šefov test.
 
 ---
 
-**Generisano:** 2026-07-06, trigger (KORAK 0b) — D+36 (KORAK 0b aktivan od 2026-06-17)
-**Status arhiva:** 14 igara je čekalo šefov test (resolved).
+## 🎯 Prioritet: Niš Fuga čeka sign-off (37 dana u polishu)
 
-**KORAK 0b je aktivan:** broj igara koje NISU `released` je 20 (≫ 2). Trigger danas NIJE pokrenuo novu igru. **0 sign-off-ova primljeno otkad praćenje postoji (KORAK 0b aktiviran 2026-06-17) — 19 uzastopnih dana, 0 progresa.** Red ne raste više (impl/concept su zamrznuti od 06-13), ali i ne opada — pipeline je u potpunosti zaglavljen na jednoj tački: šefov test.
+**Jedina aktivna igra koja treba tvoj test:**
 
-**Napomena (06-30 rok):** Nega je imala rok 2026-06-30 da zatvori META-pitanje (auto-signoff politika) kao `[PROPOSAL]` self-commit u ajajaj repo. Ovaj backlog ne prati ajajaj — proveri tamo. Nezavisno od tog ishoda, KORAK 6.75 (manuelni test) ostaje obavezan.
+| Igra | Dana čeka | Beta iter2 | Brand | Play |
+|------|-----------|------------|-------|------|
+| **Niš Fuga** | 37 dana (od 2026-06-01) | **9.7/10** ✅ | kluboslavija | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-01-nis-fuga/) |
 
-## ⚠️ Avala prozor je zatvoren — potvrđen promašaj
+**Šta je igra:** Point-and-click mini avantura — vodiš Jovanku, tour managera Kluboslavija ekipe, kroz Niš u jutro pred event. Pet autentičnih niških scena, dijaloški izbori, resursi koji se prenose — stigni na soundcheck na vreme.
 
-6 od 14 igara u backlogu su izgrađene kao **countdown-do-Avale** sadržaj (Tiha Avala, Zvučna Proba, Turneja 2026, Ekipa Noći, Festival Mreža, Avala Crew). Event je bio 20.06 — prozor je definitivno zatvoren: **nijedna od 6 Avala-hook igara nije dobila sign-off ni release, ni pre ni tokom eventa.** Ako se ipak release-uju, to je samo "uspomena/recap" sadržaj, ne promo hook.
+**Beta status:**
+- Beta iter 1: **8.2/10** (3 MEDIUM + 3 LOW bugova nađena)
+- Fix log: sve MEDIUM ispravljeno, LOW logovano
+- Beta iter 2: **9.7/10** ✅ — svi fix-ovi verifikovani, 0 novih bugova
+- Šef sign-off: **čeka** (blokira release)
 
-## Sign-off lista (14 igara, najstarije prvo)
+**Test checklist (5 min):**
+1. Otvori play URL iznad
+2. Prođi barem 2 scene (Bulevar → Kiosk → Kafana)
+3. Provjeri da dijaloški izbori reaguju i da resursi (vreme/moral/strpljenje) se menjaju
+4. Provjeri game over / dobar ending
+5. Javi: "OK Niš Fuga" ili "vrati u fix: [šta]"
 
-Otvori, odigraj 2-5 min, javi "OK [ime]" ili "vrati u fix [ime]: [šta]".
+**Ako daš OK:** sledeći trigger radi KORAK 7 (manifest finalize + README + release commit + push).
 
-| # | Igra | Dana čeka | Beta iter2 | Brand | Napomena | Play |
-|---|------|-----------|------------|-------|----------|------|
-| 1 | **Tiha Avala** | 55 | 9.0/10 | kluboslavija | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-12-tiha-avala/) |
-| 2 | Sound vs Tišina | 45 | 8.0/10 | kluboslavija × mkdslend | Beta1=3.0 — imala ozbiljnih bug-ova inicijalno | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-22-sound-vs-tisina/) |
-| 3 | **Zvučna Proba** | 43 | 8.5/10 | kluboslavija | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-24-zvucna-proba/) |
-| 4 | **Kluboslavija: Turneja 2026** | 42 | 9.0/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-25-turneja-2026/) |
-| 5 | Gari Tim Simulator | 41 | 8.5/10 | mkdslend | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-26-gari-tim-simulator/) |
-| 6 | DJ Akademija | 39 | 8.5/10 | kluboslavija | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-28-dj-akademija/) |
-| 7 | Akva-Sklop | 37 | 7.4/10 | guncati | Najslabiji beta iter2 u listi | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-30-akva-sklop/) |
-| 8 | **Ekipa Noći** | 36 | 8.5/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-05-31-ekipa-noci/) |
-| 9 | Pečurka Inokulator | 34 | 7.5/10 | guncati | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-02-pecurka-inokulator/) |
-| 10 | Sarajevo ili Smrt | 33 | 6.8/10 ⚠️ | kluboslavija × mkdslend | Najniži beta iter2 — ispod 7.0 | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-03-sarajevo-ili-smrt/) |
-| 11 | **Festival Mreža** ⚠️ najjača Avala-sprega (grand-win uslov) | 32 | 8.1/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-04-festival-mreza/) |
-| 12 | **Avala Crew** | 30 | 8.3/10 | kluboslavija × mkdslend | Avala hook — prozor zatvoren | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-06-avala-crew/) |
-| 13 | Zemlja i Znanje | 29 | 9.0/10 | guncati × mkdslend | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-07-zemlja-i-znanje/) |
-| 14 | Park Mapa | 23 | 7.8/10 | mkdslend × kluboslavija × guncati | | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-13-park-mapa/) |
+---
 
-Svaka igra ima `docs/sef_signoff.md` u svom folderu sa konkretnom test checklistom (5-6 koraka, <5 min). Kolona "Beta iter2" je stvarni rezultat posle fix-ova (post_fix_score u manifestima je sve 9.0 zbog stare formule bez bonus-cap — ne uzimaj ga kao indikator; iter2 je pravi). **Sarajevo ili Smrt (beta2=6.8) i Akva-Sklop (beta2=7.4) su kandidati za dodatni fix pre release-a ako šef tako odluči.** Ovo NE zamenjuje šefov test (KORAK 6.75 je obavezan bez obzira na score).
+## 📊 Kompletna slika (6 unreleased)
 
-## ⚠️ Pasoš cross-game registry drift (KORAK 0c, potvrđeno i danas)
+| # | Igra | Stage | Status | Napomena |
+|---|------|-------|--------|----------|
+| 1 | **Niš Fuga** (06-01) | polish | in_progress | Čeka sign-off — vidi gore |
+| 2 | Park Mapa (05-21) | concept | failed | Orphan/legacy — zamenjena retry-em 06-13 koji je released |
+| 3 | DJ za Pultom v1 (05-11) | — | V2 BUILD | Legacy — ne prati standardni manifest format |
+| 4 | Park Ranger (05-06) | — | in_progress | Legacy — bez stage polja |
+| 5 | Kartaški Front (04-24) | — | done | Legacy — bez stage polja |
+| 6 | Kanal (04-22) | — | in_progress | Legacy stub — nikad dovršen |
 
-Kluboslavija Pasoš (`games/2026-05-10-cross-event-pasos/src/config.js`) ima **3 registrovana slug-a** od **17 released igara** — gap = 14 (≫ 5 prag), nepromenjeno. Drift je netaknut od 10.05 (preko 7 nedelja). Čak i kad bi sve 14 igara iznad dobile sign-off danas, Pasoš ih ne bi prepoznao dok neko ne dopiše slugove/stamps u `config.js` (Jovin posao, brand/copy odluka po igri — ovaj korak samo izveštava, ne piše u config). Vidi `tim/retrospektiva/2026-06-21.md` (ajajaj repo) za poreklo nalaza.
+Stavke 2-6 su legacy/pre-KORAK-0a format — ne blokiraju pipeline direktno, ali se broje u KORAK 0b ukupnom broju. Šef može odlučiti da li ih arhivira ručno.
 
-## ⚠️ Orphaned concept igre (KORAK 0d, potvrđeno i danas)
+---
 
-Dve igre su zaglavljene u `concept` stage-u i nevidljive normalnom routing-u:
+## ⚠️ Pasoš cross-game registry drift (KORAK 0c)
 
-| Igra | Stage | Dana stoji | Napomena |
-|------|-------|-----------|----------|
-| Park Mapa (05-21, original) | concept | 46 dana | Napuštena — zamenjena retry-em 06-13 koji je u sign-off tabeli iznad |
-| **Niš Fuga** (06-01) | concept | 35 dana | Nikad ušla u impl — čeka 09:00 trigger koji je poveže sa impl subagentom |
+**Gap: 28** (31 released igara, samo 3 registrovana u Pasoš config-u)
 
-KORAK 0d kaže: 09:00 trigger treba da radi impl na Niš Fugi (najstariji orphan u concept). Ali KORAK 0b (count=20 ≫ 2) zaustavlja sve dok sign-off red ne padne ispod 2.
+`games/2026-05-10-cross-event-pasos/src/config.js` ima **3 registrovana slug-a** od **31 released igara**.
+Gap je ≫ 5 prag (KORAK 0c trigger). Drift je netaknut od 10.05.
 
-## Ako odgovoriš "OK SVE"
+**Ovo ne radi Gari automatski** — dodavanje slugova/stamps je Jovin posao, brand/copy odluka po igri.
+Samo flagujemo da gap postoji i raste. Vidi `tim/retrospektiva/2026-06-21.md` (ajajaj repo) za poreklo nalaza.
 
-Gari prolazi kroz svih 14 redom, radi KORAK 7 (manifest finalize + README + release commit) za svaku.
+---
 
-## Napuštene/legacy stavke (pre-KORAK-0a šema, van scope-a ovog paketa)
+## ⚠️ Orphan igre (KORAK 0d)
 
-`games/2026-04-22-kanal`, `2026-04-24-kartaski-front`, `2026-05-06-park-ranger`, `2026-05-11-dj-za-pultom-v1` — stariji manifest format bez `stage` polja ili nestandardni `status`. Ne blokiraju trenutni routing (nisu "najnoviji po datumu fajla"); šef odlučuje da li ih treba arhivirati ili ponovo otvoriti.
+| Igra | Stage | Status | Napomena |
+|------|-------|--------|----------|
+| Park Mapa (05-21) | concept | failed | Superseded od 06-13 Park Mapa (released). Legacy. |
+
+KORAK 0d: jedini orphan je failed/legacy — nema aktivnih orphan igara u concept/impl stage-u koje treba da se napreduju.
+
+---
+
+## Istorija
+
+- **2026-07-05:** Šef dao OK za sve 14 igara. Commit `53e302e Released: 14 igara — šef sign-off 2026-07-05`. Backlog od 19-55 dana u potpunosti rešen.
+- **2026-07-07:** Niš Fuga impl dovršena (35 modula, 6932 JS + 1090 CSS). Beta iter 1 + fix log + beta iter 2 (9.7/10). Čeka šef sign-off.
+- **2026-07-08:** KORAK 0b aktivan (6 unreleased). Nema nove igre. Ovaj refresh dokument.
