@@ -77,7 +77,12 @@ prebroj sve postojeće manifeste koji NISU released:
 ```bash
 count=0
 for m in games/*/manifest.json; do
-  grep -q '"status": *"released"' "$m" || count=$((count+1))
+  stage=$(grep -o '"stage": *"[^"]*"' "$m" | cut -d'"' -f4)
+  status=$(grep -o '"status": *"[^"]*"' "$m" | cut -d'"' -f4)
+  [ -z "$stage" ] && continue
+  [ "$status" = "released" ] && continue
+  [ "$status" = "failed" ] && continue
+  count=$((count+1))
 done
 echo "$count"
 ```
