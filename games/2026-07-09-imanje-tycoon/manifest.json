@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-07-09-imanje-tycoon/",
   "brand_serves": ["guncati", "mkdslend"],
   "stage": "concept",
-  "status": "in_progress",
+  "status": "failed",
   "modules": {},
   "line_counts": {
     "total_js": 0,

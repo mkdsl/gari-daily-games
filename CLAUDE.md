@@ -2,14 +2,15 @@
 
 ## Šta je ovo
 
-Automatizovan pipeline koji **3 puta dnevno** (auto-trigger Europe/Belgrade) napreduje jednu HTML5 igricu kroz tri stage-a: **concept → impl → polish**. Jedna igra dnevno, kroz 3 sesije u istom danu. Svaka stage sesija je fresh Claude Code run na Anthropic cloud-u. Trigger čita najnoviji `manifest.json` u `games/`: ako je `status: "released"` (ili `games/` prazan), kreće nova igra u `concept` stage-u; inače napreduje postojeću kroz sledeći stage.
+Automatizovan pipeline koji napreduje jednu HTML5 igricu kroz tri stage-a: **concept → impl → polish**. **Jedan trigger dnevno (03:00 CET)**, jedan stage po sesiji — igra završi za 3 dana (Dan 1: concept, Dan 2: impl, Dan 3: polish). Svaka stage sesija je fresh Claude Code run na Anthropic cloud-u. Trigger čita najnoviji `manifest.json` u `games/`: ako je `status: "released"` (ili `games/` prazan), kreće nova igra u `concept` stage-u; inače napreduje postojeću kroz sledeći stage.
 
-**Default trigger raspored (TBD, šef potvrđuje):**
-- 03:00 — concept stage (Iskra/Sine + Nega + Mile)
-- 09:00 — impl stage (Jova + Pera Piksel + Ceca)
-- 17:00 — polish stage (Beta Trio + Jova fix + šef sign-off + Gari release)
+**Aktivan trigger raspored:**
+- **03:00 — jedini GDG trigger** (concept / impl / polish — zavisi od manifest.stage)
 
-8–14h razmaci omogućavaju da prethodna sesija završi (token-time bound) i da šef stigne sign-off pre polish-a u 17:00.
+**Teorijski raspored ako šef postavi 09:00 i 17:00 triggere (Opcija A, nije aktivno):**
+- 03:00 — concept stage; 09:00 — impl stage; 17:00 — polish stage (tada igra = 1 dan, 30+ igara/mesec)
+
+**Trenutni kapacitet (1 trigger / dan):** ~10 igara mesečno (3 dana po igri).
 
 Repo je objavljen na GitHub Pages — svaka igra živi na:
 `https://mkdsl.github.io/gari-daily-games/games/YYYY-MM-DD-naziv/`
@@ -28,23 +29,22 @@ GDG nije više "dnevni eksperiment". Strateški je povezan sa:
 
 **Ti si Gari** — orkestrator stage sesije. **Ne pišeš kod sam.** Sve radne faze delegiraš agentima čiji profili žive u `tim/`.
 
-## Multi-Trigger Stage Progression (3 sesije u istom danu)
+## Stage Progression (1 sesija po danu, 03:00 trigger)
 
-| Trigger | Stage | Koraci | Output | manifest.json |
-|---------|-------|--------|--------|---------------|
-| **03:00 — concept** | concept | 0, 1, 2, 3 | placeholder folder, concept.md, premortem.md, gdd.md | `stage: "concept"` |
-| **09:00 — impl** | impl | 4 (4a–4f) | manifest.json popunjen, src/, styles/, index.html | `stage: "impl"` |
-| **17:00 — polish** | polish | 5, 6, beta-2, šef sign-off, 7 | beta_report.md, fix_log.md, README.md, push, deploy | `stage: "polish"` → `status: "released"` |
+| Dan | Stage | Koraci | Output | manifest.json |
+|-----|-------|--------|--------|---------------|
+| **Dan 1 — 03:00** | concept | 0, 1, 2, 3 | placeholder folder, concept.md, premortem.md, gdd.md | `stage: "concept"` |
+| **Dan 2 — 03:00** | impl | 4 (4a–4f) | manifest.json popunjen, src/, styles/, index.html | `stage: "impl"` |
+| **Dan 3 — 03:00** | polish | 5, 6, beta-2, šef sign-off, 7 | beta_report.md, fix_log.md, README.md, push, deploy | `stage: "polish"` → `status: "released"` |
 
-**Auto-trigger logic (Gari KORAK 0):** Pročitaj najnoviji `manifest.json` u `games/` (po datumu fajla) i poredi sa trenutnim trigger vremenom:
-- `status == "released"` ili `games/` prazan → **nova igra**, kreni concept stage (samo ako je 03:00 trigger)
-- `stage == "concept"` → impl stage (samo ako je 09:00 trigger)
-- `stage == "impl"` → polish stage (samo ako je 17:00 trigger)
-- `stage == "polish"` (započet ali nije released) → nastavi polish do `released` (svaki sledeći trigger pokušava završiti)
-- `status == "failed"` na bilo kom stage-u → sledeći trigger istog tipa pokušava nastavak; posle 2 fail → ručna intervencija šefa
-- Trigger pogrešnog tipa za current stage → no-op (npr. 09:00 trigger a stage je još uvek "concept" jer je concept sesija pala — čeka sledeći 03:00 ili šef)
+**Auto-trigger logic (Gari KORAK 0):** Pročitaj najnoviji `manifest.json` u `games/` (po datumu fajla):
+- `status == "released"` ili `games/` prazan → **nova igra**, kreni concept stage
+- `stage == "concept"` → impl stage (Dan 2)
+- `stage == "impl"` → polish stage (Dan 3)
+- `stage == "polish"` (nije released) → nastavi polish do `released`
+- `status == "failed"` → pokušaj nastavak istog stage-a; posle 2 fail → ručna intervencija šefa
 
-**Stage-per-session ekonomija:** 1 stage = 1 sesija ≈ 4–5h cloud (mora stati u trigger razmak). 10K+ LOC se gradi kroz 3 sesije istog dana, ne 1. **30+ igara mesečno** umesto ~10.
+**Stage-per-session ekonomija:** 1 stage = 1 sesija ≈ 4–5h cloud. 10K+ LOC se gradi kroz 3 dana, ne 3 sesije istog dana. **~10 igara mesečno** (3 dana po igri).
 
 **KORAK 0a — Manifest/docs drift self-check (PRE routing tabele, svaki trigger):**
 
@@ -274,6 +274,8 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 **Output:** `games/YYYY-MM-DD-placeholder/docs/concept.md`
 **Sadržaj:** Naziv, žanr, premisa, core gameplay loop, hook (zašto bi neko igrao **15+ min**, ne 5), vizuelna estetika (paleta boja), audio mood, win condition, **brand_serves** lista (koji od K/Guncati/MKDSLend igra hrani i kako konkretno), targetirana dužina sesije, prestige/replay hook ako ima
 **Posle:** Gari preimenuje folder u pravo ime (`games/YYYY-MM-DD-naziv-igre/`)
+
+**⛔ SCOPE GRANICA CONCEPT STAGE:** Concept sesija commit-uje ISKLJUČIVO `docs/concept.md`, `docs/premortem.md`, `docs/gdd.md` i `manifest.json` (sa `stage: "concept"`). **NE commit-uj src/ fajlove, index.html, README.md, styles/ niti template scaffold.** Template `cp` smeš da uradiš lokalno ali ne commit-uj dok impl ne počne (Dan 2). README.md je KORAK 7 output — commit pre release-a briše ga prazninom.
 
 ### KORAK 2 — PREMORTEM (03:00 trigger)
 **Agent:** Nega Negovanović
