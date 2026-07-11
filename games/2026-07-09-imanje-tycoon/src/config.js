@@ -1,15 +1,133 @@
-export const CONFIG = {
-  SAVE_KEY: 'gari-daily-game',
-  SAVE_INTERVAL_SEC: 5,
+/** @type {Object} Sve GAME_CONFIG konstante iz GDD-a */
+export const GAME_CONFIG = {
+  SAVE_KEY: 'imanje-tycoon-v1',
+  SAVE_INTERVAL_SEC: 10,
 
-  // Jova: zameni ove konstante pravim tuning brojevima iz Miletovog GDD-a
-  PLAYER_SPEED: 300,
-  TICK_RATE: 60,
+  // Timing
+  SEASON_DURATION_SEC: 120,
+  SEASON_DURATION_LATE_SEC: 90,
+  SEASON_LATE_THRESHOLD: 4,
+  MUSHROOM_WAVE_SEC: 42,
+  PLASTENIK_PARADAJZ_SEC: 180,
+  PLASTENIK_MICRO_SEC: 14,
+  FISH_GROWTH_SEC: 720,
+  DUCK_INCOME_INTERVAL_SEC: 60,
+  OFFLINE_MAX_SEC: 28800,
 
-  COLORS: {
-    BG: '#0a0a0f',
-    PRIMARY: '#e5e5e5',
-    ACCENT: '#ff4d6d',
-    DIM: '#555'
-  }
+  // Starter kapaciteti
+  MUSHROOM_STARTER_BLOCKS: 1,
+  MUSHROOM_BLOCK_KG: 5,
+  PLASTENIK_STARTER_M2: 20,
+  FISH_STARTER_M2: 200,
+
+  // Baze prinosa
+  MUSHROOM_SPAWN_RATIO_BASE: 1.0,
+  MUSHROOM_WAVES_PER_BLOCK: 3,
+  PLASTENIK_TOMATO_KG_M2: 27,
+  PLASTENIK_MICRO_KG_M2_CYCLE: 0.2,
+  FISH_KG_M2_YEAR_BASE: 12,
+  DUCK_EGGS_PER_YEAR: 80,
+
+  // Cene (din/kg ili din/jaje)
+  PRICE_BUKOVACA: 400,
+  PRICE_OYSTER: 700,
+  PRICE_PARADAJZ: 215,
+  PRICE_MIKROBILJKE: 1000,
+  PRICE_SARAN: 650,
+  PRICE_SMUDJ: 1200,
+  PRICE_JAJE: 35,
+
+  // Kanali
+  CHANNEL_MULTIPLIERS: {
+    direktna: 1.0,
+    pijaca: 1.2,
+    restoran: 1.55,
+    online: 1.9,
+    masterclass: 2.5,
+  },
+  CHANNEL_COSTS: {
+    pijaca: 5000,
+    restoran: 20000,
+    online: 35000,
+  },
+  CHANNEL_CAPS_KG: {
+    direktna: Infinity,
+    pijaca: 500,
+    restoran: 300,
+    online: 200,
+    masterclass: 50,
+  },
+
+  // Upgrade multiplijer
+  UPGRADE_YIELD_PER_LEVEL: 1.15,
+
+  // Prestiž
+  PRESTIGE_CAPITAL_CARRY: 0.50,
+  PRESTIGE_YIELD_MULTIPLIER_BASE: 1.15,
+  PRESTIGE_SPEED_PER_COUNT: 0.25,
+  ALUMNI_BONUS_PER_PRESTIGE: 0.08,
+
+  // Reputacija
+  REPUTATION_BASE: 1.0,
+  REPUTATION_PER_MASTERCLASS: 0.05,
+  REPUTATION_CAP: 1.5,
+
+  // Faza uslovi
+  PHASE_A_TOTAL_REVENUE: 25000,
+  PHASE_B_TOTAL_REVENUE: 100000,
+  PHASE_C_MONTHLY_SURPLUS: 150000,
+  PHASE_C_CONSECUTIVE_SEASONS: 3,
+
+  // Radnici
+  BASE_DAILY_ACTIONS: 5,
+  ACTIONS_PER_WORKER: 3,
+  MAX_WORKERS: 3,
+
+  // Random eventi šansa
+  EVENT_CHANCE_PER_SEASON: 0.08,
+
+  // Starter kapital
+  STARTER_CAPITAL: 5000,
+
+  // Bonus na-vreme inokulacija
+  INOKULACIJA_WINDOW_SEC: 10,
+  INOKULACIJA_BONUS: 0.10,
+
+  // Hranjenje ribe
+  FISH_FEED_INTERVAL_SEC: 60,
+  FISH_FEED_WINDOW_SEC: 15,
+  FISH_FEED_BONUS: 0.05,
+
+  // Mikrobiljke harvest window
+  MICRO_HARVEST_WINDOW_SEC: 8,
+  MICRO_HARVEST_BONUS: 0.05,
+  MICRO_HARVEST_AUTO_PENALTY: 0.10,
+
+  // Berba grace period pre penalizacije
+  HARVEST_GRACE_SEC: 60,
+  HARVEST_GRACE_PENALTY_PER_TICK: 0.005,
+
+  // Sezonski eventi
+  DROUGHT_YIELD_PENALTY: 0.30,
+  DISEASE_YIELD_PENALTY: 0.25,
+  MOLD_YIELD_PENALTY: 0.20,
+  RECORD_SEASON_BONUS: 0.15,
+  INSPECTION_FINE: 10000,
+
+  // Sinergije
+  KOMPOSTER_SPAWN_BONUS: 0.25,
+  MULJ_YIELD_BONUS: 0.30,
+  EKOSISTEM_BRANCH_BONUS: 0.05,
+
+  // Masterclass
+  MASTERCLASS_REVENUE_PER_PARTICIPANT: 5000,
+  MASTERCLASS_PARTICIPANTS_BASE: 10,
+  MASTERCLASS_UNLOCK_SEASON: 4,
+
+  // Branch unlock costs
+  GREENHOUSE_UNLOCK_COST: 15000,
+  FISHPOND_UNLOCK_COST: 40000,
+
+  // Worker hire cost
+  WORKER_HIRE_COST: 8000,
 };

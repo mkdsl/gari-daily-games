@@ -1,10 +1,7 @@
-// Jova: ovaj fajl wire-uje sve systeme. Importuj iz ./physics.js, ./collision.js itd.
-// i zovi ih po redu u updateSystems.
+// Legacy stub — not used by Imanje Tycoon (DOM-based dashboard, not canvas).
+// Tick logic is in src/engine/tick.js.
+// This file kept to avoid import errors if any old references remain.
 
-export function updateSystems(state, input, dt) {
-  if (state.paused || state.gameOver) return;
-  // updatePhysics(state, dt);
-  // updateCollisions(state);
-  // updateAI(state, dt);
-  // updateProgression(state, dt);
+export function updateSystems(_state, _input, _dt) {
+  // no-op: see src/engine/tick.js
 }

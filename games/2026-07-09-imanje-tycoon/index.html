@@ -3,18 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#000">
-  <title>GAME_TITLE — Gari Daily Games</title>
+  <meta name="theme-color" content="#2D4A1E">
+  <title>Imanje Tycoon — Guncati</title>
   <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/theme.css">
   <link rel="stylesheet" href="styles/ui.css">
   <link rel="stylesheet" href="styles/game.css">
 </head>
 <body>
-  <div id="game-root">
-    <canvas id="game-canvas"></canvas>
-    <div id="hud"></div>
-    <div id="menu" class="menu-overlay"></div>
+  <div id="app-root">
+    <!-- TOP HUD -->
+    <div id="hud-bar">
+      <div id="hud-capital">
+        <span class="hud-label">Kapital</span>
+        <span id="capital-amount">5.000</span>
+        <span class="hud-unit">din</span>
+        <span id="capital-trend" class="trend-neutral"></span>
+      </div>
+      <div id="hud-phase">
+        <span class="hud-label">Faza</span>
+        <span id="phase-badge" class="phase-badge phase-0">0</span>
+      </div>
+      <div id="hud-season">
+        <span class="hud-label">Sezona</span>
+        <span id="season-num">1</span>
+        <span id="season-timer" class="season-timer">2:00</span>
+      </div>
+      <div id="hud-actions">
+        <span class="hud-label">Akcije</span>
+        <span id="actions-display">5/5</span>
+      </div>
+      <div id="hud-reputation">
+        <span class="hud-label">Rep.</span>
+        <span id="rep-display">1.0×</span>
+      </div>
+      <button id="mute-btn" class="icon-btn" title="Mute/Unmute zvuk" aria-label="Mute">🔊</button>
+    </div>
+
+    <!-- MACRO PANEL -->
+    <div id="macro-panel">
+      <div id="macro-header">
+        <span class="panel-title">📋 Makro pregled</span>
+        <span id="macro-income-preview" class="income-preview"></span>
+        <button id="macro-toggle" class="toggle-btn" aria-label="Otvori/zatvori makro panel">▾</button>
+      </div>
+      <div id="macro-content">
+        <div id="macro-branches">
+          <div class="branches-row">
+            <div class="branch-item branch-active" id="branch-mushrooms">
+              <span class="branch-icon">🍄</span>
+              <span class="branch-name">Pečurke</span>
+              <span class="branch-status-label">Aktivne</span>
+            </div>
+            <div class="branch-item branch-locked" id="branch-greenhouse">
+              <span class="branch-icon">🌱</span>
+              <span class="branch-name">Plastenik</span>
+              <button class="branch-unlock-btn" data-branch="greenhouse" data-cost="15000">Otključaj<br>15.000 din</button>
+            </div>
+            <div class="branch-item branch-locked" id="branch-fishpond">
+              <span class="branch-icon">🐟</span>
+              <span class="branch-name">Jezero</span>
+              <button class="branch-unlock-btn" data-branch="fishpond" data-cost="40000">Otključaj<br>40.000 din</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="macro-channels-section" class="macro-section">
+          <div class="section-subheader">Prodajni kanali</div>
+          <div id="channel-panel-container"></div>
+        </div>
+
+        <div class="macro-stats-row">
+          <div class="stat-cell">
+            <span class="stat-label">Prihod ukupno</span>
+            <span id="total-revenue-display">0 din</span>
+          </div>
+          <div class="stat-cell">
+            <span class="stat-label">Ova sezona</span>
+            <span id="season-revenue-display">0 din</span>
+          </div>
+          <div class="stat-cell">
+            <span class="stat-label">Radnici</span>
+            <span id="workers-display">0/3</span>
+            <button id="hire-worker-btn" class="small-btn">+Zaposli</button>
+          </div>
+        </div>
+
+        <div id="macro-market-forecast" class="macro-section">
+          <span class="section-subheader">📊 Tržišni radar (2 sez.):</span>
+          <span id="forecast-paradajz" class="forecast-item">Paradajz: 215 din/kg</span>
+          <span id="forecast-mikro" class="forecast-item">Mikrobiljke: 1.000 din/kg</span>
+        </div>
+
+        <div id="macro-masterclass" class="macro-section">
+          <button id="masterclass-btn" class="masterclass-btn" disabled>
+            🎓 Organizuj Masterclass
+          </button>
+          <span id="masterclass-info" class="small-text">Dostupno od sezone 4 | 0 organizovano</span>
+        </div>
+
+        <div id="synergy-tree-container" class="macro-section"></div>
+
+        <div class="macro-section save-row">
+          <button id="export-save-btn" class="small-btn">💾 Eksportuj save</button>
+          <label class="small-btn import-label" tabindex="0">
+            📂 Importuj save
+            <input type="file" id="import-save-input" accept=".json" style="display:none">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <nav id="tabs-nav" role="tablist">
+      <button class="tab-btn active" data-tab="mushrooms" role="tab" aria-selected="true" aria-controls="tab-mushrooms">🍄 Pečurke</button>
+      <button class="tab-btn" data-tab="greenhouse" role="tab" aria-selected="false" aria-controls="tab-greenhouse">🌱 Plastenik</button>
+      <button class="tab-btn" data-tab="fishpond" role="tab" aria-selected="false" aria-controls="tab-fishpond">🐟 Jezero</button>
+    </nav>
+
+    <!-- TAB CONTENT AREA -->
+    <div id="tab-content">
+      <div id="tab-mushrooms" class="tab-panel active" role="tabpanel" aria-labelledby="tab-mushrooms-btn">
+      </div>
+      <div id="tab-greenhouse" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-greenhouse-btn">
+      </div>
+      <div id="tab-fishpond" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-fishpond-btn">
+      </div>
+    </div>
+
+    <!-- MODALS LAYER -->
+    <div id="modals-layer" aria-live="polite"></div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- SHARE BUTTON -->
+    <button id="share-btn" class="share-btn" title="Podeli rezultate" aria-label="Podeli rezultate">📸 Podeli</button>
   </div>
+
   <script type="module" src="src/main.js"></script>
 </body>
 </html>

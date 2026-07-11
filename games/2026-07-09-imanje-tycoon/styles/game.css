@@ -1,5 +1,161 @@
-/* Pera: dodaj particle animacije, screen shake, damage flash ovde */
+/* ─── Game Animations & Effects ─────────────────────────────────────── */
 
+/* Pulse text (season timer warning, legacy keep) */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.pulse { animation: pulse 1.2s ease-in-out infinite; }
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Glow on harvestable items */
+@keyframes glow-success {
+  from { box-shadow: 0 0 4px rgba(92, 184, 92, 0.3); }
+  to   { box-shadow: 0 0 12px rgba(92, 184, 92, 0.7); }
+}
+
+@keyframes glow-water {
+  from { box-shadow: 0 0 4px rgba(91, 155, 245, 0.3); }
+  to   { box-shadow: 0 0 12px rgba(91, 155, 245, 0.7); }
+}
+
+@keyframes glow-green {
+  from { box-shadow: 0 0 4px rgba(168, 213, 162, 0.3); }
+  to   { box-shadow: 0 0 12px rgba(168, 213, 162, 0.7); }
+}
+
+/* Inokulacija window pulse */
+@keyframes inokulacija-pulse {
+  0%, 100% {
+    border-color: var(--clr-plastenik);
+    background: rgba(168, 213, 162, 0.06);
+  }
+  50% {
+    border-color: var(--clr-zelena-light);
+    background: rgba(168, 213, 162, 0.18);
+  }
+}
+
+/* Block shimmer while growing */
+@keyframes block-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.block-growing::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.03) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: block-shimmer 2s infinite;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Mikrobiljke ready flash */
+@keyframes micro-flash {
+  0%, 100% { border-color: var(--clr-border); }
+  50% {
+    border-color: var(--clr-kapital);
+    box-shadow: 0 0 10px rgba(212, 160, 23, 0.4);
+  }
+}
+
+/* Phase unlock entrance */
+@keyframes phase-unlock-enter {
+  from { transform: scale(0.8) translateY(20px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.animate-phase-unlock {
+  animation: phase-unlock-enter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Season transition */
+@keyframes season-fade {
+  0% { opacity: 1; }
+  30% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.season-transitioning {
+  animation: season-fade 0.8s ease-in-out;
+}
+
+/* Fish growth shimmer */
+@keyframes fish-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+.fish-fill {
+  overflow: hidden;
+  position: relative;
+}
+
+.fish-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.18),
+    transparent
+  );
+  animation: fish-shimmer 2.5s ease-in-out infinite;
+}
+
+/* Synergy active glow */
+@keyframes synergy-glow {
+  0%, 100% { box-shadow: 0 0 4px rgba(74, 124, 63, 0.2); }
+  50%       { box-shadow: 0 0 12px rgba(106, 163, 86, 0.5); }
+}
+
+.synergy-node.synergy-active {
+  animation: synergy-glow 3s ease-in-out infinite;
+}
+
+/* Phase badge pop on new phase */
+@keyframes badge-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.phase-badge-pop {
+  animation: badge-pop 0.4s ease-in-out;
+}
+
+/* Branch unlock gold glow */
+@keyframes glow-gold {
+  from { box-shadow: 0 0 4px rgba(212, 160, 23, 0.3); }
+  to   { box-shadow: 0 0 14px rgba(212, 160, 23, 0.8); }
+}
+
+.branch-unlock-btn.btn-ready {
+  animation: glow-gold 2s ease-in-out infinite alternate;
+}
+
+/* Capital trend blink */
+@keyframes trend-up-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Screen shake (keep from template) */
 @keyframes shake {
   0%, 100% { transform: translate(0, 0); }
   25% { transform: translate(-2px, 1px); }
@@ -8,10 +164,3 @@
 }
 
 .shake { animation: shake 0.3s ease-in-out; }
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.pulse { animation: pulse 1.2s ease-in-out infinite; }
