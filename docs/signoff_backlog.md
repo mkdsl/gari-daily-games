@@ -76,3 +76,4 @@ KORAK 0d: jedini orphan je failed/legacy — nema aktivnih orphan igara u concep
 - **2026-07-07:** Niš Fuga impl dovršena (35 modula, 6932 JS + 1090 CSS). Beta iter 1 + fix log + beta iter 2 (9.7/10). Čeka šef sign-off.
 - **2026-07-08:** KORAK 0b aktivan (6 unreleased). Nema nove igre. Ovaj refresh dokument.
 - **2026-07-11:** KORAK 0c — Pasoš registry drift potvrđen: gap i dalje 28 (31 released, 3 registrovana). Jedini unreleased non-failed: Niš Fuga (čeka šef sign-off). KORAK 0b ispod praga (1 < 2). Impl stage za Imanje Tycoon (retry) pokrenut.
+- **2026-07-12:** KORAK 0c — Pasoš drift gap 28 (31 released, 3 u config.js — neazuriran od 10.05). Jovin posao. Impl scope-up za Imanje Tycoon: 4043 → 8000+ JS linija.
