@@ -78,7 +78,14 @@ export const ACHIEVEMENTS = [
     edu: 'Pravo imanje pravi surplus koji se investira u zajednicu — MKDSLend filozofija.' },
 ];
 
-/** Check all achievements and unlock new ones */
+// ─── Check all achievements ───────────────────────────────────────────────────
+
+/**
+ * Check all achievements and unlock newly triggered ones.
+ * @param {object} state
+ * @param {object|null} audio
+ * @param {Function|null} onAchievement
+ */
 export function checkAchievements(state, audio, onAchievement) {
   for (const ach of ACHIEVEMENTS) {
     if (state.unlockedAchievements.includes(ach.id)) continue;
@@ -155,6 +162,7 @@ function applyReward(state, reward) {
   if (reward.capital) state.capital += reward.capital;
   if (reward.spawnRatio) {
     state.achievementBonuses.spawnRatio = (state.achievementBonuses.spawnRatio || 0) + reward.spawnRatio;
+    state.mushrooms.spawnRatioBonus = (state.mushrooms.spawnRatioBonus || 0) + reward.spawnRatio;
   }
   if (reward.greenhouseYield) {
     state.achievementBonuses.greenhouseYield = (state.achievementBonuses.greenhouseYield || 0) + reward.greenhouseYield;
@@ -169,15 +177,158 @@ function applyReward(state, reward) {
     state.achievementBonuses.pijacaMultiplier = (state.achievementBonuses.pijacaMultiplier || 0) + reward.pijacaMultiplier;
   }
   if (reward.reputation) {
-    state.reputation = Math.min(state.reputation + reward.reputation, 1.5);
+    const cap = state.achievementBonuses?.reputationCap || 1.5;
+    state.reputation = Math.min(state.reputation + reward.reputation, cap);
   }
   if (reward.alumniBonus) {
     state.prestige.alumniBonus = (state.prestige.alumniBonus || 0) + reward.alumniBonus;
   }
   if (reward.dailyActions) {
     state.workers.dailyActionsTotal += reward.dailyActions;
+    state.achievementBonuses.dailyActions = (state.achievementBonuses.dailyActions || 0) + reward.dailyActions;
   }
   if (reward.reputationCap) {
     state.achievementBonuses.reputationCap = reward.reputationCap;
   }
+  if (reward.masterclassBonus) {
+    state.achievementBonuses.masterclassBonus = (state.achievementBonuses.masterclassBonus || 0) + reward.masterclassBonus;
+  }
+}
+
+// ─── Progress and display helpers ─────────────────────────────────────────────
+
+/**
+ * Get progress toward a specific achievement (0-1).
+ * @param {object} state
+ * @param {object} ach - achievement definition
+ * @returns {{ pct: number, current: number|string, target: number|string }}
+ */
+export function getAchievementProgress(state, ach) {
+  if (state.unlockedAchievements.includes(ach.id)) {
+    return { pct: 1, current: ach.value, target: ach.value };
+  }
+
+  let current = 0;
+  const target = typeof ach.value === 'number' ? ach.value : 1;
+
+  switch (ach.trigger) {
+    case 'mushroom_revenue': current = state.mushrooms.revenueEarned; break;
+    case 'inokulacija_streak': current = state.mushrooms.inokulacijaStreak || 0; break;
+    case 'oyster_revenue': current = state._oysterRevenue || 0; break;
+    case 'micro_harvested': current = state._microHarvestedKg || 0; break;
+    case 'tomato_harvested': current = state.greenhouse.tomato_harvested_kg || 0; break;
+    case 'smudj_harvested': current = state.fishpond.smudj_harvested_kg || 0; break;
+    case 'seasons_completed': current = state.season; break;
+    case 'reputation': current = state.reputation; break;
+    case 'masterclass_count': current = state.masterclassCount; break;
+    case 'pijaca_seasons': current = state.greenhouse.pijacaSeasons || 0; break;
+    case 'prestige_count': current = state.prestige.count; break;
+    case 'workers': current = state.workers.hired; break;
+    case 'monthly_revenue': {
+      const recent = state.monthlyRevenue || [];
+      current = recent.length > 0 ? Math.max(...recent) : 0;
+      break;
+    }
+    case 'greenhouse_unlocked':
+    case 'fishpond_unlocked':
+    case 'all_branches_active':
+    case 'all_synergies':
+    case 'fish_polyculture':
+    case 'synergy_active':
+    case 'upgrade_purchased':
+    case 'prestige_scenario':
+      current = checkTrigger(state, ach) ? 1 : 0;
+      break;
+    default: current = 0;
+  }
+
+  const pct = typeof ach.value === 'number'
+    ? Math.min(1, current / ach.value)
+    : (current ? 1 : 0);
+
+  return { pct, current, target: ach.value };
+}
+
+/**
+ * Get list of achievements pending unlock (close to trigger).
+ * "Close" = progress >= 50%.
+ * @param {object} state
+ * @returns {Array<{ach, pct, current, target}>}
+ */
+export function getPendingAchievements(state) {
+  const pending = [];
+  for (const ach of ACHIEVEMENTS) {
+    if (state.unlockedAchievements.includes(ach.id)) continue;
+    const { pct, current, target } = getAchievementProgress(state, ach);
+    if (pct >= 0.5) {
+      pending.push({ ach, pct, current, target });
+    }
+  }
+  return pending.sort((a, b) => b.pct - a.pct);
+}
+
+/**
+ * Get all achievements grouped by status.
+ * @param {object} state
+ * @returns {{ unlocked: Array, available: Array, locked: Array }}
+ */
+export function getAchievementsByStatus(state) {
+  const unlocked = [];
+  const available = [];
+  const locked = [];
+
+  for (const ach of ACHIEVEMENTS) {
+    if (state.unlockedAchievements.includes(ach.id)) {
+      unlocked.push(ach);
+    } else {
+      const { pct } = getAchievementProgress(state, ach);
+      if (pct > 0) {
+        available.push({ ...ach, _pct: pct });
+      } else {
+        locked.push(ach);
+      }
+    }
+  }
+
+  return { unlocked, available: available.sort((a, b) => b._pct - a._pct), locked };
+}
+
+/**
+ * Get reward description string for an achievement.
+ * @param {object} reward
+ * @returns {string}
+ */
+export function getRewardDescription(reward) {
+  if (!reward) return '';
+  const parts = [];
+  if (reward.capital) parts.push(`+${reward.capital.toLocaleString()} din`);
+  if (reward.spawnRatio) parts.push(`+${(reward.spawnRatio * 100).toFixed(0)}% spawn ratio`);
+  if (reward.greenhouseYield) parts.push(`+${(reward.greenhouseYield * 100).toFixed(0)}% plastenik yield`);
+  if (reward.allRevenue) parts.push(`+${(reward.allRevenue * 100).toFixed(0)}% svi prihodi`);
+  if (reward.microPrice) parts.push(`+${reward.microPrice} din/kg mikrobiljke`);
+  if (reward.pijacaMultiplier) parts.push(`+${(reward.pijacaMultiplier * 100).toFixed(0)}% pijaca mult`);
+  if (reward.reputation) parts.push(`+${(reward.reputation * 100).toFixed(0)}% reputacija`);
+  if (reward.alumniBonus) parts.push(`+${(reward.alumniBonus * 100).toFixed(0)}% alumni bonus`);
+  if (reward.dailyActions) parts.push(`+${reward.dailyActions} dnevne akcije`);
+  if (reward.reputationCap) parts.push(`Rep cap → ${reward.reputationCap}×`);
+  if (reward.masterclassBonus) parts.push(`+${reward.masterclassBonus} din/participant MC`);
+  return parts.join(', ') || 'Specijalni bonus';
+}
+
+/**
+ * Get summary stats for achievement system.
+ * @param {object} state
+ * @returns {{ total, unlocked, pct, totalBonuses }}
+ */
+export function getAchievementSummary(state) {
+  const total = ACHIEVEMENTS.length;
+  const unlockedCount = state.unlockedAchievements.length;
+  const bonuses = state.achievementBonuses || {};
+  const totalRevBonus = (bonuses.allRevenue || 0) + (bonuses.greenhouseYield || 0);
+  return {
+    total,
+    unlocked: unlockedCount,
+    pct: Math.round((unlockedCount / total) * 100),
+    revenueBonusPct: Math.round(totalRevBonus * 100),
+  };
 }

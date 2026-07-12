@@ -1,7 +1,12 @@
-// Legacy stub — not used by Imanje Tycoon (DOM-based dashboard, not canvas).
-// Tick logic is in src/engine/tick.js.
-// This file kept to avoid import errors if any old references remain.
+/**
+ * systems/index.js — Barrel re-export for all game systems.
+ * Allows: import { evaluatePhase, doPrestige, checkAchievements } from './systems/index.js'
+ */
 
-export function updateSystems(_state, _input, _dt) {
-  // no-op: see src/engine/tick.js
-}
+export * from './upgrades.js';
+export * from './phases.js';
+export * from './seasons.js';
+export * from './prestige.js';
+export * from './workers.js';
+export * from './masterclass.js';
+export * from './achievements.js';

@@ -125,6 +125,9 @@ window.addEventListener('beforeunload', () => {
 // ─── Service worker for offline (optional, GitHub Pages) ─────────────────
 // No service worker needed — game saves to localStorage, works offline
 
+// ─── Input module (keyboard shortcuts, swipe gestures) ───────────────────────
+import('./input.js').then(({ initInput }) => initInput(gameRef));
+
 // ─── Debug helpers (dev only) ─────────────────────────────────────────────
 if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
   window._gameState = state;
