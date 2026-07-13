@@ -125,7 +125,7 @@ export function getPhaseProgress(state) {
   const idx = PHASE_ORDER.indexOf(current);
 
   if (idx >= PHASE_ORDER.length - 1) {
-    return { pct: 1.0, current: 0, target: 0, desc: 'Maksimalna faza dostiuguta!' };
+    return { pct: 1.0, current: 0, target: 0, desc: 'Maksimalna faza dostiguta!' };
   }
 
   const next = PHASE_ORDER[idx + 1];

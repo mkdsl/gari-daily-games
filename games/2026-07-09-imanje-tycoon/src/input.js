@@ -25,6 +25,12 @@ let _helpVisible = false;
  */
 export function initInput(gameRef) {
   _gameRef = gameRef;
+  // Wire macro-toggle button click (keyboard 'm' already handled below)
+  const macroToggleBtn = document.getElementById('macro-toggle');
+  if (macroToggleBtn && !macroToggleBtn.dataset.inputBound) {
+    macroToggleBtn.dataset.inputBound = '1';
+    macroToggleBtn.addEventListener('click', () => toggleMacroPanel(_gameRef?.state));
+  }
 }
 
 // ─── Keyboard ────────────────────────────────────────────────────────────────

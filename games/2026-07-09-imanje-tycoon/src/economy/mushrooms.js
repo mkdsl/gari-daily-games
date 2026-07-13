@@ -89,7 +89,7 @@ function completeWave(state, block, audio) {
 /** Player clicks inokulacija during window */
 export function doInokulacija(state, blockId, audio) {
   const block = state.mushrooms.blocks.find(b => b.id === blockId);
-  if (!block || !block.inokulacijaWindow) return false;
+  if (!block || !block.inokulacijaWindow) return { success: false };
 
   // On-time bonus
   block.inokulacijaBonus += GAME_CONFIG.INOKULACIJA_BONUS;
@@ -98,7 +98,7 @@ export function doInokulacija(state, blockId, audio) {
   state.mushrooms.inokulacijaStreak = (state.mushrooms.inokulacijaStreak || 0) + 1;
   startNextWave(state, block);
   if (audio) audio.playSfx('inokulacija');
-  return true;
+  return { success: true, bonus: GAME_CONFIG.INOKULACIJA_BONUS };
 }
 
 function startNextWave(state, block) {
@@ -127,6 +127,25 @@ export function harvestBlock(state, blockId, audio) {
 
   if (audio) audio.playSfx('harvest');
   return revenue;
+}
+
+/**
+ * Estimate din revenue for a block over one season.
+ * @param {object} state
+ * @param {object} block
+ * @returns {number} projected din/season
+ */
+export function getBlockRevenueProjection(state, block) {
+  const seasDur = state.season >= GAME_CONFIG.SEASON_LATE_THRESHOLD
+    ? GAME_CONFIG.SEASON_DURATION_LATE_SEC
+    : GAME_CONFIG.SEASON_DURATION_SEC;
+  const waveDur = getWaveDuration(state);
+  const totalCycleSec = waveDur * GAME_CONFIG.MUSHROOM_WAVES_PER_BLOCK;
+  const cyclesPerSeason = seasDur / totalCycleSec;
+  const kgPerCycle = getWaveYieldKg(state, block);
+  const price = getBlockPrice(block);
+  const channelMultiplier = state?.market?.activeMultiplier || 1.0;
+  return Math.round(cyclesPerSeason * kgPerCycle * price * channelMultiplier);
 }
 
 /** Add a new block (from upgrade) */

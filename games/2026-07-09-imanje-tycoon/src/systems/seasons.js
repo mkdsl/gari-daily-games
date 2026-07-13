@@ -263,7 +263,7 @@ export function applyEvent(state, ev) {
         seasonsLeft: 0, severity: ev.severity, icon: ev.icon,
       };
       // Clears immediately after application
-      setTimeout(() => clearEvent(state), 200);
+      clearEvent(state);
       break;
     }
 

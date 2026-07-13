@@ -90,7 +90,7 @@ export const GAME_CONFIG = {
   STARTER_CAPITAL: 5000,
 
   // Bonus na-vreme inokulacija
-  INOKULACIJA_WINDOW_SEC: 10,
+  INOKULACIJA_WINDOW_SEC: 18,
   INOKULACIJA_BONUS: 0.10,
 
   // Hranjenje ribe

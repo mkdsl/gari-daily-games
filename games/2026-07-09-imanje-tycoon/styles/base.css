@@ -355,6 +355,16 @@ img { max-width: 100%; }
   background: rgba(255,255,255,0.04);
 }
 
+.tab-btn.tab-locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.tab-btn.tab-locked:hover {
+  background: none;
+  color: var(--clr-text-muted);
+}
+
 /* ─── Tab Content ─────────────────────────────────────────────────── */
 #tab-content {
   flex: 1;

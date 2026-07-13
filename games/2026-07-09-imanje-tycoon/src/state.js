@@ -162,6 +162,14 @@ export function applyOfflineProgress(state) {
   // Season timer advance (multiple seasons)
   let timeLeft = elapsed;
   while (timeLeft > 0) {
+    // Guard: if seasonTimer is 0 or negative at loop entry, reset before processing
+    // to prevent a phantom season from being counted with 0 elapsed time
+    if (state.seasonTimer <= 0) {
+      const dur = state.season >= GAME_CONFIG.SEASON_LATE_THRESHOLD
+        ? GAME_CONFIG.SEASON_DURATION_LATE_SEC
+        : GAME_CONFIG.SEASON_DURATION_SEC;
+      state.seasonTimer = dur;
+    }
     const thisSeason = Math.min(timeLeft, state.seasonTimer);
     state.seasonTimer -= thisSeason;
     timeLeft -= thisSeason;

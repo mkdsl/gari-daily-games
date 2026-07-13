@@ -6,6 +6,7 @@ import { spawnRevenueParticle } from '../render.js';
 
 let _gameRef = null;
 let initialized = false;
+let _mushroomClickCtrl = null;
 
 // ─── Init ──────────────────────────────────────────────────────────────────────
 
@@ -260,6 +261,8 @@ function updateMushroomEduFact(panel, state) {
 // ─── Event binding ────────────────────────────────────────────────────────────
 
 function bindMushroomEvents(panel, state) {
+  if (_mushroomClickCtrl) _mushroomClickCtrl.abort();
+  _mushroomClickCtrl = new AbortController();
   panel.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-action]');
     if (!btn || btn.disabled) return;
@@ -300,5 +303,5 @@ function bindMushroomEvents(panel, state) {
 
     // Force re-render on next tick
     initialized = false;
-  });
+  }, { signal: _mushroomClickCtrl.signal });
 }

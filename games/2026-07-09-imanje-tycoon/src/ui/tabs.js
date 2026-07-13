@@ -25,6 +25,13 @@ export function initTabs(state, gameRef) {
   const tabBtns = document.querySelectorAll('.tab-btn');
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
+      if (btn.classList.contains('tab-locked')) {
+        // Show tooltip explaining why tab is locked
+        import('./modals.js').then(({ showToast }) => {
+          showToast(`🔒 ${btn.title || 'Tab zaključan'}`);
+        });
+        return;
+      }
       const tabId = btn.getAttribute('data-tab');
       if (tabId) switchTab(tabId, state);
     });
