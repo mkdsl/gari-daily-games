@@ -37,25 +37,14 @@ export function initTabs(state, gameRef) {
     });
   });
 
-  // Macro panel toggle
+  // Restore macro panel open state from saved UI state
+  // (click toggle is handled by input.js → toggleMacroPanel)
   const toggle = document.getElementById('macro-toggle');
   const content = document.getElementById('macro-content');
-  if (toggle && content) {
-    toggle.addEventListener('click', () => {
-      const isNowHidden = content.classList.toggle('hidden');
-      toggle.textContent = isNowHidden ? '▸' : '▾';
-      toggle.setAttribute('aria-expanded', isNowHidden ? 'false' : 'true');
-      if (_state) {
-        _state.ui = _state.ui || {};
-        _state.ui.macroPanelOpen = !isNowHidden;
-      }
-    });
-    // Restore macro panel open state
-    if (state.ui?.macroPanelOpen === false) {
-      content.classList.add('hidden');
-      toggle.textContent = '▸';
-      toggle.setAttribute('aria-expanded', 'false');
-    }
+  if (toggle && content && state.ui?.macroPanelOpen === false) {
+    content.classList.add('hidden');
+    toggle.textContent = '▸';
+    toggle.setAttribute('aria-expanded', 'false');
   }
 
   // Set initial active tab
@@ -160,18 +149,7 @@ document.addEventListener('keydown', (e) => {
     case '1': switchTab('mushrooms', _state); break;
     case '2': switchTab('greenhouse', _state); break;
     case '3': switchTab('fishpond', _state); break;
-    case 'M':
-    case 'm': {
-      // Toggle macro panel
-      const content = document.getElementById('macro-content');
-      const toggle = document.getElementById('macro-toggle');
-      if (content && toggle) {
-        const isHidden = content.classList.toggle('hidden');
-        toggle.textContent = isHidden ? '▸' : '▾';
-        if (_state) _state.ui = { ...(_state.ui || {}), macroPanelOpen: !isHidden };
-      }
-      break;
-    }
+    // 'm'/'M' toggle handled by input.js → toggleMacroPanel
     default: break;
   }
 });
