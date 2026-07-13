@@ -5,7 +5,7 @@
   "description": "Pokrećeš imanje od nule: pečurke, plastenik i ribnjak. Macro planiranje × Micro izvedba × permakulturna ekonomika — dostigni Fazu C kroz 4-6 sati sa realnim guncatskim brojkama.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-07-09-imanje-tycoon/",
   "brand_serves": ["guncati", "mkdslend"],
-  "stage": "impl",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "index.html": "Ulazna tačka — 4 CSS importa, app-root DOM sa #macro-panel + #tabs-nav + #tab-content, ES6 module entry",
