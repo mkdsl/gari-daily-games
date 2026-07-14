@@ -1,50 +1,59 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Generisano:** 2026-07-08, trigger (KORAK 0b) — 6 igara nije released (≥ 2 prag)
+**Generisano:** 2026-07-14, trigger (KORAK 0b — 2 igre čekaju šef test)
 
-**KORAK 0b je aktivan:** Trigger danas NIJE pokrenuo novu igru. Pipeline čeka šefov test.
+**Pipeline čeka šefov test.** Dvije igre u polish/in_progress — nema novih igara dok ovaj red ne padne ispod 2.
 
 ---
 
-## 🎯 Prioritet: Niš Fuga čeka sign-off (37 dana u polishu)
+## 🎯 Prioritet 1: Niš Fuga (43 dana čeka sign-off)
 
-**Jedina aktivna igra koja treba tvoj test:**
+| Polje | Vrednost |
+|-------|----------|
+| **Igra** | Niš Fuga |
+| **Žanr** | Point-and-click Mini Avantura |
+| **Brand** | Kluboslavija |
+| **Play URL** | https://mkdsl.github.io/gari-daily-games/games/2026-06-01-nis-fuga/ |
+| **Beta iter 1** | 8.2/10 (3 MEDIUM + 3 LOW, sve ispravljeno) |
+| **Beta iter 2** | 9.7/10 ✅ (0 novih bugova) |
+| **Post-fix score** | **9.0/10** |
+| **Sign-off fajl** | `games/2026-06-01-nis-fuga/docs/sef_signoff.md` |
 
-| Igra | Dana čeka | Beta iter2 | Brand | Play |
-|------|-----------|------------|-------|------|
-| **Niš Fuga** | 37 dana (od 2026-06-01) | **9.7/10** ✅ | kluboslavija | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-01-nis-fuga/) |
-
-**Šta je igra:** Point-and-click mini avantura — vodiš Jovanku, tour managera Kluboslavija ekipe, kroz Niš u jutro pred event. Pet autentičnih niških scena, dijaloški izbori, resursi koji se prenose — stigni na soundcheck na vreme.
-
-**Beta status:**
-- Beta iter 1: **8.2/10** (3 MEDIUM + 3 LOW bugova nađena)
-- Fix log: sve MEDIUM ispravljeno, LOW logovano
-- Beta iter 2: **9.7/10** ✅ — svi fix-ovi verifikovani, 0 novih bugova
-- Šef sign-off: **čeka** (blokira release)
+**Šta je igra:** Vodiš Jovanku, tour managera Kluboslavija ekipe, kroz Niš u jutro pred event. Pet autentičnih niških scena, dijaloški izbori, resursi koji se prenose (vreme/moral/strpljenje/reputacija) — 7 různih endinga, stigni na soundcheck na vreme. Kluboslavija branding na ending screenu sa bilet.rs linkom.
 
 **Test checklist (5 min):**
 1. Otvori play URL iznad
-2. Prođi barem 2 scene (Bulevar → Kiosk → Kafana)
-3. Provjeri da dijaloški izbori reaguju i da resursi (vreme/moral/strpljenje) se menjaju
-4. Provjeri game over / dobar ending
-5. Javi: "OK Niš Fuga" ili "vrati u fix: [šta]"
-
-**Ako daš OK:** sledeći trigger radi KORAK 7 (manifest finalize + README + release commit + push).
+2. Prođi barem 2–3 scene (Bulevar → Kiosk → Kafana)
+3. Provjeri da dijaloški izbori reaguju i da resursi se menjaju vidljivo u HUD-u
+4. Dođi do jednog endinga
+5. Provjeri Kluboslavija branding na ending screenu
+6. Javi: "OK Niš Fuga" ili "vrati u fix: [šta]"
 
 ---
 
-## 📊 Kompletna slika (6 unreleased)
+## 🎯 Prioritet 2: Imanje Tycoon (5 dana čeka sign-off)
 
-| # | Igra | Stage | Status | Napomena |
-|---|------|-------|--------|----------|
-| 1 | **Niš Fuga** (06-01) | polish | in_progress | Čeka sign-off — vidi gore |
-| 2 | Park Mapa (05-21) | concept | failed | Orphan/legacy — zamenjena retry-em 06-13 koji je released |
-| 3 | DJ za Pultom v1 (05-11) | — | V2 BUILD | Legacy — ne prati standardni manifest format |
-| 4 | Park Ranger (05-06) | — | in_progress | Legacy — bez stage polja |
-| 5 | Kartaški Front (04-24) | — | done | Legacy — bez stage polja |
-| 6 | Kanal (04-22) | — | in_progress | Legacy stub — nikad dovršen |
+| Polje | Vrednost |
+|-------|----------|
+| **Igra** | Imanje Tycoon |
+| **Žanr** | Multi-layer Idle/Tycoon + Farm Simulation |
+| **Brand** | Guncati + MKDSLend |
+| **Play URL** | https://mkdsl.github.io/gari-daily-games/games/2026-07-09-imanje-tycoon/ |
+| **Beta iter 1** | 6.4/10 (0 CRITICAL, 6 MEDIUM, 4 LOW) |
+| **Beta iter 2** | 7.9/10 ✅ (sve ispravljeno, 1 regresija odmah fixovana) |
+| **Post-fix score** | **8.9/10** |
+| **Sign-off fajl** | `games/2026-07-09-imanje-tycoon/docs/sef_signoff.md` |
 
-Stavke 2-6 su legacy/pre-KORAK-0a format — ne blokiraju pipeline direktno, ali se broje u KORAK 0b ukupnom broju. Šef može odlučiti da li ih arhivira ručno.
+**Šta je igra:** Pokrećeš imanje od nule — pečurke, plastenik i ribnjak. Macro planiranje × Micro izvedba × permakulturna ekonomika s realnim guncatskim brojkama. Dostigni Fazu C kroz 4–6 sati gameplay-a. Offline progress, 25 achievementa, Web Audio folk ambient.
+
+**Test checklist (5 min):**
+1. Otvori play URL iznad
+2. Pokreni prvu inokulaciju (Pečurke tab → "🌱 Inokulacija!" kad se pojavi timer)
+3. Dočekaj prvu berbu (progress bar ~2 min)
+4. Provjeri da kapital raste i sezonski timer odbroji
+5. Provjeri macro panel — klik na `▾` ga sklopi/otvori
+6. Provjeri locked tabove (Plastenik, Jezero su dimmed sa unlock uslovom)
+7. Javi: "OK Imanje Tycoon" ili "vrati u fix: [šta]"
 
 ---
 
@@ -60,13 +69,14 @@ Samo flagujemo da gap postoji i raste. Vidi `tim/retrospektiva/2026-06-21.md` (a
 
 ---
 
-## ⚠️ Orphan igre (KORAK 0d)
+## 📊 Kompletna slika (2 aktivno unreleased)
 
-| Igra | Stage | Status | Napomena |
-|------|-------|--------|----------|
-| Park Mapa (05-21) | concept | failed | Superseded od 06-13 Park Mapa (released). Legacy. |
+| # | Igra | Stage | Status | Dana čeka | Napomena |
+|---|------|-------|--------|-----------|----------|
+| 1 | **Niš Fuga** (06-01) | polish | in_progress | 43 dana | Čeka sign-off — sef_signoff.md kreiran |
+| 2 | **Imanje Tycoon** (07-09) | polish | in_progress | 5 dana | Čeka sign-off — sef_signoff.md postoji (07-13) |
 
-KORAK 0d: jedini orphan je failed/legacy — nema aktivnih orphan igara u concept/impl stage-u koje treba da se napreduju.
+Legacy igre (Park Mapa 05-21: failed/superseded, i stariji bez stage polja) se ne broje aktivno.
 
 ---
 
@@ -74,7 +84,8 @@ KORAK 0d: jedini orphan je failed/legacy — nema aktivnih orphan igara u concep
 
 - **2026-07-05:** Šef dao OK za sve 14 igara. Commit `53e302e Released: 14 igara — šef sign-off 2026-07-05`. Backlog od 19-55 dana u potpunosti rešen.
 - **2026-07-07:** Niš Fuga impl dovršena (35 modula, 6932 JS + 1090 CSS). Beta iter 1 + fix log + beta iter 2 (9.7/10). Čeka šef sign-off.
-- **2026-07-08:** KORAK 0b aktivan (6 unreleased). Nema nove igre. Ovaj refresh dokument.
-- **2026-07-11:** KORAK 0c — Pasoš registry drift potvrđen: gap i dalje 28 (31 released, 3 registrovana). Jedini unreleased non-failed: Niš Fuga (čeka šef sign-off). KORAK 0b ispod praga (1 < 2). Impl stage za Imanje Tycoon (retry) pokrenut.
-- **2026-07-12:** KORAK 0c — Pasoš drift gap 28 (31 released, 3 u config.js — neazuriran od 10.05). Jovin posao. Impl scope-up za Imanje Tycoon: 4043 → 8000+ JS linija.
-- **2026-07-13:** KORAK 0c — Pasoš drift gap i dalje 28. Imanje Tycoon (34 modula, 8578 JS + 2171 CSS) ulazi u polish stage (03:00 trigger). Beta test pokrenut. Niš Fuga čeka sign-off 42 dana.
+- **2026-07-08:** KORAK 0b aktivan (6 unreleased). Nema nove igre. Refresh dokument.
+- **2026-07-11:** KORAK 0c — Pasoš registry drift potvrđen: gap 28. Impl za Imanje Tycoon pokrenut.
+- **2026-07-12:** Imanje Tycoon scope-up: 4043 → 8000+ JS linija.
+- **2026-07-13:** Imanje Tycoon (34 modula, 8578 JS + 2171 CSS) ulazi u polish. Beta test + fix + beta iter 2 (7.9/10). sef_signoff.md kreiran. Niš Fuga čeka 42 dana.
+- **2026-07-14:** KORAK 0b aktivan (2 unreleased: Niš Fuga + Imanje Tycoon). sef_signoff.md za Niš Fugu kreiran. post_fix_score 9.0 upisano u manifest. Čeka šef test oba naslova.
