@@ -365,6 +365,57 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 - `git push origin main`
 - GitHub Pages auto-deploy ~1min
 
+### KORAK P — PATCH STAGE (post-release, autonomni)
+
+**Kada se aktivira:** KORAK 0 routing kaže "nova igra" (latest manifest `status == "released"`)
+ALI pre nego što se kreira novi concept, Gari proverava da li postoji otvoreni P1 patch:
+
+```bash
+for q in games/*/docs/patch_queue.md; do
+  grep -q "^- \[ \] P1" "$q" && echo "$q" && break
+done
+```
+
+- Ako P1 postoji → **KORAK P umesto novog concept-a** (jedan patch, jedna igra, jedna sesija)
+- Ako nema P1 → nastavi normalno na novi concept
+
+**Flow KORAK P:**
+1. Gari čita `manifest.json` te igre (da zna module opise)
+2. Uzima PRVI otvoreni P1 red iz `patch_queue.md`
+3. Brifinuje Jovu sa: naziv igre, opis patcha, TAČNO 1-3 modula koja se diraju
+4. Jova čita manifest.json + navedene module (ništa više)
+5. Pravi izmenu, Gari commit-uje:
+   `[patch] NazivIgre: opis promene — P1 (patch_queue.md)`
+6. Gari zaokružuje `[ ]` → `[x]` u patch_queue.md + dodaje datum
+7. Push — GitHub Pages auto-deploy
+
+**Token budžet po patch sesiji:** ~50–150K (1-3 modula, nema scaffolding)
+
+**Ko dodaje stavke u patch_queue.md:**
+- Šef: direktan edit patch_queue.md (commit ili u chatu)
+- Nega/Iskra: mogu da predlože stavke kao `[PROPOSAL]` commit — šef odobrava
+- Trigger nikad ne dodaje P1 sam — jedino izvršava stavke koje šef ili tim stave
+
+**patch_queue.md format:**
+```markdown
+# Patch Queue — Naziv Igre
+
+## Otvoreni patčevi
+- [ ] P1 `src/modul.js` — šta tačno promeniti (≤ 2 modula po stavci)
+- [ ] P2 `src/modul.js` + `styles/ui.css` — UX poboljšanje
+- [ ] P3 `src/content/aforizmi.js` — nova sadržajna stavka
+
+## Završeni patčevi
+- [x] P1 `src/audio.js` — iOS AudioContext fix (done 2026-07-10, commit abc1234)
+```
+
+**Pravila:**
+- Max 2 modula po stavci — ako treba više, to je mini-impl, ne patch
+- P1 = bug koji oštećuje brand ili UX (player ga vidi u prvoj sesiji)
+- P2 = polish koji vidno poboljšava iskustvo ali igra radi i bez
+- P3 = content/feature expansion — radi se samo kad nema P1/P2 u redu
+- Trigger radi MAX 1 patch po sesiji (ne praznimo celu listu odjednom)
+
 ## Template (u `templates/standard-game/`)
 
 **Jova uvek kopira ovaj template kao startnu tačku.** Template ima multi-file modular skeleton — minimum 15 stub fajlova. Stub-ovi su prazni ali sa JSDoc tipovima i import grafom koji vodi do 25-40 modula posle 4a-4f popunjavanja.
