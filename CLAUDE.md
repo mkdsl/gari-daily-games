@@ -336,11 +336,15 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 **Output:** `docs/beta_report_2.md`
 **Gate:** Ako iter 2 nađe nove CRITICAL bugove → još jedan fix krug (Jova). Inače → šef sign-off.
 
-### KORAK 6.75 — ŠEF SIGN-OFF (17:00 trigger, OBAVEZAN)
-**Agent:** Gari traži šefovu potvrdu eksplicitno
-**Input:** Šef testira igru (`play_url`) za 5+ minuta
-**Output:** `docs/sef_signoff.md` — kratka beleška šefa: "OK za release" ili "vrati u fix"
-**Bez sign-off-a, igra NE ide u released status.** Beta Trio score ne zamenjuje šefa.
+### KORAK 6.75 — AUTO-RELEASE GATE
+
+**Auto-release uslovi (oba moraju biti ispunjena):**
+- `beta_score_iter2 >= 8.0`
+- 0 CRITICAL bugova u oba `beta_report.md`
+
+Ako **oba uslova ispunjena** → preskoči čekanje, idi direktno na KORAK 7. Šef dobija notifikaciju posle release-a. Veto: `git revert` released commita u bilo kom trenutku → igra se vraća u `polish/in_progress`.
+
+Ako **nije ispunjeno** (score < 8.0 ili postoji CRITICAL) → kreira se `docs/sef_signoff.md` kao i pre, pipeline čeka šefov nod.
 
 ### KORAK 7 — FINALE (Gari direktno, 17:00 trigger kraj)
 - Ažuriraj `manifest.json` sa line counts, oba beta_score-a, post_fix_score, `sef_signoff: true`, `stage: "polish"`, `status: "released"`
@@ -365,56 +369,74 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 - `git push origin main`
 - GitHub Pages auto-deploy ~1min
 
+### KORAK P-init — POPUNJAVANJE QUEUE-A (odmah posle KORAK 7, ista sesija)
+
+Čim igra dobije `status: "released"`, četiri agenta paralelno dodaju stavke u `docs/patch_queue.md` te igre:
+
+| Agent | Input | Šta dodaje |
+|-------|-------|-----------|
+| **Nega** | `beta_report.md` + `beta_report_2.md` + `fix_log.md` | P1/P2 — tehnički dug, LOW bugovi koji nisu ušli, potencijalne regresije |
+| **Iskra** | `manifest.json` + `concept.md` | P3 — brand hooks, kako igra hrani K/Guncati/MKDSLend u narednih 6 meseci |
+| **Dule** | `manifest.json` + `concept.md` | P2/P3 — retention, replay vrednost, emocionalna kriva posle prvog prolaska |
+| **Sine** | `concept.md` | P3 — narativna ekspanzija, novi dijaloški lukovi, content koji produžuje igru |
+
+Svaki agent dodaje 3–5 stavki. Commit: `[P-init] NazivIgre: patch queue populated (Nega/Iskra/Dule/Sine)`.
+
+---
+
 ### KORAK P — PATCH STAGE (post-release, autonomni)
 
 **Kada se aktivira:** KORAK 0 routing kaže "nova igra" (latest manifest `status == "released"`)
-ALI pre nego što se kreira novi concept, Gari proverava da li postoji otvoreni P1 patch:
+ALI pre nego što se kreira novi concept, Gari proverava da li postoji otvoreni patch bez `[HOLD]`:
 
 ```bash
 for q in games/*/docs/patch_queue.md; do
-  grep -q "^- \[ \] P1" "$q" && echo "$q" && break
+  grep -qP "^- \[ \] P[123](?! \[HOLD\])" "$q" && echo "$q" && break
 done
 ```
 
-- Ako P1 postoji → **KORAK P umesto novog concept-a** (jedan patch, jedna igra, jedna sesija)
-- Ako nema P1 → nastavi normalno na novi concept
+- Ako otvoreni patch postoji → **KORAK P umesto novog concept-a** (jedan patch, jedna igra)
+- Ako nema → nastavi normalno na novi concept
+
+**Izvršni redosled unutar jedne igre:** P1 → P2 → P3 (po redu pojavljivanja u fajlu)
 
 **Flow KORAK P:**
-1. Gari čita `manifest.json` te igre (da zna module opise)
-2. Uzima PRVI otvoreni P1 red iz `patch_queue.md`
-3. Brifinuje Jovu sa: naziv igre, opis patcha, TAČNO 1-3 modula koja se diraju
+1. Gari čita `manifest.json` te igre
+2. Uzima PRVI otvoreni red bez `[HOLD]` (P1 first, pa P2, pa P3)
+3. Brifinuje Jovu: naziv igre, opis patcha, TAČNO 1–2 modula
 4. Jova čita manifest.json + navedene module (ništa više)
-5. Pravi izmenu, Gari commit-uje:
-   `[patch] NazivIgre: opis promene — P1 (patch_queue.md)`
-6. Gari zaokružuje `[ ]` → `[x]` u patch_queue.md + dodaje datum
+5. Gari commit-uje: `[patch] NazivIgre: opis — P1/P2/P3`
+6. Zaokruži `[ ]` → `[x]` + dodaj datum i commit hash
 7. Push — GitHub Pages auto-deploy
 
-**Token budžet po patch sesiji:** ~50–150K (1-3 modula, nema scaffolding)
+**Token budžet po patch sesiji:** ~50–150K
 
-**Ko dodaje stavke u patch_queue.md:**
-- Šef: direktan edit patch_queue.md (commit ili u chatu)
-- Nega/Iskra: mogu da predlože stavke kao `[PROPOSAL]` commit — šef odobrava
-- Trigger nikad ne dodaje P1 sam — jedino izvršava stavke koje šef ili tim stave
+**Ko dodaje stavke:**
+- Tim (Nega/Iskra/Dule/Sine) direktno commituju stavke — nema [PROPOSAL] taga, trigger ih izvršava
+- Šef dodaje `[HOLD]` na stavke koje želi da pauzira ili preusmeri
+- Šef može da doda sopstvene stavke direktnim editom
 
 **patch_queue.md format:**
 ```markdown
 # Patch Queue — Naziv Igre
 
 ## Otvoreni patčevi
-- [ ] P1 `src/modul.js` — šta tačno promeniti (≤ 2 modula po stavci)
-- [ ] P2 `src/modul.js` + `styles/ui.css` — UX poboljšanje
-- [ ] P3 `src/content/aforizmi.js` — nova sadržajna stavka
+- [ ] P1 `src/modul.js` — auto-izvršava odmah (bug)
+- [ ] P2 `src/modul.js` + `styles/ui.css` — auto-izvršava (polish)
+- [ ] P2 [HOLD] `src/audio.js` — pauziran, šef odlučuje kad
+- [ ] P3 `src/content/brand_hooks.js` — auto-izvršava kad nema P1/P2
 
 ## Završeni patčevi
-- [x] P1 `src/audio.js` — iOS AudioContext fix (done 2026-07-10, commit abc1234)
+- [x] P1 `src/audio.js` — iOS fix (done 2026-07-10, commit abc1234)
 ```
 
 **Pravila:**
 - Max 2 modula po stavci — ako treba više, to je mini-impl, ne patch
-- P1 = bug koji oštećuje brand ili UX (player ga vidi u prvoj sesiji)
-- P2 = polish koji vidno poboljšava iskustvo ali igra radi i bez
-- P3 = content/feature expansion — radi se samo kad nema P1/P2 u redu
-- Trigger radi MAX 1 patch po sesiji (ne praznimo celu listu odjednom)
+- P1 = bug koji oštećuje brand ili UX
+- P2 = polish koji vidno poboljšava iskustvo
+- P3 = content/feature expansion
+- `[HOLD]` = šef ili tim zamrzavaju stavku dok nije jasno šta treba
+- Trigger radi MAX 1 patch po sesiji
 
 ## Template (u `templates/standard-game/`)
 
