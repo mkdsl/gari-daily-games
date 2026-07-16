@@ -1,12 +1,12 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Generisano:** 2026-07-15, trigger (KORAK 0b — 2 igre čekaju šef test)
+**Generisano:** 2026-07-16, trigger (KORAK 0b — 2 igre čekaju šef test)
 
 **Pipeline čeka šefov test.** Dvije igre u polish/in_progress — nema novih igara dok ovaj red ne padne ispod 2.
 
 ---
 
-## 🎯 Prioritet 1: Niš Fuga (44 dana čeka sign-off)
+## 🎯 Prioritet 1: Niš Fuga (45 dana čeka sign-off)
 
 | Polje | Vrednost |
 |-------|----------|
@@ -31,7 +31,7 @@
 
 ---
 
-## 🎯 Prioritet 2: Imanje Tycoon (6 dana čeka sign-off)
+## 🎯 Prioritet 2: Imanje Tycoon (7 dana čeka sign-off)
 
 | Polje | Vrednost |
 |-------|----------|
@@ -73,8 +73,8 @@ Samo flagujemo da gap postoji i raste. Vidi `tim/retrospektiva/2026-06-21.md` (a
 
 | # | Igra | Stage | Status | Dana čeka | Napomena |
 |---|------|-------|--------|-----------|----------|
-| 1 | **Niš Fuga** (06-01) | polish | in_progress | 44 dana | Čeka sign-off — sef_signoff.md kreiran (07-14) |
-| 2 | **Imanje Tycoon** (07-09) | polish | in_progress | 6 dana | Čeka sign-off — sef_signoff.md postoji (07-13) |
+| 1 | **Niš Fuga** (06-01) | polish | in_progress | 45 dana | Čeka sign-off — sef_signoff.md kreiran (07-14) |
+| 2 | **Imanje Tycoon** (07-09) | polish | in_progress | 7 dana | Čeka sign-off — sef_signoff.md postoji (07-13) |
 
 Legacy igre (Park Mapa 05-21: failed/superseded, i stariji bez stage polja) se ne broje aktivno.
 
@@ -90,3 +90,4 @@ Legacy igre (Park Mapa 05-21: failed/superseded, i stariji bez stage polja) se n
 - **2026-07-13:** Imanje Tycoon (34 modula, 8578 JS + 2171 CSS) ulazi u polish. Beta test + fix + beta iter 2 (7.9/10). sef_signoff.md kreiran. Niš Fuga čeka 42 dana.
 - **2026-07-14:** KORAK 0b aktivan (2 unreleased: Niš Fuga + Imanje Tycoon). sef_signoff.md za Niš Fugu kreiran. post_fix_score 9.0 upisano u manifest. Čeka šef test oba naslova.
 - **2026-07-15:** KORAK 0b aktivan (2 unreleased). Pasoš gap i dalje 28. Niš Fuga čeka 44 dana, Imanje Tycoon 6 dana. Pipeline ne pokreće novu igru dok šef ne odobri oba naslova.
+- **2026-07-16:** KORAK 0b aktivan (2 unreleased). Niš Fuga čeka 45 dana, Imanje Tycoon 7 dana. KORAK 0d: Park Mapa (05-21) u concept ali status=failed (superseded — zatvorena 07-07). Pasoš gap i dalje 28. Pipeline stoji — čeka šef sign-off.
