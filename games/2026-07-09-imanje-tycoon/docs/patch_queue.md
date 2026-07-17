@@ -7,10 +7,10 @@ Tim dodaje stavke direktno — trigger ih izvršava. Šef stavlja `[HOLD]` da pa
 
 ### P2 — Polish (Nega — tehnički dug iz beta)
 
-- [ ] P2 `src/systems/phases.js` — typo line ~128: `'dostiuguta'` → `'dostiguta'` (beta iter 1 LOW #3)
-- [ ] P2 `src/engine/tick.js` — zaštiti `applyOfflineProgress` od `seasonTimer = 0`: dodaj `if (state.seasonTimer <= 0) state.seasonTimer = SEASON_DURATION;` na početku while petlje (beta iter 1 LOW #1)
-- [ ] P2 `src/systems/seasons.js` — inspekcija `clearEvent` via `setTimeout` → premesti u `handleSeasonEnd` (već postoji `seasonsLeft <= 0` check ~line 131-138), ukloni async setTimeout (beta iter 1 LOW #2)
-- [ ] P2 `src/config.js` + `src/economy/mushrooms.js` — povećaj `INOKULACIJA_WINDOW_SEC` sa 10 na 18s; dodaj audio alert 3s pre isteka (`audio.playSfx('inokulacija_alert')`) — mobile UX pati (beta iter 1 MEDIUM #6, granični slučaj)
+- [x] P2 `src/systems/phases.js` — typo line ~128: `'dostiuguta'` → `'dostiguta'` (done 2026-07-13, commit 23a2217 — fix_log L1)
+- [x] P2 `src/engine/tick.js` — zaštiti `applyOfflineProgress` od `seasonTimer = 0` (done 2026-07-13, commit 23a2217 — fix_log L2)
+- [x] P2 `src/systems/seasons.js` — inspekcija `clearEvent` async → sync (done 2026-07-13, commit 23a2217 — fix_log L3)
+- [x] P2 `src/config.js` + `src/economy/mushrooms.js` — `INOKULACIJA_WINDOW_SEC` 10 → 18s (done 2026-07-13, commit 23a2217 — fix_log M6)
 
 ### P3 — Balance & Expansion (Dule/Iskra)
 
@@ -20,4 +20,7 @@ Tim dodaje stavke direktno — trigger ih izvršava. Šef stavlja `[HOLD]` da pa
 
 ## Završeni patčevi
 
-*(prazno — svi MEDIUM bugovi iz beta iter 1/2 rešeni u fix_log.md)*
+- [x] P2 `src/systems/phases.js` — typo `dostiuguta` → `dostiguta` (done 2026-07-13, commit 23a2217)
+- [x] P2 `src/engine/tick.js` — phantom sezona guard (done 2026-07-13, commit 23a2217)
+- [x] P2 `src/systems/seasons.js` — clearEvent async → sync (done 2026-07-13, commit 23a2217)
+- [x] P2 `src/config.js` + `src/economy/mushrooms.js` — INOKULACIJA_WINDOW_SEC 10→18s (done 2026-07-13, commit 23a2217)
