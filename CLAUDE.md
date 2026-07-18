@@ -154,6 +154,42 @@ done
 Ovaj korak ne dira manifest/release logiku — samo bira KOJI manifest trigger sledeći
 obrađuje. Šef revertuje jednim `git revert` ako se ne slaže.
 
+**KORAK 0e — Polish orphan rescue (PRE routing tabele, svaki trigger):**
+
+KORAK 0 routing bira SAMO najnoviji `manifest.json` po datumu fajla — igra u `stage: "polish"`,
+`status: "in_progress"` koja nije najnovija postaje trajno nevidljiva svim triggerima. KORAK 0d
+ne pomaže jer pokriva isključivo `concept` i `impl`. Niš Fuga stajala je ovako 47 dana
+(9.7/10, 0 CRITICAL, KORAK 6.75 kriterijumi ispunjeni) jer trigger nikad nije evaluirao njen
+manifest — bila je polish orphan, ne concept/impl orphan (vidi `tim/retrospektiva/2026-07-17.md`
+i `2026-07-18.md` u ajajaj repo, Nalaz #1/#2).
+
+Pre routing tabele, proveri sve manifeste sa `stage: "polish"` i `status: "in_progress"` koji
+NISU najnoviji po datumu fajla:
+
+```bash
+latest=$(ls -t games/*/manifest.json | head -1)
+for m in games/*/manifest.json; do
+  [ "$m" = "$latest" ] && continue
+  stage=$(grep -o '"stage": *"[^"]*"' "$m" | cut -d'"' -f4)
+  status=$(grep -o '"status": *"[^"]*"' "$m" | cut -d'"' -f4)
+  if [ "$stage" = "polish" ] && [ "$status" = "in_progress" ]; then
+    score=$(grep -o '"beta_score_iter2": *[0-9.]*' "$m" | grep -o '[0-9.]*$')
+    echo "$m: polish orphan, score=$score"
+  fi
+done
+```
+
+- Ako orphan postoji SA `beta_score_iter2 >= 8.0` → dodaj red u `docs/signoff_backlog.md`:
+  `"⚠️ POLISH ORPHAN: [Naziv] — beta_score_iter2=[score], KORAK 6.75 ispunjen, blokiran
+  pozicijom u pipeline-u. Šef: ček OK u sef_signoff.md ili git revert."` Commit:
+  `chore: KORAK 0e — polish orphan detected: [naziv]`.
+- Ako orphan postoji sa `beta_score_iter2 < 8.0` → logiraj isti red, ali bez "KORAK 6.75
+  ispunjen" (nije gotov za release, treba još beta iteracija — ručna intervencija šefa).
+- Ako nema orphana → preskoči.
+
+Ovaj korak je idempotentan i ne dira manifest/release logiku — samo detektuje i flaguje.
+Šef revertuje jednim `git revert` ako se ne slaže.
+
 ## Arhitektura za Token Economy (KLJUČNO)
 
 Svaka igra ima **modularnu strukturu sa manifest fajlom**. Agenti ne čitaju celu igru — čitaju samo module koji ih zanimaju. Pipeline korak X ne sme da učita fajlove koje ne menja.
