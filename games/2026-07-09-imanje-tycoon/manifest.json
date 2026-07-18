@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-07-09-imanje-tycoon/",
   "brand_serves": ["guncati", "mkdslend"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "index.html": "Ulazna tačka — 4 CSS importa, app-root DOM sa #macro-panel + #tabs-nav + #tab-content, ES6 module entry",
     "src/main.js": "Bootstrap: init state, bind tabs, start idle ticker, sync HUD, pokretanje audio konteksta na prvi klik",
@@ -50,5 +50,5 @@
   "beta_score": 6.4,
   "beta_score_iter2": 7.9,
   "post_fix_score": 8.9,
-  "sef_signoff": false
+  "sef_signoff": true
 }

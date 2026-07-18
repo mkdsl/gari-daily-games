@@ -1,27 +1,45 @@
-# Standard Game Template
+# Imanje Tycoon
 
-Ova skela je startna tačka svake dnevne igre. Jova (dev) kopira ovaj folder, preimenuje ga u `games/YYYY-MM-DD-naziv-igre/`, pa popunjava modul po modul.
+**Žanr:** Multi-layer Idle/Tycoon + Farm Simulation
+**Datum:** 2026-07-09
+**Brand:** Guncati × MKDSLend
+**Status:** ✅ Released (šef sign-off — 2026-07-18)
 
-## Šta radi van kutije
+---
 
-- ES6 moduli (import/export)
-- responsive full-screen canvas
-- game loop sa delta time
-- save/load u localStorage (ključ `gari-daily-game`, versioned)
-- input handling (kbd + mouse + touch, sa pressed/released detekcijom)
-- HUD + menu overlay sa CSS-om
-- ima mesto za audio, systems, entities, levels
+## O igri
 
-## Šta Jova MORA da uradi
+Pokrećeš imanje od nule: pečurke, plastenik i ribnjak. Macro planiranje (faze, sezone, prodajni kanali, radnici) × Micro izvedba (inokulacija na vreme, berba, hranjenje ribe) × permakulturna ekonomika sa realnim guncatskim brojkama. Dostigni Fazu C kroz 4-6 sati gameplay-a, sa offline progress-om, sinergijama (Komposter, Mulj đubrivo, Ekosistem Masterclass) i prestige sistemom sa tri scenarija (Guncati/Avala/Štrand).
 
-1. Kopira folder, preimenuje u `games/YYYY-MM-DD-slug/`
-2. Preimenuje `manifest.json.template` u `manifest.json` i popuni vrednosti
-3. Ažurira `index.html` title + meta
-4. Popunjava config konstante iz Miletovog GDD-a
-5. Proširi `state.js` shape po GDD-u
-6. Implementira systems, entities, render po konceptu
-7. Brend-ira UI preko Perinog CSS-a
+**Core loop:** Investiraj u granu → prati ciklus (inokulacija/berba/hranjenje) → prodaj kroz kanale → otključaj fazu → sezona se završava → prestige kad je spreman.
 
-## Pravilo
+---
 
-Ako modul nije potreban za ovaj konkretan žanr igre — **obriši ga**. Manifest.json mora da reflektuje šta STVARNO postoji u folderu.
+## Tehnički detalji
+
+- **Engine:** Vanilla JS ES6 moduli, requestAnimationFrame idle ticker sa offline progress cap-om (8h)
+- **Audio:** Web Audio API — folk-inspired ambient (srpska lestvica, 70BPM) + generisani SFX
+- **Storage:** LocalStorage save/load + JSON export/import
+- **Moduli:** 34 fajla, 8578 JS + 2171 CSS linija
+- **Sadržaj:** 24 upgrade-a, 25 achievementa, 3 prestige scenarija, 3 sinergije
+
+---
+
+## Guncati/MKDSLend Brand Integration
+
+Realne guncatske brojke (protok izvora, pečurke ciklusi, plastenik prinosi) i tri prestige scenarija vezana za stvarne Kluboslavija/Guncati destinacije (Guncati, Avala, Štrand).
+
+---
+
+## Beta rezultati
+
+| Iter | Ocena | CRITICAL | MEDIUM | LOW |
+|------|-------|----------|--------|-----|
+| Iter 1 | 6.4/10 | 0 | 6 | 4 |
+| Iter 2 | 7.9/10 | 0 | 1 (R1 regresija) | 0 |
+
+Post-fix score: **8.9/10**
+
+R1 (makro panel toggle regresija) fixovan u istom commit-u kao beta iter 2, ali nedokumentovan u fix_log-u do 2026-07-18. Uživo verifikovan (klik + tastatura) pre release-a — vidi `docs/fix_log.md` i `docs/sef_signoff.md`.
+
+**Play:** https://mkdsl.github.io/gari-daily-games/games/2026-07-09-imanje-tycoon/

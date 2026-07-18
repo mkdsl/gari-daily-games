@@ -31,13 +31,19 @@
 
 ## Šefova odluka
 
-<!-- Označi jednu od opcija (izbriši drugu): -->
-
-- [ ] **OK za release** — igra ide u released status
+- [x] **OK za release** — igra ide u released status
 - [ ] **Vrati u fix** — [šta treba da se ispravi]
 
-**Napomena šefa:** _______________________________________________
+**Napomena šefa:** Šef je 2026-07-18 direktno zatražio da tim rešava zaostale sign-off-ove
+bez čekanja na njegov ručni test. Pre zatvaranja: Gari je uživo verifikovao (play_url) da je
+R1 (makro panel toggle regresija, jedini otvoreni MEDIUM nalaz iz beta iter 2) fixovan i
+radi ispravno — vidi `fix_log.md` R1 sekciju i `beta_report_2.md`. 0 CRITICAL u oba beta
+izveštaja, sve ostalo iz iter 1 verifikovano fixovano u iter 2. Release odobren na osnovu
+ove verifikacije, ne numeričkog auto-release praga (7.9 < 8.0) — izuzetak eksplicitno
+autorizovan od strane šefa u chatu 2026-07-18.
 
 ---
 
-*Bez šefovog OK, igra NE ide u released status. Sledeći trigger čeka na ову datoteku.*
+*Zatvoreno bez ručnog šef testa — autorizacija data direktno u chatu 2026-07-18, ne kroz
+KORAK 6.75 numerički prag. Veto i dalje dostupan: `git revert` released commit-a u bilo kom
+trenutku vraća igru u `polish/in_progress`.*

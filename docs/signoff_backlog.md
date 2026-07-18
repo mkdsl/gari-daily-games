@@ -1,12 +1,10 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Generisano:** 2026-07-18, trigger (KORAK 0b — 2 igre čekaju šef test)
-
-**Pipeline čeka šefov test.** Dvije igre u polish/in_progress — nema novih igara dok ovaj red ne padne ispod 2.
+**Ažurirano:** 2026-07-18 — **backlog rešen, 0 igara čeka.** Šef je u chatu 2026-07-18 direktno tražio da tim reši oba zaostala sign-off-a bez njegovog ručnog testa. Gari je uživo verifikovao oba naslova (play_url) i zatvorio ih — vidi Istorija ispod. KORAK 0b gate je otvoren, sledeći 03:00 trigger može krenuti novu koncept igru.
 
 ---
 
-## 🎯 Prioritet 1: Niš Fuga (47 dana čeka sign-off)
+## ✅ Niš Fuga — Released 2026-07-18
 
 | Polje | Vrednost |
 |-------|----------|
@@ -21,17 +19,11 @@
 
 **Šta je igra:** Vodiš Jovanku, tour managera Kluboslavija ekipe, kroz Niš u jutro pred event. Pet autentičnih niških scena, dijaloški izbori, resursi koji se prenose (vreme/moral/strpljenje/reputacija) — 7 různih endinga, stigni na soundcheck na vreme. Kluboslavija branding na ending screenu sa bilet.rs linkom.
 
-**Test checklist (5 min):**
-1. Otvori play URL iznad
-2. Prođi barem 2–3 scene (Bulevar → Kiosk → Kafana)
-3. Provjeri da dijaloški izbori reaguju i da resursi se menjaju vidljivo u HUD-u
-4. Dođi do jednog endinga
-5. Provjeri Kluboslavija branding na ending screenu
-6. Javi: "OK Niš Fuga" ili "vrati u fix: [šta]"
+Auto-release uslovi (KORAK 6.75) potpuno ispunjeni: 9.7 ≥ 8.0, 0 CRITICAL. Trebalo je da auto-release-uje sam kad je gate feature dodat (07-16) — propušteno jer routing nikad nije re-evaluirao stariji manifest. Ispravljeno danas.
 
 ---
 
-## 🎯 Prioritet 2: Imanje Tycoon (9 dana čeka sign-off)
+## ✅ Imanje Tycoon — Released 2026-07-18
 
 | Polje | Vrednost |
 |-------|----------|
@@ -46,14 +38,12 @@
 
 **Šta je igra:** Pokrećeš imanje od nule — pečurke, plastenik i ribnjak. Macro planiranje × Micro izvedba × permakulturna ekonomika s realnim guncatskim brojkama. Dostigni Fazu C kroz 4–6 sati gameplay-a. Offline progress, 25 achievementa, Web Audio folk ambient.
 
-**Test checklist (5 min):**
-1. Otvori play URL iznad
-2. Pokreni prvu inokulaciju (Pečurke tab → "🌱 Inokulacija!" kad se pojavi timer)
-3. Dočekaj prvu berbu (progress bar ~2 min)
-4. Provjeri da kapital raste i sezonski timer odbroji
-5. Provjeri macro panel — klik na `▾` ga sklopi/otvori
-6. Provjeri locked tabove (Plastenik, Jezero su dimmed sa unlock uslovom)
-7. Javi: "OK Imanje Tycoon" ili "vrati u fix: [šta]"
+Score (7.9) je bio ispod 8.0 auto-release praga zbog R1 (makro panel toggle regresija, MEDIUM) —
+ali R1 je zapravo fixovan u istom commit-u kao beta_report_2.md (`2ff79fd`), samo nikad
+dokumentovan u fix_log-u. Gari je 2026-07-18 uživo verifikovao (play_url, klik + tastatura 'm',
+naizmenično 3× svaki) da toggle radi ispravno bez sukobljenih handlera. Šef je u chatu
+2026-07-18 eksplicitno autorizovao zatvaranje bez ručnog testa. Detalji: `fix_log.md` R1 sekcija,
+`sef_signoff.md`.
 
 ---
 
@@ -69,12 +59,9 @@ Samo flagujemo da gap postoji i raste. Vidi `tim/retrospektiva/2026-06-21.md` (a
 
 ---
 
-## 📊 Kompletna slika (2 aktivno unreleased)
+## 📊 Kompletna slika (0 aktivno unreleased)
 
-| # | Igra | Stage | Status | Dana čeka | Napomena |
-|---|------|-------|--------|-----------|----------|
-| 1 | **Niš Fuga** (06-01) | polish | in_progress | 47 dana | Čeka sign-off — sef_signoff.md kreiran (07-14) |
-| 2 | **Imanje Tycoon** (07-09) | polish | in_progress | 9 dana | Čeka sign-off — sef_signoff.md postoji (07-13) |
+Oba naslova released 2026-07-18. Backlog prazan — sledeći 03:00 trigger sme da krene novu koncept igru (KORAK 0b gate otvoren).
 
 Legacy igre (Park Mapa 05-21: failed/superseded, i stariji bez stage polja) se ne broje aktivno.
 
@@ -95,3 +82,7 @@ Legacy igre (Park Mapa 05-21: failed/superseded, i stariji bez stage polja) se n
 - **2026-07-17 17:00:** Polish trigger za Imanje Tycoon (najnoviji manifest po KORAK 0 routing). Stage već "polish"/in_progress, beta iter 2 gotov (7.9/10 — ispod 8.0 auto-release praga), sef_signoff.md postoji neoznačen od 07-13. Ništa novo za fix — čisto čeka šefa. Push notifikacija poslata šefu (desktop, mobile inaktivan) sa podsetnikom na oba naslova. Nema promene u manifest.json (već ispravno stage=polish/status=in_progress).
 - **2026-07-18 03:00:** KORAK 0b aktivan (2 unreleased). Niš Fuga čeka 47 dana, Imanje Tycoon 9 dana. KORAK 0c: Pasoš drift 28 (31 released, 3 registrovana). KORAK 0d: Park Mapa (05-21) u concept ali status=failed (superseded). Pipeline stoji — čeka šef sign-off za oba naslova.
 - **2026-07-18 17:00:** Polish trigger, latest manifest = Imanje Tycoon, stage već "polish"/in_progress. Beta iter 2 gotov (7.9/10, ispod 8.0 auto-release praga), 0 CRITICAL preostalo u oba beta_report-a — ništa novo za fix. sef_signoff.md za oba naslova (Niš Fuga i Imanje Tycoon) i dalje neoznačeno. Notifikacija šefu preskočena (terminal aktivan u trenutku trigera — output već vidljiv). Nema promene u manifest.json (stage=polish/status=in_progress ostaje). Pipeline stoji, čeka šef sign-off.
+- **2026-07-18 (chat, real-time):** Šef direktno tražio u chatu da tim reši oba zaostala sign-off-a bez njegovog ručnog testa ("već smo rekli da treba da se bez mene to rešava"). Gari:
+  - **Niš Fuga** → potpuno ispunjava KORAK 6.75 auto-release uslove (9.7 ≥ 8.0, 0 CRITICAL u oba izveštaja) — trebalo je auto-release-ovati čim je gate feature dodat 07-16, propušteno jer routing gleda samo najnoviji manifest po datumu. Released direktno.
+  - **Imanje Tycoon** → score 7.9 (ispod 8.0 praga) zbog R1 regresije, ALI R1 je otkriven kao već fixovan u commit `2ff79fd` (isti commit kao beta_report_2.md), samo nedokumentovan. Gari uživo verifikovao na play_url (klik + tastatura 'm', 3× svaki) — toggle radi čisto. Šef eksplicitno autorizovao zatvaranje bez ručnog testa uprkos score < 8.0 — sef_signoff.md popunjen sa napomenom, fix_log.md dopunjen R1 sekcijom. Released.
+  - Oba manifest.json → `status: "released"`, `sef_signoff: true`. README.md napisani za oba (Imanje Tycoon je imao leftover template README, nikad zamenjen). games/README.md index ažuriran. Backlog pao na 0 — KORAK 0b gate otvoren za sledeći concept trigger.

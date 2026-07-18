@@ -63,6 +63,20 @@
   Zamenjen direktnim pozivom `clearEvent(state)` — ako je animacija potrebna, delay treba
   primeniti samo na UI, ne na state mutation.
 
+## R1 — regresija iz beta iter 2 (fixovano isti dan, dokumentovano naknadno 2026-07-18)
+
+- **[R1] Macro panel toggle dupli handler** — `src/ui/tabs.js`
+  M5 fix (input.js) dodao je click + keydown 'M' handler za makro toggle, ali `tabs.js` je
+  zadržao svoj stari click listener (linije ~41-58) i keydown case 'M' (linije ~163-172) —
+  oba su se okidala na isti klik/taster i poništavala jedno drugo (neto efekat: panel se
+  ne pomera). Fix je ušao u commit `2ff79fd` (isti commit kao beta_report_2.md), ali nije
+  bio upisan u fix_log.md — beta_report_2.md je i dalje opisivao R1 kao "preporuka za fix"
+  iako je fix već bio u istom commit-u.
+  Uklonjen duplirani click listener i keydown case 'M' iz `tabs.js`; `input.js` ostaje
+  jedini vlasnik `toggleMacroPanel` logike (klik + taster).
+  **Verifikovano uživo 2026-07-18** (play_url, klik na dugme + taster 'm', naizmenično
+  testirano 3× svaki): čist toggle visible↔hidden, bez sukobljenih handlera.
+
 ## Nije dirano
 
 - `src/economy/market.js` — tržišna ekonomija
