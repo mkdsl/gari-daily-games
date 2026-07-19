@@ -1,0 +1,253 @@
+/* Na Vezi — Game CSS: Scanline/CRT Efekat, Battery Animacije, Alarm Animacije */
+
+/* ===================== CRT SCANLINE EFFECT ===================== */
+#screen-micro::after,
+#screen-lockin::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+  animation: scanline-scroll 8s linear infinite;
+}
+
+@keyframes scanline-scroll {
+  from { background-position: 0 0; }
+  to   { background-position: 0 100vh; }
+}
+
+/* CRT glow on signal value */
+.signal-active {
+  text-shadow: 0 0 10px currentColor;
+}
+
+/* ===================== BATTERY / OFF-GRID BREATHING ===================== */
+@keyframes battery-breathe {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.92; transform: scale(0.99); }
+}
+
+@keyframes battery-breathe-warn {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes battery-breathe-critical {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 rgba(179, 61, 61, 0); }
+  50% { opacity: 0.6; box-shadow: 0 0 16px rgba(179, 61, 61, 0.4); }
+}
+
+#offgrid-meter-container {
+  animation: battery-breathe 2s ease-in-out infinite;
+}
+
+#offgrid-meter-container.warn {
+  animation: battery-breathe-warn 1.5s ease-in-out infinite;
+  border-color: var(--color-warn);
+}
+
+#offgrid-meter-container.critical {
+  animation: battery-breathe-critical 0.8s ease-in-out infinite;
+  border-color: var(--color-critical);
+}
+
+/* ===================== ALARM ANIMATIONS ===================== */
+@keyframes alarm-pulse {
+  0%, 100% { border-color: var(--color-warn); }
+  50% { border-color: rgba(217, 113, 60, 0.3); }
+}
+
+@keyframes alarm-pulse-critical {
+  0%, 100% { border-color: var(--color-critical); box-shadow: 0 0 0 rgba(179, 61, 61, 0); }
+  50% { border-color: var(--color-critical); box-shadow: 0 0 16px rgba(179, 61, 61, 0.5); }
+}
+
+.alarm-card {
+  animation: alarm-slide-in 0.3s ease, alarm-pulse 1.5s ease infinite 0.3s;
+}
+
+.alarm-card.critical {
+  animation: alarm-slide-in 0.3s ease, alarm-pulse-critical 0.8s ease infinite 0.3s;
+}
+
+/* ===================== ON-AIR GLOW ===================== */
+@keyframes onair-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(179, 61, 61, 0.3); }
+  50% { box-shadow: 0 0 24px rgba(179, 61, 61, 0.8); }
+}
+
+.micro-header {
+  animation: onair-glow 2s ease-in-out infinite;
+}
+
+/* ===================== SIGNAL DROP EFFECT ===================== */
+@keyframes signal-drop-flash {
+  0% { background: var(--color-bg); }
+  10% { background: rgba(179, 61, 61, 0.15); }
+  100% { background: var(--color-bg); }
+}
+
+.signal-drop-active #screen-micro {
+  animation: signal-drop-flash 1s ease;
+}
+
+/* ===================== CHAT POP ANIMATION ===================== */
+@keyframes chat-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.chat-panel.has-activity {
+  animation: chat-pop 0.25s ease;
+}
+
+/* ===================== ACHIEVEMENT UNLOCK ===================== */
+@keyframes achievement-shine {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.achievement-toast::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(224, 166, 76, 0.12) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: achievement-shine 1.5s ease 0.3s;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* ===================== SCREEN TRANSITIONS ===================== */
+.screen {
+  transition: opacity 0.3s ease;
+}
+
+.screen.fading-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ===================== TikTok SPIKE EFFECT ===================== */
+@keyframes tiktok-spike {
+  0% { transform: scale(1); border-color: var(--color-border); }
+  30% { transform: scale(1.02); border-color: var(--color-tiktok); }
+  100% { transform: scale(1); border-color: var(--color-border); }
+}
+
+.chat-panel.tiktok.spike-active {
+  animation: tiktok-spike 0.5s ease;
+}
+
+/* ===================== PRESTIGE PARTICLES ===================== */
+@keyframes prestige-particle {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+}
+
+.prestige-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-signal);
+  animation: prestige-particle 1s ease forwards;
+}
+
+/* ===================== COUNTDOWN PULSE ===================== */
+@keyframes count-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.lockin-count.pulse {
+  animation: count-pulse 0.4s ease;
+}
+
+/* ===================== OUTCOME REVEAL ===================== */
+@keyframes score-reveal {
+  from { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.outcome-score-big {
+  animation: score-reveal 0.6s ease;
+}
+
+/* ===================== SIGNAL BAR FLICKER ===================== */
+@keyframes signal-flicker {
+  0%, 100% { opacity: 1; }
+  33% { opacity: 0.6; }
+  66% { opacity: 0.8; }
+}
+
+.signal-bar-fill.dropping {
+  animation: signal-flicker 0.3s ease infinite;
+  background: var(--color-critical);
+}
+
+/* ===================== EQUIPMENT PURCHASE FLASH ===================== */
+@keyframes purchase-flash {
+  from { border-color: var(--color-crt); box-shadow: 0 0 12px rgba(95, 191, 143, 0.5); }
+  to { border-color: var(--color-crt-dim); box-shadow: none; }
+}
+
+.equipment-item.just-purchased {
+  animation: purchase-flash 0.6s ease;
+  border-color: var(--color-crt-dim);
+}
+
+/* ===================== GUEST NO-SHOW SHAKE ===================== */
+@keyframes noshow-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+.guest-noshow-event {
+  animation: noshow-shake 0.5s ease;
+}
+
+/* ===================== BATTERY CRITICAL OVERLAY ===================== */
+@keyframes battery-critical-overlay {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.06; }
+}
+
+#screen-micro.battery-critical::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--color-critical);
+  pointer-events: none;
+  z-index: 5;
+  animation: battery-critical-overlay 1s ease-in-out infinite;
+}
+
+/* ===================== HIGHLIGHT MOMENT FLASH ===================== */
+@keyframes highlight-flash {
+  0% { background: var(--color-bg-card); }
+  30% { background: rgba(224, 166, 76, 0.18); }
+  100% { background: var(--color-bg-card); }
+}
+
+.highlight-card.new {
+  animation: highlight-flash 0.8s ease;
+}

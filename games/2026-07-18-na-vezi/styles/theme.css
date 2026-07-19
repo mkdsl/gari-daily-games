@@ -1,0 +1,59 @@
+/* Na Vezi — Theme CSS: Guncati Televizija Brand Paleta */
+
+:root {
+  --color-bg:            #1A1F3B;
+  --color-bg-panel:      #1E2444;
+  --color-bg-card:       #232952;
+  --color-bg-input:      #2A3162;
+  --color-signal:        #E0A64C;
+  --color-signal-dim:    #A07830;
+  --color-warn:          #D9713C;
+  --color-critical:      #B33D3D;
+  --color-critical-dim:  #7A2525;
+  --color-crt:           #5FBF8F;
+  --color-crt-dim:       #3A7A5A;
+  --color-text:          #EDEAE0;
+  --color-text-dim:      #A09A8C;
+  --color-text-muted:    #6A6460;
+  --color-offgrid:       #7A8FA6;
+  --color-offgrid-dim:   #4A6070;
+  --color-border:        #2E3660;
+  --color-border-light:  #3A4580;
+  --color-overlay:       rgba(26, 31, 59, 0.85);
+  --color-success:       #5FBF8F;
+  --color-gold:          #E0A64C;
+  --color-ig:            #C13584;
+  --color-ig-dim:        #7A2050;
+  --color-tiktok:        #69C9D0;
+  --color-tiktok-dim:    #3A7A80;
+  --color-youtube:       #FF0000;
+  --color-youtube-dim:   #991500;
+
+  /* Spacing */
+  --gap-xs: 4px;
+  --gap-sm: 8px;
+  --gap-md: 16px;
+  --gap-lg: 24px;
+  --gap-xl: 32px;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-mid:  300ms ease;
+  --transition-slow: 600ms ease;
+
+  /* Font */
+  --font-mono: 'Courier New', 'Lucida Console', monospace;
+  --font-ui:   system-ui, -apple-system, sans-serif;
+}
+
+/* Dark on-air mode overlay (applied during micro layer) */
+[data-onair="true"] {
+  --color-bg:        #0F1225;
+  --color-bg-panel:  #12162E;
+  --color-bg-card:   #181D3A;
+}

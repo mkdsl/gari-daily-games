@@ -1,0 +1,142 @@
+/* Na Vezi — Tutorial CSS: Progressive Disclosure za Onboarding */
+
+/* Hidden za tutorial mode — fajlovi sa TikTok/YouTube panelima */
+.hidden-tutorial {
+  display: none !important;
+}
+
+/* Dimmed elementi koji su tu ali ne aktivni u tutorialu */
+.dimmed-tutorial {
+  opacity: 0.35;
+  pointer-events: none;
+  filter: grayscale(0.5);
+  position: relative;
+}
+
+.dimmed-tutorial::after {
+  content: 'Otključava se posle prve emisije';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: var(--gap-sm);
+  font-style: italic;
+}
+
+/* Tutorial highlight — pulsira da ukaže na element */
+@keyframes tutorial-highlight {
+  0%, 100% { box-shadow: 0 0 0 2px var(--color-crt), 0 0 0 4px rgba(95, 191, 143, 0); }
+  50% { box-shadow: 0 0 0 2px var(--color-crt), 0 0 0 8px rgba(95, 191, 143, 0.3); }
+}
+
+.tutorial-highlight {
+  animation: tutorial-highlight 1.5s ease infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* Tutorial tooltip bubble */
+.tutorial-bubble {
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-crt);
+  border-radius: var(--radius-md);
+  padding: var(--gap-sm) var(--gap-md);
+  font-size: 0.8rem;
+  color: var(--color-text);
+  position: relative;
+  max-width: 260px;
+}
+
+.tutorial-bubble::before {
+  content: '👁';
+  margin-right: 6px;
+  font-size: 0.9rem;
+}
+
+.tutorial-bubble .bubble-title {
+  font-weight: 700;
+  color: var(--color-crt);
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Tutorial overlay banner na vrhu ekrana */
+.tutorial-banner {
+  background: rgba(95, 191, 143, 0.1);
+  border-bottom: 1px solid var(--color-crt-dim);
+  padding: var(--gap-xs) var(--gap-md);
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-crt);
+  flex-shrink: 0;
+}
+
+.tutorial-banner strong {
+  color: var(--color-signal);
+}
+
+/* Step indicator tokom macro planiranja (tutorial mode) */
+.tutorial-step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xs);
+  padding: var(--gap-xs) 0;
+}
+
+.tutorial-step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-light);
+  transition: background var(--transition-fast);
+}
+
+.tutorial-step-dot.active {
+  background: var(--color-signal);
+  border-color: var(--color-signal);
+}
+
+.tutorial-step-dot.done {
+  background: var(--color-crt-dim);
+  border-color: var(--color-crt);
+}
+
+/* First-time notification za TikTok unlock */
+.platform-unlock-notice {
+  background: rgba(105, 201, 208, 0.1);
+  border: 1px solid var(--color-tiktok-dim);
+  border-radius: var(--radius-sm);
+  padding: var(--gap-sm) var(--gap-md);
+  font-size: 0.8rem;
+  color: var(--color-tiktok);
+  text-align: center;
+  animation: tutorial-highlight 2s ease 3;
+}
+
+/* Hint za format u tutorial nedelji */
+.tutorial-format-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--gap-sm);
+  background: rgba(95, 191, 143, 0.08);
+  border: 1px solid var(--color-crt-dim);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  color: var(--color-crt);
+}
+
+.tutorial-arrow {
+  font-size: 1rem;
+  animation: tutorial-arrow-bounce 0.8s ease infinite;
+}
+
+@keyframes tutorial-arrow-bounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
