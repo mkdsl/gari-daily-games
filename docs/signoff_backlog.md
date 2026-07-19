@@ -49,9 +49,9 @@ naizmenično 3× svaki) da toggle radi ispravno bez sukobljenih handlera. Šef j
 
 ## ⚠️ Pasoš cross-game registry drift (KORAK 0c)
 
-**Gap: 28** (31 released igara, samo 3 registrovana u Pasoš config-u)
+**Gap: 30** (33 released igara, samo 3 registrovana u Pasoš config-u) — ažurirano 2026-07-19
 
-`games/2026-05-10-cross-event-pasos/src/config.js` ima **3 registrovana slug-a** od **31 released igara**.
+`games/2026-05-10-cross-event-pasos/src/config.js` ima **3 registrovana slug-a** od **33 released igara**.
 Gap je ≫ 5 prag (KORAK 0c trigger). Drift je netaknut od 10.05.
 
 **Ovo ne radi Gari automatski** — dodavanje slugova/stamps je Jovin posao, brand/copy odluka po igri.
@@ -82,6 +82,7 @@ Legacy igre (Park Mapa 05-21: failed/superseded, i stariji bez stage polja) se n
 - **2026-07-17 17:00:** Polish trigger za Imanje Tycoon (najnoviji manifest po KORAK 0 routing). Stage već "polish"/in_progress, beta iter 2 gotov (7.9/10 — ispod 8.0 auto-release praga), sef_signoff.md postoji neoznačen od 07-13. Ništa novo za fix — čisto čeka šefa. Push notifikacija poslata šefu (desktop, mobile inaktivan) sa podsetnikom na oba naslova. Nema promene u manifest.json (već ispravno stage=polish/status=in_progress).
 - **2026-07-18 03:00:** KORAK 0b aktivan (2 unreleased). Niš Fuga čeka 47 dana, Imanje Tycoon 9 dana. KORAK 0c: Pasoš drift 28 (31 released, 3 registrovana). KORAK 0d: Park Mapa (05-21) u concept ali status=failed (superseded). Pipeline stoji — čeka šef sign-off za oba naslova.
 - **2026-07-18 17:00:** Polish trigger, latest manifest = Imanje Tycoon, stage već "polish"/in_progress. Beta iter 2 gotov (7.9/10, ispod 8.0 auto-release praga), 0 CRITICAL preostalo u oba beta_report-a — ništa novo za fix. sef_signoff.md za oba naslova (Niš Fuga i Imanje Tycoon) i dalje neoznačeno. Notifikacija šefu preskočena (terminal aktivan u trenutku trigera — output već vidljiv). Nema promene u manifest.json (stage=polish/status=in_progress ostaje). Pipeline stoji, čeka šef sign-off.
+- **2026-07-19 03:00:** KORAK 0c — Pasoš registry drift raste na 30 (33 released igara, 3 registrovane). KORAK 0d: Park Mapa (05-21) u concept ali status=failed (superseded). KORAK 0b: 1 unreleased (Na Vezi, u impl). Na Vezi impl stage počeo.
 - **2026-07-18 (chat, real-time):** Šef direktno tražio u chatu da tim reši oba zaostala sign-off-a bez njegovog ručnog testa ("već smo rekli da treba da se bez mene to rešava"). Gari:
   - **Niš Fuga** → potpuno ispunjava KORAK 6.75 auto-release uslove (9.7 ≥ 8.0, 0 CRITICAL u oba izveštaja) — trebalo je auto-release-ovati čim je gate feature dodat 07-16, propušteno jer routing gleda samo najnoviji manifest po datumu. Released direktno.
   - **Imanje Tycoon** → score 7.9 (ispod 8.0 praga) zbog R1 regresije, ALI R1 je otkriven kao već fixovan u commit `2ff79fd` (isti commit kao beta_report_2.md), samo nedokumentovan. Gari uživo verifikovao na play_url (klik + tastatura 'm', 3× svaki) — toggle radi čisto. Šef eksplicitno autorizovao zatvaranje bez ručnog testa uprkos score < 8.0 — sef_signoff.md popunjen sa napomenom, fix_log.md dopunjen R1 sekcijom. Released.
