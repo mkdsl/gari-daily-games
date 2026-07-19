@@ -1092,5 +1092,10 @@ async function init() {
   console.log('[Na Vezi] Igra inicijalizovana. Nedelja:', getState().week || 1);
 }
 
-// Boot na DOMContentLoaded
-document.addEventListener('DOMContentLoaded', init);
+// Boot — module skripte se izvršavaju posle HTML parsiranja (defer-like),
+// pa je DOMContentLoaded često već opalio pre ovog listenera. Pokrivamo oba slučaja.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
