@@ -1,0 +1,19 @@
+{
+  "name": "Na Vezi",
+  "genre": "Multi-layer Broadcast Management Sim",
+  "date": "2026-07-18",
+  "description": "Vodiš kontrolnu sobu Guncati Televizije — planiraš nedelju (format, platforme, oprema, gost, off-grid budžet), pa izvodiš emisiju uživo dok signal, chat i baterija testiraju tvoje odluke u realnom vremenu.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-07-18-na-vezi/",
+  "brand_serves": ["guncati", "mkdslend", "kluboslavija"],
+  "stage": "concept",
+  "status": "in_progress",
+  "modules": {},
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "beta_score_iter2": null,
+  "post_fix_score": null,
+  "sef_signoff": false
+}
