@@ -59,7 +59,7 @@
     "total_css": 1932
   },
   "beta_score": 1.2,
-  "beta_score_iter2": null,
+  "beta_score_iter2": 5.3,
   "post_fix_score": null,
   "sef_signoff": false
 }
