@@ -41,7 +41,7 @@ export function initAudio() {
 /**
  * Tihi sintisajzer pad (sine 60Hz, konstantno u pozadini)
  */
-function startAmbientPad() {
+export function startAmbientPad() {
   if (!_ctx) return;
   _ambientGain = _ctx.createGain();
   _ambientGain.gain.value = 0.03;

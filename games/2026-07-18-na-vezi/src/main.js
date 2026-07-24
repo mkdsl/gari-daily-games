@@ -21,7 +21,8 @@ import {
   renderMacroPlanningScreen, renderPrestigeScreen,
   showAchievementToast, initAchievementToast
 } from './ui.js';
-import { startPlanningSession, lockInPlan, getCurrentStep } from './macro/planning-session.js';
+import { startPlanningSession, lockInPlan, getCurrentStep, getDraftPlan, getTotalSteps, nextStep, prevStep, updateDraftPlan } from './macro/planning-session.js';
+import { buyEquipment } from './macro/equipment-shop.js';
 import { resolveWeeklyOutcome } from './macro/weekly-outcome.js';
 import {
   initDashboardState, getDashboardState, updateDashboardState,
@@ -299,21 +300,36 @@ function _showMacro() {
  * @param {HTMLElement} container
  */
 function _renderMacroStep(container) {
-  const tutMode = isTutorialMode();
-  renderMacroPlanningScreen(container, {
-    tutorialMode: tutMode,
-    tutorialBannerHtml: tutMode ? getTutorialBannerHtml() : '',
-    onNext: () => _renderMacroStep(container),
-    onPrev: () => _renderMacroStep(container),
+  const draftPlan = getDraftPlan();
+  const { index: currentStep } = getCurrentStep();
+  const totalSteps = getTotalSteps();
+  renderMacroPlanningScreen(container, draftPlan, currentStep, totalSteps, {
+    onNext: () => { nextStep(); _renderMacroStep(container); },
+    onPrev: () => { prevStep(); _renderMacroStep(container); },
     onLockIn: () => {
-      const plan = lockInPlan();
-      if (plan) {
-        _currentPlan = plan;
-        _showLockin(plan);
+      const result = lockInPlan();
+      if (result && result.ok) {
+        _currentPlan = getState().weekly_plan;
+        _showLockin(_currentPlan);
       }
+    },
+    onFormat: (formatId) => {
+      updateDraftPlan({ format: formatId });
+    },
+    onAlloc: (platform, value) => {
+      const current = getDraftPlan();
+      const newAlloc = { ...current.platform_alloc, [platform]: value };
+      updateDraftPlan({ platform_alloc: newAlloc });
+      return newAlloc;
+    },
+    onEquip: (equipId) => {
+      return buyEquipment(equipId);
+    },
+    onGuest: (guestId) => {
+      updateDraftPlan({ chosen_guest_id: guestId });
     }
   });
-  applyTutorialClasses(tutMode);
+  applyTutorialClasses(isTutorialMode());
 }
 
 /**
@@ -374,7 +390,14 @@ function _startMicro(plan) {
   resetEscalation();
   resetGuestRuntime();
   resetEqSession();
-  initDashboardState();
+  const _initSt = getState();
+  const _initWp = _initSt.weekly_plan;
+  initDashboardState(
+    _initWp,
+    _initSt.equipment,
+    { arrived: false, gostId: _initWp.chosen_guest_id },
+    _initWp.weekly_capacity
+  );
 
   // Off-grid meter DOM
   const offgridContainer = document.getElementById('offgrid-meter-container');
@@ -450,8 +473,8 @@ function _tickMicro(dt) {
   tickTime(dt);
 
   // 2. Signal passive recovery (između alarmova)
-  passiveSignalRecover(dt);
-  tickSignal(dt);
+  passiveSignalRecover(GAME_CONFIG.SIGNAL_RECOVER_RATE);
+  tickSignal(GAME_CONFIG.SIGNAL_RECOVER_RATE);
 
   // 3. Off-grid baterija se prazni
   const drainPerSec = calcCurrentDrain();
@@ -571,7 +594,7 @@ function _renderMicro() {
   const elapsed = ds.elapsed || 0;
   if (elapsed !== _lastRenderedElapsed) {
     _lastRenderedElapsed = elapsed;
-    renderTimer(elapsed, GAME_CONFIG.EMISIJA_DURATION_SECONDS || 2700);
+    renderTimer(elapsed, GAME_CONFIG.EMISIJA_DURATION);
   }
 
   // Chat — nove poruke po platformama
