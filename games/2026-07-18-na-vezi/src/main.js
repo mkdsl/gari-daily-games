@@ -31,9 +31,9 @@ import {
 } from './micro/dashboard-state.js';
 import { passiveSignalRecover, resolveSignalAction } from './micro/signal-system.js';
 import {
-  tryGenerateAlarm, resolveAlarm, tickAlarms
+  tryGenerateAlarm, resolveAlarm, tickAlarms, missAlarm
 } from './micro/alarm-generator.js';
-import { resetEscalation, processEscalation, processResolution } from './micro/alarm-escalation.js';
+import { resetEscalation, processEscalation, processResolution, getEscalationBonuses } from './micro/alarm-escalation.js';
 import {
   tickEqWindow, isEqActive, getEqSession,
   confirmEq, updateEqValue, startEqMinigame, resetEqSession
@@ -63,6 +63,7 @@ import {
 } from './ui/tutorial-mode.js';
 import { renderReplayScreen } from './ui/replay-screen.js';
 import { initOffgridMeter } from './ui/offgrid-meter.js';
+import { resolveGostArrival } from './content/gost-roster.js';
 
 /** @type {number|null} RAF handle za micro loop */
 let _rafId = null;
@@ -417,7 +418,7 @@ function _startMicro(plan) {
     const delay = 30 + Math.floor(Math.random() * 60);
     setTimeout(() => {
       if (!_emisijaEnded) {
-        handleGuestArrival(plan.chosen_guest_id, getState());
+        handleGuestArrival(resolveGostArrival(plan.chosen_guest_id));
       }
     }, delay * 1000);
   }
@@ -478,24 +479,22 @@ function _tickMicro(dt) {
 
   // 3. Off-grid baterija se prazni
   const drainPerSec = calcCurrentDrain();
-  tickBattery(drainPerSec * dt, getDashboardState());
+  tickBattery(dt, drainPerSec);
 
   // 4. Chat generacija po platformama
   const momentum = getAllMomentum();
-  tickChat(dt, alloc, momentum);
+  tickChat(getDashboardState().elapsed || 0, { platform_alloc: alloc }, isTutorialMode());
 
   // 5. Platform engagement krive
   const currentDs = getDashboardState();
-  for (const platform of ['ig', 'tiktok', 'youtube']) {
-    if ((alloc[platform] || 0) > 0) {
-      calcPlatformEngagement(
-        platform,
-        currentDs.elapsed || 0,
-        alloc[platform],
-        momentum[platform] || 0.2
-      );
-    }
-  }
+  calcPlatformEngagement(
+    currentDs.elapsed || 0,
+    currentDs.signal || 100,
+    getAllMomentum(),
+    currentDs.gostArrived || false,
+    plan.format || 'dj_lajv',
+    alloc
+  );
 
   // 6. TikTok spike detekcija (samo jednom)
   if (hasTiktokSpike() && !currentDs.tiktokSpikeTriggered) {
@@ -506,15 +505,16 @@ function _tickMicro(dt) {
   }
 
   // 7. Alarm generacija
-  const freshDs = getDashboardState();
-  const newAlarm = tryGenerateAlarm(freshDs.elapsed || 0, freshDs);
+  const escalationBonuses = getEscalationBonuses();
+  const newAlarm = tryGenerateAlarm(escalationBonuses);
   if (newAlarm) _handleNewAlarm(newAlarm);
 
-  // 8. Tick alarm tajmera (miss expired)
-  tickAlarms(dt);
-
-  // 9. Alarm escalacija (cross-alarm lanci)
-  processEscalation(getDashboardState());
+  // 8. Tick alarm tajmera i procesi expired
+  const expiredIds = tickAlarms(dt);
+  for (const id of expiredIds) {
+    const alarm = missAlarm(id);
+    if (alarm) processEscalation(alarm);
+  }
 
   // 10. EQ window tick
   if (isEqActive()) {
@@ -525,7 +525,7 @@ function _tickMicro(dt) {
   }
 
   // 11. Guest standout event (random window tokom emisije)
-  const standout = tickGuestStandout(dt, plan.chosen_guest_id);
+  const standout = tickGuestStandout(getDashboardState().elapsed || 0, plan.format || 'dj_lajv');
   if (standout && !getDashboardState().guestStandoutDone) {
     updateDashboardState({ guestStandoutDone: true });
     _injectGuestStandoutChat(standout, plan.chosen_guest_id);
@@ -1039,6 +1039,14 @@ function _wireSystemEvents() {
 
   on(EVENTS.SIGNAL_DROP, () => {
     if (!_emisijaEnded) flashScreen('signal');
+  });
+
+  on(EVENTS.GUEST_ARRIVED, () => {
+    updateDashboardState({ gostArrived: true });
+  });
+
+  on(EVENTS.GUEST_NOSHOW, () => {
+    updateDashboardState({ gostArrived: false });
   });
 
   on(EVENTS.ACHIEVEMENT_UNLOCKED, (ac) => {
