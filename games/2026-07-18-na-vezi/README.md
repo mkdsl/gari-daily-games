@@ -49,7 +49,7 @@ Pa prelaziš u kontrolnu sobu uživo (8 minuta emisije): signal osciluje, chat s
 - **CSS:** 1932 linija (5 fajlova)
 - **Stack:** Vanilla JS ES6 moduli, DOM rendering, Web Audio API
 - **Mobile:** Touch-first (tap alarmove, EQ slider, menu navigacija)
-- **Beta score:** 8.2/10 (kod review, iter 3 post-fix)
+- **Beta score:** 8.5/10 (kod review, iter 5 — 9 CRITICAL + 8 MEDIUM rešeno u 4 fix kruga)
 
 ---
 
