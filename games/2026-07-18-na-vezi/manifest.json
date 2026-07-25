@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-07-18-na-vezi/",
   "brand_serves": ["guncati", "mkdslend", "kluboslavija"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Bootstrap — wires macro→micro→meta petlju, RAF game loop, sve screen tranzicije",
     "src/config.js": "GAME_CONFIG, EQUIPMENT (18 stavki), FORMATS (3), ACHIEVEMENTS (14), helper funkcije",
@@ -55,11 +55,12 @@
     "index.html": "Ulazna tačka — CSS linkovi, html2canvas CDN, #app div, script type=module src=main.js"
   },
   "line_counts": {
-    "total_js": 6900,
+    "total_js": 6928,
     "total_css": 1932
   },
   "beta_score": 1.2,
   "beta_score_iter2": 5.3,
-  "post_fix_score": null,
-  "sef_signoff": false
+  "beta_score_iter3": 8.2,
+  "post_fix_score": 8.2,
+  "sef_signoff": true
 }

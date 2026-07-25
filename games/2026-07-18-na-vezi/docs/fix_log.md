@@ -49,6 +49,32 @@ Jedan typo u ~50 modula reprodukuje prazan crn ekran bez traga. Nema `try/catch`
 
 ---
 
-## Fajlovi promenjeni
+## Fajlovi promenjeni (iter 1)
 - `src/audio.js` — dodato `export` na `startAmbientPad`
 - `src/main.js` — prošireni importi, prepisan `_renderMacroStep`, fiksovano `initDashboardState`, signal recovery rate, timer duration
+
+---
+
+## Fix Krug 2 — 2026-07-25 (MEDIUM Naming Mismatches)
+
+**Triggered by:** sef_signoff.md Opcija A, šef politika "bez mene", trigger routing "nastavi polish"
+**Beta iter 2 score:** 5.3/10 — 3 MEDIUM naming mismatch u main.js
+
+### M3 — Platform allocation ignorisana u emisiji (REŠEN)
+**Uzrok:** `plan.platformAlloc` ne postoji — ispravno polje je `plan.platform_alloc`. Fallback `{}` znači da chat i engagement sistemi dobijaju 0% za sve platforme.
+**Fix:** 3 zamene u `src/main.js` (linije 345, 470, 572): `plan.platformAlloc` → `plan.platform_alloc`
+
+### M4 — Gost nikad ne dolazi (REŠEN)
+**Uzrok:** `plan.guest` ne postoji — ispravno polje je `plan.chosen_guest_id`. Uslov `if (plan.guest)` uvek false → `handleGuestArrival` nikad pozvan. `tickGuestStandout` dobija `undefined` → standout event nikad ne pali.
+**Fix:** 5 zamena u `src/main.js` (linije 353, 416, 420, 528, 531): `plan.guest` → `plan.chosen_guest_id`
+
+### M5 — Battery meter statičan (REŠEN)
+**Uzrok:** `ds.offgridCapacity` ne postoji u dashboard state — ispravno polje je `ds.offgrid`. `renderOffgridMeter` dobijao fallback 80 umesto stvarnog stanja baterije.
+**Fix:** 1 zamena u `src/main.js` (linija 588): `ds.offgridCapacity` → `ds.offgrid`
+
+### Bonus — Lock-in summary pokazivao pogrešan offgrid % (REŠEN)
+**Uzrok:** `plan.offgridCapacity` ne postoji — ispravno polje je `plan.weekly_capacity`.
+**Fix:** 1 zamena u `src/main.js` (linija 354): `plan.offgridCapacity` → `plan.weekly_capacity`
+
+## Fajlovi promenjeni (iter 2)
+- `src/main.js` — 10 naming mismatch zamena (svi u jednom fajlu)

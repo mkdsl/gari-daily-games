@@ -342,7 +342,7 @@ function _showLockin(plan) {
   const summaryEl = document.getElementById('lockin-plan-summary');
 
   if (summaryEl && plan) {
-    const alloc = plan.platformAlloc || {};
+    const alloc = plan.platform_alloc || {};
     const formatName = plan.format ? (plan.format.replace('_', ' ').toUpperCase()) : '--';
     summaryEl.innerHTML = `
       <div class="lockin-row"><span class="lockin-key">Format</span><strong>${formatName}</strong></div>
@@ -350,8 +350,8 @@ function _showLockin(plan) {
         <span class="lockin-key">Platforme</span>
         <span>IG ${alloc.ig || 0}% · TT ${alloc.tiktok || 0}% · YT ${alloc.youtube || 0}%</span>
       </div>
-      ${plan.guest ? `<div class="lockin-row"><span class="lockin-key">Gost</span><strong>${plan.guest}</strong></div>` : ''}
-      <div class="lockin-row"><span class="lockin-key">Off-grid</span><span>${Math.round(plan.offgridCapacity || 80)}%</span></div>
+      ${plan.chosen_guest_id ? `<div class="lockin-row"><span class="lockin-key">Gost</span><strong>${plan.chosen_guest_id}</strong></div>` : ''}
+      <div class="lockin-row"><span class="lockin-key">Off-grid</span><span>${Math.round(plan.weekly_capacity || 80)}%</span></div>
     `;
   }
 
@@ -413,11 +413,11 @@ function _startMicro(plan) {
   playOnAirJingle();
 
   // Gost dolazak (30-90s kašnjenje — simulira "ušao za kulisu")
-  if (plan.guest) {
+  if (plan.chosen_guest_id) {
     const delay = 30 + Math.floor(Math.random() * 60);
     setTimeout(() => {
       if (!_emisijaEnded) {
-        handleGuestArrival(plan.guest, getState());
+        handleGuestArrival(plan.chosen_guest_id, getState());
       }
     }, delay * 1000);
   }
@@ -467,7 +467,7 @@ function _tickMicro(dt) {
   if (!ds || _emisijaEnded) return;
   const state = getState();
   const plan = _currentPlan || ds.plan || {};
-  const alloc = plan.platformAlloc || { ig: 100, tiktok: 0, youtube: 0 };
+  const alloc = plan.platform_alloc || { ig: 100, tiktok: 0, youtube: 0 };
 
   // 1. Timer napreduje
   tickTime(dt);
@@ -525,10 +525,10 @@ function _tickMicro(dt) {
   }
 
   // 11. Guest standout event (random window tokom emisije)
-  const standout = tickGuestStandout(dt, plan.guest);
+  const standout = tickGuestStandout(dt, plan.chosen_guest_id);
   if (standout && !getDashboardState().guestStandoutDone) {
     updateDashboardState({ guestStandoutDone: true });
-    _injectGuestStandoutChat(standout, plan.guest);
+    _injectGuestStandoutChat(standout, plan.chosen_guest_id);
   }
 
   // 12. Periodičan save (svake 60s)
@@ -569,7 +569,7 @@ function _renderMicro() {
   if (!ds) return;
   const state = getState();
   const plan = _currentPlan || ds.plan || {};
-  const alloc = plan.platformAlloc || { ig: 100, tiktok: 0, youtube: 0 };
+  const alloc = plan.platform_alloc || { ig: 100, tiktok: 0, youtube: 0 };
 
   // Mini top bar — kapital i publika
   const capEl = document.getElementById('micro-capital');
@@ -585,7 +585,7 @@ function _renderMicro() {
 
   // Off-grid meter
   renderOffgridMeter(
-    ds.offgridCapacity !== undefined ? ds.offgridCapacity : (state.base_offgrid_capacity || 80),
+    ds.offgrid !== undefined ? ds.offgrid : (state.base_offgrid_capacity || 80),
     state.base_offgrid_capacity || 100,
     state.current_weather_band || 'prosecno'
   );
