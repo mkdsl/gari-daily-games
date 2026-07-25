@@ -31,7 +31,7 @@ import {
 } from './micro/dashboard-state.js';
 import { passiveSignalRecover, resolveSignalAction } from './micro/signal-system.js';
 import {
-  tryGenerateAlarm, resolveAlarm, tickAlarms, missAlarm
+  tryGenerateAlarm, resolveAlarm, tickAlarms, missAlarm, addActiveAlarm
 } from './micro/alarm-generator.js';
 import { resetEscalation, processEscalation, processResolution, getEscalationBonuses } from './micro/alarm-escalation.js';
 import {
@@ -63,7 +63,7 @@ import {
 } from './ui/tutorial-mode.js';
 import { renderReplayScreen } from './ui/replay-screen.js';
 import { initOffgridMeter } from './ui/offgrid-meter.js';
-import { resolveGostArrival } from './content/gost-roster.js';
+import { resolveGostArrival, getGostProfile } from './content/gost-roster.js';
 
 /** @type {number|null} RAF handle za micro loop */
 let _rafId = null;
@@ -487,7 +487,7 @@ function _tickMicro(dt) {
 
   // 5. Platform engagement krive
   const currentDs = getDashboardState();
-  calcPlatformEngagement(
+  const engResult = calcPlatformEngagement(
     currentDs.elapsed || 0,
     currentDs.signal || 100,
     getAllMomentum(),
@@ -495,6 +495,7 @@ function _tickMicro(dt) {
     plan.format || 'dj_lajv',
     alloc
   );
+  if (engResult) updateDashboardState({ engagement: engResult });
 
   // 6. TikTok spike detekcija (samo jednom)
   if (hasTiktokSpike() && !currentDs.tiktokSpikeTriggered) {
@@ -528,7 +529,12 @@ function _tickMicro(dt) {
   const standout = tickGuestStandout(getDashboardState().elapsed || 0, plan.format || 'dj_lajv');
   if (standout && !getDashboardState().guestStandoutDone) {
     updateDashboardState({ guestStandoutDone: true });
-    _injectGuestStandoutChat(standout, plan.chosen_guest_id);
+    const standoutMoment = getStandoutMoment(plan.chosen_guest_id);
+    const standoutProfile = getGostProfile(plan.chosen_guest_id);
+    _injectGuestStandoutChat(
+      standoutMoment?.note || 'Gost oduševljava!',
+      standoutProfile?.name || 'Gost'
+    );
   }
 
   // 12. Periodičan save (svake 60s)
@@ -611,22 +617,17 @@ function _renderMicro() {
   // Engagement po platformama
   const engagement = {};
   for (const p of ['ig', 'tiktok', 'youtube']) {
-    if ((alloc[p] || 0) > 0) {
-      engagement[p] = calcOverallEngagement(p) || 0;
-    } else {
-      engagement[p] = 0;
-    }
+    engagement[p] = (alloc[p] || 0) > 0 ? (ds.engagement?.[p] ?? 0) : 0;
   }
   renderEngagement(engagement);
 
-  // Alarm timer bars (event delegation — update fill)
+  // Alarm timer bars — čitaj timeRemaining/timeLimit direktno iz activeAlarms
   const overlay = document.getElementById('alarm-overlay');
-  if (overlay && ds.alarmTimers) {
+  if (overlay) {
     overlay.querySelectorAll('[data-alarm-id]').forEach(card => {
       const id = card.dataset.alarmId;
-      const rem = ds.alarmTimers[id];
-      const lim = ds.alarmLimits ? ds.alarmLimits[id] : 30;
-      if (rem !== undefined) updateAlarmTimer(id, rem, lim || 30);
+      const alarmObj = ds.activeAlarms?.find(a => a.id === id);
+      if (alarmObj) updateAlarmTimer(id, alarmObj.timeRemaining, alarmObj.timeLimit || 30);
     });
   }
 
@@ -717,9 +718,9 @@ function _handleAlarmAction(alarmId, action) {
   if (action === 'diagnose' || action === 'eq_fix') {
     // Pokreni EQ minigame za feedback_glitch
     if (!isEqActive()) startEqMinigame();
-    resolveAlarm(alarmId, action, ds);
+    const resolvedEq = resolveAlarm(alarmId, action);
     removeAlarmCard(alarmId);
-    processResolution(alarmId, action, ds);
+    if (resolvedEq) processResolution(resolvedEq);
     return;
   }
 
@@ -734,9 +735,9 @@ function _handleAlarmAction(alarmId, action) {
     resolveSignalAction('push', ds);
   }
 
-  resolveAlarm(alarmId, action, ds);
+  const resolved = resolveAlarm(alarmId, action);
   removeAlarmCard(alarmId);
-  processResolution(alarmId, action, ds);
+  if (resolved) processResolution(resolved);
   playSuccessChime();
 }
 
@@ -749,6 +750,7 @@ function _handleNewAlarm(alarm) {
   if (!overlay) return;
 
   renderAlarm(alarm, overlay);
+  addActiveAlarm(alarm);
 
   if (alarm.type === 'battery_critical') {
     flashScreen('battery');

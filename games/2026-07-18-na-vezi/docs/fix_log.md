@@ -164,3 +164,67 @@ Dodat import: `missAlarm` iz `alarm-generator.js`, `getEscalationBonuses` iz `al
 
 ## Fajlovi promenjeni (iter 3)
 - `src/main.js` — svi fiksevi u jednom fajlu (CRITICAL #1–#7)
+
+---
+
+## Fix Krug 4 — 2026-07-25 (2 CRITICAL + 3 MEDIUM)
+
+**Triggered by:** Beta Trio iter 4 (score 3.0/10) — verifikacija iter 3 fikseva uspešna, ali temeljniji pregled `_handleNewAlarm` i `_handleAlarmAction` blokova otkrio 2 nova CRITICAL-a.
+
+### CRITICAL #8 — `addActiveAlarm` nikad nije pozvan → `ds.activeAlarms` uvek prazno (REŠEN)
+
+**Uzrok:** `_handleNewAlarm` rendovao alarm kartu, ali nije pozivao `addActiveAlarm(alarm)`. Posledica: `tickAlarms` iterira prazan niz → timeout eskalacija nikad ne radi; `resolveAlarm` ne može da nađe alarm u stanju → `alarmsResolved` nikad ne raste; cap od 3 simultana alarma se ne primenjuje. Vizuelni/audio feedback alarmima radio ispravno, ali state je bio nekonzistentan.
+
+**Fix:** Dodat import `addActiveAlarm` iz `alarm-generator.js`. Jedna linija u `_handleNewAlarm` posle `renderAlarm`:
+```js
+addActiveAlarm(alarm);
+```
+
+### CRITICAL #9 — `processResolution` prima string ID umesto alarm objekta → eskalacioni bonusi nikad ne opadaju (REŠEN)
+
+**Uzrok:** `_handleAlarmAction` pozivao `processResolution(alarmId, action, ds)` sa string ID-om. Pravi potpis: `processResolution(resolvedAlarm)` prima alarm objekat. `resolvedAlarm.type === undefined` → eskalacioni bonusi se akumuliraju jednosmerno (rastu na miss, nikad ne opadaju na resolve).
+
+**Fix:** Oba poziva u `_handleAlarmAction` prepravljena da hvate return vrednost `resolveAlarm` i proslede je:
+```js
+const resolved = resolveAlarm(alarmId, action);
+removeAlarmCard(alarmId);
+if (resolved) processResolution(resolved);
+```
+
+### MEDIUM #1 — `calcPlatformEngagement` povratna vrednost odbačena → iste eng. vrednosti za sve platforme (REŠEN)
+
+**Uzrok:** `calcPlatformEngagement(...)` pozivana u `_tickMicro` ali povratna vrednost `{ig,tiktok,youtube}` ignorisana. `_renderMicro` koristio `calcOverallEngagement(p)` koji ignoriše `p` parametar → iste vrednosti za sve platforme.
+
+**Fix:** Sačuvano u state + render čita iz state:
+```js
+// _tickMicro:
+const engResult = calcPlatformEngagement(...);
+if (engResult) updateDashboardState({ engagement: engResult });
+
+// _renderMicro:
+engagement[p] = (alloc[p] || 0) > 0 ? (ds.engagement?.[p] ?? 0) : 0;
+```
+
+### MEDIUM #2 — Alarm countdown bar-ovi statični (REŠEN)
+
+**Uzrok:** `_renderMicro` uslov `if (overlay && ds.alarmTimers)` uvek `false` jer `alarmTimers` nije inicijalizovano. Alarm kartica ne pokazuje odbrojavanje.
+
+**Fix (opcija B):** Timer bar-ovi čitaju `timeRemaining`/`timeLimit` direktno iz `ds.activeAlarms`:
+```js
+const alarmObj = ds.activeAlarms?.find(a => a.id === id);
+if (alarmObj) updateAlarmTimer(id, alarmObj.timeRemaining, alarmObj.timeLimit || 30);
+```
+
+### MEDIUM #3 — Standout chat prikazuje "💫 g2: true" (REŠEN)
+
+**Uzrok:** `tickGuestStandout` vraća `boolean`, ali kod ga prosleđivao kao tekst poruke. Ime gosta prosleđivano kao raw ID ('g2') umesto `profile.name`.
+
+**Fix:** Dodat import `getGostProfile` iz `gost-roster.js`. Koristi `getStandoutMoment(gostId).note` za tekst i `getGostProfile(gostId).name` za ime:
+```js
+const standoutMoment = getStandoutMoment(plan.chosen_guest_id);
+const standoutProfile = getGostProfile(plan.chosen_guest_id);
+_injectGuestStandoutChat(standoutMoment?.note || 'Gost oduševljava!', standoutProfile?.name || 'Gost');
+```
+
+## Fajlovi promenjeni (iter 4)
+- `src/main.js` — svi fiksevi (CRITICAL #8, #9, MEDIUM #1, #2, #3)
