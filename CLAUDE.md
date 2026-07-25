@@ -57,6 +57,12 @@ Pre primene routing tabele iz KORAK 0, proveri da li `docs/` artefakti najnovije
   - Commit: `fix(<naziv-igre>): manifest/docs sync (KORAK 0a)`, push.
   - `sef_signoff` i `status` ostaju netaknuti — KORAK 6.75/7 i dalje čekaju šefa.
 - Ako `docs/sef_signoff.md` ima čekirano "OK za release" ALI `manifest.sef_signoff != true`:
+  - **Proveri `[x]` u fajlu, ne samo postojanje fajla:**
+    ```bash
+    grep -q '\[x\]' docs/sef_signoff.md && echo "approved" || echo "not-approved"
+    ```
+  - Nastavi na KORAK 7 SAMO ako `grep` vrati "approved" (tj. bar jedan `[x]` postoji).
+  - Samo postojanje `sef_signoff.md` bez `[x]` = šef još nije odlučio → čekaj, ne release-uj.
   - Tretiraj kao odobren KORAK 6.75 — nastavi na KORAK 7 (Finale) bez obzira na trigger tip.
 - Ako nijedan drift nije nađen — preskoči, idi na routing tabelu ispod.
 
