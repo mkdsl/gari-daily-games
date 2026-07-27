@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-07-26-guncati-grand/",
   "brand_serves": ["guncati", "kluboslavija", "mkdslend"],
   "stage": "impl",
-  "status": "failed",
+  "status": "in_progress",
   "modules": {
     "src/main.js": "Bootstrap, game loop, screen routing (MENU→MACRO→MICRO→RESULT→FINALE→SCORE)",
     "src/config.js": "Sve konstante: GC ekonomija, formule, volunteer tipovi, building tipovi, finale eventi",
@@ -46,8 +46,11 @@
     "styles/theme.css": "Guncati paleta: #1a1208 / #8B4513 / #2d5016 / #FFD700 / #FF6B35 / #E8D5B0"
   },
   "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+    "total_js": 6307,
+    "total_css": 1455,
+    "total_html": 152,
+    "grand_total": 7914,
+    "module_count": 32
   },
   "beta_score": null,
   "beta_score_iter2": null,

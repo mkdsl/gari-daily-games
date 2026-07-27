@@ -1,0 +1,122 @@
+/* Guncati Grand — theme.css: brand palette, CSS custom properties */
+
+:root {
+  /* ── Guncati Brand Palette ── */
+  --c-bg:      #1a1208;  /* tamna zemlja */
+  --c-earth:   #8B4513;  /* glina, drvo */
+  --c-forest:  #2d5016;  /* šuma, trava */
+  --c-gold:    #FFD700;  /* festival svetla, primary accent */
+  --c-fire:    #FF6B35;  /* zalazak sunca, CTA */
+  --c-sand:    #E8D5B0;  /* pesak, tekst */
+  --c-panel:   #2a1f10;  /* panel pozadina */
+  --c-border:  #5a3a1a;  /* border */
+
+  /* ── Extended palette ── */
+  --c-forest-light: #3d6b20;
+  --c-earth-dark:   #5a2d00;
+  --c-gold-dim:     #a8900a;
+  --c-fire-dark:    #c04000;
+  --c-sand-dim:     #a89070;
+  --c-success:      #4caf50;
+  --c-warning:      #ff9800;
+  --c-error:        #f44336;
+  --c-info:         #2196f3;
+
+  /* ── Spacing ── */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+
+  /* ── Border radius ── */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+
+  /* ── Transitions ── */
+  --transition-fast:   0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow:   0.4s ease;
+
+  /* ── Font sizes ── */
+  --fs-xs:  0.75rem;
+  --fs-sm:  0.875rem;
+  --fs-md:  1rem;
+  --fs-lg:  1.125rem;
+  --fs-xl:  1.25rem;
+  --fs-2xl: 1.5rem;
+  --fs-3xl: 2rem;
+  --fs-4xl: 3rem;
+  --fs-5xl: 4rem;
+}
+
+/* ── Brand text accents ── */
+.brand-guncati  { color: var(--c-forest); }
+.brand-kluba    { color: var(--c-fire); }
+.brand-mkdslend { color: var(--c-gold); }
+
+/* ── WB color scale ── */
+.wb-critical { color: #f44336; }
+.wb-low      { color: #ff9800; }
+.wb-ok       { color: var(--c-sand); }
+.wb-good     { color: #8bc34a; }
+.wb-great    { color: #4caf50; }
+.wb-ts       { color: var(--c-info); } /* Tom Sawyer active */
+
+/* ── Effectiveness badge colors ── */
+.eff-great   { color: #4caf50; }
+.eff-good    { color: #8bc34a; }
+.eff-neutral { color: var(--c-sand-dim); }
+.eff-bad     { color: var(--c-warning); }
+.eff-terrible{ color: var(--c-error); }
+
+/* ── HUD urgency states ── */
+.urgency-low      { color: var(--c-sand); }
+.urgency-medium   { color: var(--c-gold); }
+.urgency-high     { color: var(--c-fire); }
+.urgency-critical { color: var(--c-error); animation: pulse 0.8s ease-in-out infinite; }
+
+/* ── Prestige gold shine ── */
+.prestige-active {
+  border-color: var(--c-gold) !important;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+}
+
+/* ── Tom Sawyer active glow ── */
+.ts-active {
+  color: var(--c-info) !important;
+  text-shadow: 0 0 8px rgba(33, 150, 243, 0.6);
+}
+
+/* ── Building level dot colors ── */
+.level-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  background: var(--c-border);
+  border: 1px solid var(--c-earth);
+  margin: 0 2px;
+}
+
+.level-dot.filled {
+  background: var(--c-gold);
+  border-color: var(--c-gold);
+  box-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
+}
+
+/* ── Win tier colors ── */
+.tier-legend { color: var(--c-gold); }
+.tier-decent { color: var(--c-forest-light); }
+.tier-fail   { color: var(--c-earth); }
+
+/* ── Share card brand footer ── */
+.brand-footer {
+  font-size: var(--fs-xs);
+  color: var(--c-sand-dim);
+  text-align: center;
+  padding: var(--space-sm);
+  border-top: 1px solid var(--c-border);
+}

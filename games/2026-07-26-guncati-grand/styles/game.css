@@ -1,0 +1,387 @@
+/* Guncati Grand — game.css: animations, building grow, WB pulse, crowd surge, event flash */
+
+/* ── HUD ── */
+.hud-left, .hud-center, .hud-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hud-left { flex: 0 0 auto; }
+.hud-center { flex: 1; flex-wrap: wrap; justify-content: center; }
+.hud-right { flex: 0 0 auto; flex-wrap: wrap; }
+
+.hud-week {
+  font-weight: bold;
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+.hud-progress {
+  width: 80px;
+  height: 6px;
+  background: var(--c-earth-dark);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.hud-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-forest), var(--c-gold));
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.hud-gc {
+  font-weight: bold;
+  font-size: var(--fs-lg);
+  color: var(--c-gold);
+  transition: color 0.2s;
+}
+
+.hud-gc.hud-gc-low { color: var(--c-error); }
+
+@keyframes gc-flash {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); color: var(--c-error); }
+}
+
+.hud-gc-flash { animation: gc-flash 0.3s ease; }
+
+.hud-wb-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hud-wb { font-size: var(--fs-sm); white-space: nowrap; }
+
+.hud-wb-track {
+  width: 60px;
+  height: 6px;
+  background: var(--c-earth-dark);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.hud-wb-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease, background 0.4s ease;
+}
+
+.hud-ts {
+  font-size: var(--fs-xs);
+  background: var(--c-info);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.hud-bld { font-size: 1.1rem; position: relative; }
+.hud-bld sub { font-size: 0.55rem; position: absolute; bottom: -2px; right: -4px; color: var(--c-gold); }
+.hud-reputation { font-size: var(--fs-xs); color: var(--c-gold); }
+
+/* ── FARM GRID ── */
+.farm-grid-inner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 6px;
+  aspect-ratio: 1;
+  width: 100%;
+}
+
+.farm-cell {
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: var(--c-earth-dark);
+  border: 1px solid var(--c-border);
+  transition: all 0.3s ease;
+  padding: 6px;
+  min-height: 60px;
+}
+
+.farm-cell-built {
+  border-color: var(--c-forest);
+  background: rgba(45, 80, 22, 0.3);
+}
+
+.farm-cell-empty {
+  border-style: dashed;
+  border-color: var(--c-earth);
+}
+
+.cell-emoji { font-size: 1.5rem; }
+.cell-level { font-size: 10px; color: var(--c-gold); font-weight: bold; }
+.cell-terrain { font-size: 1.2rem; opacity: 0.4; }
+.cell-large  { background: rgba(45,80,22,0.4); border-width: 2px; }
+.cell-medium { background: rgba(45,80,22,0.25); }
+.farm-cell-empty.farm-cell-empty { background: var(--c-earth-dark); }
+
+@keyframes building-pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.cell-upgrade-pulse { animation: building-pop 0.6s ease-out; }
+
+/* ── WB PULSE ── */
+@keyframes wb-pulse-anim {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4); }
+  50%       { box-shadow: 0 0 0 12px rgba(33, 150, 243, 0); }
+}
+
+.wb-pulse-active { animation: wb-pulse-anim 1s ease-out; }
+
+/* ── FINALE HUD ── */
+.finale-header {
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.finale-title { color: var(--c-gold); flex: 1; font-size: var(--fs-xl); }
+
+.finale-timer-wrap { display: flex; align-items: center; gap: 8px; }
+.timer-label { font-size: var(--fs-xs); color: var(--c-sand-dim); }
+
+.finale-timer {
+  font-size: var(--fs-3xl);
+  font-weight: bold;
+  color: var(--c-gold);
+  font-variant-numeric: tabular-nums;
+  min-width: 90px;
+  text-align: right;
+  transition: color 0.3s;
+}
+
+.finale-timer.timer-urgent { color: var(--c-error); animation: pulse 0.6s ease-in-out infinite; }
+
+.finale-progress-track {
+  width: 100%;
+  height: 6px;
+  background: var(--c-earth-dark);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.finale-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-forest), var(--c-fire), var(--c-gold));
+  border-radius: 3px;
+  transition: width 1s linear;
+}
+
+/* ── METERS ── */
+.meter-panel { margin-bottom: 12px; }
+
+.meter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.meter-label { font-size: var(--fs-sm); font-weight: bold; }
+.meter-value { font-size: var(--fs-xl); font-weight: bold; color: var(--c-gold); }
+.meter-sublabel { font-size: var(--fs-xs); color: var(--c-sand-dim); display: block; margin-top: 4px; }
+
+.meter-track {
+  height: 16px;
+  background: var(--c-earth-dark);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.5s ease, background 0.3s ease;
+}
+
+.mood-bar { position: relative; }
+.hype-bar { position: relative; }
+
+/* ── DJ TRANSITION ── */
+.dj-transition-panel {
+  margin-top: 12px;
+}
+
+.btn-transition {
+  width: 100%;
+  padding: 14px;
+  background: rgba(33,150,243,0.15);
+  border: 2px solid rgba(33,150,243,0.3);
+  color: #90caf9;
+  border-radius: var(--radius-lg);
+  font-size: var(--fs-md);
+  transition: all var(--transition-fast);
+}
+
+.btn-transition.btn-transition-active {
+  background: rgba(33,150,243,0.3);
+  border-color: var(--c-info);
+  color: white;
+  box-shadow: 0 0 16px rgba(33,150,243,0.4);
+}
+
+.transition-progress {
+  height: 6px;
+  background: var(--c-earth-dark);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.transition-fill {
+  height: 100%;
+  background: var(--c-info);
+  border-radius: 3px;
+  width: 100%;
+}
+
+/* ── EVENT CARD ── */
+.event-card {
+  background: var(--c-panel);
+  border: 2px solid var(--c-fire);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 20px rgba(255,107,53,0.3);
+}
+
+.event-card-header h3 { color: var(--c-gold); margin-bottom: 6px; }
+.event-card-header p  { color: var(--c-sand-dim); font-size: var(--fs-sm); margin-bottom: 12px; }
+
+.event-urgent-badge {
+  display: inline-block;
+  background: var(--c-fire);
+  color: var(--c-bg);
+  font-size: var(--fs-xs);
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+
+.event-options { display: flex; flex-direction: column; gap: 8px; }
+
+.btn-event-option {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  text-align: left;
+  color: var(--c-sand);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: var(--fs-sm);
+}
+
+.btn-event-option:hover { border-color: var(--c-gold); background: rgba(255,215,0,0.05); }
+.opt-desc { font-size: var(--fs-xs); color: var(--c-sand-dim); }
+
+/* ── FINALE STATS ── */
+.finale-stats { margin-bottom: 12px; }
+.stat-row-finale {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: var(--fs-sm);
+  border-bottom: 1px solid rgba(90,58,26,0.3);
+}
+
+/* ── EVENT LOG ── */
+.event-log h4 { color: var(--c-gold); margin-bottom: 8px; font-size: var(--fs-sm); }
+.event-log-list { max-height: 200px; overflow-y: auto; }
+
+.log-entry {
+  font-size: var(--fs-xs);
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(90,58,26,0.2);
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.log-time { color: var(--c-sand-dim); flex-shrink: 0; }
+.log-title { color: var(--c-sand); }
+.log-detail { color: var(--c-sand-dim); font-style: italic; }
+
+.log-success .log-title { color: var(--c-success); }
+.log-warning .log-title { color: var(--c-warning); }
+.log-event .log-title   { color: var(--c-fire); }
+
+/* ── DINO SLOT ── */
+.dj-slot-info { font-size: var(--fs-xs); color: var(--c-sand-dim); margin-top: 4px; }
+
+/* ── FINALE FARM ── */
+.finale-farm h4 { color: var(--c-gold); margin-bottom: 10px; }
+.farm-empty { color: var(--c-sand-dim); font-style: italic; font-size: var(--fs-sm); }
+
+.finale-farm .farm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.finale-farm .farm-cell {
+  min-height: 50px;
+  font-size: 1.2rem;
+}
+
+/* ── CROWD DOTS ── */
+.crowd-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+.crowd-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--c-border);
+}
+
+.crowd-dot-filled { background: var(--c-fire); }
+.crowd-dot-empty  { background: var(--c-earth-dark); }
+
+.crowd-label { font-size: var(--fs-xs); color: var(--c-sand-dim); }
+
+/* ── TASK HINT ── */
+.task-hint { color: var(--c-sand-dim); font-size: var(--fs-sm); font-style: italic; padding: 8px 0; }
+
+/* ── MICRO EMPTY ── */
+.micro-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 12px;
+  text-align: center;
+  color: var(--c-sand-dim);
+}
+
+.empty-icon { font-size: 3rem; }
+
+/* ── SCREEN TRANSITIONS ── */
+.screen-in  { animation: fadeIn 0.25s ease-out; }
+.screen-out { animation: fadeIn 0.25s ease-out reverse; }
