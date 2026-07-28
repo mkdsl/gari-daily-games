@@ -10,6 +10,7 @@ import { initRender } from './render.js';
 import { hasSavedGame } from './systems/checkpoint.js';
 import { CONFIG } from './config.js';
 import { createVolunteer } from './entities/volunteer.js';
+import { initAudio } from './audio.js';
 
 /** Main entry point */
 async function main() {
@@ -54,6 +55,7 @@ async function main() {
     // Fresh start
     navigateTo('MENU');
   }
+  window.dispatchEvent(new CustomEvent('guncati:ready'));
 
   // Global event handlers
   document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -119,6 +121,8 @@ function _handleMenuActions(e) {
   setState(fresh);
   saveState();
 }
+
+document.addEventListener('click', () => { initAudio(); }, { once: true });
 
 // Run when DOM is ready
 if (document.readyState === 'loading') {

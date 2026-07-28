@@ -118,8 +118,7 @@ function renderMenuScreen(container) {
   `;
 
   container.querySelector('#btn-new')?.addEventListener('click', () => {
-    const { clearSave } = require('../state.js');
-    startNewGame();
+    navigateTo('MACRO');
   });
 
   container.querySelector('#btn-continue')?.addEventListener('click', () => {
@@ -247,12 +246,7 @@ function renderScoreScreen(container) {
 /** ── Game lifecycle ── */
 
 function startNewGame() {
-  const { createInitialState } = require('../state.js');
-  import('../state.js').then(({ clearSave }) => {
-    clearSave();
-    navigateTo('MENU');
-    // Re-initialize from menu
-  });
+  navigateTo('MENU');
 }
 
 function continueGame() {
