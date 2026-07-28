@@ -74,7 +74,7 @@ function buildMacroHTML(state) {
         <div class="budget-panel panel">
           <div class="budget-total-row">
             <span>Budžet:</span>
-            <span class="budget-total" id="budget-display">500 GC</span>
+            <span class="budget-total" id="budget-display">${formatGC(state.gcBalance)} GC</span>
             <span>Preostalo:</span>
             <span class="budget-remaining" id="budget-remaining">500 GC</span>
           </div>
@@ -281,6 +281,9 @@ function updateMacroTotals(container, state) {
     remainEl.classList.toggle('remaining-low', remaining < 50);
     remainEl.classList.toggle('remaining-zero', remaining === 0);
   }
+
+  const budgetEl = container.querySelector('#budget-display');
+  if (budgetEl) budgetEl.textContent = formatGC(state.gcBalance) + ' GC';
 
   const effects = projectAllocationEffects(state.allocation, state);
 

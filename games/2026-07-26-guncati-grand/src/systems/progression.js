@@ -73,6 +73,7 @@ export function advanceWeek(microResult) {
   setState({
     week: week + 1,
     currentWB: newWB,
+    gcBalance: CONFIG.WEEKLY_BUDGET + weekRevenue,
     totalRevenue: (state.totalRevenue || 0) + weekRevenue,
     crowdSize: newCrowdSize,
     seasonCrowdCap: newCrowdCap,
