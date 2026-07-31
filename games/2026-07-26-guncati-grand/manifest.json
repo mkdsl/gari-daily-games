@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-07-26-guncati-grand/",
   "brand_serves": ["guncati", "kluboslavija", "mkdslend"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Bootstrap, game loop, screen routing (MENU→MACRO→MICRO→RESULT→FINALE→SCORE)",
     "src/config.js": "Sve konstante: GC ekonomija, formule, volunteer tipovi, building tipovi, finale eventi",
@@ -54,6 +54,9 @@
   },
   "beta_score": 7.0,
   "beta_score_iter2": 8.5,
-  "post_fix_score": null,
-  "sef_signoff": false
+  "beta_score_iter3": 7.5,
+  "post_fix_score": 9.0,
+  "sef_signoff": true,
+  "auto_released": true,
+  "auto_release_note": "KORAK 6.75 — beta_score_iter2=8.5≥8.0, svi CRITICALs fiksirani i verifikovani u beta iter 3 (CRITICAL #4 iz iter 3 fiksovan 2026-07-31). šef obavešten post-release."
 }

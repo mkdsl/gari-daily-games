@@ -66,3 +66,20 @@
 - DJ Transition dugme ostaje enabled posle smene
 - `applyAllocationEffects()` direktna mutacija state objekta
 - Finale grid 3-kolone na 500-900px ekranima (finali breakpoint)
+
+---
+
+# Post-Beta Iter 3 Fiksevi (2026-07-31)
+
+**Input:** beta_report_3.md (7.5/10, 1 CRITICAL + 1 MEDIUM[false positive])
+
+## CRITICAL #4 — Finale revenue se dvaput uračunava u final score
+
+**Fajl:** `src/systems/scoring.js` — `calcFinalScore()`, linja 19
+**Problem:** `endFinale()` dodaje `finaleRevenue` u `state.totalRevenue` pre pozivanja `_onFinaleEnd` callback-a. Zatim `calcFinalScore()` (pozvano u `_onFinaleEnd`) ponovo dodaje `finale.revenue` na `totalRevenue` — duplo računanje. Igač sa 8000 GC finale prihoda dobijao je `totalRev = seasonRevenue + 8000 + 8000` — score karta bila netačna.
+**Fix:** U `calcFinalScore()`, linja 19: `totalRev` se sada računa samo iz `state.totalRevenue` (koja već sadrži finale prihod). Uklonjeno `+ (finale?.revenue || 0)`.
+
+## MEDIUM #3 — Verifikovano: FALSE POSITIVE
+
+**Tvrdnja iz beta_report_3.md:** "Nova Sezona" dugme ne resetuje aktivni save.
+**Verifikacija:** `main.js` ima `document.addEventListener('click', _handleMenuActions, { capture: true })`. Ovaj capture listener, koji se izvršava PRE svih bubling handlera, poziva `createInitialState()` + `setState(fresh)` + `saveState()` za svaki klik na `#btn-new`. State je pravilno resetovan pre `navigateTo('MACRO')` u ui.js handleru. Nema buga.

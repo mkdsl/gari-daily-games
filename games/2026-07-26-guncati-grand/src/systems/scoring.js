@@ -15,8 +15,8 @@ export function calcFinalScore(state) {
   // 1. Crowd Happiness = crowdMood_final / 100
   const crowdHappiness = (finale?.crowdMood || 50) / 100;
 
-  // 2. Revenue = all season + finale revenue
-  const totalRev = (totalRevenue || 0) + (finale?.revenue || 0);
+  // 2. Revenue = totalRevenue already includes finale revenue (endFinale adds it before this call)
+  const totalRev = totalRevenue || 0;
   const revenueScore = Math.min(totalRev / CONFIG.REVENUE_TARGET, 1.5); // can exceed target
 
   // 3. Community Vibe = avg WB nedelje 7-10 × 2 (weighted), capped at 100
