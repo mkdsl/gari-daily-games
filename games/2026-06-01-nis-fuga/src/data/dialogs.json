@@ -11,7 +11,11 @@
           "text": "Oprostite, mi smo Kluboslavija ekipa — večeras sviramo u Toniku...",
           "next": "s1_diplomatic",
           "requires": null,
-          "effects": { "time": -5, "reputation": 2, "morale": 1 },
+          "effects": {
+            "time": -5,
+            "reputation": 2,
+            "morale": 1
+          },
           "tooltip": null
         },
         {
@@ -19,7 +23,10 @@
           "text": "U redu, platimo odmah. Koliko košta?",
           "next": "s1_pay",
           "requires": null,
-          "effects": { "time": -2, "morale": -1 },
+          "effects": {
+            "time": -2,
+            "morale": -1
+          },
           "tooltip": null
         },
         {
@@ -27,7 +34,11 @@
           "text": "[Tiho pomaknuti kombi bez objašnjenja]",
           "next": "s1_sneak",
           "requires": null,
-          "effects": { "time": -20, "patience": -2, "morale": -2 },
+          "effects": {
+            "time": -20,
+            "patience": -2,
+            "morale": -2
+          },
           "tooltip": null
         }
       ]
@@ -108,7 +119,12 @@
           "text": "Strpljivo čekati u redu kao svi.",
           "next": "s2_wait",
           "requires": null,
-          "effects": { "time": -10, "morale": 2, "reputation": 1, "flag_set": "setlista_printovana" },
+          "effects": {
+            "time": -10,
+            "morale": 2,
+            "reputation": 1,
+            "flag_set": "setlista_printovana"
+          },
           "tooltip": null
         },
         {
@@ -116,7 +132,11 @@
           "text": "Oprostite, može li nas propustiti — hitno je, event večeras...",
           "next": "s2_skip",
           "requires": null,
-          "effects": { "time": -4, "patience": -1, "morale": -1 },
+          "effects": {
+            "time": -4,
+            "patience": -1,
+            "morale": -1
+          },
           "tooltip": null
         },
         {
@@ -124,8 +144,25 @@
           "text": "Odložiti print za posle — verovatno ne treba.",
           "next": "s2_skip_print",
           "requires": null,
-          "effects": { "time": -2 },
+          "effects": {
+            "time": -2
+          },
           "tooltip": null
+        },
+        {
+          "id": "s2_d",
+          "text": "[Reputacija ≥ 3] 'Dobar dan — jeste li možda razgovarali sa Dragoljubom maloprije?'",
+          "next": "s2_rep_poznanstvo",
+          "requires": {
+            "reputation": 3
+          },
+          "effects": {
+            "time": -3,
+            "morale": 1,
+            "reputation": 1,
+            "flag_set": "setlista_printovana"
+          },
+          "tooltip": "Dostupno ako si diplomatski prošao Scene 1 (rep ≥ 3)"
         }
       ]
     },
@@ -158,7 +195,9 @@
           "text": "Hvala, idemo.",
           "next": null,
           "requires": null,
-          "effects": { "flag_set": "setlista_printovana" },
+          "effects": {
+            "flag_set": "setlista_printovana"
+          },
           "tooltip": null,
           "action": "next_scene"
         }
@@ -200,7 +239,10 @@
           "text": "Izaći napolje da uhvatim signal.",
           "next": "s3_outside",
           "requires": null,
-          "effects": { "time": -12, "patience": -2 },
+          "effects": {
+            "time": -12,
+            "patience": -2
+          },
           "tooltip": null
         },
         {
@@ -208,7 +250,10 @@
           "text": "Odložiti poziv za posle.",
           "next": "s3_delay",
           "requires": null,
-          "effects": { "time": 0, "complication": 20 },
+          "effects": {
+            "time": 0,
+            "complication": 20
+          },
           "tooltip": null
         }
       ]
@@ -288,7 +333,12 @@
           "text": "Dogovoreno! Hvala, Panta!",
           "next": null,
           "requires": null,
-          "effects": { "time": -8, "reputation": 2, "morale": 1, "flag_set": "tonika_potvrdjeno" },
+          "effects": {
+            "time": -8,
+            "reputation": 2,
+            "morale": 1,
+            "flag_set": "tonika_potvrdjeno"
+          },
           "tooltip": null,
           "action": "next_scene",
           "achievement": "soundcheck_objasnjenje"
@@ -340,7 +390,12 @@
           "text": "Naravno, ima mesta! Uskoro idemo, ajde.",
           "next": "s4_yes",
           "requires": null,
-          "effects": { "morale": 2, "reputation": 1, "time": -10, "flag_set": "bojan_happy" },
+          "effects": {
+            "morale": 2,
+            "reputation": 1,
+            "time": -10,
+            "flag_set": "bojan_happy"
+          },
           "tooltip": null
         },
         {
@@ -348,7 +403,10 @@
           "text": "Nema mesta u kombiju, ali može taxi — naručimo ti.",
           "next": "s4_taxi",
           "requires": null,
-          "effects": { "morale": 1, "time": -3 },
+          "effects": {
+            "morale": 1,
+            "time": -3
+          },
           "tooltip": null
         },
         {
@@ -356,7 +414,11 @@
           "text": "Žao mi je, Bojane — kombi je pun do vrha.",
           "next": "s4_lie",
           "requires": null,
-          "effects": { "morale": -2, "reputation": -1, "patience": -1 },
+          "effects": {
+            "morale": -2,
+            "reputation": -1,
+            "patience": -1
+          },
           "tooltip": null,
           "achievement_hidden": "niva_do_petka"
         }
@@ -423,8 +485,12 @@
           "id": "s5_a",
           "text": "Pošaljemo mejl potvrdu i reference — mi smo organizatori.",
           "next": "s5_email",
-          "requires": { "reputation": 3 },
-          "effects": { "time": -5 },
+          "requires": {
+            "reputation": 3
+          },
+          "effects": {
+            "time": -5
+          },
           "tooltip": "Treba reputacija ≥ 3"
         },
         {
@@ -432,23 +498,34 @@
           "text": "Čekati da Goran siđe i pusti nas.",
           "next": "s5_wait_goran",
           "requires": null,
-          "effects": { "time": -15 },
+          "effects": {
+            "time": -15
+          },
           "tooltip": null
         },
         {
           "id": "s5_c",
           "text": "[Pokazati print setliste od Bace Mileta]",
           "next": "s5_print",
-          "requires": { "flag": "setlista_printovana" },
-          "effects": { "time": -2, "reputation": 1 },
+          "requires": {
+            "flag": "setlista_printovana"
+          },
+          "effects": {
+            "time": -2,
+            "reputation": 1
+          },
           "tooltip": "Treba setlista printovana"
         },
         {
           "id": "s5_d",
           "text": "[Bojan izlazi i garantuje za vas]",
           "next": "s5_bojan_saves",
-          "requires": { "flag": "bojan_happy" },
-          "effects": { "time": 0 },
+          "requires": {
+            "flag": "bojan_happy"
+          },
+          "effects": {
+            "time": 0
+          },
           "tooltip": "Treba Bojanova podrška"
         }
       ]
@@ -519,6 +596,23 @@
           "effects": {},
           "tooltip": null,
           "action": "ending"
+        }
+      ]
+    },
+    "s2_rep_poznanstvo": {
+      "id": "s2_rep_poznanstvo",
+      "speaker": "Baca Mile",
+      "portrait": "bacamile_friendly",
+      "text": "Ma, Dragoljub me zvao malo pre! Kaže ‘Mile, propusti ekipu — to su kulturni ljudi.’ E moj, kad Dragoljub kaže — Mile sluša. Evo vam printa, bez reda, bez čekanja. Ali da znate — ja to ne radim svakome!",
+      "choices": [
+        {
+          "id": "s2_rp_end",
+          "text": "Hvala Baca Mile — Dragoljub je srce od čoveka!",
+          "next": null,
+          "requires": null,
+          "effects": {},
+          "tooltip": null,
+          "action": "next_scene"
         }
       ]
     }
