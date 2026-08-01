@@ -376,13 +376,13 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 **Agent:** Beta Trio (re-test posle fix-ova)
 **Input:** fix_log.md + igra ponovo
 **Output:** `docs/beta_report_2.md`
-**Gate:** Ako iter 2 nađe nove CRITICAL bugove → još jedan fix krug (Jova). Inače → šef sign-off.
+**Gate:** Ako iter 2 nađe nove CRITICAL bugove → još jedan fix krug (Jova) → `docs/beta_report_3.md` (KORAK 6.5b), upiši `beta_score_iter3` u manifest.json. KORAK 6.75 koristi `beta_score_iter3` kao poslednji score. Inače → šef sign-off.
 
 ### KORAK 6.75 — AUTO-RELEASE GATE
 
 **Auto-release uslovi (oba moraju biti ispunjena):**
-- `beta_score_iter2 >= 8.0`
-- 0 CRITICAL bugova u oba `beta_report.md`
+- Poslednji beta score (`beta_score_iter3` ako postoji u manifest.json, inače `beta_score_iter2`) >= 8.0
+- 0 CRITICAL bugova u svim `docs/beta_report*.md` fajlovima
 
 Ako **oba uslova ispunjena** → preskoči čekanje, idi direktno na KORAK 7. Šef dobija notifikaciju posle release-a. Veto: `git revert` released commita u bilo kom trenutku → igra se vraća u `polish/in_progress`.
 
