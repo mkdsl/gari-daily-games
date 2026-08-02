@@ -5,7 +5,7 @@
   "description": "Vodiš kontrolnu sobu Guncati Televizije — planiraš nedelju (format, platforme, oprema, gost, off-grid budžet), pa izvodiš emisiju uživo dok signal, chat i baterija testiraju tvoje odluke u realnom vremenu.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-07-18-na-vezi/",
   "brand_serves": ["guncati", "mkdslend", "kluboslavija"],
-  "stage": "impl",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "src/main.js": "Bootstrap — wires macro→micro→meta petlju, RAF game loop, sve screen tranzicije",
@@ -58,7 +58,7 @@
     "total_js": 6900,
     "total_css": 1932
   },
-  "beta_score": null,
+  "beta_score": 1.2,
   "beta_score_iter2": null,
   "post_fix_score": null,
   "sef_signoff": false

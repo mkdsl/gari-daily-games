@@ -21,7 +21,13 @@ import {
   renderMacroPlanningScreen, renderPrestigeScreen,
   showAchievementToast, initAchievementToast
 } from './ui.js';
-import { startPlanningSession, lockInPlan, getCurrentStep } from './macro/planning-session.js';
+import {
+  startPlanningSession, lockInPlan, getCurrentStep, getTotalSteps,
+  getDraftPlan, updateDraftPlan, nextStep, prevStep
+} from './macro/planning-session.js';
+import { setAllocation } from './macro/platform-allocation.js';
+import { buyEquipment } from './macro/equipment-shop.js';
+import { bookGuest } from './macro/guest-booking.js';
 import { resolveWeeklyOutcome } from './macro/weekly-outcome.js';
 import {
   initDashboardState, getDashboardState, updateDashboardState,
@@ -249,15 +255,10 @@ function _buildHtml(app) {
  * Prikazuje main meni
  */
 function _showMain() {
-  const state = getState();
-  const container = document.getElementById('main-screen-content');
   showScreen('main');
-  renderMainScreen(container, {
-    state,
-    onStart: _showBriefing,
-    prestigeAvailable: isPrestigeAvailable(),
-    onPrestige: () => _showPrestige()
-  });
+  // renderMainScreen(onStart) čita state/#screen-main interno (ui.js) —
+  // ne prima container/options objekat, samo onStart callback.
+  renderMainScreen(_showBriefing);
 }
 
 /**
@@ -267,20 +268,13 @@ function _showBriefing() {
   resumeAudio();
   const state = getState();
   const container = document.getElementById('briefing-content');
-  const stats = getSeasonStats();
   showScreen('briefing');
+  // renderWeeklyBriefing(screen, capacityResult, onContinue) — capacityResult
+  // treba { capacity, band } (koristi ih renderStaticCapacityPreview interno).
   renderWeeklyBriefing(container, {
-    state,
-    stats,
-    week: state.week || 1,
-    capacityInfo: {
-      capacity: state.base_offgrid_capacity || 80,
-      weatherBand: state.current_weather_band || 'prosecno'
-    },
-    prestigeAvailable: isPrestigeAvailable(),
-    onStart: _showMacro,
-    onPrestige: () => _showPrestige()
-  });
+    capacity: state.base_offgrid_capacity || 80,
+    band: state.current_weather_band || 'prosecno'
+  }, _showMacro);
 }
 
 /**
@@ -300,19 +294,29 @@ function _showMacro() {
  */
 function _renderMacroStep(container) {
   const tutMode = isTutorialMode();
-  renderMacroPlanningScreen(container, {
-    tutorialMode: tutMode,
-    tutorialBannerHtml: tutMode ? getTutorialBannerHtml() : '',
-    onNext: () => _renderMacroStep(container),
-    onPrev: () => _renderMacroStep(container),
+  const draftPlan = getDraftPlan();
+  const { index: currentStep } = getCurrentStep();
+  const totalSteps = getTotalSteps();
+
+  const callbacks = {
+    onFormat: (formatId) => updateDraftPlan({ format: formatId }),
+    onAlloc: (platform, value) => setAllocation(platform, value),
+    onEquip: (equipId) => buyEquipment(equipId),
+    onGuest: (gostId) => bookGuest(gostId),
+    onNext: () => { nextStep(); _renderMacroStep(container); },
+    onPrev: () => { prevStep(); _renderMacroStep(container); },
     onLockIn: () => {
-      const plan = lockInPlan();
-      if (plan) {
-        _currentPlan = plan;
-        _showLockin(plan);
+      const result = lockInPlan();
+      if (result.ok) {
+        _currentPlan = result.plan;
+        _showLockin(result.plan);
+      } else if (result.reason) {
+        alert(result.reason);
       }
     }
-  });
+  };
+
+  renderMacroPlanningScreen(container, draftPlan, currentStep, totalSteps, callbacks);
   applyTutorialClasses(tutMode);
 }
 
@@ -374,7 +378,10 @@ function _startMicro(plan) {
   resetEscalation();
   resetGuestRuntime();
   resetEqSession();
-  initDashboardState();
+
+  const gostInfo = { arrived: false, gostId: plan.chosen_guest_id || null };
+  const weeklyCapacity = plan.weekly_capacity || state.base_offgrid_capacity || 80;
+  initDashboardState(plan, state.equipment, gostInfo, weeklyCapacity);
 
   // Off-grid meter DOM
   const offgridContainer = document.getElementById('offgrid-meter-container');
@@ -450,8 +457,8 @@ function _tickMicro(dt) {
   tickTime(dt);
 
   // 2. Signal passive recovery (između alarmova)
-  passiveSignalRecover(dt);
-  tickSignal(dt);
+  passiveSignalRecover(GAME_CONFIG.SIGNAL_RECOVER_RATE);
+  tickSignal(GAME_CONFIG.SIGNAL_RECOVER_RATE);
 
   // 3. Off-grid baterija se prazni
   const drainPerSec = calcCurrentDrain();
@@ -571,7 +578,7 @@ function _renderMicro() {
   const elapsed = ds.elapsed || 0;
   if (elapsed !== _lastRenderedElapsed) {
     _lastRenderedElapsed = elapsed;
-    renderTimer(elapsed, GAME_CONFIG.EMISIJA_DURATION_SECONDS || 2700);
+    renderTimer(elapsed, GAME_CONFIG.EMISIJA_DURATION);
   }
 
   // Chat — nove poruke po platformama
