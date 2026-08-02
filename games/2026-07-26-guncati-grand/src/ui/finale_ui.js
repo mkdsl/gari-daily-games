@@ -191,9 +191,14 @@ function buildFinaleHTML() {
 function bindFinaleEvents(container) {
   container.querySelector('#btn-dj-transition')?.addEventListener('click', () => {
     if (!_transitionPending) return;
+    const btn = container.querySelector('#btn-dj-transition');
+    btn.disabled = true;
+    _transitionPending = false;
+    if (_transitionTimeoutId) {
+      clearTimeout(_transitionTimeoutId);
+      _transitionTimeoutId = null;
+    }
     const result = playerDJTransition();
-    updateTransitionButton({ pendingTransition: false });
-
     if (result.success) {
       addEventLogEntry('🎵 DJ Smena Savršena!', '+20 Hype', 'log-success');
     } else {
