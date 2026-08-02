@@ -4,7 +4,7 @@
 
 ### P1 — Bugovi koji oštećuju brand ili UX
 
-- [ ] P1 `src/ui/finale_ui.js` — DJ Transition dugme ostaje enabled posle smene; drugi klik može triggerovati duplu smenu (crash rizik u finale sim-u)
+- [x] P1 `src/ui/finale_ui.js` — DJ Transition crash fix: button disabled + _transitionPending cleared + timeout cancelled pre playerDJTransition() (done 2026-08-02, commit 435fc74)
 - [ ] P1 `src/ui/modals.js` — inline `onclick="closeModalGlobal()"` u HTML-u (linija ~31) nije CSP-kompatibilno; blokiraće se u strožem Content Security Policy okruženju i ostavlja globalnu funkciju kao imperativni API
 
 ### P2 — Polish koji vidno poboljšava iskustvo
