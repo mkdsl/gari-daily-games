@@ -14,7 +14,7 @@ Tim dodaje stavke direktno — trigger ih izvršava. Šef stavlja `[HOLD]` da pa
 
 ### P3 — Balance & Expansion (Dule/Iskra)
 
-- [ ] P3 `src/config.js` + `src/systems/phases.js` — Phase A pacing: smanji inicijalne cene Plastenik unlock-a za 30% ili dodaj starter bonus +5.000 din (troši se samo u prvih 5 min). Cilj: first-session igrač dođe do prve Faze A transition za ~15 min, ne 30+ (Dule)
+- [x] P3 `src/config.js` + `src/systems/phases.js` — Phase A pacing: PHASE_A_TOTAL_REVENUE 25k→12k din; first-session player dostiže Fazu A za ~15 min (done 2026-08-03, commit PENDING)
 - [ ] P3 `src/systems/prestige.js` + `src/ui/modals.js` — prestige scenario 3 ("Štrand") je placeholder — popuni Guncati Štrand narativ i drugačiji permanent bonus od scenarija 1/2 (Iskra)
 - [ ] P3 `src/content/brand_hooks.js` — dodaj 3 Guncati Avala hook-a: trigger kad `masterclass_count >= 3`, in-game notifikacija "Pravi masterclass čeka te na Guncatiju — 20. jun" (Iskra)
 
