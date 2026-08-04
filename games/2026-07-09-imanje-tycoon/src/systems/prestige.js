@@ -19,9 +19,9 @@ export const PRESTIGE_SCENARIOS = [
   {
     id: 'strandG',
     name: '🏖️ Štrand (Prestiž 2+)',
-    desc: 'Urbano imanje pored reke. Smuđ kanal mult →2.0. Paradajz +25% cena. Regulatorni troškovi.',
+    desc: 'Guncati na Štrandu — festival farma uz Dunav. Restorani i gastro budžet su tvoji prirodni kanali. Smuđ sa Štranda priča sam za sebe, paradajz prolazi pre zore. Ali Novi Sad ima inspekciju.',
     unlockCount: 2,
-    bonuses: ['Smuđ restoran mult →2.0', 'Paradajz +25% cena', '−5.000 din/sezona operating cost', 'Inspekcija 12%'],
+    bonuses: ['Smuđ restoran mult →2.0', 'Paradajz +25% cena', 'Restoran kanal otključan od starta', '−5.000 din/sezona operating cost', 'Inspekcija 12%'],
   },
 ];
 
@@ -86,6 +86,7 @@ export function getPrestigeBonusSummary(state) {
   if (p.scenario === 'strandG') {
     bonuses.push({ label: 'Štrand: Smuđ restoran', value: '×2.0 min', desc: 'Gastro segment plaća premium za smuđa' });
     bonuses.push({ label: 'Štrand: Paradajz cena', value: '+25%', desc: 'Urbana potražnja za svežim povrćem' });
+    bonuses.push({ label: 'Štrand: Restoran kanal', value: 'Od starta', desc: 'Gastro hub na Dunavu — restorani su tvoji prirodni partneri' });
     bonuses.push({ label: 'Štrand: Operating cost', value: '−5.000 din/sez', desc: 'Regulatorni i komunalni troškovi' });
   }
 
@@ -302,6 +303,12 @@ function applyScenarioBonuses(state, scenarioId) {
   } else if (scenarioId === 'strandG') {
     // Operating costs 5000 din/season handled in season end
     state._strandGOperatingCost = 5000;
+    // Unlock restoran channel at start (urban gastro hub)
+    if (!state.unlockedChannels.includes('restoran')) {
+      state.unlockedChannels.push('restoran');
+      state.channels.restoran = 15;
+      state.channels.direktna = Math.max(0, (state.channels.direktna || 100) - 15);
+    }
   }
 }
 
