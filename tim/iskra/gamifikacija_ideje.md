@@ -9,7 +9,7 @@
 
 ## PRIORITET #1 — Berba Trka (timing/rhythm, Guncati × Kluboslavija)
 
-**Status:** CONCEPT READY — detalji u `ajajaj/tim/iskra/2026-08-02.md`, sekcija "Berba Trka"
+**Status:** CONCEPT READY — lokalni GDG brief: `tim/iskra/berba_trka_gdg_brief.md` (copy-paste spreman za KORAK 1 → docs/concept.md). Originalni detalji u `ajajaj/tim/iskra/2026-08-02.md`, sekcija "Berba Trka".
 **Urgentnost:** ⚡ Berba počinje 04.08 — izlaz igre za 04–06.08 ima prirodni marketing window koji se ne ponavlja do sledeće sezone
 **Žanr:** Timing/Rhythm Puzzle (Precision Harvesting) — žanr koji GDG nije radio
 **Session target:** 10–15 min
