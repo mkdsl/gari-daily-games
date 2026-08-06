@@ -1125,10 +1125,49 @@ async function init() {
   console.log('[Na Vezi] Igra inicijalizovana. Nedelja:', getState().week || 1);
 }
 
+/* ═══════════════════ ERROR OVERLAY ═══════════════════ */
+
+function _showCriticalError(msg) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = [
+    'position:fixed', 'inset:0', 'background:#1a0808',
+    'display:flex', 'flex-direction:column', 'align-items:center',
+    'justify-content:center', 'z-index:9999', 'color:#ff6b6b',
+    'font-family:monospace', 'text-align:center', 'padding:20px'
+  ].join(';');
+  overlay.innerHTML = `
+    <div style="font-size:2rem;margin-bottom:16px;">⚠️</div>
+    <div style="font-size:1.1rem;margin-bottom:8px;color:#fff;">Greška u inicijalizaciji</div>
+    <div style="font-size:0.8rem;color:#aaa;margin-bottom:20px;max-width:400px;">${msg}</div>
+    <button onclick="location.reload()" style="background:#c0392b;color:#fff;border:none;padding:10px 28px;border-radius:4px;cursor:pointer;font-size:1rem;">Refresh</button>
+  `;
+  (document.body || document.documentElement).appendChild(overlay);
+}
+
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('[Na Vezi] Unhandled rejection:', e.reason);
+  _showCriticalError('Refresh stranicu i pokušaj ponovo.');
+});
+
+window.onerror = (_msg, _src, _line, _col, err) => {
+  console.error('[Na Vezi] Uncaught error:', err || _msg);
+  _showCriticalError('Refresh stranicu i pokušaj ponovo.');
+  return true;
+};
+
+async function _safeInit() {
+  try {
+    await init();
+  } catch (err) {
+    console.error('[Na Vezi] Init greška:', err);
+    _showCriticalError('Refresh stranicu i pokušaj ponovo.');
+  }
+}
+
 // Boot — module skripte se izvršavaju posle HTML parsiranja (defer-like),
 // pa je DOMContentLoaded često već opalio pre ovog listenera. Pokrivamo oba slučaja.
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', _safeInit);
 } else {
-  init();
+  _safeInit();
 }

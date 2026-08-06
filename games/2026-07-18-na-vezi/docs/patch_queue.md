@@ -4,7 +4,7 @@
 
 ### Nega — Tehničke ispravke
 
-- [ ] P1 `src/main.js` — dodaj top-level `try/catch` sa `console.error` i vidljivom DOM porukom (crveni overlay "Greška u inicijalizaciji — refresh") umesto crnog ekrana kad typo u bilo kom od 44 modula baci SyntaxError (LOW L2 — nije ušao u fix krug)
+- [x] P1 `src/main.js` — dodaj top-level `try/catch` sa `console.error` i vidljivom DOM porukom (crveni overlay "Greška u inicijalizaciji — refresh") umesto crnog ekrana kad typo u bilo kom od 44 modula baci SyntaxError (LOW L2 — nije ušao u fix krug) (done 2026-08-06, commit TBD)
 - [ ] P1 `src/ui.js` — zameni guest ID ("g5", "g3"...) sa `guest.name` u lock-in summary i chat standout sekciji; ID procuri na oba mesta jer ih renderuje ista helper fn (LOW iz iter 3 — harmless ali brand-oštećujuće na screenshot-ovima koje igrači šejeruju)
 - [ ] P1 `src/systems/signal.js` — signature `resolveSignalAction(type)` ne prima `ds` koji joj se šalje na svim call site-ovima; dodaj parametar ili ukloni argument iz svakog poziva da signal log ne prikazuje undefined u konzoli (LOW L1 — nije kritičan ali zabunjuje next dev kad bude dodavao signal tipove)
 - [ ] P2 `src/state.js` — dodaj migracioni guard za save-ove koji su kreirani pre `platformAlloc`/`plan.guest`/`offgridCapacity` renaiming fixa; `loadState()` treba da detektuje stari key format i shim-uje podatke umesto da vrati `undefined` i sruši macro planning na prvom load-u posle update-a (regresija od iter 2 fixa — utiče samo na igrače sa existing save-om)
@@ -33,4 +33,4 @@
 
 ## Završeni patčevi
 
-_(nema — igra upravo released)_
+- [x] P1 `src/main.js` — try/catch + error overlay (done 2026-08-06, commit TBD)
