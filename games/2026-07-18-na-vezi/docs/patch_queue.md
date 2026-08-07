@@ -5,7 +5,7 @@
 ### Nega — Tehničke ispravke
 
 - [x] P1 `src/main.js` — dodaj top-level `try/catch` sa `console.error` i vidljivom DOM porukom (crveni overlay "Greška u inicijalizaciji — refresh") umesto crnog ekrana kad typo u bilo kom od 44 modula baci SyntaxError (LOW L2 — nije ušao u fix krug) (done 2026-08-06, commit 82ad2c7)
-- [ ] P1 `src/ui.js` — zameni guest ID ("g5", "g3"...) sa `guest.name` u lock-in summary i chat standout sekciji; ID procuri na oba mesta jer ih renderuje ista helper fn (LOW iz iter 3 — harmless ali brand-oštećujuće na screenshot-ovima koje igrači šejeruju)
+- [x] P1 `src/main.js` — zameni guest ID sa `guest.name` u lock-in summary (`_showLockin` line 354: `getGostProfile(plan.chosen_guest_id)?.name || plan.chosen_guest_id`); bug bio u main.js ne ui.js (done 2026-08-07, commit 8eff2bd)
 - [ ] P1 `src/systems/signal.js` — signature `resolveSignalAction(type)` ne prima `ds` koji joj se šalje na svim call site-ovima; dodaj parametar ili ukloni argument iz svakog poziva da signal log ne prikazuje undefined u konzoli (LOW L1 — nije kritičan ali zabunjuje next dev kad bude dodavao signal tipove)
 - [ ] P2 `src/state.js` — dodaj migracioni guard za save-ove koji su kreirani pre `platformAlloc`/`plan.guest`/`offgridCapacity` renaiming fixa; `loadState()` treba da detektuje stari key format i shim-uje podatke umesto da vrati `undefined` i sruši macro planning na prvom load-u posle update-a (regresija od iter 2 fixa — utiče samo na igrače sa existing save-om)
 - [ ] P2 `src/systems/planning.js` — dodaj null check za `guest.profile` pre pristupa `.reliability` u petlji planiranja; crash je rešen ali samo za poznat set gostiju — treći-party data (buduće proširenje gost liste) može ponovo da trigger-uje isti crash
