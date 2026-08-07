@@ -351,7 +351,7 @@ function _showLockin(plan) {
         <span class="lockin-key">Platforme</span>
         <span>IG ${alloc.ig || 0}% · TT ${alloc.tiktok || 0}% · YT ${alloc.youtube || 0}%</span>
       </div>
-      ${plan.chosen_guest_id ? `<div class="lockin-row"><span class="lockin-key">Gost</span><strong>${plan.chosen_guest_id}</strong></div>` : ''}
+      ${plan.chosen_guest_id ? `<div class="lockin-row"><span class="lockin-key">Gost</span><strong>${getGostProfile(plan.chosen_guest_id)?.name || plan.chosen_guest_id}</strong></div>` : ''}
       <div class="lockin-row"><span class="lockin-key">Off-grid</span><span>${Math.round(plan.weekly_capacity || 80)}%</span></div>
     `;
   }
