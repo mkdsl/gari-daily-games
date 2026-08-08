@@ -7,56 +7,73 @@
 
 ---
 
-## PRIORITET #1 — Berba Trka (timing/rhythm, Guncati × Kluboslavija)
+## PRIORITET #1 — Put do Guncata (point-and-click narativna avantura, road trip)
 
-**Status:** CONCEPT READY — lokalni GDG brief: `tim/iskra/berba_trka_gdg_brief.md` (copy-paste spreman za KORAK 1 → docs/concept.md). Originalni detalji u `ajajaj/tim/iskra/2026-08-02.md`, sekcija "Berba Trka".
-**Urgentnost:** ⚡ Berba počinje 04.08 — izlaz igre za 04–06.08 ima prirodni marketing window koji se ne ponavlja do sledeće sezone
-**Žanr:** Timing/Rhythm Puzzle (Precision Harvesting) — žanr koji GDG nije radio
-**Session target:** 10–15 min
+> Ažurirao: Iskra 2026-08-08. Berba Trka arhivirana (⬇️ ispod) — berba window 2026 istekao 06.08. Nov PRIORITET #1.
+
+**Status:** CONCEPT READY — skeleton u nastavku, direktno za KORAK 1 → docs/concept.md
+**Urgentnost:** August = mesec planiranja pred Guncati grand finale. Igra koja vodi igrača ka lokaciji = pre-event companion. Bez sezonskog expiry-a (funkcioniše i u septembru).
+**Žanr:** Text/narrative adventure (point-and-click lite) — nije rađeno od Niš Fuge (01.06, 2 meseca). Posle 3 management/sim zaredom (Imanje, Na Vez, Guncati Grand), žanrovska diversifikacija je obavezna.
+**Session target:** 15–20 min
 **Brand serves:** guncati (primary), kluboslavija (secondary)
 
-### Core loop (za Mile/GDD)
+### Premisa
 
-- 4–6 biljaka istovremeno, svaka sa RIPENESS METER-om koji raste sopstvenim tempom
-- Meter: 🟢 Zeleno (nezrelo, minus) → 🟡 Žuto (prime zone, max poena) → 🔴 Crveno (overripe, minus)
-- Igrač klika voćku kad proceni "prime" — TIMING SCORE u ms od ulaska u prime zone
-- Paralelno: oblaci i kiša skraćuju krug (urgencija bez panic-a)
-- Prestige hook: "Drugi krug" → reset, zadrži Berba Rekord permanentno, +1 nova biljka/prestige
+Igrač putuje od Beograda do Guncatija u 5 etapa. Svaka etapa ima kratku narativnu scenu + mini-mehaniku. Na kraju: dolazak na jezero + shareable "Na sam putu" karta. Svaki run otkriva drugu stranu Guncatija (jezero, ribe, glineni zidovi, muzika).
 
-### Biljke i prime zone (različite krive)
+### Core loop (5 etapa, linearno)
 
-| Biljka | Prime zona | Napomena |
-|--------|-----------|----------|
-| jagoda | 2.5s | brza, osnovna |
-| trešnja | 3s | nestabilna ±15% šuma |
-| paradajz | 7s | spor ali siguran |
-| lubenica | 8s | najveća nagrada |
-| dinja | 5s | srednja, predvidljiva |
-| kupina | 1.5s | HIGH risk/high reward |
+1. **Beograd Parkijalište** — timing puzzle: nađi parking pre meter istekne (60s). Pera Period aforizam u "radio" overlay-u dok čekaš.
+2. **Autoput E75** — resource balance: gorivo (tank decay), vreme (clock), muzika (radio stanica menja mood). 3 minuta "vožnje" sa random event-om (gužva, pojačanje, izlaz-greška).
+3. **Skretanje u selu** — navigation choice: 3 tabla, 3 puta (brže / slikovitije / sigurnije). Svaki vodi drugačijoj etapi 5 sceni. Igrač ne zna unapred.
+4. **Šumski put** — obstacle dodge: šarafi, blato, grane u 90-sekundnoj mikro-sekciji. Mobile-friendly tap/swipe.
+5. **Guncati Jezero — dolazak** — narativni epilog baziran na kumulativnim izborima (šta si poneo, koliko si gorivo potrošio, koji put si izabrao). 3-4 varijante scene. Aforizam za završnicu.
+
+### Win condition i Pripremljenost sistem
+
+- Svaka etapa dodaje/oduzima "Pripremljenost" bod (0–100)
+- Dolazak sa ≥ 70 → zelena scena "Stigao si spreman. Guncati te čeka."
+- 40–69 → žuta scena "Stigao si. Odmori se malo."
+- < 40 → humorna scena "Sledećeg puta, možda mapa?"
+- Sve tri varijante otključavaju shareable kartu
+
+### Share card (svaki ishod)
+
+"Na sam putu ka Guncatiju. Pripremljenost: [score]%. [play_url]"  
+Web Share API sa pozivom na akciju + link. Screenshot spreman za IG Story.
+
+### Brand hooks
+
+- Etapa 3 (skretanje): jedna ruta prolazi pored Brane koji kratko objašnjava akvakulturni sistem (3 linije, ne tutorial)
+- Etapa 5 (dolazak): finalni aforizam od Pere Perioda, specijalan po putu koji si izabrao
+- Guncati Grand crosslink: zeleni ishod prikazuje "Odigraj Guncati Grand" prompt (→ play_url Guncati Grand)
 
 ### Audio (Ceca Čujka)
 
-- Jutarnje ptice → poslepodnevni cvrčci → distant thunder → kiša crescendo
-- Click SFX: "crunch" koji se menja po kvalitetu (dobar = satisfying thud, loš = soft plop)
-- Prime zone entry: kratki folk riff (jedna nota)
+- Etapa 1-2: city ambience → highway hum → radio (Pera Period citat kao "pesma")
+- Etapa 3-4: šuma zvukovi, živinstvo, zemlja
+- Etapa 5: jezero ambience, ptice, tiha muzika kao Guncati Grand theme
 
 ### Vizuelni identitet (Pera Piksel)
 
-- Top-down garden, pixel art, 3×2 grid biljaka
-- Paleta: #1a1208 bg / #2d5016 biljke / #FFD700 sunce / #8B8B8B oblak
-- Ripeness indikator: RING oko biljke (zelena→žuta→crvena outline pulsira)
+- Letnji, topao, ilustrativan CSS. Ne fotorealistično.
+- Paleta: #1e2d1a (tamna šuma) / #f5d87a (sunce/žito) / #3a8c5c (jezero/polja) / #e8dcc8 (zemlja/put)
+- Svaka etapa ima drugačiji background color-scheme (grad → drumski / šuma → polje → jezero)
+- Karakteri: 2-3 CSS sprite-a (Brana, random putnik, Pera aforizmator)
 
-### Share card
+### Prestige hook
 
-"Moj Berba Score: X. Prava berba počinje 04.08 na Guncatiju. [play_url]"
-
-### Easter egg (Kluboslavija secondary)
-
-Ako nađeš "Avala Trešnju" (poseban beli pixel) → Krediti screen sa Avala event posterom
+Drugi run otključava "Noćna vožnja" varijantu etape 2 (autoput noću) i drugačiju verziju etape 5 (večernji dolazak na jezero). Svaki run vredi.
 
 ### Scope procena
 
-~18–22 modula, 5000–7000 JS linija, single-layer arkada, 2-3 dana pipeline
+~22–28 modula, 6000–8000 JS linija, single-layer narativna avantura, 2-3 dana pipeline
+
+---
+
+## ARHIVA — Berba Trka (timing/rhythm, Guncati × Kluboslavija)
+
+> **Status: HOLD DO 2027** — berba window 2026 istekao 06.08. Koncept validan, vrati u PRIORITET u julu 2027 (berba sezona → 04–06.08 svake godine). Brief fajl: `tim/iskra/berba_trka_gdg_brief.md`.
 
 ---
 
@@ -64,7 +81,7 @@ Ako nađeš "Avala Trešnju" (poseban beli pixel) → Krediti screen sa Avala ev
 
 → Za kompletan katalog sa statusom (✅ isporučeno / kandidat): `ajajaj/tim/iskra/gamifikacija_ideje.md`
 
-**Sledeći kandidati posle Berba Trka:**
-- Crew Recruiter (deck-builder, pred Sarajevo restart)
-- Park Mapa (retry — 2× pokušan, 0 JS do sad)
+**Sledeći kandidati posle Put do Guncata:**
+- Crew Recruiter (deck-builder, pred Sarajevo restart kad datum padne)
 - Sound Check Simulator (pred Niš žurku kad datum padne)
+- Park Mapa (retry — 2× pokušan, 0 JS do sad; tek kad ima jači brand hook)
