@@ -726,13 +726,13 @@ function _handleAlarmAction(alarmId, action) {
 
   if (action === 'reroute') {
     // Reroute: troši off-grid kapacitet ali trenutno oporavlja signal
-    resolveSignalAction('reroute', ds);
+    resolveSignalAction('reroute');
   } else if (action === 'push') {
     // Push: besplatno, postepeni oporavak
-    resolveSignalAction('push', ds);
+    resolveSignalAction('push');
   } else if (action === 'restart') {
     // Platform hiccup: kratki restart
-    resolveSignalAction('push', ds);
+    resolveSignalAction('push');
   }
 
   const resolved = resolveAlarm(alarmId, action);
