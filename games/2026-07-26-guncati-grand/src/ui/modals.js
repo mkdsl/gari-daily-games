@@ -28,12 +28,13 @@ export function showModal(html, opts = {}) {
 
   _overlayEl.innerHTML = `
     <div class="modal ${opts.className || ''}">
-      ${opts.closable !== false ? '<button class="modal-close" onclick="closeModalGlobal()">✕</button>' : ''}
+      ${opts.closable !== false ? '<button class="modal-close">✕</button>' : ''}
       ${html}
     </div>
   `;
   _overlayEl.classList.add('modal-overlay-active');
-  window.closeModalGlobal = closeModal;
+  const closeBtn = _overlayEl.querySelector('.modal-close');
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
   return _overlayEl.querySelector('.modal');
 }
 
