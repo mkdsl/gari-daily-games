@@ -155,13 +155,30 @@ export function resetState() {
  * @returns {Object}
  */
 function migrateState(saved) {
+  // Shim weekly_plan keys renamed in 2026-07-25 iter2 fix
+  // Old: platformAlloc, guest, offgridCapacity → New: platform_alloc, chosen_guest_id, weekly_capacity
+  if (saved.weekly_plan) {
+    const p = saved.weekly_plan;
+    if (p.platformAlloc !== undefined && p.platform_alloc === undefined) {
+      p.platform_alloc = p.platformAlloc;
+      delete p.platformAlloc;
+    }
+    if (p.guest !== undefined && p.chosen_guest_id === undefined) {
+      p.chosen_guest_id = p.guest;
+      delete p.guest;
+    }
+    if (p.offgridCapacity !== undefined && p.weekly_capacity === undefined) {
+      p.weekly_capacity = p.offgridCapacity;
+      delete p.offgridCapacity;
+    }
+  }
+
   // Merge sa default da popuni nove polja
   const merged = deepMerge(deepClone(DEFAULT_STATE), saved);
 
   // Version migrations
   if (!merged.version || merged.version < STATE_VERSION) {
     merged.version = STATE_VERSION;
-    // Buduće migracije idu ovde
   }
 
   return merged;
