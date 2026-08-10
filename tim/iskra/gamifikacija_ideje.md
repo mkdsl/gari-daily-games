@@ -7,13 +7,58 @@
 
 ---
 
-## PRIORITET #1 — Put do Guncata (point-and-click narativna avantura, road trip)
+## PRIORITET #1 — Crew Recruiter: Izgradi Ekipu (deck-builder / crew manager)
 
-> Ažurirao: Iskra 2026-08-08. Berba Trka arhivirana (⬇️ ispod) — berba window 2026 istekao 06.08. Nov PRIORITET #1.
+> Ažurirao: Iskra 2026-08-10. Put do Guncata premešten na #2 — Crew Recruiter ima W34 Tom Sawyer tie-in (17–23.08), konkretniji release timing. Brief je iz ajajaj/tim/iskra/2026-08-09.md.
+
+**Status:** CONCEPT READY — brief u nastavku, direktno za KORAK 1 → docs/concept.md
+**Urgentnost:** W34 (17–23.08) = Tom Sawyer Poziv za Guncati volontere. Igra izlazi ~21.08 — organik tie-in "završi igru → prijavi se za stvarni crew". Bez vremenskog expiry-a, funkcioniše i posle.
+**Žanr:** Mini deck-builder / crew manager — nije rađeno u GDG katalogu, žanrovska diversifikacija obavezna.
+**Session target:** 10–15 min
+**Brand serves:** mkdslend (primary), kluboslavija (secondary), guncati (tie-in)
+
+### Premisa
+
+Ti si event organizer. Imaš 5 uloga koje treba popuniti pre nastupa: Tonac, Host, Content Creator, Logistika, Obezbeđenje. Tegleš karte iz špila — svaka karta je čovek sa profilom (snaga: A, B, C). 6 rundi. Na kraju: "Vibe Score" — koliko je crew sinergija bila jaka.
+
+### Core loop
+
+1. Draw 3 karte (random)
+2. Assign → 5 slota (drag ili klik)
+3. Outcome: svaki slot pali event smer. Synergy bonus ako komplementarne uloge sede zajedno.
+4. Repeat ×6 rundi, svaki round = drug event stage (Setup, Soundcheck, Opening, Climax, Breakdown, Recap)
+5. Final Score: crowd satisfaction + crew morale
+
+### Win condition
+
+Vibe Score 80+ = "Crew je legenda. August u Guncatiju."
+50–79 = "Dobro, može bolje."
+< 50 = "Sutra pokušaš ponovo."
+
+### Brand hook (ending screen)
+
+"Tvoj crew score: [N]. Pravi tim se gradi na Guncatiju [DATUM]." + share karta + GDG logo.
+Organik link ka volonterskom pozivu Guncati Grand Finale.
+
+### Sadržaj koji treba
+
+- **Pera Period:** 6–8 mikro-aforizma za "unlock" trenutke kad crew sinergija peak-uje
+- **Mile Mehanika:** skill matrica (7 uloga × 5 event slotova = 35 ćelija), synergy balance pass
+- **Dule:** ending screen copy review (CTA ka Guncati real poziv — etički OK)
+
+### Kompleksnost
+
+3/5 — text-based card UI, malo animacije, nema canvas. Jova može brzo. ~20–25 modula.
+
+---
+
+## PRIORITET #2 — Put do Guncata (point-and-click narativna avantura, road trip)
+
+> Originalno PRIORITET #1 (Iskra 2026-08-08), premešten 2026-08-10 — Crew Recruiter ima konkretniji W34 tie-in. Put do Guncata ostaje evergreen — funkcioniše u septembru ili nakon Crew Recruitera.
 
 **Status:** CONCEPT READY — skeleton u nastavku, direktno za KORAK 1 → docs/concept.md
-**Urgentnost:** August = mesec planiranja pred Guncati grand finale. Igra koja vodi igrača ka lokaciji = pre-event companion. Bez sezonskog expiry-a (funkcioniše i u septembru).
-**Žanr:** Text/narrative adventure (point-and-click lite) — nije rađeno od Niš Fuge (01.06, 2 meseca). Posle 3 management/sim zaredom (Imanje, Na Vez, Guncati Grand), žanrovska diversifikacija je obavezna.
+**Urgentnost:** Evergreen Guncati companion. Pre-event narativ bez sezonskog expiry-a.
+**Žanr:** Text/narrative adventure (point-and-click lite) — nije rađeno od Niš Fuge (01.06, 2 meseca).
 **Session target:** 15–20 min
 **Brand serves:** guncati (primary), kluboslavija (secondary)
 
@@ -82,6 +127,5 @@ Drugi run otključava "Noćna vožnja" varijantu etape 2 (autoput noću) i druga
 → Za kompletan katalog sa statusom (✅ isporučeno / kandidat): `ajajaj/tim/iskra/gamifikacija_ideje.md`
 
 **Sledeći kandidati posle Put do Guncata:**
-- Crew Recruiter (deck-builder, pred Sarajevo restart kad datum padne)
 - Sound Check Simulator (pred Niš žurku kad datum padne)
 - Park Mapa (retry — 2× pokušan, 0 JS do sad; tek kad ima jači brand hook)
