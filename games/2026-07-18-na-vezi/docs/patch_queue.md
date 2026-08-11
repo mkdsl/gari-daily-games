@@ -8,7 +8,7 @@
 - [x] P1 `src/main.js` — zameni guest ID sa `guest.name` u lock-in summary (`_showLockin` line 354: `getGostProfile(plan.chosen_guest_id)?.name || plan.chosen_guest_id`); bug bio u main.js ne ui.js (done 2026-08-07, commit 8eff2bd)
 - [x] P1 `src/systems/signal.js` — uklonjen redundantan `ds` argument iz sva 3 call site-a u `main.js:729/732/735`; `resolveSignalAction` već poziva `getDashboardState()` interno (done 2026-08-08, commit 5e2a2a6)
 - [x] P2 `src/state.js` — dodaj migracioni guard za save-ove koji su kreirani pre `platformAlloc`/`plan.guest`/`offgridCapacity` renaiming fixa; `loadState()` treba da detektuje stari key format i shim-uje podatke umesto da vrati `undefined` i sruši macro planning na prvom load-u posle update-a (regresija od iter 2 fixa — utiče samo na igrače sa existing save-om) (done 2026-08-10, commit 1f5d2e7)
-- [x] P2 `src/content/gost-roster.js` + `src/macro/guest-booking.js` — null guard u `calcNoShowChance` (if !gostProfile return 0.5) i filter(Boolean) u `getGuestBookingOptions` map petlji; crash je bio samo za nepoznate guest ID-eve, fixovan generički (done 2026-08-11, commit TBD)
+- [x] P2 `src/content/gost-roster.js` + `src/macro/guest-booking.js` — null guard u `calcNoShowChance` (if !gostProfile return 0.5) i filter(Boolean) u `getGuestBookingOptions` map petlji; crash je bio samo za nepoznate guest ID-eve, fixovan generički (done 2026-08-11, commit 6f41395)
 
 ### Iskra — Brand hooks
 
