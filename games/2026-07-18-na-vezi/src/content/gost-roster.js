@@ -122,6 +122,7 @@ export function getGostProfile(gostId) {
  * @returns {number} 0-1
  */
 export function calcNoShowChance(gostProfile) {
+  if (!gostProfile) return 0.5;
   if (gostProfile.isSolo) return 0;
   const base = gostProfile.baseNoShow;
   const adj = (gostProfile.reliability - 50) * GAME_CONFIG.NO_SHOW_ADJUST_PER_POINT;
