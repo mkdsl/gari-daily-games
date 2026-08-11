@@ -11,7 +11,7 @@
 
 > Ažurirao: Iskra 2026-08-10. Put do Guncata premešten na #2 — Crew Recruiter ima W34 Tom Sawyer tie-in (17–23.08), konkretniji release timing. Brief je iz ajajaj/tim/iskra/2026-08-09.md.
 
-**Status:** CONCEPT READY — brief u nastavku, direktno za KORAK 1 → docs/concept.md
+**Status:** CONCEPT READY — kompletna concept.md u `tim/iskra/crew-recruiter-concept.md`, direktno kopirati u `docs/concept.md`. Ne spawna Iskru agenta. (Ažurirao Iskra 2026-08-11)
 **Urgentnost:** W34 (17–23.08) = Tom Sawyer Poziv za Guncati volontere. Igra izlazi ~21.08 — organik tie-in "završi igru → prijavi se za stvarni crew". Bez vremenskog expiry-a, funkcioniše i posle.
 **Žanr:** Mini deck-builder / crew manager — nije rađeno u GDG katalogu, žanrovska diversifikacija obavezna.
 **Session target:** 10–15 min
