@@ -7,7 +7,7 @@ import { renderMacro } from './macro_ui.js';
 import { renderMicro } from './micro_ui.js';
 import { renderFinale, updateFinaleHUD, updateFinaleFarm } from './finale_ui.js';
 import { renderScore } from './score_ui.js';
-import { advanceWeek, checkVolunteerUnlocks, shouldStartFinale, resolveBuildingUpgrade } from '../systems/progression.js';
+import { advanceWeek, shouldStartFinale, resolveBuildingUpgrade } from '../systems/progression.js';
 import { resolveMicro } from '../systems/micro.js';
 import { startFinale } from '../systems/finale.js';
 import { autoSave } from '../systems/checkpoint.js';
@@ -159,18 +159,17 @@ function renderMicroScreen(container) {
     // Resolve micro
     const microResult = resolveMicro(state.volunteers, assignments, state);
 
-    // Check for new volunteers BEFORE advancing
-    const newVols = checkVolunteerUnlocks(state.week, state.volunteers);
-
-    // Advance week
+    // Advance week (internally handles volunteer unlocks)
     const weekResult = advanceWeek(microResult);
 
     // Auto-save
     autoSave(state.week);
 
-    // Show new volunteer joins
-    if (newVols.length > 0) {
-      let queue = [...newVols];
+    // Show new volunteer joins using weekResult (avoids duplicate checkVolunteerUnlocks call)
+    const newVolNames = weekResult.newVolunteers || [];
+    if (newVolNames.length > 0) {
+      const updatedState = getState();
+      let queue = updatedState.volunteers.filter(v => newVolNames.includes(v.name));
       const showNext = () => {
         if (queue.length === 0) {
           showWeekResult(weekResult, () => {

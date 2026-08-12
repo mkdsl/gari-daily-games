@@ -1,6 +1,12 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Ažurirano:** 2026-07-18 — **backlog rešen, 0 igara čeka.** Šef je u chatu 2026-07-18 direktno tražio da tim reši oba zaostala sign-off-a bez njegovog ručnog testa. Gari je uživo verifikovao oba naslova (play_url) i zatvorio ih — vidi Istorija ispod. KORAK 0b gate je otvoren, sledeći 03:00 trigger može krenuti novu koncept igru.
+**Ažurirano:** 2026-08-12 — **backlog čist, 0 igara čeka sign-off.**
+
+---
+
+## ⚠️ KORAK 0c — Pasoš registry drift (2026-08-12)
+
+Pasoš registry drift: 32 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Trenutno registrovane: avala-run, aforizam-generator, dj-za-pultom (3/35). Gap = 32. Dodavanje slugova je Jovin/brand posao po igri — ovo je samo flag da gap postoji.
 
 ---
 
