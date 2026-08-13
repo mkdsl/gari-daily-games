@@ -19,7 +19,7 @@
 
 ### Dule — Retention & Replay
 
-- [ ] P2 `src/ui.js` + `styles/ui.css` — end-of-emisija ekran je pre-hladan: dodaj animated "Reach" metar (listener count pulse) i progress bar za sledeći guest unlock; bez ovog igrač nema vizuelni pull ka narednoj sesiji — "još jedan" moment nedostaje u emocionalnoj krivoj
+- [x] P2 `src/ui/replay-screen.js` + `styles/ui.css` — end-of-emisija ekran je pre-hladan: dodaj animated "Reach" metar (listener count pulse) i progress bar za sledeći guest unlock; bez ovog igrač nema vizuelni pull ka narednoj sesiji — "još jedan" moment nedostaje u emocionalnoj krivoj (done 2026-08-13, commit af29a73)
 - [ ] P2 `src/ui.js` — achievement unlock je trenutno tih (samo checkmark u listi); dodaj 400ms slide-in toast sa achievement ikonom i jednorednim flavor tekstom — 14 achievement-a su sav mid-game reward i treba da se osete kao event, ne log entry
 - [ ] P3 `src/ui.js` — dodaj "reliability trend" ikonicu (↑ ↓ →) pored gosta u booking ekranu baziranu na poslednjih 3 emisije; igrač treba da oseti da gradi ili troši vezu sa gostom, ne samo da bookira statičnu vrednost — emocionalna investicija u repeat booking
 - [ ] P3 `src/state.js` + `src/ui.js` — prestige reset je brutal bez tranzicije: dodaj "Loyal Core Ceremony" ekran (5 sekundi, ime svakog od 15% retained slušalaca) koji pretvara mehaničku odluku o resetu u emocionalni moment — igra koja ti pokaže koga zadržavaš vs. koga gubiš ima mnogo veći replay zamah od puke multiplikator matematike
