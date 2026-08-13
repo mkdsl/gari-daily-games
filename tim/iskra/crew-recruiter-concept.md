@@ -102,3 +102,59 @@ Prosečan igrač odgovori na bar 2 od 3 hooks-a: curiosity + synergy exploration
 ## Napomena za KORAK 4 (impl)
 
 Card drag-and-drop: koristiti pointer events API (touch + mouse unified), ne jQuery. Karte su DOM elementi, ne canvas sprites — lakše za accessibility i CSS animacije. State: `game_state.hand[]`, `game_state.slots[5]`, `game_state.vibe_score`, `game_state.phase_index`. Save u localStorage posle svake runde (ne posle svakog dropa — prečesto za storage quota).
+
+---
+
+## Ending Screen UI Spec (Iskra, 2026-08-13 — za Jovu impl sesiju)
+
+Mici koristi screenshot ending screena kao POST 1 visual na launch dan (~21.08). Jova gradi ovo po spec-u — ne improvizuje.
+
+### Layout
+
+Format: square (1:1 ratio, 1080×1080 logički, CSS `aspect-ratio: 1`). Full-bleed pozadina u Guncati earthy paleti (iz `styles/theme.css` — ne dodavati nove boje).
+
+```
+┌─────────────────────────┐
+│  [mali label] Vibe Score │
+│                          │
+│         [SCORE]          │  ← font-size: min(72px, 15vw). Bold.
+│         80/100           │
+│                          │
+│  "Crew je spreman."      │  ← score-gated tagline (ispod)
+│                          │
+│  Pravi tim se gradi      │
+│  na Guncatiju.           │
+│                          │
+│  [SHARE dugme]           │
+│  Probaj: [play_url]      │  ← mali, jedan red
+└─────────────────────────┘
+```
+
+### Score-gated tagline (3 varijante)
+
+- Score ≥ 80: `"Crew je spreman. Svi znaju šta im je posao."`
+- Score 50–79: `"Solidno. Malo još rada na sinergiji."`
+- Score < 50: `"Sutra probaj ponovo. Crew se gradi vremenom."`
+
+### Web Share API payload (`src/share.js`)
+
+```js
+const PLAY_URL = 'https://mkdsl.github.io/gari-daily-games/games/YYYY-MM-DD-crew-recruiter/';
+
+navigator.share({
+  title: `Crew Recruiter — Vibe ${vibeScore}/100`,
+  text: `Izgradi svoju ekipu za nastup. Moj score: ${vibeScore}/100.\nGuncati Grand Finale — probaj: ${PLAY_URL}`,
+  url: PLAY_URL
+});
+```
+
+Fallback (bez Web Share API): ceo `text + '\n' + PLAY_URL` string ide u `navigator.clipboard.writeText()` → toast "Link kopiran, podeli ga!"
+
+### Pristupačnost
+
+- Share dugme: `aria-label="Podeli svoj Crew Recruiter score"`
+- Score element: `aria-live="polite"` kad se finalni score renderuje
+
+### Napomena za Mici
+
+Screenshot ending screena (score ≥ 80 varijanta) = POST 1 visual. Nema edit-a. Mici snima sa desktop-a ili šef šalje print-screen posle prvog igranja.
