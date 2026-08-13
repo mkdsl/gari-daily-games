@@ -1214,3 +1214,44 @@
   color: var(--color-signal);
   font-weight: 700;
 }
+
+/* === Replay Screen: Reach Meter + Unlock Progress === */
+.reach-meter {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+.reach-number {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: var(--color-signal);
+  animation: reachPulse 1.8s ease-in-out infinite;
+  display: inline-block;
+}
+.reach-breakdown {
+  font-size: 0.75rem;
+  color: var(--color-text-dim);
+  margin-top: 4px;
+}
+@keyframes reachPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.06); opacity: 0.85; }
+}
+.unlock-progress-panel {
+  background: var(--color-bg-panel, rgba(255,255,255,0.05));
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.unlock-track {
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.unlock-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-signal), var(--color-crt));
+  border-radius: 3px;
+  transition: width 0.8s ease;
+  min-width: 4px;
+}
