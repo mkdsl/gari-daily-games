@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a1208">
+  <meta name="description" content="Guncati Grand — Multi-layer Festival Management Sim. Organizuj 10 nedelja priprema, upravljaj volonterima i Tom Sawyerom, pa izvedi Grand Finale koji će ući u legendu.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Guncati Grand">
+  <meta property="og:description" content="Tom Sawyer model. Volonteri. Grand Finale. Da li imaš šta treba?">
+  <meta property="og:type" content="website">
+
+  <title>Guncati Grand</title>
+
+  <!-- Styles (order matters: base → theme → ui → game) -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+
+  <!-- html2canvas for score sharing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"></script>
+
+  <style>
+    /* Inline critical: prevent flash before CSS loads */
+    body { background: #1a1208; }
+
+    /* Loading state */
+    #app-loading {
+      position: fixed;
+      inset: 0;
+      background: #1a1208;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: #E8D5B0;
+      font-family: 'Courier New', Courier, monospace;
+      z-index: 9999;
+      transition: opacity 0.4s ease;
+    }
+
+    #app-loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-logo {
+      font-size: 3rem;
+      animation: loadPulse 1.2s ease-in-out infinite;
+    }
+
+    .loading-title {
+      font-size: 1.4rem;
+      color: #FFD700;
+      letter-spacing: 0.05em;
+    }
+
+    .loading-sub {
+      font-size: 0.8rem;
+      color: #a89070;
+    }
+
+    .loading-bar-wrap {
+      width: 200px;
+      height: 4px;
+      background: #5a3a1a;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .loading-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2d5016, #FFD700);
+      border-radius: 2px;
+      animation: loadBar 1.5s ease-in-out infinite;
+      width: 40%;
+    }
+
+    @keyframes loadPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    @keyframes loadBar {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(600%); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading screen (hidden after first render) -->
+  <div id="app-loading" aria-live="polite" aria-label="Učitavanje Guncati Grand">
+    <div class="loading-logo">🌄</div>
+    <div class="loading-title">Guncati Grand</div>
+    <div class="loading-sub">Priprema terena…</div>
+    <div class="loading-bar-wrap">
+      <div class="loading-bar-fill"></div>
+    </div>
+  </div>
+
+  <!-- Main app shell -->
+  <div id="app">
+    <!-- Persistent HUD (week / GC / WB / buildings) -->
+    <header id="hud" role="banner" aria-label="Status igre"></header>
+
+    <!-- Screen content (MENU / MACRO / MICRO / RESULT / FINALE / SCORE) -->
+    <main id="screen-container" role="main" aria-live="polite"></main>
+
+    <!-- Modal overlay (onboarding, confirmations, volunteer joins) -->
+    <div id="modal-overlay" role="dialog" aria-modal="true" aria-label="Dijalog"></div>
+  </div>
+
+  <!-- Game entry point (ES6 module) -->
+  <script type="module" src="src/main.js"></script>
+
+  <script>
+    // Hide loading screen once the module fires its first paint signal
+    // main.js dispatches 'guncati:ready' after navigateTo('MENU') completes
+    window.addEventListener('guncati:ready', () => {
+      const loading = document.getElementById('app-loading');
+      if (loading) {
+        loading.classList.add('hidden');
+        setTimeout(() => loading.remove(), 500);
+      }
+    });
+
+    // Fallback: hide after 4s regardless (slow mobile, no event)
+    setTimeout(() => {
+      const loading = document.getElementById('app-loading');
+      if (loading) {
+        loading.classList.add('hidden');
+        setTimeout(() => loading.remove(), 500);
+      }
+    }, 4000);
+
+    // Service worker registration (offline support for GitHub Pages)
+    if ('serviceWorker' in navigator && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+      window.addEventListener('load', () => {
+        // SW not yet implemented — placeholder for polish stage
+        // navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

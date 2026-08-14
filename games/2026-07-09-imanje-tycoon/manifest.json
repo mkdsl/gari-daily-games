@@ -41,7 +41,8 @@
     "styles/base.css": "Layout: CSS varijable Guncati paleta, app-root grid (macro-panel top + main content), responsive mobile-first, Guncati font stack, loading screen",
     "styles/ui.css": "Dashboard UI: tab nav, panel cards, upgrade items (locked/unlocked/purchased), channel sliders, progress bars, prestige modal, projection modal, HUD bar",
     "styles/game.css": "Animacije: achievement toast slide-in/out, phase unlock pulse, season transition fade, blok inkubacija shimmer, riba rast pulse, sinergija glow efekt",
-    "styles/theme.css": "Guncati brand paleta: CSS vars (#6B4C2A zemlja, #4A7C3F zelena, #3A7BD5 voda, #A8D5A2 plastenik, #E8D5F0 pečurke, #D4A017 kapital, #E07B39 event akcent)"
+    "styles/theme.css": "Guncati brand paleta: CSS vars (#6B4C2A zemlja, #4A7C3F zelena, #3A7BD5 voda, #A8D5A2 plastenik, #E8D5F0 pečurke, #D4A017 kapital, #E07B39 event akcent)",
+    "src/content/brand_hooks.js": "Guncati brand hook notifikacije: 3 masterclass milestones (3/5/8), showToast triggered, evergreen brand messaging ka guncati.rs"
   },
   "line_counts": {
     "total_js": 8578,

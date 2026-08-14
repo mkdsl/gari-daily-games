@@ -41,6 +41,8 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-06-07 | Zemlja i Znanje ⭐ | Multi-Layer Time Management Sim — Guncati × MKDSLend | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-07-zemlja-i-znanje/) |
 | 2026-06-13 | Park Mapa ⭐ | Ambient Persistent / Interactive Map — MKDSLend × Kluboslavija × Guncati | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-06-13-park-mapa/) |
 | 2026-07-09 | Imanje Tycoon ⭐ | Multi-layer Idle/Tycoon + Farm Simulation — Guncati × MKDSLend | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-07-09-imanje-tycoon/) |
+| 2026-07-18 | Na Vezi ⭐ | Multi-layer Broadcast Management Sim — Guncati × MKDSLend × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-07-18-na-vezi/) |
+| 2026-07-26 | Guncati Grand ⭐ | Multi-layer Festival/Venue Management Sim — Guncati × Kluboslavija × MKDSLend | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-07-26-guncati-grand/) |
 
 ## Statusi
 

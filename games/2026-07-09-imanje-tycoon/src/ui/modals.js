@@ -244,6 +244,12 @@ function showPrestigeSuccessModal(state) {
   const ml = modalsLayer();
   if (!ml) return;
   const modal = document.createElement('div');
+  const scenarioFlavor = {
+    guncati: '🌿 Sinergija Kompostera i Mulja — zemlja živi!',
+    avala: '⛰️ Online kanal aktivan — turisti dolaze!',
+    strandG: '🏖️ Restoran kanal otvoren — gastro scena Štranda je vaša!',
+  };
+  const flavorLine = scenarioFlavor[state.prestige.scenario] || '';
   modal.className = 'modal-backdrop prestige-success-modal';
   modal.innerHTML = `
     <div class="modal-box animate-phase-unlock">
@@ -254,6 +260,7 @@ function showPrestigeSuccessModal(state) {
         <div>Brzina: <strong>×${state.prestige.speedMultiplier.toFixed(2)}</strong></div>
         <div>Kapital: <strong>${formatDin(state.capital)}</strong></div>
       </div>
+      ${flavorLine ? `<div class="prestige-scenario-flavor" style="margin-top:8px;font-size:0.9em;color:#a8c898;">${flavorLine}</div>` : ''}
       <button class="modal-btn primary" id="prestige-success-close">Počni ponovo! 🌱</button>
     </div>
   `;

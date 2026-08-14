@@ -2,6 +2,7 @@ import { GAME_CONFIG } from '../config.js';
 import { useAction } from './workers.js';
 import { updateSynergies } from '../economy/synergies.js';
 import { showToast } from '../ui/modals.js';
+import { checkMasterclassHooks } from '../content/brand_hooks.js';
 
 /** Cost of organizing a masterclass (actions-based) */
 export const MASTERCLASS_ACTION_COST = 2;
@@ -97,6 +98,7 @@ export function organizeMasterclass(state, audio) {
   state.totalRevenue += revenue;
   state.seasonRevenue = (state.seasonRevenue || 0) + revenue;
   state.masterclassCount++;
+  checkMasterclassHooks(state, showToast);
 
   // Track history
   if (!state._masterclassHistory) state._masterclassHistory = [];

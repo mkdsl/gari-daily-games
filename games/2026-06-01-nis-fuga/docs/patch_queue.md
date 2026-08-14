@@ -5,18 +5,15 @@ Tim dodaje stavke direktno — trigger ih izvršava. Šef stavlja `[HOLD]` da pa
 
 ## Otvoreni patčevi
 
-### P2 — Polish (Nega — tehnički dug iz beta)
-
-- [ ] P2 `src/ui/ResourceBar.js` — ukloni dead `els.clock` (line ~30, klasa `.rb-clock-hands` ne postoji u `buildHTML()`, nigde se ne koristi — beta iter 1 LOW #4)
-- [ ] P2 `src/scenes/SceneBulevar.js` + `src/engine/SceneManager.js` — dupli NPC u DOM-u: `SceneManager.renderSceneBackground()` ubacuje `div.scene-npc.npc-dragoljub`, potom `SceneBulevar.setup()` appenda drugi — ukloniti NPC append iz SceneManager-a (beta iter 1 LOW #5)
-- [ ] P2 `src/engine/AchievementSystem.js` — dead case `'scene3_full_explain'` u `checkTrigger()` se nikad ne poziva; dijalog koristi `'soundcheck_objasnjenje'` direktno — ukloniti (beta iter 1 LOW #6)
-
-### P3 — Content & Brand (Iskra/Dule/Sine)
-
-- [ ] P3 `src/ui/EndingScreen.js` + `styles/ui.css` — dodaj Web Share API dugme na ending screenu (payload: naziv endinga + play_url). Fallback clipboard. Postojeći `share.js` već ima infrastrukturu. (Iskra)
-- [ ] P3 `src/ui/EndingScreen.js` — povećaj vidljivost `bilet.rs/show/261` CTA — iz plain texta u styled dugme sa Kluboslavija bojama (Iskra)
-- [ ] P3 `src/data/dialogs.json` — dodaj opcioni dijaloški čvor u Scenu 2 (Kiosk) koji daje hint ka boljim resourceima za igrače koji znaju rešenje — replay incentive za drugi prolaz (Sine)
+*(prazno)*
 
 ## Završeni patčevi
 
-*(prazno — svi MEDIUM bugovi iz beta iter 1 rešeni u fix_log.md)*
+*(P2 stavke su bile dead-code cleanup — sve tri pronađene kao pre-fiksirane u commit-ima iz polish stage-a. Verifikovano 2026-08-01: `els.clock` nema u ResourceBar.js, SceneManager.js line 224 ima komentar "NPC element is created by each scene module — not duplicated here", `scene3_full_explain` case ne postoji u AchievementSystem.js)*
+
+- [x] P2 `src/ui/ResourceBar.js` — dead `els.clock` — **pre-fiksirano u polish** (verifikovano 2026-08-01)
+- [x] P2 `src/scenes/SceneBulevar.js` + `src/engine/SceneManager.js` — dupli NPC u DOM-u — **pre-fiksirano u polish** (verifikovano 2026-08-01, SceneManager.js:224)
+- [x] P2 `src/engine/AchievementSystem.js` — dead case `'scene3_full_explain'` — **pre-fiksirano u polish** (verifikovano 2026-08-01)
+- [x] P3 `src/ui/EndingScreen.js` + `styles/ui.css` — Web Share API dugme — **pre-implementovano** (EndingScreen.js lines 83-84, 150-173)
+- [x] P3 `src/ui/EndingScreen.js` — styled bilet.rs CTA — **pre-implementovano** (EndingScreen.js line 126-129, `ending-btn-cta` class)
+- [x] P3 `src/data/dialogs.json` — opcioni dijaloški čvor `s2_rep_poznanstvo` za replay: igrač sa reputacija ≥ 3 iz Scene 1 (diplomatski prolaz) unlockuje Baca Mileta koji propušta bez reda ("Dragoljub me zvao"). Sine Scenario. (done 2026-08-01)

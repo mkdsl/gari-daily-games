@@ -15,6 +15,7 @@ export function getGuestBookingOptions(format) {
 
   return compatible.map(g => {
     const profile = getGostProfile(g.id);
+    if (!profile) return null;
     const noShowChance = calcNoShowChance(profile);
     const bookingHistory = state.guest_bookings[g.id] || 0;
     return {
@@ -24,7 +25,7 @@ export function getGuestBookingOptions(format) {
       bookingHistory,
       recommended: noShowChance < 0.12 && (profile.engagementBonus || 0) > 0.05,
     };
-  });
+  }).filter(Boolean);
 }
 
 /**

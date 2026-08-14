@@ -21,13 +21,8 @@ import {
   renderMacroPlanningScreen, renderPrestigeScreen,
   showAchievementToast, initAchievementToast
 } from './ui.js';
-import {
-  startPlanningSession, lockInPlan, getCurrentStep, getTotalSteps,
-  getDraftPlan, updateDraftPlan, nextStep, prevStep
-} from './macro/planning-session.js';
-import { setAllocation } from './macro/platform-allocation.js';
+import { startPlanningSession, lockInPlan, getCurrentStep, getDraftPlan, getTotalSteps, nextStep, prevStep, updateDraftPlan } from './macro/planning-session.js';
 import { buyEquipment } from './macro/equipment-shop.js';
-import { bookGuest } from './macro/guest-booking.js';
 import { resolveWeeklyOutcome } from './macro/weekly-outcome.js';
 import {
   initDashboardState, getDashboardState, updateDashboardState,
@@ -36,9 +31,9 @@ import {
 } from './micro/dashboard-state.js';
 import { passiveSignalRecover, resolveSignalAction } from './micro/signal-system.js';
 import {
-  tryGenerateAlarm, resolveAlarm, tickAlarms
+  tryGenerateAlarm, resolveAlarm, tickAlarms, missAlarm, addActiveAlarm
 } from './micro/alarm-generator.js';
-import { resetEscalation, processEscalation, processResolution } from './micro/alarm-escalation.js';
+import { resetEscalation, processEscalation, processResolution, getEscalationBonuses } from './micro/alarm-escalation.js';
 import {
   tickEqWindow, isEqActive, getEqSession,
   confirmEq, updateEqValue, startEqMinigame, resetEqSession
@@ -68,6 +63,7 @@ import {
 } from './ui/tutorial-mode.js';
 import { renderReplayScreen } from './ui/replay-screen.js';
 import { initOffgridMeter } from './ui/offgrid-meter.js';
+import { resolveGostArrival, getGostProfile } from './content/gost-roster.js';
 
 /** @type {number|null} RAF handle za micro loop */
 let _rafId = null;
@@ -255,10 +251,15 @@ function _buildHtml(app) {
  * Prikazuje main meni
  */
 function _showMain() {
+  const state = getState();
+  const container = document.getElementById('main-screen-content');
   showScreen('main');
-  // renderMainScreen(onStart) čita state/#screen-main interno (ui.js) —
-  // ne prima container/options objekat, samo onStart callback.
-  renderMainScreen(_showBriefing);
+  renderMainScreen(container, {
+    state,
+    onStart: _showBriefing,
+    prestigeAvailable: isPrestigeAvailable(),
+    onPrestige: () => _showPrestige()
+  });
 }
 
 /**
@@ -268,13 +269,20 @@ function _showBriefing() {
   resumeAudio();
   const state = getState();
   const container = document.getElementById('briefing-content');
+  const stats = getSeasonStats();
   showScreen('briefing');
-  // renderWeeklyBriefing(screen, capacityResult, onContinue) — capacityResult
-  // treba { capacity, band } (koristi ih renderStaticCapacityPreview interno).
   renderWeeklyBriefing(container, {
-    capacity: state.base_offgrid_capacity || 80,
-    band: state.current_weather_band || 'prosecno'
-  }, _showMacro);
+    state,
+    stats,
+    week: state.week || 1,
+    capacityInfo: {
+      capacity: state.base_offgrid_capacity || 80,
+      weatherBand: state.current_weather_band || 'prosecno'
+    },
+    prestigeAvailable: isPrestigeAvailable(),
+    onStart: _showMacro,
+    onPrestige: () => _showPrestige()
+  });
 }
 
 /**
@@ -293,31 +301,36 @@ function _showMacro() {
  * @param {HTMLElement} container
  */
 function _renderMacroStep(container) {
-  const tutMode = isTutorialMode();
   const draftPlan = getDraftPlan();
   const { index: currentStep } = getCurrentStep();
   const totalSteps = getTotalSteps();
-
-  const callbacks = {
-    onFormat: (formatId) => updateDraftPlan({ format: formatId }),
-    onAlloc: (platform, value) => setAllocation(platform, value),
-    onEquip: (equipId) => buyEquipment(equipId),
-    onGuest: (gostId) => bookGuest(gostId),
+  renderMacroPlanningScreen(container, draftPlan, currentStep, totalSteps, {
     onNext: () => { nextStep(); _renderMacroStep(container); },
     onPrev: () => { prevStep(); _renderMacroStep(container); },
     onLockIn: () => {
       const result = lockInPlan();
-      if (result.ok) {
-        _currentPlan = result.plan;
-        _showLockin(result.plan);
-      } else if (result.reason) {
-        alert(result.reason);
+      if (result && result.ok) {
+        _currentPlan = getState().weekly_plan;
+        _showLockin(_currentPlan);
       }
+    },
+    onFormat: (formatId) => {
+      updateDraftPlan({ format: formatId });
+    },
+    onAlloc: (platform, value) => {
+      const current = getDraftPlan();
+      const newAlloc = { ...current.platform_alloc, [platform]: value };
+      updateDraftPlan({ platform_alloc: newAlloc });
+      return newAlloc;
+    },
+    onEquip: (equipId) => {
+      return buyEquipment(equipId);
+    },
+    onGuest: (guestId) => {
+      updateDraftPlan({ chosen_guest_id: guestId });
     }
-  };
-
-  renderMacroPlanningScreen(container, draftPlan, currentStep, totalSteps, callbacks);
-  applyTutorialClasses(tutMode);
+  });
+  applyTutorialClasses(isTutorialMode());
 }
 
 /**
@@ -330,7 +343,7 @@ function _showLockin(plan) {
   const summaryEl = document.getElementById('lockin-plan-summary');
 
   if (summaryEl && plan) {
-    const alloc = plan.platformAlloc || {};
+    const alloc = plan.platform_alloc || {};
     const formatName = plan.format ? (plan.format.replace('_', ' ').toUpperCase()) : '--';
     summaryEl.innerHTML = `
       <div class="lockin-row"><span class="lockin-key">Format</span><strong>${formatName}</strong></div>
@@ -338,8 +351,8 @@ function _showLockin(plan) {
         <span class="lockin-key">Platforme</span>
         <span>IG ${alloc.ig || 0}% · TT ${alloc.tiktok || 0}% · YT ${alloc.youtube || 0}%</span>
       </div>
-      ${plan.guest ? `<div class="lockin-row"><span class="lockin-key">Gost</span><strong>${plan.guest}</strong></div>` : ''}
-      <div class="lockin-row"><span class="lockin-key">Off-grid</span><span>${Math.round(plan.offgridCapacity || 80)}%</span></div>
+      ${plan.chosen_guest_id ? `<div class="lockin-row"><span class="lockin-key">Gost</span><strong>${getGostProfile(plan.chosen_guest_id)?.name || plan.chosen_guest_id}</strong></div>` : ''}
+      <div class="lockin-row"><span class="lockin-key">Off-grid</span><span>${Math.round(plan.weekly_capacity || 80)}%</span></div>
     `;
   }
 
@@ -378,10 +391,14 @@ function _startMicro(plan) {
   resetEscalation();
   resetGuestRuntime();
   resetEqSession();
-
-  const gostInfo = { arrived: false, gostId: plan.chosen_guest_id || null };
-  const weeklyCapacity = plan.weekly_capacity || state.base_offgrid_capacity || 80;
-  initDashboardState(plan, state.equipment, gostInfo, weeklyCapacity);
+  const _initSt = getState();
+  const _initWp = _initSt.weekly_plan;
+  initDashboardState(
+    _initWp,
+    _initSt.equipment,
+    { arrived: false, gostId: _initWp.chosen_guest_id },
+    _initWp.weekly_capacity
+  );
 
   // Off-grid meter DOM
   const offgridContainer = document.getElementById('offgrid-meter-container');
@@ -397,11 +414,11 @@ function _startMicro(plan) {
   playOnAirJingle();
 
   // Gost dolazak (30-90s kašnjenje — simulira "ušao za kulisu")
-  if (plan.guest) {
+  if (plan.chosen_guest_id) {
     const delay = 30 + Math.floor(Math.random() * 60);
     setTimeout(() => {
       if (!_emisijaEnded) {
-        handleGuestArrival(plan.guest, getState());
+        handleGuestArrival(resolveGostArrival(plan.chosen_guest_id));
       }
     }, delay * 1000);
   }
@@ -451,7 +468,7 @@ function _tickMicro(dt) {
   if (!ds || _emisijaEnded) return;
   const state = getState();
   const plan = _currentPlan || ds.plan || {};
-  const alloc = plan.platformAlloc || { ig: 100, tiktok: 0, youtube: 0 };
+  const alloc = plan.platform_alloc || { ig: 100, tiktok: 0, youtube: 0 };
 
   // 1. Timer napreduje
   tickTime(dt);
@@ -462,24 +479,23 @@ function _tickMicro(dt) {
 
   // 3. Off-grid baterija se prazni
   const drainPerSec = calcCurrentDrain();
-  tickBattery(drainPerSec * dt, getDashboardState());
+  tickBattery(dt, drainPerSec);
 
   // 4. Chat generacija po platformama
   const momentum = getAllMomentum();
-  tickChat(dt, alloc, momentum);
+  tickChat(getDashboardState().elapsed || 0, { platform_alloc: alloc }, isTutorialMode());
 
   // 5. Platform engagement krive
   const currentDs = getDashboardState();
-  for (const platform of ['ig', 'tiktok', 'youtube']) {
-    if ((alloc[platform] || 0) > 0) {
-      calcPlatformEngagement(
-        platform,
-        currentDs.elapsed || 0,
-        alloc[platform],
-        momentum[platform] || 0.2
-      );
-    }
-  }
+  const engResult = calcPlatformEngagement(
+    currentDs.elapsed || 0,
+    currentDs.signal || 100,
+    getAllMomentum(),
+    currentDs.gostArrived || false,
+    plan.format || 'dj_lajv',
+    alloc
+  );
+  if (engResult) updateDashboardState({ engagement: engResult });
 
   // 6. TikTok spike detekcija (samo jednom)
   if (hasTiktokSpike() && !currentDs.tiktokSpikeTriggered) {
@@ -490,15 +506,16 @@ function _tickMicro(dt) {
   }
 
   // 7. Alarm generacija
-  const freshDs = getDashboardState();
-  const newAlarm = tryGenerateAlarm(freshDs.elapsed || 0, freshDs);
+  const escalationBonuses = getEscalationBonuses();
+  const newAlarm = tryGenerateAlarm(escalationBonuses);
   if (newAlarm) _handleNewAlarm(newAlarm);
 
-  // 8. Tick alarm tajmera (miss expired)
-  tickAlarms(dt);
-
-  // 9. Alarm escalacija (cross-alarm lanci)
-  processEscalation(getDashboardState());
+  // 8. Tick alarm tajmera i procesi expired
+  const expiredIds = tickAlarms(dt);
+  for (const id of expiredIds) {
+    const alarm = missAlarm(id);
+    if (alarm) processEscalation(alarm);
+  }
 
   // 10. EQ window tick
   if (isEqActive()) {
@@ -509,10 +526,15 @@ function _tickMicro(dt) {
   }
 
   // 11. Guest standout event (random window tokom emisije)
-  const standout = tickGuestStandout(dt, plan.guest);
+  const standout = tickGuestStandout(getDashboardState().elapsed || 0, plan.format || 'dj_lajv');
   if (standout && !getDashboardState().guestStandoutDone) {
     updateDashboardState({ guestStandoutDone: true });
-    _injectGuestStandoutChat(standout, plan.guest);
+    const standoutMoment = getStandoutMoment(plan.chosen_guest_id);
+    const standoutProfile = getGostProfile(plan.chosen_guest_id);
+    _injectGuestStandoutChat(
+      standoutMoment?.note || 'Gost oduševljava!',
+      standoutProfile?.name || 'Gost'
+    );
   }
 
   // 12. Periodičan save (svake 60s)
@@ -553,7 +575,7 @@ function _renderMicro() {
   if (!ds) return;
   const state = getState();
   const plan = _currentPlan || ds.plan || {};
-  const alloc = plan.platformAlloc || { ig: 100, tiktok: 0, youtube: 0 };
+  const alloc = plan.platform_alloc || { ig: 100, tiktok: 0, youtube: 0 };
 
   // Mini top bar — kapital i publika
   const capEl = document.getElementById('micro-capital');
@@ -569,7 +591,7 @@ function _renderMicro() {
 
   // Off-grid meter
   renderOffgridMeter(
-    ds.offgridCapacity !== undefined ? ds.offgridCapacity : (state.base_offgrid_capacity || 80),
+    ds.offgrid !== undefined ? ds.offgrid : (state.base_offgrid_capacity || 80),
     state.base_offgrid_capacity || 100,
     state.current_weather_band || 'prosecno'
   );
@@ -595,22 +617,17 @@ function _renderMicro() {
   // Engagement po platformama
   const engagement = {};
   for (const p of ['ig', 'tiktok', 'youtube']) {
-    if ((alloc[p] || 0) > 0) {
-      engagement[p] = calcOverallEngagement(p) || 0;
-    } else {
-      engagement[p] = 0;
-    }
+    engagement[p] = (alloc[p] || 0) > 0 ? (ds.engagement?.[p] ?? 0) : 0;
   }
   renderEngagement(engagement);
 
-  // Alarm timer bars (event delegation — update fill)
+  // Alarm timer bars — čitaj timeRemaining/timeLimit direktno iz activeAlarms
   const overlay = document.getElementById('alarm-overlay');
-  if (overlay && ds.alarmTimers) {
+  if (overlay) {
     overlay.querySelectorAll('[data-alarm-id]').forEach(card => {
       const id = card.dataset.alarmId;
-      const rem = ds.alarmTimers[id];
-      const lim = ds.alarmLimits ? ds.alarmLimits[id] : 30;
-      if (rem !== undefined) updateAlarmTimer(id, rem, lim || 30);
+      const alarmObj = ds.activeAlarms?.find(a => a.id === id);
+      if (alarmObj) updateAlarmTimer(id, alarmObj.timeRemaining, alarmObj.timeLimit || 30);
     });
   }
 
@@ -701,26 +718,26 @@ function _handleAlarmAction(alarmId, action) {
   if (action === 'diagnose' || action === 'eq_fix') {
     // Pokreni EQ minigame za feedback_glitch
     if (!isEqActive()) startEqMinigame();
-    resolveAlarm(alarmId, action, ds);
+    const resolvedEq = resolveAlarm(alarmId, action);
     removeAlarmCard(alarmId);
-    processResolution(alarmId, action, ds);
+    if (resolvedEq) processResolution(resolvedEq);
     return;
   }
 
   if (action === 'reroute') {
     // Reroute: troši off-grid kapacitet ali trenutno oporavlja signal
-    resolveSignalAction('reroute', ds);
+    resolveSignalAction('reroute');
   } else if (action === 'push') {
     // Push: besplatno, postepeni oporavak
-    resolveSignalAction('push', ds);
+    resolveSignalAction('push');
   } else if (action === 'restart') {
     // Platform hiccup: kratki restart
-    resolveSignalAction('push', ds);
+    resolveSignalAction('push');
   }
 
-  resolveAlarm(alarmId, action, ds);
+  const resolved = resolveAlarm(alarmId, action);
   removeAlarmCard(alarmId);
-  processResolution(alarmId, action, ds);
+  if (resolved) processResolution(resolved);
   playSuccessChime();
 }
 
@@ -733,6 +750,7 @@ function _handleNewAlarm(alarm) {
   if (!overlay) return;
 
   renderAlarm(alarm, overlay);
+  addActiveAlarm(alarm);
 
   if (alarm.type === 'battery_critical') {
     flashScreen('battery');
@@ -1025,6 +1043,14 @@ function _wireSystemEvents() {
     if (!_emisijaEnded) flashScreen('signal');
   });
 
+  on(EVENTS.GUEST_ARRIVED, () => {
+    updateDashboardState({ gostArrived: true });
+  });
+
+  on(EVENTS.GUEST_NOSHOW, () => {
+    updateDashboardState({ gostArrived: false });
+  });
+
   on(EVENTS.ACHIEVEMENT_UNLOCKED, (ac) => {
     showAchievementToast(ac);
   });
@@ -1099,10 +1125,49 @@ async function init() {
   console.log('[Na Vezi] Igra inicijalizovana. Nedelja:', getState().week || 1);
 }
 
+/* ═══════════════════ ERROR OVERLAY ═══════════════════ */
+
+function _showCriticalError(msg) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = [
+    'position:fixed', 'inset:0', 'background:#1a0808',
+    'display:flex', 'flex-direction:column', 'align-items:center',
+    'justify-content:center', 'z-index:9999', 'color:#ff6b6b',
+    'font-family:monospace', 'text-align:center', 'padding:20px'
+  ].join(';');
+  overlay.innerHTML = `
+    <div style="font-size:2rem;margin-bottom:16px;">⚠️</div>
+    <div style="font-size:1.1rem;margin-bottom:8px;color:#fff;">Greška u inicijalizaciji</div>
+    <div style="font-size:0.8rem;color:#aaa;margin-bottom:20px;max-width:400px;">${msg}</div>
+    <button onclick="location.reload()" style="background:#c0392b;color:#fff;border:none;padding:10px 28px;border-radius:4px;cursor:pointer;font-size:1rem;">Refresh</button>
+  `;
+  (document.body || document.documentElement).appendChild(overlay);
+}
+
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('[Na Vezi] Unhandled rejection:', e.reason);
+  _showCriticalError('Refresh stranicu i pokušaj ponovo.');
+});
+
+window.onerror = (_msg, _src, _line, _col, err) => {
+  console.error('[Na Vezi] Uncaught error:', err || _msg);
+  _showCriticalError('Refresh stranicu i pokušaj ponovo.');
+  return true;
+};
+
+async function _safeInit() {
+  try {
+    await init();
+  } catch (err) {
+    console.error('[Na Vezi] Init greška:', err);
+    _showCriticalError('Refresh stranicu i pokušaj ponovo.');
+  }
+}
+
 // Boot — module skripte se izvršavaju posle HTML parsiranja (defer-like),
 // pa je DOMContentLoaded često već opalio pre ovog listenera. Pokrivamo oba slučaja.
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', _safeInit);
 } else {
-  init();
+  _safeInit();
 }

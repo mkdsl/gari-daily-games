@@ -57,6 +57,12 @@ Pre primene routing tabele iz KORAK 0, proveri da li `docs/` artefakti najnovije
   - Commit: `fix(<naziv-igre>): manifest/docs sync (KORAK 0a)`, push.
   - `sef_signoff` i `status` ostaju netaknuti — KORAK 6.75/7 i dalje čekaju šefa.
 - Ako `docs/sef_signoff.md` ima čekirano "OK za release" ALI `manifest.sef_signoff != true`:
+  - **Proveri `[x]` u fajlu, ne samo postojanje fajla:**
+    ```bash
+    grep -q '\[x\]' docs/sef_signoff.md && echo "approved" || echo "not-approved"
+    ```
+  - Nastavi na KORAK 7 SAMO ako `grep` vrati "approved" (tj. bar jedan `[x]` postoji).
+  - Samo postojanje `sef_signoff.md` bez `[x]` = šef još nije odlučio → čekaj, ne release-uj.
   - Tretiraj kao odobren KORAK 6.75 — nastavi na KORAK 7 (Finale) bez obzira na trigger tip.
 - Ako nijedan drift nije nađen — preskoči, idi na routing tabelu ispod.
 
@@ -370,13 +376,13 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 **Agent:** Beta Trio (re-test posle fix-ova)
 **Input:** fix_log.md + igra ponovo
 **Output:** `docs/beta_report_2.md`
-**Gate:** Ako iter 2 nađe nove CRITICAL bugove → još jedan fix krug (Jova). Inače → šef sign-off.
+**Gate:** Ako iter 2 nađe nove CRITICAL bugove → još jedan fix krug (Jova) → `docs/beta_report_3.md` (KORAK 6.5b), upiši `beta_score_iter3` u manifest.json. KORAK 6.75 koristi `beta_score_iter3` kao poslednji score. Inače → šef sign-off.
 
 ### KORAK 6.75 — AUTO-RELEASE GATE
 
 **Auto-release uslovi (oba moraju biti ispunjena):**
-- `beta_score_iter2 >= 8.0`
-- 0 CRITICAL bugova u oba `beta_report.md`
+- Poslednji beta score (`beta_score_iter3` ako postoji u manifest.json, inače `beta_score_iter2`) >= 8.0
+- 0 CRITICAL bugova u svim `docs/beta_report*.md` fajlovima
 
 Ako **oba uslova ispunjena** → preskoči čekanje, idi direktno na KORAK 7. Šef dobija notifikaciju posle release-a. Veto: `git revert` released commita u bilo kom trenutku → igra se vraća u `polish/in_progress`.
 

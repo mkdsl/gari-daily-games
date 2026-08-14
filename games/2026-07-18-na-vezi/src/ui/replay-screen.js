@@ -3,7 +3,9 @@ import { formatHighlight, calcSessionHighlightScore } from '../meta/replay-highl
 import { buildHighlightText, shareHighlight } from '../share.js';
 import { getAforizam, getOutcomeType } from '../content/aforizmi.js';
 import { BRAND_HOOKS, getOutcomeBrandCopy } from '../content/brand-hooks.js';
-import { formatCapital } from '../config.js';
+import { formatCapital, GAME_CONFIG } from '../config.js';
+import { getState } from '../state.js';
+import { getNextUnlock } from '../meta/unlock-manager.js';
 
 /**
  * Renderuje replay screen
@@ -18,6 +20,10 @@ export function renderReplayScreen(container, emisijaResult, onContinue) {
   const outcomeType = getOutcomeType(overallEngagement || 0);
   const aforizam = getAforizam(outcomeType);
   const brandCopy = getOutcomeBrandCopy(overallEngagement || 0, 'guncati');
+  const state = getState();
+  const nextUnlock = getNextUnlock();
+  const UNLOCK_MAP = { podkast: 3, vlog_uzivo: 6 };
+  const unlockThreshold = nextUnlock ? UNLOCK_MAP[nextUnlock.formatId] : GAME_CONFIG.SEASON_LENGTH_EMISIJE;
 
   container.innerHTML = `
     <div class="replay-container scroll-area">
@@ -51,6 +57,36 @@ export function renderReplayScreen(container, emisijaResult, onContinue) {
       ` : ''}
 
       <div class="divider"></div>
+
+      <div class="reach-meter">
+        <div class="value-label">📡 REACH</div>
+        <div class="reach-number">${formatCapital(state.audience.ig + state.audience.tiktok + state.audience.youtube)}</div>
+        <div class="reach-breakdown">
+          IG ${formatCapital(state.audience.ig)} · TT ${formatCapital(state.audience.tiktok)} · YT ${formatCapital(state.audience.youtube)}
+        </div>
+      </div>
+
+      ${nextUnlock ? `
+        <div class="unlock-progress-panel">
+          <div class="flex-between" style="margin-bottom:6px;">
+            <span class="value-label">🔓 ${nextUnlock.format.name}</span>
+            <span style="font-size:0.8rem; color:var(--color-text-dim);">još ${nextUnlock.emisijeDo} emisija</span>
+          </div>
+          <div class="unlock-track">
+            <div class="unlock-fill" style="width:${Math.round((unlockThreshold - nextUnlock.emisijeDo) / unlockThreshold * 100)}%"></div>
+          </div>
+        </div>
+      ` : `
+        <div class="unlock-progress-panel">
+          <div class="flex-between" style="margin-bottom:6px;">
+            <span class="value-label">⭐ Prestige Progress</span>
+            <span style="font-size:0.8rem; color:var(--color-text-dim);">još ${Math.max(0, GAME_CONFIG.SEASON_LENGTH_EMISIJE - state.emisije_u_sezoni)} emisija</span>
+          </div>
+          <div class="unlock-track">
+            <div class="unlock-fill" style="width:${Math.round(state.emisije_u_sezoni / GAME_CONFIG.SEASON_LENGTH_EMISIJE * 100)}%"></div>
+          </div>
+        </div>
+      `}
 
       <div class="panel" style="text-align:center; font-style:italic;">
         <p style="color:var(--color-signal); font-size:0.9rem;">"${aforizam}"</p>

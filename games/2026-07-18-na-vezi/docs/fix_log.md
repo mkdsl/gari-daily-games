@@ -1,37 +1,230 @@
-# Fix Log — Na Vezi (polish, krug 1)
+# Fix Log — Na Vezi
 
-Izvor: `docs/beta_report.md` (ocena 1.2/10, 3 CRITICAL + 2 MEDIUM + 2 LOW).
+**Beta iter 1 score:** 1.2/10 (3 CRITICAL, 2 MEDIUM, 2 LOW)
+**Fix sesija:** 2026-07-24
 
-## Rešeno
+---
 
-**Bug #1 (CRITICAL — boot failure)** — commit `1839082` (prethodna sesija)
-- `src/audio.js:44` — `startAmbientPad` nije bila exportovana iako je `main.js` importuje kao named export → SyntaxError ruši ceo module graf, `init()` se nikad ne pozove.
-- Fix: dodat `export` ispred `function startAmbientPad()`.
+## CRITICAL Bugovi (svi rešeni)
 
-**Bug #2 (CRITICAL — macro planning ekran crash)**
-- `src/main.js` je pozivao `renderMacroPlanningScreen(container, {options})` sa 2 argumenta, dok `src/ui.js:226` zahteva 5 pozicionih parametara (`screen, draftPlan, currentStep, totalSteps, callbacks`).
-- Fix: `_renderMacroStep()` u `main.js` sada čita `getDraftPlan()`, `getCurrentStep()`, `getTotalSteps()` iz `planning-session.js` i sastavlja `callbacks` objekat (`onFormat`, `onAlloc`, `onEquip`, `onGuest`, `onNext`, `onPrev`, `onLockIn`) koji odgovara onome što `ui.js` očekuje. `onFormat`/`onAlloc`/`onEquip`/`onGuest` su ožičeni na `updateDraftPlan`, `setAllocation`, `buyEquipment`, `bookGuest` (novi import-i u `main.js`).
+### C1 — Blank screen za 100% korisnika (REŠEN)
+**Uzrok:** `src/audio.js:44` — `startAmbientPad()` definisana bez `export` ključne reči, ali `src/main.js:7` je importuje kao named export → ES module SyntaxError ruši ceo import graf pre nego što `init()` ikad pozovemo. Prethodni patch (DOMContentLoaded) nije rešio koren problema.
+**Fix:** Dodato `export` ispred `function startAmbientPad()` na liniji 44 u `audio.js`.
 
-**Bug #3 (CRITICAL — macro→micro handoff)**
-- `src/macro/planning-session.js:lockInPlan()` je vraćao samo `{ ok: true }`, bez stvarnog plana; `main.js` je čuvao taj prazan objekat kao `_currentPlan`.
-- `src/main.js:_startMicro()` je pozivao `initDashboardState()` bez argumenata, dok `dashboard-state.js` zahteva `(plan, equipment, gostInfo, weeklyCapacity)` i odmah čita `gostInfo.arrived` → TypeError, cela mikro-inicijalizacija se nikad ne završi.
-- Fix: `lockInPlan()` sada vraća `{ ok: true, plan }` gde `plan` sadrži i camelCase alias-e (`platformAlloc`, `guest`, `offgridCapacity`) koje micro sloj očekuje. `_startMicro(plan)` sada gradi `gostInfo` i `weeklyCapacity` i prosleđuje sva 4 argumenta u `initDashboardState()`.
+### C2 — Macro planning ekran puca odmah pri renderovanju (REŠEN)
+**Uzrok:** `_renderMacroStep` u `src/main.js` pozivao `renderMacroPlanningScreen(container, optionsObject)` sa 2 argumenta umesto očekivanih 5 pozicionih. `callbacks = undefined` → `TypeError: Cannot read properties of undefined (reading 'onLockIn')`.
+**Fix:** Dodat import za `getDraftPlan, getTotalSteps, nextStep, prevStep, updateDraftPlan` iz `./macro/planning-session.js` i `buyEquipment` iz `./macro/equipment-shop.js`. `_renderMacroStep` prepisan da prosleđuje sve 5 pozicionih argumenata + komplet callbacks (onNext, onPrev, onLockIn, onFormat, onAlloc, onEquip, onGuest) sa ispravnom logikom za svaki korak planiranja.
 
-**MEDIUM — signal recovery 8x presporo**
-- `main.js` je pozivao `passiveSignalRecover(dt)` / `tickSignal(dt)` sa `dt` (≈1) umesto sa stopom oporavka.
-- Fix: pozivi sada koriste `GAME_CONFIG.SIGNAL_RECOVER_RATE` (8).
+### C3 — Live emisija dashboard se nikad ne inicijalizuje (REŠEN)
+**Uzrok:** `src/main.js:377` pozivao `initDashboardState()` bez argumenata. `dashboard-state.js:47` odmah pristupa `gostInfo.arrived` → `TypeError: Cannot read properties of undefined`. Sve mikro-mehanike (signal, chat, alarmi, timer, EQ) ostajale zamrznute zauvek.
+**Fix:** `initDashboardState()` poziv zamenjen sa 4 argumenta iz `getState()`:
+```js
+const _initSt = getState();
+const _initWp = _initSt.weekly_plan;
+initDashboardState(_initWp, _initSt.equipment, { arrived: false, gostId: _initWp.chosen_guest_id }, _initWp.weekly_capacity);
+```
+Bonus fix iz KORAK 6 briga: `lockInPlan()` return vrednost (`{ ok: true }`) ne koristi se više direktno kao `_currentPlan` — plan se čita iz `getState().weekly_plan` posle uspešnog lock-in.
 
-**MEDIUM — tajmer pogrešna dužina emisije**
-- `main.js` je referencirao nepostojeći `GAME_CONFIG.EMISIJA_DURATION_SECONDS` (fallback 2700 = 45:00) dok je stvarni kraj emisije `GAME_CONFIG.EMISIJA_DURATION` (480s = 8min) — tajmer bi pokazivao pogrešno preostalo vreme.
-- Fix: `renderTimer` sada koristi `GAME_CONFIG.EMISIJA_DURATION` direktno.
+---
 
-## Ostavljeno za next pass (LOW, ne blokira first-impression)
+## MEDIUM Bugovi (svi rešeni)
 
-- `resolveSignalAction(action)` prima 1 parametar ali se poziva sa 2 na više mesta u `main.js` — drugi argument se tiho ignoriše, nije štetno.
-- Nema top-level `try/catch` oko `init()` / import lanca — jedan budući typo bi mogao ponovo da izazove tihi "crn ekran" bez traga u konzoli.
+### M1 — Signal recovery 8× sporiji od dizajniranog (REŠEN)
+**Uzrok:** `passiveSignalRecover(dt)` i `tickSignal(dt)` pozivani sa `dt=1` umesto `GAME_CONFIG.SIGNAL_RECOVER_RATE=8`.
+**Fix:** Oba poziva u `_tickMicro` promenjeni na `GAME_CONFIG.SIGNAL_RECOVER_RATE`.
 
-## Verifikacija
+### M2 — Timer pokazuje 45:00 umesto 8:00 (REŠEN)
+**Uzrok:** `GAME_CONFIG.EMISIJA_DURATION_SECONDS` ne postoji → fallback `2700` (45 min). Pravi ključ je `GAME_CONFIG.EMISIJA_DURATION = 480` (8 min).
+**Fix:** `renderTimer(elapsed, GAME_CONFIG.EMISIJA_DURATION_SECONDS || 2700)` → `renderTimer(elapsed, GAME_CONFIG.EMISIJA_DURATION)`.
 
-Sve funkcije/signature na koje se novi pozivi oslanjaju su ručno unakrsno provereni u izvoru pre commit-a: `renderMainScreen(onStart)`, `renderWeeklyBriefing(screen, capacityResult, onContinue)`, `getTotalSteps/updateDraftPlan/nextStep/prevStep` (`planning-session.js`), `setAllocation` (`platform-allocation.js`), `buyEquipment` (`equipment-shop.js`), `bookGuest` (`guest-booking.js`), `GAME_CONFIG.EMISIJA_DURATION`/`SIGNAL_RECOVER_RATE` (`config.js`) — sve postoje i signature se poklapaju sa novim pozivima.
+---
 
-Sledeći korak: Beta Trio iter 2 na `play_url` (živi test, ne code review).
+## LOW Bugovi (logguju se za next pass)
+
+### L1 — `resolveSignalAction` pozvan sa 2 argumenta, ali prima samo 1
+Drugi argument se tiho ignoriše — nije štetno, ali mrtav/zbunjujuć kod.
+
+### L2 — Nema top-level error boundary
+Jedan typo u ~50 modula reprodukuje prazan crn ekran bez traga. Nema `try/catch` ni fallback UI.
+
+---
+
+## Fajlovi promenjeni (iter 1)
+- `src/audio.js` — dodato `export` na `startAmbientPad`
+- `src/main.js` — prošireni importi, prepisan `_renderMacroStep`, fiksovano `initDashboardState`, signal recovery rate, timer duration
+
+---
+
+## Fix Krug 2 — 2026-07-25 (MEDIUM Naming Mismatches)
+
+**Triggered by:** sef_signoff.md Opcija A, šef politika "bez mene", trigger routing "nastavi polish"
+**Beta iter 2 score:** 5.3/10 — 3 MEDIUM naming mismatch u main.js
+
+### M3 — Platform allocation ignorisana u emisiji (REŠEN)
+**Uzrok:** `plan.platformAlloc` ne postoji — ispravno polje je `plan.platform_alloc`. Fallback `{}` znači da chat i engagement sistemi dobijaju 0% za sve platforme.
+**Fix:** 3 zamene u `src/main.js` (linije 345, 470, 572): `plan.platformAlloc` → `plan.platform_alloc`
+
+### M4 — Gost nikad ne dolazi (REŠEN)
+**Uzrok:** `plan.guest` ne postoji — ispravno polje je `plan.chosen_guest_id`. Uslov `if (plan.guest)` uvek false → `handleGuestArrival` nikad pozvan. `tickGuestStandout` dobija `undefined` → standout event nikad ne pali.
+**Fix:** 5 zamena u `src/main.js` (linije 353, 416, 420, 528, 531): `plan.guest` → `plan.chosen_guest_id`
+
+### M5 — Battery meter statičan (REŠEN)
+**Uzrok:** `ds.offgridCapacity` ne postoji u dashboard state — ispravno polje je `ds.offgrid`. `renderOffgridMeter` dobijao fallback 80 umesto stvarnog stanja baterije.
+**Fix:** 1 zamena u `src/main.js` (linija 588): `ds.offgridCapacity` → `ds.offgrid`
+
+### Bonus — Lock-in summary pokazivao pogrešan offgrid % (REŠEN)
+**Uzrok:** `plan.offgridCapacity` ne postoji — ispravno polje je `plan.weekly_capacity`.
+**Fix:** 1 zamena u `src/main.js` (linija 354): `plan.offgridCapacity` → `plan.weekly_capacity`
+
+## Fajlovi promenjeni (iter 2)
+- `src/main.js` — 10 naming mismatch zamena (svi u jednom fajlu)
+
+---
+
+## Fix Krug 3 — 2026-07-25 (7 CRITICAL architectural bugs)
+
+**Triggered by:** Beta Trio iter 3 (score 3.0/10) — naming fix krug 2 otkrio dublje arhitekturne bugove koji su bili sakriveni dok su code paths bili mrtvi.
+**Beta iter 3 score:** 3.0/10 — game se ne može normalno završiti (timer odbroji do 00:00 ali emisija ostaje aktivna)
+
+### CRITICAL #1 — `calcPlatformEngagement` pogrešan poziv → TypeError svake sekunde → igra se nikad ne završava (REŠEN)
+
+**Uzrok:** `_tickMicro` pozivao funkciju u for-petlji sa 4 pogrešna argumenta (`platform` string kao `elapsed`, `elapsed` kao `signalLevel`, `alloc[platform]` broj kao `chatMomentum`, `momentum[platform]` broj kao `gostArrived`). Pravi potpis: `(elapsed, signalLevel, chatMomentum, gostArrived, format, platformAlloc)`. Linija 41 unutar funkcije: `if (platformAlloc.ig > 0)` → `TypeError: Cannot read properties of undefined (reading 'ig')`. TypeError sprečava izvršavanje svih koraka posle step 5 u `_tickMicro`, uključujući step 13 (`isEmisijaOver`) — igra se nikad ne završava prirodno.
+
+**Fix:** for-petlja zamenjena jednim ispravnim pozivom van petlje:
+```js
+calcPlatformEngagement(
+  freshDs2.elapsed || 0,
+  freshDs2.signal || 100,
+  getAllMomentum(),
+  freshDs2.gostArrived || false,
+  plan.format || 'dj_lajv',
+  alloc
+);
+```
+
+### CRITICAL #2 — `handleGuestArrival` prima string umesto `{arrived, noShow}` objekta (REŠEN)
+
+**Uzrok:** `main.js:420` pozivao `handleGuestArrival(plan.chosen_guest_id, getState())` — prosleđivao string ID (`'g1'`) kao `arrivalResult`. Funkcija odmah pristupa `arrivalResult.noShow` i `arrivalResult.arrived` — oba `undefined` (falsy). `EVENTS.GUEST_ARRIVED` i `EVENTS.GUEST_NOSHOW` se nikad ne emituju → `ds.gostArrived` ostaje `false` za celo trajanje emisije.
+
+**Fix:** Dodat import `resolveGostArrival` iz `./content/gost-roster.js`. Poziv zamenjen sa:
+```js
+handleGuestArrival(resolveGostArrival(plan.chosen_guest_id));
+```
+
+### CRITICAL #3 — `EVENTS.GUEST_ARRIVED` emitovan ali nema listenera → `ds.gostArrived` nikad `true` (REŠEN)
+
+**Uzrok:** `handleGuestArrival` emituje `EVENTS.GUEST_ARRIVED`, ali `_wireSystemEvents()` nikad nije registrovao listener za taj event. `updateDashboardState({ gostArrived: true })` se nikad ne poziva → `calcOverallEngagement` uvek računa bez gost faktora.
+
+**Fix:** Dodata dva listenera u `_wireSystemEvents()`:
+```js
+on(EVENTS.GUEST_ARRIVED, () => { updateDashboardState({ gostArrived: true }); });
+on(EVENTS.GUEST_NOSHOW, () => { updateDashboardState({ gostArrived: false }); });
+```
+
+### CRITICAL #4 — `tickGuestStandout` pozvan sa pogrešnim argumentima (REŠEN)
+
+**Uzrok:** `main.js:527` pozivao `tickGuestStandout(dt, plan.chosen_guest_id)` — `dt` (delta vreme ≈0.016) kao `elapsed` (ukupno proteklo vreme u sekundama), i `plan.chosen_guest_id` string kao `format` string. Funkcija nikad ne pali standout window jer `elapsed < 2` uvek (treba 120–300 sekundi).
+
+**Fix:** `tickGuestStandout(getDashboardState().elapsed || 0, plan.format || 'dj_lajv')`
+
+### CRITICAL #5 — `tickBattery` pozvan sa pre-izračunatom vrednošću i state objektom (REŠEN)
+
+**Uzrok:** `main.js` pozivao `tickBattery(drainPerSec * dt, getDashboardState())`. Pravi potpis: `tickBattery(dt, drainPerSec)` — funkcija interno računuje `drainPerSec * dt`. Rezultat: funkcija primala `NaN` (broj * objekat = NaN) pa `tickOffgrid(NaN)` → baterija se nikad ne troši.
+
+**Fix:** `tickBattery(dt, drainPerSec)`
+
+### CRITICAL #6 — `tickChat` pozvan sa pogrešnim argumentima → samo IG chat, nikad TikTok/YT (REŠEN)
+
+**Uzrok:** `main.js` pozivao `tickChat(dt, alloc, momentum)`. Pravi potpis: `tickChat(elapsed, plan, tutorialMode)` gde `plan.platform_alloc` određuje aktivne platforme, a `tutorialMode` (bool) limitira na IG-only. Pošto je `momentum` objekat (truthy), `tutorialMode` je uvek `true` → TikTok i YouTube chat se nikad ne generišu.
+
+**Fix:** `tickChat(getDashboardState().elapsed || 0, { platform_alloc: alloc }, isTutorialMode())`
+
+### CRITICAL #7 — Alarm sistem: pogrešni pozivi `tryGenerateAlarm`, `tickAlarms`, `processEscalation` (REŠEN)
+
+**Uzrok:** Tri greške u `_tickMicro` koraku 7-9:
+1. `tryGenerateAlarm(freshDs.elapsed || 0, freshDs)` — pravi potpis: `tryGenerateAlarm(escalationBonuses = {})`. Poziv sa dva argumenta ignoriše `escalationBonuses` → alarmna eskalacija nikad ne utiče na novu generaciju alarma.
+2. `tickAlarms(dt)` — return vrednost (niz expired ID-ova) ignorisana → expired alarmi nikad ne prolaze kroz `missAlarm` + `processEscalation`.
+3. `processEscalation(getDashboardState())` pozvan svaki tik — pravi potpis: `processEscalation(missedAlarm)` prima specifičan alarm objekat. Svaki tik poziva `_missedCount++` unutar funkcije → nakon 8 minuta (480 tika) `_missedCount` = 480+ što maxuje sve eskalacione bonuse i sabotira alarm balans.
+
+**Fix:**
+```js
+// 7. Alarm generacija
+const escalationBonuses = getEscalationBonuses();
+const newAlarm = tryGenerateAlarm(escalationBonuses);
+if (newAlarm) _handleNewAlarm(newAlarm);
+
+// 8. Tick alarm tajmera i procesi expired
+const expiredIds = tickAlarms(dt);
+for (const id of expiredIds) {
+  const alarm = missAlarm(id);
+  if (alarm) processEscalation(alarm);
+}
+```
+Dodat import: `missAlarm` iz `alarm-generator.js`, `getEscalationBonuses` iz `alarm-escalation.js`.
+
+## Fajlovi promenjeni (iter 3)
+- `src/main.js` — svi fiksevi u jednom fajlu (CRITICAL #1–#7)
+
+---
+
+## Fix Krug 4 — 2026-07-25 (2 CRITICAL + 3 MEDIUM)
+
+**Triggered by:** Beta Trio iter 4 (score 3.0/10) — verifikacija iter 3 fikseva uspešna, ali temeljniji pregled `_handleNewAlarm` i `_handleAlarmAction` blokova otkrio 2 nova CRITICAL-a.
+
+### CRITICAL #8 — `addActiveAlarm` nikad nije pozvan → `ds.activeAlarms` uvek prazno (REŠEN)
+
+**Uzrok:** `_handleNewAlarm` rendovao alarm kartu, ali nije pozivao `addActiveAlarm(alarm)`. Posledica: `tickAlarms` iterira prazan niz → timeout eskalacija nikad ne radi; `resolveAlarm` ne može da nađe alarm u stanju → `alarmsResolved` nikad ne raste; cap od 3 simultana alarma se ne primenjuje. Vizuelni/audio feedback alarmima radio ispravno, ali state je bio nekonzistentan.
+
+**Fix:** Dodat import `addActiveAlarm` iz `alarm-generator.js`. Jedna linija u `_handleNewAlarm` posle `renderAlarm`:
+```js
+addActiveAlarm(alarm);
+```
+
+### CRITICAL #9 — `processResolution` prima string ID umesto alarm objekta → eskalacioni bonusi nikad ne opadaju (REŠEN)
+
+**Uzrok:** `_handleAlarmAction` pozivao `processResolution(alarmId, action, ds)` sa string ID-om. Pravi potpis: `processResolution(resolvedAlarm)` prima alarm objekat. `resolvedAlarm.type === undefined` → eskalacioni bonusi se akumuliraju jednosmerno (rastu na miss, nikad ne opadaju na resolve).
+
+**Fix:** Oba poziva u `_handleAlarmAction` prepravljena da hvate return vrednost `resolveAlarm` i proslede je:
+```js
+const resolved = resolveAlarm(alarmId, action);
+removeAlarmCard(alarmId);
+if (resolved) processResolution(resolved);
+```
+
+### MEDIUM #1 — `calcPlatformEngagement` povratna vrednost odbačena → iste eng. vrednosti za sve platforme (REŠEN)
+
+**Uzrok:** `calcPlatformEngagement(...)` pozivana u `_tickMicro` ali povratna vrednost `{ig,tiktok,youtube}` ignorisana. `_renderMicro` koristio `calcOverallEngagement(p)` koji ignoriše `p` parametar → iste vrednosti za sve platforme.
+
+**Fix:** Sačuvano u state + render čita iz state:
+```js
+// _tickMicro:
+const engResult = calcPlatformEngagement(...);
+if (engResult) updateDashboardState({ engagement: engResult });
+
+// _renderMicro:
+engagement[p] = (alloc[p] || 0) > 0 ? (ds.engagement?.[p] ?? 0) : 0;
+```
+
+### MEDIUM #2 — Alarm countdown bar-ovi statični (REŠEN)
+
+**Uzrok:** `_renderMicro` uslov `if (overlay && ds.alarmTimers)` uvek `false` jer `alarmTimers` nije inicijalizovano. Alarm kartica ne pokazuje odbrojavanje.
+
+**Fix (opcija B):** Timer bar-ovi čitaju `timeRemaining`/`timeLimit` direktno iz `ds.activeAlarms`:
+```js
+const alarmObj = ds.activeAlarms?.find(a => a.id === id);
+if (alarmObj) updateAlarmTimer(id, alarmObj.timeRemaining, alarmObj.timeLimit || 30);
+```
+
+### MEDIUM #3 — Standout chat prikazuje "💫 g2: true" (REŠEN)
+
+**Uzrok:** `tickGuestStandout` vraća `boolean`, ali kod ga prosleđivao kao tekst poruke. Ime gosta prosleđivano kao raw ID ('g2') umesto `profile.name`.
+
+**Fix:** Dodat import `getGostProfile` iz `gost-roster.js`. Koristi `getStandoutMoment(gostId).note` za tekst i `getGostProfile(gostId).name` za ime:
+```js
+const standoutMoment = getStandoutMoment(plan.chosen_guest_id);
+const standoutProfile = getGostProfile(plan.chosen_guest_id);
+_injectGuestStandoutChat(standoutMoment?.note || 'Gost oduševljava!', standoutProfile?.name || 'Gost');
+```
+
+## Fajlovi promenjeni (iter 4)
+- `src/main.js` — svi fiksevi (CRITICAL #8, #9, MEDIUM #1, #2, #3)

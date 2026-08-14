@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-07-18-na-vezi/",
   "brand_serves": ["guncati", "mkdslend", "kluboslavija"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Bootstrap — wires macro→micro→meta petlju, RAF game loop, sve screen tranzicije",
     "src/config.js": "GAME_CONFIG, EQUIPMENT (18 stavki), FORMATS (3), ACHIEVEMENTS (14), helper funkcije",
@@ -20,7 +20,7 @@
     "src/content/aforizmi.js": "Pera Period aforizmi po outcome tipu (great/good/ok/poor), getAforizam, getOutcomeType",
     "src/content/brand-hooks.js": "BRAND_HOOKS za guncati/mkdslend/kluboslavija, getOutcomeBrandCopy, getBrandCtaHtml",
     "src/content/chat-templates.js": "13+ chat template-a po tagu (hype/pitanje/kritika/podrska) po platformi, srpski slang, generateChatMessage",
-    "src/content/gost-roster.js": "8 gosta (g1-g8) sa profilima, calcNoShowChance, resolveGostArrival, calcGostEngagementBonus",
+    "src/content/gost-roster.js": "8 gosta (g1-g8) sa profilima, calcNoShowChance, resolveGostArrival, getGostProfile, calcGostEngagementBonus",
     "src/macro/equipment-shop.js": "getEquipmentList, buyEquipment, previewAlarmChance, calcEffectiveSignalLevel, getEquipmentByCategory",
     "src/macro/format-selector.js": "getAvailableFormats, selectFormat, getFormatAffinity, checkFormatUnlocks (podkast@3, vlog@6)",
     "src/macro/guest-booking.js": "getGuestBookingOptions, bookGuest, previewGuestEngagement, formatReliability",
@@ -28,7 +28,7 @@
     "src/macro/planning-session.js": "5-koračna sesija planiranja: startPlanningSession, nextStep/prevStep, getDraftPlan, lockInPlan",
     "src/macro/platform-allocation.js": "setAllocation (proportional rebalancing na 100%), getAllocTotal, validateAllocation, estimateDrain",
     "src/macro/weekly-outcome.js": "calcWeeklyRevenue, updateAudienceAfterEmisija (IG growth, TikTok spike/decay, YT retention), resolveWeeklyOutcome",
-    "src/micro/alarm-generator.js": "ALARM_CONFIGS (5 tipova), calcAlarmChance, tryGenerateAlarm, resolveAlarm, missAlarm, tickAlarms",
+    "src/micro/alarm-generator.js": "ALARM_CONFIGS (5 tipova), calcAlarmChance, tryGenerateAlarm, resolveAlarm, missAlarm, tickAlarms, addActiveAlarm",
     "src/micro/alarm-escalation.js": "Odvojen od generatora: resetEscalation, processEscalation (lanci između alarmova), processResolution, getEscalationBonuses",
     "src/micro/chat-momentum.js": "tickChat, getRecentMessages, resetChatQueues, triggerTiktokSpike, getAllMomentum",
     "src/micro/dashboard-state.js": "initDashboardState, getDashboardState, updateDashboardState, tickTime, tickSignal, calcOverallEngagement, isEmisijaOver",
@@ -55,11 +55,14 @@
     "index.html": "Ulazna tačka — CSS linkovi, html2canvas CDN, #app div, script type=module src=main.js"
   },
   "line_counts": {
-    "total_js": 6900,
+    "total_js": 6928,
     "total_css": 1932
   },
   "beta_score": 1.2,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
-  "sef_signoff": false
+  "beta_score_iter2": 5.3,
+  "beta_score_iter3": 3.0,
+  "beta_score_iter4": 3.0,
+  "beta_score_iter5": 8.5,
+  "post_fix_score": 8.5,
+  "sef_signoff": true
 }
