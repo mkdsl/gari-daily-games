@@ -14,7 +14,7 @@
 
 - [ ] P3 `src/content/brand_hooks.js` — dodaj "Guncati Terenska Emisija" event: kad igrač dostigne off-grid capacity tier 3, otključava specijalnu emisiju snimljenu "sa sela" (zelena paleta, statički šum kao flavor, Brana Barakonja kao gost profil) — direktna Guncati brand integracija u core loop
 - [ ] P3 `src/content/brand_hooks.js` — dodaj "Kluboslavija Predaj-tura" format unlock: pet uzastopnih uspešnih emisija sa gostom koji ima `type: "live_performer"` otključava podcast format "Na putu do Avale / Štranda / Sarajeva / Guncata" — četiri epizode kao progression, svaka sa Kluboslavija venue flavor tekstom u intro overlay-u
-- [ ] P2 `src/share.js` — unaprediti shareable broadcast card posle emisije: dodaj `play_url` link i format/platforme u share tekst; trenutni screenshot nema URL pa igrač koji šeruje ne vuče novi promet ka igri — fiksirati Web Share API `text` payload sa pozivom na akciju i linkom [P3→P2: W34 engagement kampanja, Iskra 2026-08-13]
+- [x] P2 `src/share.js` — unaprediti shareable broadcast card posle emisije: dodaj `play_url` link i format/platforme u share tekst; trenutni screenshot nema URL pa igrač koji šeruje ne vuče novi promet ka igri — fiksirati Web Share API `text` payload sa pozivom na akciju i linkom [P3→P2: W34 engagement kampanja, Iskra 2026-08-13] (done 2026-08-14, commit 7166336)
 - [ ] P3 `src/content/brand_hooks.js` — MKDSLend studio upgrade milestone copy: kad igrač kupi studio tier 4+ prikaži overlay sa "Zabavni radni park — studio je spreman" flavor tekstom i mention-om MKDSLend koncepta; kopija ide u `aforizmi.js` pod `studioMilestones[]` array koji vec postoji
 
 ### Dule — Retention & Replay
