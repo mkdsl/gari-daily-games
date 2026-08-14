@@ -1,15 +1,17 @@
 /** html2canvas fallback + Web Share API (highlight share) */
 import { getState } from './state.js';
 
+const PLAY_URL = 'https://mkdsl.github.io/gari-daily-games/games/2026-07-18-na-vezi/';
+
 /**
  * Deli highlight reel
  * @param {string} highlightText - tekstualni opis highligtha
  */
 export async function shareHighlight(highlightText) {
   const state = getState();
-  const url = window.location.href;
+  const url = PLAY_URL;
   const title = 'Na Vezi — Guncati Televizija';
-  const text = `${highlightText}\n\n📺 Emisija br. ${state.week}, Sezona ${state.prestige_count + 1}\n#GuncatiTvizija #NaVezi`;
+  const text = `${highlightText}\n\n📺 Emisija br. ${state.week}, Sezona ${state.prestige_count + 1}\n🎮 Igraj: ${PLAY_URL}\n#GuncatiTvizija #NaVezi`;
 
   // Pokušaj Web Share API
   if (navigator.share) {
@@ -114,11 +116,13 @@ export function buildOutcomeSummary(outcome) {
     `📊 Engagement: ${Math.round(outcome.engagement * 100)}%`,
     `💰 Kapital: +${Math.round(outcome.capitalDelta)}`,
   ];
+  if (outcome.format) lines.push(`🎙 Format: ${outcome.format}`);
   if (outcome.noShow) {
     lines.push('😬 Gost nije stigao...');
   }
   if (outcome.tiktokSpike) {
     lines.push('🚀 TikTok spike!');
   }
+  lines.push(`🎮 Igraj: ${PLAY_URL}`);
   return lines.join('\n');
 }
