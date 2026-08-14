@@ -49,8 +49,20 @@ export function showAchievementToast(achievement) {
   if (name) name.textContent = `🔓 ${achievement.name}`;
   if (desc) desc.textContent = achievement.desc || '';
 
-  _achievementToast.classList.add('visible');
   if (_toastTimer) clearTimeout(_toastTimer);
+
+  if (_achievementToast.classList.contains('visible')) {
+    // Toast je već na ekranu (back-to-back unlock) — forsiraj replay entrance
+    // tranzicije umesto tihe zamene teksta, da svaki achievement dobije svoj "event".
+    _achievementToast.classList.remove('visible');
+    void _achievementToast.offsetHeight; // force reflow
+    requestAnimationFrame(() => {
+      _achievementToast.classList.add('visible');
+    });
+  } else {
+    _achievementToast.classList.add('visible');
+  }
+
   _toastTimer = setTimeout(() => {
     _achievementToast.classList.remove('visible');
   }, 4000);
