@@ -91,7 +91,7 @@ export function getDraftPlan() {
 
 /**
  * Finalizuje plan i zaključava u state
- * @returns {{ ok: boolean, reason?: string }}
+ * @returns {{ ok: boolean, reason?: string, plan?: Object }}
  */
 export function lockInPlan() {
   if (!_draftPlan) return { ok: false, reason: 'Nema plana' };
@@ -103,9 +103,23 @@ export function lockInPlan() {
   }
 
   updateState({ weekly_plan: { ..._draftPlan } });
-  emit(EVENTS.MACRO_PLAN_COMPLETE, { plan: { ..._draftPlan } });
 
-  return { ok: true };
+  // Locked plan — uključuje sva polja iz draft plana PLUS camelCase alias-e
+  // koje micro/dashboard sloj (main.js _showLockin/_tickMicro/_renderMicro)
+  // već očekuje (platformAlloc/guest/offgridCapacity), da se izbegne
+  // naming mismatch snake_case (macro planning) vs camelCase (micro runtime).
+  const plan = {
+    ..._draftPlan,
+    platformAlloc: _draftPlan.platform_alloc,
+    guest: (_draftPlan.chosen_guest_id && _draftPlan.chosen_guest_id !== 'g8')
+      ? _draftPlan.chosen_guest_id
+      : null,
+    offgridCapacity: _draftPlan.weekly_capacity,
+  };
+
+  emit(EVENTS.MACRO_PLAN_COMPLETE, { plan });
+
+  return { ok: true, plan };
 }
 
 /**
