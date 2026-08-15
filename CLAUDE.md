@@ -312,6 +312,7 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 
 ### KORAK 1 — KONCEPT (03:00 trigger — concept stage)
 **Agent:** Iskra Ivanović (primary) ili Sine Scenario (narrative-heavy)
+**Brief check (pre spawn-a):** Čitaj `tim/iskra/gamifikacija_ideje.md` → ako PRIORITET #1 navodi lokalnu putanju brief-a (`tim/iskra/*.md`), pročitaj je. Ako fajl postoji i ima sadržaj za `docs/concept.md` — kopiraj ga direktno, ne spawni Iskra agenta, idi na KORAK 2 (Nega premortem). Ako lokalni brief ne postoji → spawn normalno.
 **Input:** `games/README.md` (poslednjih 5 igara), `tim/iskra/gamifikacija_ideje.md` (utility backlog), Kluboslavija/Guncati current state
 **Output:** `games/YYYY-MM-DD-placeholder/docs/concept.md`
 **Sadržaj:** Naziv, žanr, premisa, core gameplay loop, hook (zašto bi neko igrao **15+ min**, ne 5), vizuelna estetika (paleta boja), audio mood, win condition, **brand_serves** lista (koji od K/Guncati/MKDSLend igra hrani i kako konkretno), targetirana dužina sesije, prestige/replay hook ako ima
