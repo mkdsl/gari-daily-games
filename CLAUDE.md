@@ -144,6 +144,8 @@ latest=$(ls -t games/*/manifest.json | head -1)
 for m in games/*/manifest.json; do
   [ "$m" = "$latest" ] && continue
   stage=$(grep -o '"stage": *"[^"]*"' "$m" | cut -d'"' -f4)
+  status=$(grep -o '"status": *"[^"]*"' "$m" | cut -d'"' -f4)
+  [ "$status" = "failed" ] && continue
   if [ "$stage" = "concept" ] || [ "$stage" = "impl" ]; then
     echo "$m: orphaned at $stage"
   fi
