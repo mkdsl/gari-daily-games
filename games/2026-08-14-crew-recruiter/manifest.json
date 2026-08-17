@@ -5,7 +5,7 @@
   "description": "Popuni 5 uloga za jedan nastup vučenim kartama, upravljaj sinergijom i zamenama kroz 6 faza događaja da podigneš Vibe Score.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-08-14-crew-recruiter/",
   "brand_serves": ["mkdslend", "guncati", "kluboslavija"],
-  "stage": "impl",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "src/main.js": "Bootstrap, game start/restart/event-type selection, wire all modules",
@@ -27,7 +27,7 @@
     "src/ui/ending-screen.js": "Ending screen: 1:1 aspect ratio, score-gated tagline, Guncati CTA link, share button; aria-live for final score",
     "src/ui/menu.js": "Main menu: event type selector (locked/unlocked), HOF display (after 3 runs), Play button",
     "src/ui/synergy-display.js": "Synergy pair display: list active pairs this round with bonus values; fade-in per pair; pulse animation",
-    "src/ui/tutorial.js": "First-run tooltip overlays: step 1=draw explained, step 2=assign, step 3=synergy; localStorage flag to skip on replay",
+    "src/ui/tutorial.js": "First-run tooltip overlays: step 1=draw, step 2=assign, step 3=synergy, step 4=Vibe Score; localStorage flag to skip on replay",
     "src/input.js": "Pointer events API (touch+mouse unified): drag/drop cards to slots, click-to-slot fallback; keyboard: space=confirm, escape=discard",
     "src/audio.js": "Web Audio API: crowd ambient (sine + noise, volume ramps up through phases), SFX: vinyl scratch (draw), muffled thud (assign), bass drop (synergy trigger), feedback squeal (vibe drop below 30)",
     "src/share.js": "Web Share API + clipboard fallback; PLAY_URL; buildSharePayload(vibeScore)",
@@ -42,11 +42,11 @@
     "styles/theme.css": "Dark event palette: #0d1117 bg, #1a1a2e card bg, #e8d5b7 text; role accents; rarity gold border for Rare"
   },
   "line_counts": {
-    "total_js": 2652,
-    "total_css": 1191
+    "total_js": 2665,
+    "total_css": 1190
   },
-  "beta_score": null,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
+  "beta_score": 7.0,
+  "beta_score_iter2": 7.5,
+  "post_fix_score": 8.5,
   "sef_signoff": false
 }

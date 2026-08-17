@@ -1,12 +1,29 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Ažurirano:** 2026-08-12 — **backlog čist, 0 igara čeka sign-off.**
+**Ažurirano:** 2026-08-17 — **1 igra čeka sign-off.**
 
 ---
 
-## ⚠️ KORAK 0c — Pasoš registry drift (2026-08-12)
+## 🎮 Crew Recruiter: Izgradi Ekipu — čeka šef sign-off (2026-08-17)
 
-Pasoš registry drift: 32 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Trenutno registrovane: avala-run, aforizam-generator, dj-za-pultom (3/35). Gap = 32. Dodavanje slugova je Jovin/brand posao po igri — ovo je samo flag da gap postoji.
+| Polje | Vrednost |
+|-------|----------|
+| **Igra** | Crew Recruiter: Izgradi Ekipu |
+| **Žanr** | Mini deck-builder / crew manager |
+| **Brand** | MKDSLend (primary), Guncati, Kluboslavija |
+| **Play URL** | https://mkdsl.github.io/gari-daily-games/games/2026-08-14-crew-recruiter/ |
+| **Beta iter 1** | 7.0/10 (2 CRITICAL, 5 MEDIUM) |
+| **Beta iter 2** | 7.5/10 ✅ (0 CRITICAL, 4 MEDIUM ostaju) |
+| **Post-fix score** | 8.5/10 |
+| **Sign-off fajl** | `games/2026-08-14-crew-recruiter/docs/sef_signoff.md` |
+
+Zašto čeka: score 7.5 < 8.0 auto-release threshold. Igra funkcionalna, 0 crash bugova, ali 4 MEDIUM nevalidirana (Guncati CTA, keyboard drag, hand clearance, Vibe tension). Šef igra 5-10 min i čekira OK u sef_signoff.md.
+
+---
+
+## ⚠️ KORAK 0c — Pasoš registry drift (2026-08-17)
+
+Pasoš registry drift: 32 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Trenutno registrovane: avala-run, aforizam-generator, dj-za-pultom (3/35). Gap = 32. Dodavanje slugova je Jovin/brand posao po igri — ovo je samo flag da gap postoji. *(Potvrđeno 2026-08-17, isti gap kao 2026-08-12.)*
 
 ---
 

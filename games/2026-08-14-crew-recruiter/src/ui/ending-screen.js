@@ -7,13 +7,15 @@ import { loadPersistentState } from '../state.js';
 
 /**
  * Animate a numeric counter from `from` to `to` in ~duration ms.
- * Updates `el.textContent` each frame.
+ * Updates `el.textContent` each frame. On completion, populates srOnly
+ * with the final accessible label so screen readers announce once.
  * @param {HTMLElement} el
  * @param {number} from
  * @param {number} to
  * @param {number} duration
+ * @param {HTMLElement|null} srOnly - hidden span for SR announcement
  */
-function animateCounter(el, from, to, duration) {
+function animateCounter(el, from, to, duration, srOnly) {
   const startTime = performance.now();
 
   function step(now) {
@@ -24,7 +26,11 @@ function animateCounter(el, from, to, duration) {
     const current  = Math.round(from + (to - from) * eased);
     el.textContent = current;
 
-    if (progress < 1) requestAnimationFrame(step);
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else if (srOnly) {
+      srOnly.textContent = `Vibe Score: ${to} od 100`;
+    }
   }
 
   requestAnimationFrame(step);
@@ -77,10 +83,11 @@ export function showEndingScreen(vibeScore, eventType, crashed, onRestart) {
     <div class="ending-card ending-${type}${extraClass ? ' ' + extraClass : ''}">
       <div class="ending-label">Vibe Score</div>
 
-      <div class="ending-score-wrap" aria-live="polite" aria-label="Vibe score ${clampedScore} od 100">
+      <div class="ending-score-wrap">
         <span class="ending-emoji" aria-hidden="true">${emoji}</span>
         <span class="ending-score-counter" id="score-counter">0</span>
         <span class="ending-max">/100</span>
+        <span class="sr-only" id="score-sr-announce"></span>
       </div>
 
       <div class="ending-tagline">${tagline}</div>
@@ -108,9 +115,11 @@ export function showEndingScreen(vibeScore, eventType, crashed, onRestart) {
   document.getElementById('game-screen')?.classList.add('hidden');
 
   // Start animated counter (0 → clampedScore in 1.5s)
+  // srEl is populated on completion so screen readers announce once, not every frame
   const counterEl = document.getElementById('score-counter');
+  const srEl      = document.getElementById('score-sr-announce');
   if (counterEl) {
-    animateCounter(counterEl, 0, clampedScore, 1500);
+    animateCounter(counterEl, 0, clampedScore, 1500, srEl);
   }
 
   // Share button

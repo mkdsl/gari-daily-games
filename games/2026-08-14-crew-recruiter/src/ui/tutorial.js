@@ -14,6 +14,10 @@ const STEPS = [
   {
     title: 'Korak 3 — Sinergija',
     text:  'Neke kombinacije uloga aktiviraju sinergiju i donose bonus Vibe. Eksperimentiši!'
+  },
+  {
+    title: 'Korak 4 — Vibe Score',
+    text:  'Tvoj Vibe Score raste po svakoj rundi. Prazni slotovi, niska snaga karte ili prečeste zamjene smanjuju ga. Cilj: 80+ za legendaran nastup!'
   }
 ];
 
@@ -25,7 +29,7 @@ let _onDoneCallback = null;
  * @param {boolean} isFirstRun
  * @param {() => void} onDone
  */
-export function maybShowTutorial(isFirstRun, onDone) {
+export function maybeShowTutorial(isFirstRun, onDone) {
   if (!isFirstRun) { onDone(); return; }
   _onDoneCallback = onDone;
   _currentStep    = 0;

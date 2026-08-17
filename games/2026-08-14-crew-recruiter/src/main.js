@@ -13,7 +13,7 @@ import { render } from './render.js';
 import { renderMenu, hideMenu } from './ui/menu.js';
 import { showSynergyPairs, clearSynergyDisplay } from './ui/synergy-display.js';
 import { showEndingScreen, hideEndingScreen } from './ui/ending-screen.js';
-import { maybShowTutorial } from './ui/tutorial.js';
+import { maybeShowTutorial } from './ui/tutorial.js';
 import {
   renderActionArea,
   showResolveBreakdown,
@@ -57,7 +57,7 @@ function startGame(eventType) {
   // Init audio on first interaction
   try { initAudio(); } catch { /* AudioContext may be blocked */ }
 
-  maybShowTutorial(state.isFirstRun, () => {
+  maybeShowTutorial(state.isFirstRun, () => {
     state.isFirstRun = false;
     enterDrawPhase();
   });
