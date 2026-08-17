@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="description" content="Crew Recruiter — Izgradi ekipu za nastup. Mini deck-builder by MKDSLend.">
+  <title>Crew Recruiter — Izgradi Ekipu</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+</head>
+<body>
+  <div id="app">
+    <!-- MENU SCREEN -->
+    <div id="menu-screen" class="screen"></div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="screen hidden">
+      <div id="phase-indicator"></div>
+
+      <div id="vibe-container">
+        <div id="vibe-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20"></div>
+        <span id="vibe-score-display" aria-label="Vibe score">20</span>
+      </div>
+
+      <div id="slots-container" role="region" aria-label="Pozicijski slotovi"></div>
+
+      <div id="synergy-display-area" class="hidden" aria-live="polite" aria-label="Aktivna sinergija"></div>
+
+      <div id="hand-container" role="region" aria-label="Karte u ruci"></div>
+
+      <div id="action-btn-area"></div>
+    </div>
+
+    <!-- RESOLVE OVERLAY (aforism / breakdown) -->
+    <div id="resolve-overlay" class="hidden" aria-live="assertive"></div>
+
+    <!-- ENDING SCREEN -->
+    <div id="ending-screen" class="screen hidden"></div>
+
+    <!-- TUTORIAL OVERLAY -->
+    <div id="tutorial-overlay" class="hidden"></div>
+
+    <!-- GLOBAL TOAST -->
+    <div id="toast" class="hidden" role="status" aria-live="polite"></div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

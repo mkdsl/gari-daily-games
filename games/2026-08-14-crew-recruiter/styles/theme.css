@@ -1,0 +1,45 @@
+/* theme.css — Dark event palette, role accents, rarity borders */
+
+:root {
+  /* ── Base palette ── */
+  --color-bg:         #0d1117;
+  --color-surface:    #161b22;
+  --color-card-bg:    #1a1a2e;
+  --color-card-hover: #212140;
+  --color-text:       #e8d5b7;
+  --color-text-dim:   #8b7355;
+  --color-text-muted: #5c4f3a;
+  --color-border:     #2d2d4e;
+  --color-border-dim: #1e1e35;
+
+  /* ── Role accents ── */
+  --role-tonac:        #2563eb;
+  --role-host:         #d97706;
+  --role-content:      #db2777;
+  --role-logistika:    #16a34a;
+  --role-obezbedjenje: #dc2626;
+
+  /* ── Rarity ── */
+  --rarity-common:    var(--color-border);
+  --rarity-rare:      #b8860b;
+  --rarity-rare-glow: rgba(184, 134, 11, 0.3);
+  --rarity-signature: #7c3aed;
+  --rarity-sig-glow:  rgba(124, 58, 237, 0.35);
+
+  /* ── Vibe meter ── */
+  --vibe-green:  #22c55e;
+  --vibe-yellow: #eab308;
+  --vibe-red:    #ef4444;
+
+  /* ── UI ── */
+  --radius-card: 10px;
+  --radius-btn:  8px;
+  --radius-slot: 10px;
+  --shadow-card: 0 4px 16px rgba(0,0,0,0.5);
+  --shadow-glow-blue:  0 0 12px rgba(37, 99, 235, 0.55);
+  --shadow-glow-amber: 0 0 12px rgba(217, 119, 6, 0.55);
+  --shadow-glow-syn:   0 0 16px rgba(34, 197, 94, 0.6);
+
+  --transition-fast: 150ms ease;
+  --transition-mid:  300ms ease;
+}
