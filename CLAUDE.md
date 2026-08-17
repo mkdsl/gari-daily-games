@@ -62,7 +62,13 @@ Pre primene routing tabele iz KORAK 0, proveri da li `docs/` artefakti najnovije
     grep -q '\[x\]' docs/sef_signoff.md && echo "approved" || echo "not-approved"
     ```
   - Nastavi na KORAK 7 SAMO ako `grep` vrati "approved" (tj. bar jedan `[x]` postoji).
-  - Samo postojanje `sef_signoff.md` bez `[x]` = šef još nije odlučio → čekaj, ne release-uj.
+  - Samo postojanje `sef_signoff.md` bez `[x]` = šef još nije odlučio → **polish-idle exit:**
+    ```bash
+    score=$(grep -o '"beta_score_iter2": *[0-9.]*' manifest.json | grep -o '[0-9.]*$')
+    git add -A && git commit -m "chore(<naziv>): polish idle — čeka sef_signoff, beta_score_iter2: $score"
+    git push origin main
+    ```
+    Sesija se završava ovde. Sledeći trigger proverava ponovo. **Ne spawni Beta Trio ponovo.**
   - Tretiraj kao odobren KORAK 6.75 — nastavi na KORAK 7 (Finale) bez obzira na trigger tip.
 - Ako nijedan drift nije nađen — preskoči, idi na routing tabelu ispod.
 
