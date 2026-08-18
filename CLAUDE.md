@@ -59,9 +59,9 @@ Pre primene routing tabele iz KORAK 0, proveri da li `docs/` artefakti najnovije
 - Ako `docs/sef_signoff.md` ima čekirano "OK za release" ALI `manifest.sef_signoff != true`:
   - **Proveri `[x]` u fajlu, ne samo postojanje fajla:**
     ```bash
-    grep -q '\[x\]' docs/sef_signoff.md && echo "approved" || echo "not-approved"
+    grep -qE '^\s*\[x\]' docs/sef_signoff.md && echo "approved" || echo "not-approved"
     ```
-  - Nastavi na KORAK 7 SAMO ako `grep` vrati "approved" (tj. bar jedan `[x]` postoji).
+  - Nastavi na KORAK 7 SAMO ako `grep` vrati "approved" (tj. bar jedan `[x]` na **početku linije** postoji — sprečava false positive iz instruction teksta u template-u).
   - Samo postojanje `sef_signoff.md` bez `[x]` = šef još nije odlučio → **polish-idle exit:**
     ```bash
     score=$(grep -o '"beta_score_iter2": *[0-9.]*' manifest.json | grep -o '[0-9.]*$')
@@ -323,7 +323,7 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 **Brief check (pre spawn-a):** Čitaj `tim/iskra/gamifikacija_ideje.md` → ako PRIORITET #1 navodi lokalnu putanju brief-a (`tim/iskra/*.md`), pročitaj je. Ako fajl postoji i ima sadržaj za `docs/concept.md` — kopiraj ga direktno, ne spawni Iskra agenta, idi na KORAK 2 (Nega premortem). Ako lokalni brief ne postoji → spawn normalno.
 **Input:** `games/README.md` (poslednjih 5 igara), `tim/iskra/gamifikacija_ideje.md` (utility backlog), Kluboslavija/Guncati current state
 **Output:** `games/YYYY-MM-DD-placeholder/docs/concept.md`
-**Sadržaj:** Naziv, žanr, premisa, core gameplay loop, hook (zašto bi neko igrao **15+ min**, ne 5), vizuelna estetika (paleta boja), audio mood, win condition, **brand_serves** lista (koji od K/Guncati/MKDSLend igra hrani i kako konkretno), targetirana dužina sesije, prestige/replay hook ako ima
+**Sadržaj:** Naziv, žanr, premisa, core gameplay loop, hook (zašto bi neko igrao **15+ min**, ne 5), vizuelna estetika (paleta boja), audio mood, win condition, **brand_serves** lista (koji od K/Guncati/MKDSLend igra hrani i kako konkretno), targetirana dužina sesije, prestige/replay hook ako ima, **procena broja modula po kategoriji (entities, systems, UI, content, styles) sa potvrdom da zbir ≥ 25** — bez ove procene concept.md nije kompletan
 **Posle:** Gari preimenuje folder u pravo ime (`games/YYYY-MM-DD-naziv-igre/`)
 
 **⛔ SCOPE GRANICA CONCEPT STAGE:** Concept sesija commit-uje ISKLJUČIVO `docs/concept.md`, `docs/premortem.md`, `docs/gdd.md` i `manifest.json` (sa `stage: "concept"`). **NE commit-uj src/ fajlove, index.html, README.md, styles/ niti template scaffold.** Template `cp` smeš da uradiš lokalno ali ne commit-uj dok impl ne počne (Dan 2). README.md je KORAK 7 output — commit pre release-a briše ga prazninom.
@@ -339,7 +339,7 @@ cp -r templates/standard-game games/YYYY-MM-DD-placeholder/
 **Agent:** Mile Mehanika
 **Input:** SAMO concept.md + premortem.md
 **Output:** `docs/gdd.md`
-**Sadržaj:** Mehanike detaljno, progression krive, ekonomija brojeva (eksponencijalne, ne linearne), formule (base, growth factor, caps), prestige loop, multiplier stacking, win/lose uslovi, tabele upgrade-ova (minimum 20 stavki ako je idle-flavor), pacing po minutama, balance tabele
+**Sadržaj:** Mehanike detaljno, progression krive, ekonomija brojeva (eksponencijalne, ne linearne), formule (base, growth factor, caps), prestige loop, multiplier stacking, win/lose uslovi, tabele upgrade-ova (minimum 20 stavki ako je idle-flavor), pacing po minutama, balance tabele. **Verifikuj modul listu iz concept.md: zbir svih kategorija mora biti ≥ 25. Ako nije — proširi mehanike dok suma ne pređe 25 pre nego što GDD izađe iz sesije (ne bounce na impl).**
 
 **Kraj 03:00 sesije:** Commit `[concept] folder, docs/concept.md, docs/premortem.md, docs/gdd.md`. Postavi `stage: "concept"`, `status: "in_progress"` u manifest.json. Push origin/main da 09:00 trigger vidi.
 
@@ -419,6 +419,15 @@ Ako **nije ispunjeno** (score < 8.0 ili postoji CRITICAL) → kreira se `docs/se
 - `git commit -m "Released: [Naziv] ([žanr]) — serves [brand_serves]"`
 - `git push origin main`
 - GitHub Pages auto-deploy ~1min
+- **Pasoš P3 auto-stub:** dodaj jedan red u cross-event-pasos patch_queue za ovu igru:
+  ```bash
+  pasos_queue="games/2026-05-10-cross-event-pasos/docs/patch_queue.md"
+  game_slug=$(basename $game_dir)
+  echo "- [ ] P3 \`src/config.js\` (pasoš) — dodati slug \`$game_slug\` u SLUG_WHITELIST + STAMPS" >> "$pasos_queue"
+  git add "$pasos_queue"
+  git commit -m "chore(pasoš): P3 stub za $game_slug (auto, KORAK 7)"
+  git push origin main
+  ```
 
 ### KORAK P-init — POPUNJAVANJE QUEUE-A (odmah posle KORAK 7, ista sesija)
 
