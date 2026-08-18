@@ -1,10 +1,10 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Ažurirano:** 2026-08-17 — **1 igra čeka sign-off.**
+**Ažurirano:** 2026-08-18 — **0 igara čeka sign-off. Backlog prazan.**
 
 ---
 
-## 🎮 Crew Recruiter: Izgradi Ekipu — čeka šef sign-off (2026-08-17)
+## ✅ Crew Recruiter: Izgradi Ekipu — Released 2026-08-18
 
 | Polje | Vrednost |
 |-------|----------|
@@ -12,18 +12,17 @@
 | **Žanr** | Mini deck-builder / crew manager |
 | **Brand** | MKDSLend (primary), Guncati, Kluboslavija |
 | **Play URL** | https://mkdsl.github.io/gari-daily-games/games/2026-08-14-crew-recruiter/ |
-| **Beta iter 1** | 7.0/10 (2 CRITICAL, 5 MEDIUM) |
+| **Beta iter 1** | 7.0/10 (2 CRITICAL, 2 MEDIUM) |
 | **Beta iter 2** | 7.5/10 ✅ (0 CRITICAL, 4 MEDIUM ostaju) |
 | **Post-fix score** | 8.5/10 |
-| **Sign-off fajl** | `games/2026-08-14-crew-recruiter/docs/sef_signoff.md` |
 
-Zašto čeka: score 7.5 < 8.0 auto-release threshold. Igra funkcionalna, 0 crash bugova, ali 4 MEDIUM nevalidirana (Guncati CTA, keyboard drag, hand clearance, Vibe tension). Šef igra 5-10 min i čekira OK u sef_signoff.md.
+Score 7.5 je bio ispod auto-release praga (8.0), ali šef je odigrao partiju i potvrdio ending screen + Guncati CTA. `[x]` u `docs/sef_signoff.md` 2026-08-18. Backlog prazan — sledeći 03:00 trigger kreće KORAK P (patch stavke) ili novi concept.
 
 ---
 
-## ⚠️ KORAK 0c — Pasoš registry drift (2026-08-17)
+## ⚠️ KORAK 0c — Pasoš registry drift (2026-08-18)
 
-Pasoš registry drift: 32 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Trenutno registrovane: avala-run, aforizam-generator, dj-za-pultom (3/35). Gap = 32. Dodavanje slugova je Jovin/brand posao po igri — ovo je samo flag da gap postoji. *(Potvrđeno 2026-08-17, isti gap kao 2026-08-12.)*
+Pasoš registry drift: 33 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Trenutno registrovane: avala-run, aforizam-generator, dj-za-pultom (3/36). Gap = 33. Dodavanje slugova je Jovin/brand posao po igri — ovo je samo flag da gap postoji i raste.
 
 ---
 
@@ -130,3 +129,4 @@ Legacy igre (Park Mapa 05-21: failed/superseded, i stariji bez stage polja) se n
 - [2026-08-13] KORAK 0c: Pasoš registry drift 32 (released=35, registered=3 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d: Park Mapa (2026-05-21) concept/failed (superseded, permanentni false positive) — zanemarena. KORAK 0b: 0 unreleased igara. KORAK P: Na Vezi P2 `src/ui/replay-screen.js` + `styles/ui.css` — animated Reach metar (pulsing audience total sa IG/TT/YT breakdown) i format unlock progress bar na replay screenu; "još jedan" vizuelni pull ka narednoj emisiji (commit af29a73). Korekcija prethodnog broja: Na Vezi je imao 2×P2 otvorena (Dule sekcija), ne 0×P2 — greška u 08-11 statistici. Ostalo: Na Vezi 1×P2 + 10×P3, Guncati Grand 4×P2 + 11×P3 = ukupno 5×P2 + 21×P3 = **26 otvorenih stavki**. ⚠️ W34 KRITIČNO: W34 (Crew Recruiter Tom Sawyer tie-in) počinje za 4 dana (17.08). Bez šef HOLD-a na P3 stavke, concept ne može početi pre ~08.09 — W34 prozor potpuno izgubljen. Čak i sa HOLD-om na sve P3 odmah (danas), concept počinje najranije 18.08 (5 P2 ostaje), što daje svega 5 dana za 3-dnevni pipeline. Šef akcija potrebna DANAS.
 - [2026-08-14] KORAK 0c: Pasoš registry drift 32 (released=35, registered=3 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d: Park Mapa (2026-05-21) concept/failed (superseded, permanentni false positive) — zanemarena. KORAK 0b: 0 unreleased igara. KORAK P: Na Vezi P2 `src/share.js` — PLAY_URL konstanta + play_url CTA u Web Share API text payload (`🎮 Igraj: URL` pre hash-tagova) + format emisije u `buildOutcomeSummary` (commit 7166336). Ostalo: Na Vezi 9×P3, Guncati Grand 4×P2 + 11×P3 = **24 otvorene stavke**. ⚠️ W34 (Crew Recruiter tie-in, 17–23.08) počeo je juče — prozor aktivan, ali concept ne može početi dok postoje P2 stavke (Guncati Grand ima 4×P2). Šef akcija potrebna: HOLD sve P3 stavke da se otblokira concept pre kraja W34.
 - [2026-08-15] KORAK 0c: Pasoš registry drift 32 (released=35, registered=3 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d: Park Mapa (2026-05-21) concept/failed (superseded, permanentni false positive) — zanemarena. KORAK 0b: 1 unreleased (Crew Recruiter, concept→impl). **Impl stage počeo** — Crew Recruiter: Izgradi Ekipu (mini deck-builder, MKDSLend×Guncati×Kluboslavija). W34 (17–23.08): impl danas, polish 16.08 — release pre vikenda realan. Patch backlog: Na Vezi 9×P3 [HOLD/P3], Guncati Grand 4×P2 + 11×P3 [P2 otblokirali Crew Recruiter concept pravilima — šef je deblokirao pipeline manuelno 08-14].
+- [2026-08-18] KORAK 0a: sef_signoff.md za Crew Recruiter ima `[x]` — šef odobrio. **KORAK 7 izvršen: Crew Recruiter RELEASED** (beta_score_iter2=7.5, post_fix_score=8.5, 0 CRITICAL). Backlog prazan. KORAK 0c: Pasoš drift 33 (released=36, registered=3). Sledeći 03:00 trigger: KORAK P (patch stavke po redu) ili novi concept ako nema otvorenih P1/P2.
