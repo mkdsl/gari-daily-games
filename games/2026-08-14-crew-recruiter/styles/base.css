@@ -1,0 +1,70 @@
+/* base.css — Mobile-first layout, reset, typography */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* ── Game root ── */
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--color-bg);
+}
+
+/* ── Screen container ── */
+.screen {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  position: relative;
+}
+
+.screen.hidden {
+  display: none !important;
+}
+
+/* ── Typography ── */
+h1 { font-size: clamp(1.6rem, 6vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.2rem, 4vw, 1.6rem); font-weight: 700; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+
+p  { color: var(--color-text-dim); }
+
+/* ── Utility ── */
+.hidden  { display: none !important; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  clip: rect(0,0,0,0); overflow: hidden;
+}
+
+/* ── Scrollable inner if content overflows ── */
+.screen-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}

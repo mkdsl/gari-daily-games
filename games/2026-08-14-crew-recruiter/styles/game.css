@@ -1,0 +1,401 @@
+/* game.css — Card animations, synergy effects, vibe bump, slot states, glassmorphism */
+
+/* ════════════════════════════════════════════════════════════
+   CARD DRAW — staggered slide-in from below
+════════════════════════════════════════════════════════════ */
+@keyframes card-slide-in {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#hand-container .card {
+  animation: card-slide-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Staggered delays — cards come in one by one */
+#hand-container .card:nth-child(1) { animation-delay: 0ms; }
+#hand-container .card:nth-child(2) { animation-delay: 80ms; }
+#hand-container .card:nth-child(3) { animation-delay: 160ms; }
+#hand-container .card:nth-child(4) { animation-delay: 240ms; }
+#hand-container .card:nth-child(5) { animation-delay: 320ms; }
+
+/* ════════════════════════════════════════════════════════════
+   VINTAGE CARD FULL STYLING
+   Layered over the base .card rule in ui.css
+════════════════════════════════════════════════════════════ */
+
+/* Vintage paper texture via repeating gradient */
+.card {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.025) 2px,
+      rgba(0, 0, 0, 0.025) 4px
+    );
+  border: 2px dashed rgba(232, 213, 183, 0.15);
+  min-width: 92px;
+  max-width: 112px;
+  min-height: 145px;
+}
+
+/* Role-tinted translucent background overlay */
+.card-role-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.08;
+  transition: opacity 0.2s ease;
+}
+
+.card-role-bg.role-bg-tonac        { background: var(--role-tonac); }
+.card-role-bg.role-bg-host         { background: var(--role-host); }
+.card-role-bg.role-bg-content      { background: var(--role-content); }
+.card-role-bg.role-bg-logistika    { background: var(--role-logistika); }
+.card-role-bg.role-bg-obezbedjenje { background: var(--role-obezbedjenje); }
+
+/* Hover: lift and deepen role bg */
+.card:hover .card-role-bg { opacity: 0.13; }
+
+/* ── Role accent CSS variable on each card (drives selected ring) ── */
+.card-role-tonac        { --card-accent: var(--role-tonac);        --card-accent-rgb: 37,99,235; }
+.card-role-host         { --card-accent: var(--role-host);         --card-accent-rgb: 217,119,6; }
+.card-role-content      { --card-accent: var(--role-content);      --card-accent-rgb: 219,39,119; }
+.card-role-logistika    { --card-accent: var(--role-logistika);    --card-accent-rgb: 22,163,74; }
+.card-role-obezbedjenje { --card-accent: var(--role-obezbedjenje); --card-accent-rgb: 220,38,38; }
+
+/* ── Rarity badge (top-right corner) ── */
+.card-rarity-badge {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  font-size: 0.48rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.badge-rare {
+  background: rgba(184, 134, 11, 0.18);
+  color: #d4a017;
+  border: 1px solid rgba(184, 134, 11, 0.45);
+}
+
+.badge-signature {
+  background: rgba(124, 58, 237, 0.18);
+  color: #a78bfa;
+  border: 1px solid rgba(124, 58, 237, 0.45);
+}
+
+/* ── Power number — large serif centrepiece ── */
+.card-power {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--color-text);
+  text-align: center;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0.1rem 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Thin vintage divider between power and flavor ── */
+.card-divider {
+  width: 60%;
+  height: 1px;
+  background: rgba(232, 213, 183, 0.15);
+  margin: 0.2rem auto;
+}
+
+/* ── Hover lift ── */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Selected — role-colored outline + ring ── */
+.card.card-selected {
+  outline: 2px solid var(--card-accent, var(--role-host));
+  outline-offset: 1px;
+  transform: translateY(-5px);
+  box-shadow:
+    0 0 0 4px rgba(var(--card-accent-rgb, 217, 119, 6), 0.22),
+    0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Dragging state ── */
+.card.dragging {
+  opacity: 0.72;
+  transform: scale(1.03) rotate(1.5deg);
+  cursor: grabbing;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
+  z-index: 1000;
+}
+
+/* ── Rare border top glow ── */
+.card-rarity-rare {
+  border-color: rgba(184, 134, 11, 0.45);
+  box-shadow: 0 -2px 8px rgba(184, 134, 11, 0.18);
+}
+.card-rarity-rare:hover {
+  box-shadow: var(--rarity-rare-glow), 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Signature card ── */
+.card-rarity-signature {
+  border-color: rgba(124, 58, 237, 0.45);
+}
+.card-rarity-signature:hover {
+  box-shadow: var(--rarity-sig-glow), 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Assigned flash ── */
+@keyframes card-assigned-flash {
+  0%   { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.6); }
+  100% { box-shadow: none; }
+}
+.card-assigned-flash {
+  animation: card-assigned-flash 0.4s ease-out forwards;
+}
+
+/* ── Synergy glow on cards in hand ── */
+@keyframes card-synergy-glow {
+  0%, 100% { box-shadow: 0 0 6px rgba(34, 197, 94, 0.4); }
+  50%       { box-shadow: 0 0 18px rgba(34, 197, 94, 0.75); }
+}
+
+.synergy-glow {
+  animation: card-synergy-glow 1.6s ease-in-out infinite;
+  border-color: var(--vibe-green);
+}
+
+/* ════════════════════════════════════════════════════════════
+   CARD ASSIGN SNAP
+════════════════════════════════════════════════════════════ */
+@keyframes slot-snap {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.08); }
+  70%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+.slot-filled {
+  animation: slot-snap 0.25s ease-out;
+}
+
+/* ════════════════════════════════════════════════════════════
+   SLOT VISUAL IMPROVEMENTS
+════════════════════════════════════════════════════════════ */
+
+/* Filled slot: role-accent full border */
+.slot-filled.slot-tonac        { border-color: var(--role-tonac);        box-shadow: 0 0 0 1px rgba(37,99,235,0.15); }
+.slot-filled.slot-host         { border-color: var(--role-host);         box-shadow: 0 0 0 1px rgba(217,119,6,0.15); }
+.slot-filled.slot-content      { border-color: var(--role-content);      box-shadow: 0 0 0 1px rgba(219,39,119,0.15); }
+.slot-filled.slot-logistika    { border-color: var(--role-logistika);    box-shadow: 0 0 0 1px rgba(22,163,74,0.15); }
+.slot-filled.slot-obezbedjenje { border-color: var(--role-obezbedjenje); box-shadow: 0 0 0 1px rgba(220,38,38,0.15); }
+
+/* Synergy-active slot: outer ring pulse */
+@keyframes slot-synergy-ring {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.4); }
+  50%       { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.7); }
+}
+
+.slot.slot-synergy-active {
+  animation: slot-synergy-ring 1.4s ease-in-out infinite;
+}
+
+/* Synergy dot in corner of filled slot */
+.slot-synergy-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--vibe-green);
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.75);
+  pointer-events: none;
+}
+
+/* Drag-over: animated ring + scale */
+@keyframes drag-over-ring {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.5); }
+  50%       { box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.85); }
+}
+
+.slot.drag-over {
+  border-color: var(--role-host) !important;
+  transform: scale(1.03);
+  animation: drag-over-ring 0.7s ease-in-out infinite;
+}
+
+/* Empty slot dashed inner hint + opacity pulse */
+@keyframes empty-hint-pulse {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.7; }
+}
+
+.slot-empty .slot-content {
+  border: 1px dashed rgba(232, 213, 183, 0.12);
+  border-radius: 6px;
+  padding: 0.3rem;
+  animation: empty-hint-pulse 2.4s ease-in-out infinite;
+}
+
+/* ════════════════════════════════════════════════════════════
+   SYNERGY — fade-in per pair, pulse glow
+════════════════════════════════════════════════════════════ */
+@keyframes synergy-fade-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.synergy-pair.fade-in {
+  animation: synergy-fade-in 0.25s ease-out forwards;
+}
+
+@keyframes synergy-pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(34, 197, 94, 0); }
+  50%       { box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
+}
+
+.synergy-pair.synergy-pulse {
+  animation: synergy-pulse 0.8s ease-in-out 2;
+}
+
+/* ════════════════════════════════════════════════════════════
+   VIBE METER BUMP
+════════════════════════════════════════════════════════════ */
+@keyframes vibe-bump-up {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04) translateY(-2px); }
+  100% { transform: scale(1); }
+}
+
+@keyframes vibe-bump-down {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(0.96) translateY(2px); }
+  60%  { transform: translateX(-3px); }
+  80%  { transform: translateX(3px); }
+  100% { transform: scale(1); }
+}
+
+.vibe-bump-up   { animation: vibe-bump-up   0.4s ease-out; }
+.vibe-bump-down { animation: vibe-bump-down 0.5s ease-out; }
+
+/* ════════════════════════════════════════════════════════════
+   SLOT CHURN — red flash
+════════════════════════════════════════════════════════════ */
+@keyframes slot-churn-flash {
+  0%   { background: rgba(220, 38, 38, 0.0); }
+  30%  { background: rgba(220, 38, 38, 0.25); }
+  100% { background: var(--color-card-bg); }
+}
+
+.slot-churn {
+  animation: slot-churn-flash 0.4s ease-out;
+}
+
+/* ════════════════════════════════════════════════════════════
+   PHASE TRANSITION — phase indicator fade
+════════════════════════════════════════════════════════════ */
+@keyframes phase-pop {
+  0%   { opacity: 0.4; transform: scale(0.96); }
+  60%  { opacity: 1;   transform: scale(1.02); }
+  100% { opacity: 1;   transform: scale(1); }
+}
+
+#phase-indicator {
+  animation: phase-pop 0.35s ease-out;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESOLVE BOX — glassmorphism panel
+════════════════════════════════════════════════════════════ */
+.resolve-box {
+  background: rgba(22, 27, 34, 0.88);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid rgba(232, 213, 183, 0.12);
+  border-radius: 14px;
+  padding: 1.4rem 2rem;
+  text-align: center;
+  max-width: 92%;
+  min-width: 220px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ════════════════════════════════════════════════════════════
+   AFORISM OVERLAY FADE
+════════════════════════════════════════════════════════════ */
+@keyframes aforism-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.aforizam-box {
+  animation: aforism-in 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+  background: rgba(22, 27, 34, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  border-radius: 14px;
+  padding: 1.6rem 2.2rem;
+  max-width: 88%;
+}
+
+/* ════════════════════════════════════════════════════════════
+   ENDING SCREEN STYLING
+════════════════════════════════════════════════════════════ */
+@keyframes ending-entrance {
+  from { opacity: 0; transform: translateY(24px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.ending-card {
+  animation: ending-entrance 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+  aspect-ratio: 1 / 1;
+  max-width: 380px;
+}
+
+/* Legendary — golden glow */
+@keyframes legendary-glow-pulse {
+  0%, 100% { box-shadow: 0 0 30px rgba(184, 134, 11, 0.35), 0 0 80px rgba(184, 134, 11, 0.15); }
+  50%       { box-shadow: 0 0 50px rgba(184, 134, 11, 0.6),  0 0 110px rgba(184, 134, 11, 0.25); }
+}
+
+.ending-legendary {
+  border-color: var(--rarity-rare) !important;
+  background: linear-gradient(160deg, #1a1505 0%, #1a1a2e 60%, #0d1117 100%);
+  animation: ending-entrance 0.5s cubic-bezier(0.34, 1.4, 0.64, 1),
+             legendary-glow-pulse 2.5s ease-in-out 0.5s infinite;
+}
+
+/* Crash — crimson scheme */
+@keyframes crash-shake {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(-6px); }
+  40%  { transform: translateX(6px); }
+  60%  { transform: translateX(-4px); }
+  80%  { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.ending-crash {
+  border-color: var(--vibe-red) !important;
+  background: linear-gradient(160deg, #200808 0%, #1a0f0f 60%, #0d1117 100%) !important;
+  box-shadow: 0 0 40px rgba(239, 68, 68, 0.25);
+  animation: ending-entrance 0.4s ease-out, crash-shake 0.5s ease-out 0.3s;
+}
