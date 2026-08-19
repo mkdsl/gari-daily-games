@@ -10,7 +10,7 @@
 ### P2 — Polish koji vidno poboljšava iskustvo
 
 - [x] P2 `src/ui/ui.js` + `src/systems/progression.js` — dupli poziv `checkVolunteerUnlocks` (jednom iz ui.js, jednom iz progression.js u advanceWeek); može prouzrokovati duple unlock notifikacije u edge case-u (done 2026-08-12, commit b218e3e)
-- [ ] P2 `src/ui/ui.js` — Week 2 onboarding tekst "Ana se priključuje!" pogrešan — Ana je prisutna od startnog state-a, ne ulazi tek u nedelji 2
+- [x] P2 `src/ui/ui.js` + `src/ui/modals.js` + `src/ui/micro_ui.js` — Week 2 onboarding tekst "Ana se priključuje!" pogrešan — ispravljen u modals.js (naslov → "Micro Faza — raspoređuj Anu!", opis → "tu od Nedelje 1") i micro_ui.js (prazan-volonteri fallback) (done 2026-08-19, commit e677921)
 - [ ] P2 `src/systems/progression.js` — `applyAllocationEffects()` direktno mutira state objekat umesto da koristi setState(); čini state diff neupotrebljivim za budući undo/time-travel debug
 - [ ] P2 `src/ui/score_ui.js` + `src/content/volunteers_data.js` — Dodaj "ko je izdržao" retrospektivnu karticu na ending screenu: svaki volonter sa finalnim WB statusom (zeleno/žuto/crveno) i jedan flavor fragment za one koji su burn-out doživeli — Tom Sawyer mehanika dobija emocionalni udar koji pokreće drugi run
 - [ ] P2 `src/systems/wellbeing.js` + `src/ui/hud.js` — WB milestone notifikacije sa mikro-narativom: pri prvom prelasku 60% praga (Tom Sawyer unlock) prikaži jednu liniju reakcije iz volunteers_data.js; pri padu ispod 40% prikaži umor-varijantu — WB je trenutno samo broj bez emotivnog signala
