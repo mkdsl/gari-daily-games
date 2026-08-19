@@ -32,7 +32,7 @@ function buildMicroHTML(state) {
     return `
       <div class="screen-header">
         <h2>Nedelja ${state.week} — Raspoređivanje Volontera</h2>
-        <p class="screen-subtitle">Ana se priključuje sledeće nedelje!</p>
+        <p class="screen-subtitle">Volonteri pristižu kad investiraš u Zajednicu.</p>
       </div>
       <div class="micro-empty">
         <div class="empty-icon">👥</div>

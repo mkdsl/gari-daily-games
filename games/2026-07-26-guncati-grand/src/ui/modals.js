@@ -89,11 +89,11 @@ export function showOnboarding(week, onComplete) {
     const intro = ana ? getVolunteerIntro('ana') : 'Ana je tu!';
     html = `
       <div class="modal-header">
-        <h2>⭐ ${ana?.name || 'Ana'} se priključuje!</h2>
+        <h2>⭐ Micro Faza — raspoređuj ${ana?.name || 'Anu'}!</h2>
         <p class="modal-quote">"${intro}"</p>
       </div>
       <div class="modal-body">
-        <p>Ana može da radi sve podjednako dobro — savršena za prvu nedelju.</p>
+        <p>${ana?.name || 'Ana'} je tu od Nedelje 1 i radi sve podjednako dobro.</p>
         <p>Sada možeš da dodeljuješ zadatke volonterima u <strong>Micro</strong> fazi.</p>
         <div class="volunteer-preview">
           <div class="stat-row">
