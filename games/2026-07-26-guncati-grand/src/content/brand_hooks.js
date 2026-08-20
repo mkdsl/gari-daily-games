@@ -137,3 +137,22 @@ export function getWeekBrandTip(week) {
   ];
   return allTips[week % allTips.length];
 }
+
+/**
+ * Date-aware Guncati Grand Finale event CTA (active 2026-08-20 to 2026-08-30)
+ * @returns {{ active: boolean, headline?: string, cta?: string, url?: string }}
+ */
+export function getGuncatiEventCTA() {
+  const now = new Date();
+  const start = new Date('2026-08-20T00:00:00');
+  const end = new Date('2026-08-31T00:00:00');
+  if (now >= start && now < end) {
+    return {
+      active: true,
+      headline: 'Igrao si simulaciju — 23.8. dolazi stvarnost.',
+      cta: 'Guncati Grand Finale · prijave: guncati.rs',
+      url: 'https://guncati.rs'
+    };
+  }
+  return { active: false };
+}

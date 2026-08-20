@@ -4,7 +4,7 @@ import { getState, setState, clearSave, prestigeReset } from '../state.js';
 import { calcFinalScore, getWinCondition, checkAchievements, getAchievementInfo, formatScoreCard } from '../systems/scoring.js';
 import { calcReputationGain, formatReputation, getNextPrestigeThreshold } from '../systems/prestige.js';
 import { calcCommunityVibe } from '../systems/wellbeing.js';
-import { BRAND_NARRATIVES, getScoreNarrative } from '../content/brand_hooks.js';
+import { BRAND_NARRATIVES, getScoreNarrative, getGuncatiEventCTA } from '../content/brand_hooks.js';
 import { shareScore } from '../share.js';
 
 /** @type {Function|null} */
@@ -59,6 +59,16 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
 
   const barHTML = buildScoreBreakdown(breakdown);
   const brandNarrative = getBrandEndingNarrative(state, winCond.tier);
+
+  const eventCTA = getGuncatiEventCTA();
+  const eventCTAHTML = eventCTA.active ? `
+    <div class="event-cta-banner">
+      <p class="event-headline">${eventCTA.headline}</p>
+      <a class="event-cta-link" href="${eventCTA.url}" target="_blank" rel="noopener">
+        ${eventCTA.cta}
+      </a>
+    </div>
+  ` : '';
 
   const prestigeHTML = winCond.canPrestige ? `
     <div class="prestige-cta panel">
@@ -117,6 +127,8 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
         <h4>🎪 Guncati Brand</h4>
         <p>${brandNarrative}</p>
       </div>
+
+      ${eventCTAHTML}
 
       <div class="score-actions">
         <button class="btn-share" id="btn-share">📤 Podeli rezultat</button>

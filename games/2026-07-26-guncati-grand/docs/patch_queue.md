@@ -4,7 +4,7 @@
 
 ### P1 — Bugovi koji oštećuju brand ili UX
 
-- [ ] P1 `src/content/brand_hooks.js` + `src/ui/score_ui.js` — date-aware Guncati Grand Finale CTA: od 08-20 do 08-30, ending screen prikazuje event-specific poziv ("Igrao si simulaciju — 23.8. dolazi stvarnost. Guncati Grand Finale · prijave: guncati.rs"); čisti JS `new Date()` check, self-destructs posle 08-31; implementacijski brief u `ajajaj/tim/iskra/2026-08-19.md`; dodati 10-15 linija CSS za `.event-cta-banner` u `styles/ui.css` uz isti patch — Iskra, 2026-08-19
+- [x] P1 `src/content/brand_hooks.js` + `src/ui/score_ui.js` + `styles/ui.css` — date-aware Guncati Grand Finale CTA: od 08-20 do 08-30, ending screen prikazuje event-specific poziv ("Igrao si simulaciju — 23.8. dolazi stvarnost. Guncati Grand Finale · prijave: guncati.rs"); čisti JS `new Date()` check, self-destructs posle 08-31 (done 2026-08-20, commit TBD)
 
 - [x] P1 `src/ui/finale_ui.js` — DJ Transition crash fix: button disabled + _transitionPending cleared + timeout cancelled pre playerDJTransition() (done 2026-08-02, commit 435fc74)
 - [x] P1 `src/ui/modals.js` — inline `onclick="closeModalGlobal()"` u HTML-u (linija ~31) nije CSP-kompatibilno; blokiraće se u strožem Content Security Policy okruženju i ostavlja globalnu funkciju kao imperativni API (done 2026-08-09, commit f37e72b)

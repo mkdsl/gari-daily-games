@@ -722,3 +722,27 @@ input[type="range"].slider::-moz-range-thumb {
 }
 
 .prestige-cta h3 { color: var(--c-gold); margin-bottom: 8px; }
+
+/* ── EVENT CTA BANNER ── */
+.event-cta-banner {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #2d5016 0%, #1a1208 100%);
+  border: 1px solid #FFD700;
+  border-radius: 8px;
+  text-align: center;
+}
+.event-headline {
+  color: #E8D5B0;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem;
+  font-style: italic;
+}
+.event-cta-link {
+  color: #FFD700;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.event-cta-link:hover { text-decoration: underline; }
