@@ -2,7 +2,7 @@
 
 ## Otvoreni patčevi
 
-- [ ] P1 `src/systems/deck.js` + `src/state.js` — hand clearance regresija: `drawCards(n, state)` push-uje na `state.hand` bez prethodnog brisanja; ako `enterDrawPhase()` u main.js ne radi explicit `state.hand = []` pre poziva, svaka nova faza akumulira karte iz prethodne — posle 3 faze ruka prelazi 6 karata, UI puca i game flow je broken; verifikuj da `state.js resetForNewRun()` pokriva i međufazni hand clear, ne samo novi run
+- [x] P1 `src/main.js` + `src/state.js` — hand clearance regresija: `drawCards(n, state)` push-uje na `state.hand` bez prethodnog brisanja; ako `enterDrawPhase()` u main.js ne radi explicit `state.hand = []` pre poziva, svaka nova faza akumulira karte iz prethodne — posle 3 faze ruka prelazi 6 karata, UI puca i game flow je broken; verifikuj da `state.js resetForNewRun()` pokriva i međufazni hand clear, ne samo novi run (done 2026-08-21: dodato `if (state.gamePhase !== 'draw') return;` guard u performDraw(), JSDoc komentar u resetForNewRun() potvrđuje da inter-phase clear ide kroz performDraw — popularna double-click regresija zatvorena)
 
 - [ ] P2 `src/ui/cards.js` + `src/input.js` — keyboard assign flow nepotvrdjen: Enter/Space šalje sintetički `PointerEvent` sa `clientX: 0, clientY: 0` koji ne aktivira `pointermove`-based drag; nije verifikovano da click-based tok (klik karte → klik slota) radi kao nezavisan fallback bez drag-a; potvrdi da flow prolazi end-to-end bez pointera, i dodaj keyboard hint u `src/ui/tutorial.js` korak 2 ako drag nije jedini put
 

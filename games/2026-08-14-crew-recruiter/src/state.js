@@ -87,6 +87,7 @@ export function createInitialState(eventType = 'klub') {
 
 /**
  * Reset volatile game fields for a new run (keeps persistent data).
+ * Inter-phase hand clearing is handled by performDraw() in main.js.
  * @param {GameState} state
  * @param {string} eventType
  */

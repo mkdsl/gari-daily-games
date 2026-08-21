@@ -86,6 +86,7 @@ function enterDrawPhase() {
 }
 
 function performDraw() {
+  if (state.gamePhase !== 'draw') return; // guard against double-click
   // Clear old hand (unassigned cards go to graveyard)
   state.graveyard.push(...state.hand);
   state.hand = [];
