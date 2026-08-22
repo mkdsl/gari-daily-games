@@ -91,21 +91,19 @@ export function calcWeeklyExpenses(allocation, volunteerCost) {
 }
 
 /**
- * Apply weekly allocation effects to state
- * @param {Object} state - mutable game state
+ * Compute weekly allocation effects without mutating state.
+ * @param {Object} state
  * @param {Object} allocation - { gradnja, hrana, marketing, zajednica }
+ * @returns {{ seasonMarketingSpent: number, seasonCrowdCap: number }}
  */
 export function applyAllocationEffects(state, allocation) {
-  // Gradnja: increases crowd cap (handled by building upgrades separately)
-  // Marketing: tracked for ticket rate
-  state.seasonMarketingSpent = (state.seasonMarketingSpent || 0) + (allocation.marketing || 0);
-
-  // Crowd cap from gradnja spending (not buildings)
+  const seasonMarketingSpent = (state.seasonMarketingSpent || 0) + (allocation.marketing || 0);
   const gradnjaBonus = Math.floor((allocation.gradnja || 0) / 10) * CONFIG.CATEGORIES.gradnja.perUnit.crowdCap;
-  state.seasonCrowdCap = Math.min(
-    state.seasonCrowdCap + gradnjaBonus,
-    600 // absolute cap
+  const seasonCrowdCap = Math.min(
+    (state.seasonCrowdCap || 0) + gradnjaBonus,
+    600
   );
+  return { seasonMarketingSpent, seasonCrowdCap };
 }
 
 /**

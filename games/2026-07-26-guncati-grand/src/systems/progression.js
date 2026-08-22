@@ -36,9 +36,10 @@ export function advanceWeek(microResult) {
   const weekRevenue = calcWeeklyRevenue(state);
 
   // Crowd
-  applyAllocationEffects(state, allocation);
-  const newCrowdCap = calcCrowdCap(state);
-  const newCrowdSize = calcCrowdSize(state);
+  const allocationFx = applyAllocationEffects(state, allocation);
+  const stateForCrowd = { ...state, seasonMarketingSpent: allocationFx.seasonMarketingSpent };
+  const newCrowdCap = calcCrowdCap(stateForCrowd);
+  const newCrowdSize = calcCrowdSize(stateForCrowd);
 
   // Update volunteers with weekly recovery
   const updatedVolunteers = (microResult?.updatedVolunteers || volunteers).map(v => {
@@ -77,6 +78,7 @@ export function advanceWeek(microResult) {
     totalRevenue: (state.totalRevenue || 0) + weekRevenue,
     crowdSize: newCrowdSize,
     seasonCrowdCap: newCrowdCap,
+    seasonMarketingSpent: allocationFx.seasonMarketingSpent,
     volunteers: [...updatedVolunteers, ...newVolunteers],
     weeklyWB,
     buildingUpgradesThisWeek: 0,
