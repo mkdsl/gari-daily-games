@@ -746,3 +746,15 @@ input[type="range"].slider::-moz-range-thumb {
   letter-spacing: 0.02em;
 }
 .event-cta-link:hover { text-decoration: underline; }
+
+/* ── VOLUNTEER RETRO CARD ── */
+.volunteer-retro { margin-top: 1rem; }
+.retro-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+.retro-vol { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0.4rem; border-radius: 6px; min-width: 60px; background: rgba(255,255,255,0.05); }
+.retro-green { border-left: 3px solid #4caf50; }
+.retro-yellow { border-left: 3px solid #ff9800; }
+.retro-red { border-left: 3px solid #f44336; }
+.retro-emoji { font-size: 1.3rem; }
+.retro-name { font-size: 0.65rem; opacity: 0.8; }
+.retro-status { font-size: 0.9rem; }
+.retro-fragment { font-size: 0.6rem; opacity: 0.7; margin: 2px 0 0; text-align: center; font-style: italic; }

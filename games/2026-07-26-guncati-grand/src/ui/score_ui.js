@@ -58,6 +58,7 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
     : '<p class="no-ach">Nema postignuća ovog puta. Naredna sezona!</p>';
 
   const barHTML = buildScoreBreakdown(breakdown);
+  const retroHTML = buildVolunteerRetroHTML(state);
   const brandNarrative = getBrandEndingNarrative(state, winCond.tier);
 
   const eventCTA = getGuncatiEventCTA();
@@ -101,6 +102,8 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
         ${barHTML}
       </div>
 
+      ${retroHTML}
+
       <div class="narrative-panel">
         <p class="narrative-headline">${narrative.headline}</p>
         <p class="narrative-body">${narrative.body}</p>
@@ -140,6 +143,42 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
       </div>
     </div>
   `;
+}
+
+function buildVolunteerRetroHTML(state) {
+  const volunteers = state.volunteers;
+  if (!volunteers || volunteers.length === 0) return '';
+
+  const fragments = {
+    ana: 'Ana je ćutala ceo poslednji dan. Previše je traženo od nje.',
+    mika: 'Mika je spavao između testanja. Nije rekao ništa — ali sve je rekao.',
+    jovana: 'Jovana je kuvala praznu čorbu na kraju. Kada je Jovana bez ideja, ekipa to oseti.',
+    dragan: 'Dragan je odložio kameru. Nije snimio finale. To je rečito.',
+    djule: 'Đule je ostao sedeći na kamenu. Telo kaže šta reči ne mogu.',
+    maja: 'Maja je isključila muziku sat pre finala. Kada DJ stišava, nešto je pogrešno.',
+    biljana: 'Biljana je napustila svoju listu. Kad ona odustane od rasporeda — stvari su ozbiljne.'
+  };
+
+  const cards = volunteers.map(vol => {
+    const isGreen = vol.energija >= 60 && vol.vibe >= 60;
+    const isRed = vol.energija < 30 && vol.vibe < 30;
+    const cls = isGreen ? 'retro-green' : isRed ? 'retro-red' : 'retro-yellow';
+    const statusEmoji = isGreen ? '🟢' : isRed ? '🔴' : '🟡';
+    const fragment = isRed && fragments[vol.typeId]
+      ? `<p class="retro-fragment">${fragments[vol.typeId]}</p>`
+      : '';
+    return `<div class="retro-vol ${cls}">
+      <span class="retro-emoji">${vol.emoji}</span>
+      <span class="retro-name">${vol.name}</span>
+      <span class="retro-status">${statusEmoji}</span>
+      ${fragment}
+    </div>`;
+  }).join('');
+
+  return `<div class="volunteer-retro panel">
+    <h3>👥 Ko je izdržao</h3>
+    <div class="retro-grid">${cards}</div>
+  </div>`;
 }
 
 function buildScoreBreakdown(breakdown) {

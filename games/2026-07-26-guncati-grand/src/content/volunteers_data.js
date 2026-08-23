@@ -121,6 +121,17 @@ export const LOW_WB_WARNINGS = [
   'Loše raspoloženje je zarazno. Intervenišite!'
 ];
 
+/** Burn-out retrospective fragments — shown on score screen when energija < 30 AND vibe < 30 */
+export const BURNOUT_FRAGMENTS = {
+  ana: 'Ana je ćutala ceo poslednji dan. Previše je traženo od nje.',
+  mika: 'Mika je spavao između testanja. Nije rekao ništa — ali sve je rekao.',
+  jovana: 'Jovana je kuvala praznu čorbu na kraju. Kada je Jovana bez ideja, ekipa to oseti.',
+  dragan: 'Dragan je odložio kameru. Nije snimio finale. To je rečito.',
+  djule: 'Đule je ostao sedeći na kamenu. Telo kaže šta reči ne mogu.',
+  maja: 'Maja je isključila muziku sat pre finala. Kada DJ stišava, nešto je pogrešno.',
+  biljana: 'Biljana je napustila svoju listu. Kad ona odustane od rasporeda — stvari su ozbiljne.'
+};
+
 /**
  * Get random intro for volunteer type
  * @param {string} typeId
