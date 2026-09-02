@@ -20,7 +20,7 @@
 
 ### P3 — Content/feature ekspanzija
 
-- [ ] P3 `src/systems/prestige.js` + `src/ui/score_ui.js` — Sezonski dnevnik pri ulasku u Stara Šaraga mode: 3 auto-generisane linije iz prethodnog runa (najveća budžetska kategorija, volonter sa najviše/najmanje WB, finale moment) — "Ana se vratila, pamti te" umesto samo "+15% reputacija"
+- [x] P3 `src/systems/prestige.js` + `src/ui/score_ui.js` — Sezonski dnevnik pri ulasku u Stara Šaraga mode: 3 auto-generisane linije iz prethodnog runa (najveća budžetska kategorija, volonter sa najviše/najmanje WB, finale moment) — "Ana se vratila, pamti te" umesto samo "+15% reputacija" (done 2026-09-02, commit 79f67fa)
 - [ ] P3 `src/content/brand_hooks.js` + `src/ui/score_ui.js` — Guncati brand narrative ending: jedinstven closing fragment baziran na final score rangu (Legenda/Veteran/Početnik) koji govori o Guncati kao mestu — share card nosi poruku, ne samo score breakdown (svaki share = organik-promo za Guncati)
 - [ ] P3 `src/content/events_data.js` + `src/content/brand_hooks.js` — Kluboslavija Venue Skins: tri varijante Finale event seta (Štrand, Sarajevo, Guncati Grand Finale) sa specifičnim crowd cap-om, weather profilom i branded ending tekstom za svaki venue — igra postaje pre-event companion za svaki preostali stop turneje
 - [ ] P3 `src/ui/score_ui.js` + `src/share.js` — Proširiti score screen: (a) score-gated "Postani pravi volonter Guncatija" CTA sa linkom ako je score >= 7.5, (b) branded Season Report infografik (kategorije, volonteri, crowd peak, revenue peak) spreman za IG Story deljenje — direktan community-building asset za MKDSLend
