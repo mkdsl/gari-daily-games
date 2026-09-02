@@ -164,6 +164,70 @@ export function getNextPrestigeThreshold(reputation) {
 }
 
 /**
+ * Sezonski dnevnik — 3 auto-generisane linije iz prethodnog runa, prikazuju se
+ * pri ulasku u Stara Šaraga mode umesto suvog "+X% reputacija".
+ * Linija 1: najveća budžetska kategorija poslednje nedelje.
+ * Linija 2: volonter sa najvišim i najnižim WB proxy skorom ((energija+vibe)/2).
+ * Linija 3: finale moment (šta je nosilo poslednju noć — publika ili DJ).
+ * @param {Object} state
+ * @returns {string[]} tačno 3 linije, srpski, u tonu igre
+ */
+export function buildSeasonJournal(state) {
+  const lines = [];
+
+  // 1. Najveća budžetska kategorija
+  const allocation = state.allocation || {};
+  const catLabels = {
+    gradnja: 'gradnju',
+    hrana: 'hranu',
+    marketing: 'marketing',
+    zajednica: 'zajednicu'
+  };
+  const catEntries = Object.entries(allocation).filter(([, v]) => typeof v === 'number');
+  const spentTotal = catEntries.reduce((sum, [, v]) => sum + v, 0);
+  if (spentTotal > 0) {
+    const [topCat, topVal] = catEntries.reduce((a, b) => (b[1] > a[1] ? b : a));
+    lines.push(`Najviše GC je otišlo na ${catLabels[topCat] || topCat} — ${Math.round(topVal)} GC prošle sezone.`);
+  } else {
+    lines.push('Ova sezona nije ostavila trag u budžetskoj knjizi.');
+  }
+
+  // 2. Volonter sa najvišim / najnižim WB proxy skorom
+  const volunteers = state.volunteers || [];
+  if (volunteers.length === 1) {
+    const only = volunteers[0];
+    lines.push(`${only.name} nosi celu sezonu na sebi — nije bilo drugog izbora.`);
+  } else if (volunteers.length > 1) {
+    const withWB = volunteers.map(v => ({ ...v, wb: ((v.energija ?? 0) + (v.vibe ?? 0)) / 2 }));
+    const best = withWB.reduce((a, b) => (b.wb > a.wb ? b : a));
+    const worst = withWB.reduce((a, b) => (b.wb < a.wb ? b : a));
+    if (best.name === worst.name) {
+      lines.push(`${best.name} drži isti ritam ceo sezonu — ni gore ni bolje.`);
+    } else {
+      lines.push(`${best.name} se vraća, pamti te — ${worst.name} jedva izdržava do kraja.`);
+    }
+  } else {
+    lines.push('Ova sezona nije imala volontere — niko da posvedoči šta se desilo.');
+  }
+
+  // 3. Finale moment
+  const finale = state.finale;
+  if (finale && typeof finale.crowdMood === 'number' && typeof finale.djHype === 'number') {
+    const crowdMood = Math.round(finale.crowdMood);
+    const djHype = Math.round(finale.djHype);
+    if (crowdMood >= djHype) {
+      lines.push(`Publika pamti raspoloženje (${crowdMood}%) više od bine te noći.`);
+    } else {
+      lines.push(`DJ hype (${djHype}%) nosi finale te noći, publika prati.`);
+    }
+  } else {
+    lines.push('Finale se gubi u sećanju — dnevnik ćuti o njemu.');
+  }
+
+  return lines;
+}
+
+/**
  * Format reputation for display
  * @param {number} rep
  * @returns {string}

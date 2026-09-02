@@ -2,7 +2,7 @@
 
 import { getState, setState, clearSave, prestigeReset } from '../state.js';
 import { calcFinalScore, getWinCondition, checkAchievements, getAchievementInfo, formatScoreCard } from '../systems/scoring.js';
-import { calcReputationGain, formatReputation, getNextPrestigeThreshold } from '../systems/prestige.js';
+import { calcReputationGain, formatReputation, getNextPrestigeThreshold, buildSeasonJournal } from '../systems/prestige.js';
 import { calcCommunityVibe } from '../systems/wellbeing.js';
 import { BRAND_NARRATIVES, getScoreNarrative, getGuncatiEventCTA } from '../content/brand_hooks.js';
 import { shareScore } from '../share.js';
@@ -71,11 +71,17 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
     </div>
   ` : '';
 
+  const seasonJournalHTML = winCond.canPrestige
+    ? buildSeasonJournal(state).map(line => `<p class="retro-fragment">${line}</p>`).join('')
+    : '';
+
   const prestigeHTML = winCond.canPrestige ? `
     <div class="prestige-cta panel">
       <h3>🌟 Stara Šaraga Mode</h3>
       <p>Igraš ponovo — sa Reputacijom ali bez infrastrukture.</p>
       <p>Teže. Vrednije. Prava legenda se dokazuje dvaput.</p>
+      <h4>📖 Sezonski dnevnik</h4>
+      ${seasonJournalHTML}
       <button class="btn-prestige" id="btn-prestige">
         ⚡ Idi u Stara Šaraga (${newRep} rep)
       </button>
