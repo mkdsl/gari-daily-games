@@ -1,6 +1,6 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Ažurirano:** 2026-08-18 — **0 igara čeka sign-off. Backlog prazan.**
+**Ažurirano:** 2026-09-02 — **0 igara čeka sign-off. Backlog prazan.**
 
 ---
 
@@ -137,3 +137,4 @@ Legacy igre (Park Mapa 05-21: failed/superseded, i stariji bez stage polja) se n
 - [2026-08-21] KORAK 0b: 0 unreleased igara. KORAK 0c: Pasoš drift 33 (released=36, registered=3) — već logovano 2026-08-20, bez promene. KORAK 0d/0e: nema orphana. KORAK P: Crew Recruiter P1 `src/main.js` + `src/state.js` — double-draw guard dodat u performDraw() (commit 40e3e60). Guncati Grand P1 završen prethodnom sesijom 2026-08-20 (event CTA banner, commit dfc7b09). Sledeći trigger: Crew Recruiter P2 (keyboard assign flow ili Guncati CTA verifikacija) ili Guncati Grand P2 (progression.js setState refactor).
 - [2026-08-22] KORAK 0b: 0 unreleased igara. KORAK 0c: Pasoš registry drift 33 (released=36, registered=3 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. KORAK P: Guncati Grand P2 `src/systems/progression.js` + `src/systems/economy.js` — `applyAllocationEffects()` refaktoran da vraća vrednosti umesto da mutira state; `seasonMarketingSpent` dodat u setState() tok. Sledeći trigger: Guncati Grand P2 (score_ui.js + volunteers_data.js retrospektivna kartica) ili Crew Recruiter P2 (keyboard assign flow).
 - [2026-08-23] KORAK 0b: 0 unreleased igara. KORAK 0c: Pasoš drift 33 (released=36, registered=3 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. KORAK P: Guncati Grand P2 `src/ui/score_ui.js` + `src/content/volunteers_data.js` — retrospektivna kartica "Ko je izdržao" sa WB statusom (zeleno/žuto/crveno) i burn-out fragmentima za Tom Sawyer emocionalni udar. Sledeći trigger: Guncati Grand P2 (wellbeing.js milestone notifikacije) ili Crew Recruiter P2 (keyboard assign flow).
+- [2026-09-02] KORAK 0b: 0 unreleased igara. KORAK 0c: Pasoš drift 33 (released=36, registered=3 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. KORAK P: Guncati Grand P2 `src/systems/wellbeing.js` + `src/ui/hud.js` — WB milestone notifikacije: pri prelasku 60% (Tom Sawyer unlock) prikazuje se reakcija volontera, pri padu ispod 40% umor-varijanta (commit 7ca0225). Sledeći trigger: Guncati Grand P2 (finale.js + scoring.js "Ključni momenti") ili Crew Recruiter P2 (keyboard assign flow).
