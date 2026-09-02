@@ -1,12 +1,15 @@
 /** @fileoverview Persistent HUD: week number, GC balance, WB indicator, building status */
 
 import { getState } from '../state.js';
-import { getWBStatus } from '../systems/wellbeing.js';
+import { getWBStatus, checkWBMilestone, WB_MILESTONE_LINES } from '../systems/wellbeing.js';
 import { formatGC } from '../systems/economy.js';
 import { getFinaleProgress } from '../systems/progression.js';
 
 /** @type {HTMLElement|null} */
 let _hudEl = null;
+
+/** @type {number|null} */
+let _prevWB = null;
 
 /**
  * Initialize HUD element
@@ -66,6 +69,18 @@ export function updateHUD() {
   if (tsEl) {
     tsEl.style.display = wbStatus.tomSawyerActive ? 'inline-block' : 'none';
   }
+
+  // WB milestone notifications
+  const currentWBRounded = Math.round(state.currentWB);
+  if (_prevWB !== null && _prevWB !== currentWBRounded) {
+    const milestone = checkWBMilestone(_prevWB, currentWBRounded);
+    if (milestone) {
+      const lines = WB_MILESTONE_LINES[milestone];
+      const line = lines[Math.floor(Math.random() * lines.length)];
+      showHUDToast(line, milestone === 'threshold60' ? 'success' : 'warning', 3500);
+    }
+  }
+  _prevWB = currentWBRounded;
 
   // Building icons
   const bldEl = _hudEl.querySelector('.hud-buildings');

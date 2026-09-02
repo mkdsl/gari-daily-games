@@ -141,3 +141,31 @@ export function calcVolunteerVibeContrib(volunteers) {
   // Vibe above 50 contributes positively, below negatively
   return (avgVibe - 50) * 0.1;
 }
+
+/** Lines shown when WB first crosses 60% (Tom Sawyer unlock) */
+export const WB_MILESTONE_LINES = {
+  threshold60: [
+    'Ekipa je srećna! Ana trči bez pitanja zašto.',
+    'Nešto se promenilo na terenu — volonteri daju više nego što im tražiš.',
+    'Biljana se smeši. Pravi znak da je sve u redu.',
+    'Mika je prestao da priča o odlasku. Tom Sawyer radi.'
+  ],
+  below40: [
+    'Đule kasni. Maja sluša muziku na maksimumu. Ne dobro.',
+    'Jovana nije kuvala jutros. Nešto je puklo.',
+    'Dragan nije izvadio kameru ceo dan. To je loš znak.',
+    'Biljana je prekrižila tri stvari na listi. Nijedna nije bila planirana.'
+  ]
+};
+
+/**
+ * Check if WB crossed a milestone threshold
+ * @param {number} prevWB
+ * @param {number} currentWB
+ * @returns {'threshold60'|'below40'|null}
+ */
+export function checkWBMilestone(prevWB, currentWB) {
+  if (prevWB < 60 && currentWB >= 60) return 'threshold60';
+  if (prevWB >= 40 && currentWB < 40) return 'below40';
+  return null;
+}
