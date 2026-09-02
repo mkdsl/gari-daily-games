@@ -7,48 +7,23 @@
 
 ---
 
-## PRIORITET #1 — Crew Recruiter: Izgradi Ekipu (deck-builder / crew manager)
+## ~~CREW RECRUITER~~ — released 2026-08-14, nije prioritet
 
-> Ažurirao: Iskra 2026-08-10. Put do Guncata premešten na #2 — Crew Recruiter ima W34 Tom Sawyer tie-in (17–23.08), konkretniji release timing. Brief je iz ajajaj/tim/iskra/2026-08-09.md.
+> Crew Recruiter je released. Ne pipeline-uj ponovo.
 
-**Status:** CONCEPT READY — kompletna concept.md u `tim/iskra/crew-recruiter-concept.md`, direktno kopirati u `docs/concept.md`. Ne spawna Iskru agenta. (Ažurirao Iskra 2026-08-11)
-**Urgentnost:** W34 (17–23.08) = Tom Sawyer Poziv za Guncati volontere. Igra izlazi ~21.08 — organik tie-in "završi igru → prijavi se za stvarni crew". Bez vremenskog expiry-a, funkcioniše i posle.
-**Žanr:** Mini deck-builder / crew manager — nije rađeno u GDG katalogu, žanrovska diversifikacija obavezna.
-**Session target:** 10–15 min
-**Brand serves:** mkdslend (primary), kluboslavija (secondary), guncati (tie-in)
+---
 
-### Premisa
+## PRIORITET #1 — Jesenji Tok (seasonal scheduling puzzle)
 
-Ti si event organizer. Imaš 5 uloga koje treba popuniti pre nastupa: Tonac, Host, Content Creator, Logistika, Obezbeđenje. Tegleš karte iz špila — svaka karta je čovek sa profilom (snaga: A, B, C). 6 rundi. Na kraju: "Vibe Score" — koliko je crew sinergija bila jaka.
+> Ažurirao: Nega Retrospektiva 2026-09-02 [PROPOSAL] — bridge je zastareo, Crew Recruiter je released. Jesenji Tok je pre-napisan i pipeline-ready.
 
-### Core loop
+**Status:** CONCEPT READY — kompletna concept.md u `tim/iskra/2026-08-17.md` (ovaj repo), direktno kopirati kao `docs/concept.md`. Ne spawna Iskru agenta.
+**Sezonski prozor:** Aug 20 – Nov 10. Danas: 2026-09-02. Ostaje **69 dana prozora**. Idealan momenat.
+**Žanr:** Seasonal Scheduling Puzzle — NOVO za GDG (planning grid, ne arkada, ne idle, ne card)
+**Session target:** 8–12 min
+**Brand serves:** guncati (primary), kluboslavija (secondary)
 
-1. Draw 3 karte (random)
-2. Assign → 5 slota (drag ili klik)
-3. Outcome: svaki slot pali event smer. Synergy bonus ako komplementarne uloge sede zajedno.
-4. Repeat ×6 rundi, svaki round = drug event stage (Setup, Soundcheck, Opening, Climax, Breakdown, Recap)
-5. Final Score: crowd satisfaction + crew morale
-
-### Win condition
-
-Vibe Score 80+ = "Crew je legenda. August u Guncatiju."
-50–79 = "Dobro, može bolje."
-< 50 = "Sutra pokušaš ponovo."
-
-### Brand hook (ending screen)
-
-"Tvoj crew score: [N]. Pravi tim se gradi na Guncatiju [DATUM]." + share karta + GDG logo.
-Organik link ka volonterskom pozivu Guncati Grand Finale.
-
-### Sadržaj koji treba
-
-- **Pera Period:** 6–8 mikro-aforizma za "unlock" trenutke kad crew sinergija peak-uje
-- **Mile Mehanika:** skill matrica (7 uloga × 5 event slotova = 35 ćelija), synergy balance pass
-- **Dule:** ending screen copy review (CTA ka Guncati real poziv — etički OK)
-
-### Kompleksnost
-
-3/5 — text-based card UI, malo animacije, nema canvas. Jova može brzo. ~20–25 modula.
+**Kopiranje:** `cp tim/iskra/2026-08-17.md games/YYYY-MM-DD-jesenji-tok/docs/concept.md` pa uredi header.
 
 ---
 
