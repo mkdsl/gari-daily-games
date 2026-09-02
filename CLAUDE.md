@@ -4,13 +4,14 @@
 
 Automatizovan pipeline koji napreduje jednu HTML5 igricu kroz tri stage-a: **concept → impl → polish**. **Jedan trigger dnevno (03:00 CET)**, jedan stage po sesiji — igra završi za 3 dana (Dan 1: concept, Dan 2: impl, Dan 3: polish). Svaka stage sesija je fresh Claude Code run na Anthropic cloud-u. Trigger čita najnoviji `manifest.json` u `games/`: ako je `status: "released"` (ili `games/` prazan), kreće nova igra u `concept` stage-u; inače napreduje postojeću kroz sledeći stage.
 
-**Aktivan trigger raspored:**
-- **03:00 — jedini GDG trigger** (concept / impl / polish — zavisi od manifest.stage)
+**Aktivan trigger raspored (ažurirano 2026-09-02 — stvarni cron, ne teorijski):**
+- **22:00 — `gdg-concept-trigger`** (concept stage; NO-OP ako latest igra nije `released`; takođe safety-net patch check, vidi KORAK P)
+- **01:00 — `gdg-impl-trigger`** (impl stage; NO-OP ako latest igra nije `concept in_progress`)
+- **04:00 — `gdg-polish-trigger`** (polish stage; NO-OP ako latest igra nije `impl in_progress`)
+- **Svakih 5h — `gdg-patch-trigger`** (KORAK P, dedikovan, nezavisan od gornja tri — vidi KORAK P sekciju)
 
-**Teorijski raspored ako šef postavi 09:00 i 17:00 triggere (Opcija A, nije aktivno):**
-- 03:00 — concept stage; 09:00 — impl stage; 17:00 — polish stage (tada igra = 1 dan, 30+ igara/mesec)
-
-**Trenutni kapacitet (1 trigger / dan):** ~10 igara mesečno (3 dana po igri).
+**Trenutni kapacitet:** ~10 nove igre mesečno (3 noćna trigera po igri), plus kontinuirano
+pražnjenje patch backlog-a na sopstvenom 5h ritmu (ne čeka nightly ciklus).
 
 Repo je objavljen na GitHub Pages — svaka igra živi na:
 `https://mkdsl.github.io/gari-daily-games/games/YYYY-MM-DD-naziv/`
@@ -446,8 +447,14 @@ Svaki agent dodaje 3–5 stavki. Commit: `[P-init] NazivIgre: patch queue popula
 
 ### KORAK P — PATCH STAGE (post-release, autonomni)
 
-**Kada se aktivira:** KORAK 0 routing kaže "nova igra" (latest manifest `status == "released"`)
-ALI pre nego što se kreira novi concept, Gari proverava da li postoji otvoreni patch bez `[HOLD]`:
+**Dedikovan trigger, svakih 5h (2026-09-02 direktiv):** `gdg-patch-trigger` radi ISKLJUČIVO
+KORAK P, nezavisno od concept/impl/polish nightly ciklusa. Pali se svakih 5h da poklopi
+kredit/usage refresh prozor — svaki fire je "svež" budžet, ne deli ga sa ostalim stage-ovima.
+
+**Kada se aktivira:** Na svakom fire-u `gdg-patch-trigger`-a (svakih 5h), i dodatno kao
+safety-net unutar `gdg-concept-trigger`-a kad KORAK 0 routing kaže "nova igra" (latest manifest
+`status == "released"`) — ALI pre nego što se kreira novi concept, Gari proverava da li postoji
+otvoreni patch bez `[HOLD]`:
 
 ```bash
 for q in games/*/docs/patch_queue.md; do
@@ -455,21 +462,33 @@ for q in games/*/docs/patch_queue.md; do
 done
 ```
 
-- Ako otvoreni patch postoji → **KORAK P umesto novog concept-a** (jedan patch, jedna igra)
-- Ako nema → nastavi normalno na novi concept
+- Ako otvoreni patch postoji → **KORAK P** (na `gdg-patch-trigger`-u uvek; na `gdg-concept-trigger`-u
+  umesto novog concept-a)
+- Ako nema → NO-OP na `gdg-patch-trigger`-u (izlazi bez commit-a); `gdg-concept-trigger` nastavlja
+  normalno na novi concept
 
-**Izvršni redosled unutar jedne igre:** P1 → P2 → P3 (po redu pojavljivanja u fajlu)
+**Izvršni redosled unutar jedne igre:** P1 → P2 → P3 (po redu pojavljivanja u fajlu). Kros-igre
+redosled: `games/*/docs/patch_queue.md` glob je alfabetski = hronološki (folderi su YYYY-MM-DD-*),
+znači najstarija igra sa otvorenim patch-em ide prva, kompletira se (do praznog ili [HOLD]-svega)
+pre prelaska na sledeću.
 
-**Flow KORAK P:**
-1. Gari čita `manifest.json` te igre
-2. Uzima PRVI otvoreni red bez `[HOLD]` (P1 first, pa P2, pa P3)
+**Flow KORAK P (petlja, ne jedan prolaz — vidi budžet niže):**
+1. Gari re-skenira otvorene patch-eve (isti grep kao gore) — uzima PRVI bez `[HOLD]`
+2. Gari čita `manifest.json` te igre
 3. Brifinuje Jovu: naziv igre, opis patcha, TAČNO 1–2 modula
 4. Jova čita manifest.json + navedene module (ništa više)
 5. Gari commit-uje: `[patch] NazivIgre: opis — P1/P2/P3`
-6. Zaokruži `[ ]` → `[x]` + dodaj datum i commit hash
-7. Push — GitHub Pages auto-deploy
+6. Zaokruži `[ ]` → `[x]` + dodaj datum i commit hash, commit + push (GitHub Pages auto-deploy)
+7. **Vrati se na korak 1** — nastavi na sledeći otvoreni patch (ista ili sledeća igra) dok
+   traje budžet ove sesije
 
-**Token budžet po patch sesiji:** ~50–150K
+**Token budžet po patch sesiji: do sesijskog cap-a, ne 1-patch limit.** Šef je 2026-09-02
+eksplicitno ukinuo raniji "max 1 patch po sesiji" — sesija ide dok ne priđe istom cap-u kao
+ostali stage-ovi (~700K–1.2M, vidi Token Economy Pravila), commit+push posle SVAKOG pojedinačnog
+patcha (ne batch na kraju — ako sesija padne usred rada, već završeni patch-evi ostaju sačuvani).
+Kad se sesija približi budžetu: ne startuj novi patch koji ne možeš da završiš u ostatku budžeta,
+push ono što je gotovo, izađi čisto — sledeći fire (za ≤5h) nastavlja od prvog sledećeg otvorenog
+reda. Nema veštačkog zaustavljanja na broju 1 dok ima i budžeta i otvorenih redova.
 
 **Ko dodaje stavke:**
 - Tim (Nega/Iskra/Dule/Sine) direktno commituju stavke — nema [PROPOSAL] taga, trigger ih izvršava
@@ -496,7 +515,8 @@ done
 - P2 = polish koji vidno poboljšava iskustvo
 - P3 = content/feature expansion
 - `[HOLD]` = šef ili tim zamrzavaju stavku dok nije jasno šta treba
-- Trigger radi MAX 1 patch po sesiji
+- Trigger radi patch-eve u nizu dok traje sesijski budžet (vidi "Flow KORAK P" iznad) — bez
+  veštačkog 1-patch limita; `gdg-patch-trigger` se svakako vraća za ≤5h za nastavak
 
 ## Template (u `templates/standard-game/`)
 
