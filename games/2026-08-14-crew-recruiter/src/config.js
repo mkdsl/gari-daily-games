@@ -1,10 +1,10 @@
 // config.js — sve konstante za Crew Recruiter
 
-export const VIBE_START = 20;
+export const VIBE_START = 30;
 export const VIBE_MIN = 0;
 export const VIBE_MAX = 100;
 
-export const CHURN_PENALTY = 3;
+export const CHURN_PENALTY = 4;
 export const EMPTY_SLOT_PENALTY = 2;
 export const IMPATIENCE_PENALTY = 5;
 export const MAX_SYNERGY_PER_ROUND = 12;
@@ -32,12 +32,12 @@ export const PHASE_WEIGHTS = {
 };
 
 export const PHASE_THRESHOLDS = {
-  setup:      5,
-  soundcheck: 8,
-  opening:    11,
-  climax:     15,
-  breakdown:  13,
-  recap:      10
+  setup:      4,
+  soundcheck: 7,
+  opening:    10,
+  climax:     14,
+  breakdown:  11,
+  recap:      9
 };
 
 export const SLOT_ROLES = ['tonac', 'host', 'content', 'logistika', 'obezbedjenje'];
