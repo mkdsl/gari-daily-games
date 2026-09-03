@@ -35,7 +35,23 @@ export function getTagline(type) {
  * @param {string} [eventType] - 'outdoor' | 'klub' | 'intimate'
  * @returns {{ text: string, url: string }}
  */
+/** @returns {boolean} true during Guncati Grand Finale window (Aug 20–30, any year) */
+function isGuncatiGrandWindow() {
+  const now   = new Date();
+  const month = now.getMonth(); // 0-indexed
+  const day   = now.getDate();
+  return month === 7 && day >= 20 && day <= 30; // August = 7
+}
+
 export function getCTA(type, eventType) {
+  if (isGuncatiGrandWindow()) {
+    return {
+      text: 'Igrao si regrutera — 23.8. vidimo se na Guncati Grand Finalu. Masterclass prijave: guncati.rs',
+      url:  'https://guncati.rs/masterclass',
+      context: 'Guncati Grand Finale 2026 — povratak na selo.'
+    };
+  }
+
   const isOutdoor = eventType === 'outdoor';
   if (type === 'legendary') {
     return isOutdoor ? BRAND_CTAS.legendary_outdoor : BRAND_CTAS.legendary_default;
