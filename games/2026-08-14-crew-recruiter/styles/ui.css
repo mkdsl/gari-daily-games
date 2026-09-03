@@ -623,7 +623,20 @@
 }
 .ending-max          { font-size: 1.2rem; color: var(--color-text-dim); }
 .ending-tagline      { font-size: 0.95rem; color: var(--color-text); font-weight: 600; }
-.ending-cta          { font-size: 0.82rem; color: var(--role-logistika); font-style: italic; }
+.ending-cta {
+  font-size: 0.82rem;
+  color: var(--role-logistika);
+  font-style: italic;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: center;
+}
+.ending-cta-context {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  font-style: normal;
+}
 
 .ending-lesson {
   font-size: 0.8rem;

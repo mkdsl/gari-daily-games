@@ -15,19 +15,22 @@ export const BRAND = {
  */
 export const BRAND_CTAS = {
   legendary_outdoor: {
-    text: 'Crew savršen za Guncati Grand — masterclass prijave: guncati.rs',
-    url: 'https://guncati.rs'
+    text: 'Pravi tim se gradi na Guncatiju — prijavi se na masterclass',
+    url: 'https://guncati.rs/masterclass',
+    context: 'Tom Sawyer model: uči kroz pravljenje na Guncati Grand Finalu.'
   },
   legendary_default: {
-    text: 'Pravi tim, pravi prostor. Guncati masterclass čeka — guncati.rs',
-    url: 'https://guncati.rs'
+    text: 'Pravi tim se gradi na Guncatiju — prijavi se na masterclass',
+    url: 'https://guncati.rs/masterclass',
+    context: 'Tom Sawyer model: uči kroz pravljenje.'
   },
   solid_outdoor: {
-    text: 'Skoro si tamo. Guncati teren pravi razliku — guncati.rs',
-    url: 'https://guncati.rs'
+    text: 'Skoro si tamo. Guncati masterclass pravi razliku',
+    url: 'https://guncati.rs/masterclass',
+    context: 'Guncati teren — mesto gde se timovi zaista grade.'
   },
   solid_default: {
-    text: 'Solidno! MKDSLend Zabavni radni park podiže timove — mkdslend.rs',
+    text: 'Solidno! MKDSLend Zabavni radni park podiže timove',
     url: 'https://mkdslend.rs'
   },
   weak_crash: {

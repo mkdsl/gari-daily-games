@@ -97,7 +97,10 @@ export function showEndingScreen(vibeScore, eventType, crashed, onRestart, phase
 
       <div class="ending-tagline">${tagline}</div>
       ${lesson ? `<div class="ending-lesson">💡 ${lesson}</div>` : ''}
-      <div class="ending-cta"><a href="${cta.url}" target="_blank" rel="noopener">${cta.text}</a></div>
+      <div class="ending-cta">
+        <a href="${cta.url}" target="_blank" rel="noopener">${cta.text}</a>
+        ${cta.context ? `<span class="ending-cta-context">${cta.context}</span>` : ''}
+      </div>
 
       ${bestLine}
 
