@@ -205,6 +205,8 @@ export function resolveFinaleEvent(optionIndex) {
   if (option.revenueDelta)  fin.revenue = Math.max(0, fin.revenue * (1 + option.revenueDelta));
   if (option.costSlot)      fin.totalSlots = Math.max(1, fin.totalSlots - option.costSlot);
 
+  _eventLog.push({ event, optionText: option.text, effects: option, time: fin.elapsed });
+
   fin.pendingEvent = null;
   setState({ finale: fin });
 

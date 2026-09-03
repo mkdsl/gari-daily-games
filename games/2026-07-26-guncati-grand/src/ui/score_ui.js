@@ -59,6 +59,7 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
 
   const barHTML = buildScoreBreakdown(breakdown);
   const retroHTML = buildVolunteerRetroHTML(state);
+  const keyMomentsHTML = buildKeyMomentsHTML(state);
   const brandNarrative = getBrandEndingNarrative(state, winCond.tier);
   const guncatiBrandEnding = getGuncatiBrandEnding(winCond.tier);
 
@@ -130,6 +131,8 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
         <h3>📊 Breakdown</h3>
         ${barHTML}
       </div>
+
+      ${keyMomentsHTML}
 
       ${retroHTML}
 
@@ -213,6 +216,41 @@ function buildVolunteerRetroHTML(state) {
     <h3>👥 Ko je izdržao</h3>
     <div class="retro-grid">${cards}</div>
   </div>`;
+}
+
+function buildKeyMomentsHTML(state) {
+  const eventLog = state.eventLog;
+  if (!eventLog || eventLog.length === 0) return '';
+
+  const rows = eventLog
+    .filter(entry => entry.event && entry.event.title)
+    .map(entry => {
+      const min = Math.floor((entry.time || 0) / 60);
+      const choice = entry.optionText || 'auto-rešeno';
+      const effectSummary = buildEffectSummary(entry.effects);
+      const effectPart = effectSummary ? ` → ${effectSummary}` : '';
+      return `<div class="key-moment-row">
+        <span class="key-moment-time">Min ${min}</span>
+        <span class="key-moment-text">${entry.event.title} — ${choice}${effectPart}</span>
+      </div>`;
+    })
+    .join('');
+
+  if (!rows) return '';
+
+  return `<div class="key-moments panel">
+    <h3>🎬 Ključni momenti</h3>
+    <div class="key-moments-list">${rows}</div>
+  </div>`;
+}
+
+function buildEffectSummary(effects) {
+  if (!effects) return '';
+  const parts = [];
+  if (effects.moodDelta) parts.push(`${effects.moodDelta > 0 ? '+' : ''}${effects.moodDelta} Crowd Mood`);
+  if (effects.hypeDelta) parts.push(`${effects.hypeDelta > 0 ? '+' : ''}${effects.hypeDelta} DJ Hype`);
+  if (effects.revenueDelta) parts.push(`${effects.revenueDelta > 0 ? '+' : ''}${Math.round(effects.revenueDelta * 100)}% Prihod`);
+  return parts.join(', ');
 }
 
 function buildScoreBreakdown(breakdown) {

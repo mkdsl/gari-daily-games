@@ -225,11 +225,11 @@ function renderFinaleScreen(container) {
         getAudio()?.playSFX('dj_transition_bad');
       }
     },
-    onFinaleEnd: ({ revenue }) => {
+    onFinaleEnd: ({ revenue, eventLog }) => {
       showHUDToast(`🎪 Finale završen! Prihod: ${revenue} GC`, 'success', 3000);
       const state = getState();
       const breakdown = calcFinalScore(state);
-      setState({ finalScore: breakdown.finalScore, scoreBreakdown: breakdown });
+      setState({ finalScore: breakdown.finalScore, scoreBreakdown: breakdown, eventLog });
       setTimeout(() => navigateTo('SCORE'), 1500);
     }
   });
