@@ -1,4 +1,6 @@
-/** @fileoverview Seasonal arcs for each volunteer — 3 story beats tied to WB milestones */
+/** @fileoverview Seasonal arcs for each volunteer — 3 story beats tied to WB milestones, and finale crisis detection */
+
+import { getVolunteerCrisisEvent } from './events_data.js';
 
 /**
  * @typedef {Object} VolunteerArc
@@ -222,6 +224,26 @@ export function getActiveBeats(volunteers, week) {
     const beat = getVolunteerBeat(vol.typeId, phase, wb);
     if (beat) {
       results.push({ volunteerId: vol.id, name: vol.name, ...beat });
+    }
+  }
+  return results;
+}
+
+/**
+ * Get volunteer-specific crisis events for all volunteers with WB < 30% during the finale.
+ * These are personal breakdown moments the player must resolve in real-time.
+ * @param {Object[]} volunteers - state.volunteers (with energija, vibe, typeId, id, name)
+ * @returns {Array<{ volunteerId: string, name: string, event: Object }>}
+ */
+export function getVolunteerCrisisEvents(volunteers) {
+  const results = [];
+  for (const vol of volunteers) {
+    const wb = ((vol.energija || 0) + (vol.vibe || 0)) / 2;
+    if (wb < 30) {
+      const event = getVolunteerCrisisEvent(vol.typeId);
+      if (event) {
+        results.push({ volunteerId: vol.id, name: vol.name, event });
+      }
     }
   }
   return results;

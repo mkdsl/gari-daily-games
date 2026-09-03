@@ -282,6 +282,162 @@ export function getVenueEventOverrides(venueId) {
 }
 
 /**
+ * Volunteer-specific crisis events triggered when a volunteer's WB < 30% during the finale.
+ * Each event is personal — the volunteer is named, the moment is theirs.
+ * These are dynamic events; the runtime generates them from getVolunteerCrisisEvent().
+ *
+ * @type {Record<string, FinaleEvent>}
+ */
+export const VOLUNTEER_CRISIS_EVENTS = {
+  ana: {
+    id: 'crisis_ana',
+    title: 'Ana se povlači',
+    description: 'Ana sedi u uglu šatora, ne odgovara na pozive. Previše je traženo od nje tokom sezone. Šta radiš?',
+    options: [
+      {
+        text: '🫂 Sedi s njom (5 min)',
+        desc: 'Ana se vraća u igru — WB +20, ali ti gubiš 5 minuta nadzora',
+        volunteerWbDelta: 20,
+        moodDelta: -5,
+        targetVolunteerId: 'ana'
+      },
+      {
+        text: '➡️ Nastavi bez nje',
+        desc: 'Ana ostaje u šatoru. Niko ne preuzima njen zadatak.',
+        volunteerWbDelta: 0,
+        moodDelta: -3
+      }
+    ]
+  },
+  mika: {
+    id: 'crisis_mika',
+    title: 'Mika ne može više',
+    description: 'Mika sedi na kamenu, ruke na kolenima. Ne diže sanduke. Pravi fizikalac — ali telo ima granicu.',
+    options: [
+      {
+        text: '🍲 Hitna hrana i odmor',
+        desc: 'Mika se oporavlja — WB +25, ali gradnja staje na 10 min',
+        volunteerWbDelta: 25,
+        moodDelta: 0,
+        targetVolunteerId: 'mika'
+      },
+      {
+        text: '💪 Neka izdrži još malo',
+        desc: 'Mika pokušava — ali efikasnost pada na nulu',
+        volunteerWbDelta: -5,
+        moodDelta: -5
+      }
+    ]
+  },
+  jovana: {
+    id: 'crisis_jovana',
+    title: 'Jovana pravi praznu čorbu',
+    description: 'Kuhinja je tiha. Jovana meša lonac bez recepta, bez ideja. Kad kuvarica izgubi vibe — ekipa to oseća.',
+    options: [
+      {
+        text: '🎵 Pusti muziku u kuhinji',
+        desc: 'Jovana se budi — WB +15, hrana ima dušu ponovo',
+        volunteerWbDelta: 15,
+        moodDelta: 5,
+        targetVolunteerId: 'jovana'
+      },
+      {
+        text: '🤐 Ostavi je na miru',
+        desc: 'Čorba je prazna, ekipa jede bez osmeha',
+        volunteerWbDelta: 0,
+        moodDelta: -8
+      }
+    ]
+  },
+  dragan: {
+    id: 'crisis_dragan',
+    title: 'Dragan odlaže kameru',
+    description: 'Kamera visi o vratu, prst ne pritiska okidač. Dragan gleda finale — ali ga ne dokumentuje.',
+    options: [
+      {
+        text: '📸 Podseti ga zašto je tu',
+        desc: 'Dragan počinje da snima — WB +15, finale dobija vizuelnu priču',
+        volunteerWbDelta: 15,
+        reputationDelta: 5,
+        targetVolunteerId: 'dragan'
+      },
+      {
+        text: '🎭 Finale bez fotografa',
+        desc: 'Guncati Grand nema vizuelni trag ove noći',
+        reputationDelta: -5
+      }
+    ]
+  },
+  djule: {
+    id: 'crisis_djule',
+    title: 'Đule sedi na kamenu',
+    description: 'Mišići miruju. Đule koji nikad ne seda — sada sedi. Gradnja staje, terenska logistika puca.',
+    options: [
+      {
+        text: '🍲 Hrana odmah, odmor 5 min',
+        desc: 'Đule ustaje spremniji — WB +20, logistika se vraća',
+        volunteerWbDelta: 20,
+        moodDelta: 0,
+        targetVolunteerId: 'djule'
+      },
+      {
+        text: '🏗️ Podeli njegov posao ekipi',
+        desc: 'Gradnja kasni, ekipa je opterećena',
+        moodDelta: -10,
+        volunteerWbDelta: 0
+      }
+    ]
+  },
+  maja: {
+    id: 'crisis_maja',
+    title: 'Maja stišava volume',
+    description: 'Playlist radi automatski, ali Maja nije za pultom. Muzika je tu — ali DJ nije. Publika to oseća.',
+    options: [
+      {
+        text: '🎧 Povedi je iza pulta',
+        desc: 'Maja se vraća — DJ hype +15, publika se budi',
+        djHypeDelta: 15,
+        volunteerWbDelta: 10,
+        targetVolunteerId: 'maja'
+      },
+      {
+        text: '🤖 Playlist radi sam',
+        desc: 'Automatski set nema soul — hype polako pada',
+        djHypeDelta: -10
+      }
+    ]
+  },
+  biljana: {
+    id: 'crisis_biljana',
+    title: 'Biljana ostavlja listu',
+    description: 'Lista je polu-prazna. Biljana sedi, olovka na stolu. Raspored koji stane — festival koji ne zna šta sledi.',
+    options: [
+      {
+        text: '📋 Nastavi listu zajedno',
+        desc: 'Biljana se vraća — logistika je pod kontrolom, WB +15',
+        volunteerWbDelta: 15,
+        moodDelta: 5,
+        targetVolunteerId: 'biljana'
+      },
+      {
+        text: '🤷 Improvizuj bez rasporeda',
+        desc: 'Narednih 5 minuta nema koordinacije — haos je moguć',
+        moodDelta: -12
+      }
+    ]
+  }
+};
+
+/**
+ * Get the crisis event for a specific volunteer type, or null if none defined.
+ * @param {string} typeId
+ * @returns {FinaleEvent|null}
+ */
+export function getVolunteerCrisisEvent(typeId) {
+  return VOLUNTEER_CRISIS_EVENTS[typeId] || null;
+}
+
+/**
  * Cross-event decision callbacks — extra options that unlock in later events
  * based on how the player resolved an earlier event.
  *
