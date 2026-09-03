@@ -139,7 +139,8 @@ export function showEndingScreen(vibeScore, eventType, crashed, onRestart, phase
         const msg = method === 'clipboard' ? 'Link kopiran, podeli ga!' : 'Podeljeno!';
         showLocalToast(msg);
       },
-      () => showLocalToast('Deljenje nije uspelo.')
+      () => showLocalToast('Deljenje nije uspelo.'),
+      eventType
     );
   });
 
