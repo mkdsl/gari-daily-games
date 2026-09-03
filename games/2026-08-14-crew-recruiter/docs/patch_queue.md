@@ -18,7 +18,7 @@
 
 - [x] P2 `src/audio.js` — phase-specific audio klimaks: sve faze zvuče isto (linearan volume ramp), što emocionalno ravna igru; Climax (faza 4) treba bass peak, Breakdown (faza 5) treba inverzan pad — implementiraj kao per-phase parametri (`PHASE_AUDIO_PROFILE`) u postojećem phase tracking-u bez promene arhitekture audio.js (done 2026-09-03, commit 33b3e91)
 
-- [ ] P3 `src/ui/synergy-display.js` + `src/systems/synergy.js` — Synergy codex "N/10 otkriveno": igrač ne zna da postoji 10 synergy parova, pa nema meta-cilj između runova; dodaj persistent `discoveredSynergies` set u localStorage; synergy-display prikazuje "{N}/10 kombinacija otkriveno" kao passive tracker ispod aktivnih parova — pretvara igru u kolekcionar loop bez novog content-a
+- [x] P3 `src/ui/synergy-display.js` + `src/systems/synergy.js` — Synergy codex "N/10 otkriveno": igrač ne zna da postoji 10 synergy parova, pa nema meta-cilj između runova; dodaj persistent `discoveredSynergies` set u localStorage; synergy-display prikazuje "{N}/10 kombinacija otkriveno" kao passive tracker ispod aktivnih parova — pretvara igru u kolekcionar loop bez novog content-a (done 2026-09-03, commit 3d0b00b)
 
 - [ ] P3 `src/content/brand_hooks.js` — Guncati masterclass deep link i narativ: zameni generički Guncati CTA string sa strukturiranim objektom koji nosi url (`guncati.rs/masterclass`), CTA tekst ("Pravi tim se gradi na Guncatiju — prijavi se na masterclass") i kontekst ("Tom Sawyer model: uči kroz pravljenje"). Aktivira se na Legendary i Solid endingu umesto blank linka.
 
