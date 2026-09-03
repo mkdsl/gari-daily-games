@@ -91,12 +91,16 @@ export function createCardElement(card) {
   flavorEl.textContent = card.flavor;
   el.appendChild(flavorEl);
 
-  // Keyboard accessibility: enter/space triggers pointer events
+  // Keyboard: Enter/Space selects the card for click-to-slot assignment.
+  // Uses the card's own center coords so drag tracking doesn't misfire at (0,0).
   el.addEventListener('keydown', e => {
     if (e.code === 'Enter' || e.code === 'Space') {
       e.preventDefault();
-      el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: 0, clientY: 0 }));
-      el.dispatchEvent(new PointerEvent('pointerup',   { bubbles: true, clientX: 0, clientY: 0 }));
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top  + r.height / 2;
+      el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerId: 1, clientX: cx, clientY: cy }));
+      el.dispatchEvent(new PointerEvent('pointerup',   { bubbles: true, pointerId: 1, clientX: cx, clientY: cy }));
     }
   });
 

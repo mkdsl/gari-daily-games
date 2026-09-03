@@ -161,13 +161,60 @@ export function clearSelectedCard() {
 
 // ── Keyboard ──────────────────────────────────────────────────────────────────
 
+/** Index of the currently keyboard-focused slot (-1 = none) */
+let _focusedSlotIdx = -1;
+
+/**
+ * Returns the ordered list of slot elements currently in the DOM.
+ * @returns {HTMLElement[]}
+ */
+function _getSlotEls() {
+  return Array.from(document.querySelectorAll('[data-slot-role]'));
+}
+
 function _onKeyDown(e) {
-  if (e.code === 'Space') {
+  // Arrow / Tab navigation cycles slot focus when a card is selected
+  if (_inputState.selectedCardId) {
+    const slots = _getSlotEls();
+    if (slots.length > 0) {
+      if (e.code === 'ArrowRight' || (e.code === 'Tab' && !e.shiftKey)) {
+        e.preventDefault();
+        _focusedSlotIdx = (_focusedSlotIdx + 1) % slots.length;
+        _updateSlotFocus(slots);
+        return;
+      }
+      if (e.code === 'ArrowLeft' || (e.code === 'Tab' && e.shiftKey)) {
+        e.preventDefault();
+        _focusedSlotIdx = (_focusedSlotIdx - 1 + slots.length) % slots.length;
+        _updateSlotFocus(slots);
+        return;
+      }
+      if ((e.code === 'Enter') && _focusedSlotIdx >= 0 && slots[_focusedSlotIdx]) {
+        e.preventDefault();
+        const role = slots[_focusedSlotIdx].dataset.slotRole;
+        handleSlotClick(role);
+        _focusedSlotIdx = -1;
+        _updateSlotFocus(slots);
+        return;
+      }
+    }
+  }
+
+  if (e.code === 'Space' && !_inputState.selectedCardId) {
     e.preventDefault();
     if (_onConfirm) _onConfirm();
   } else if (e.code === 'Escape') {
+    _focusedSlotIdx = -1;
+    _updateSlotFocus(_getSlotEls());
+    clearSelectedCard();
     if (_onDiscard) _onDiscard();
   }
+}
+
+function _updateSlotFocus(slots) {
+  slots.forEach((el, idx) => {
+    el.classList.toggle('keyboard-focus', idx === _focusedSlotIdx);
+  });
 }
 
 /**
