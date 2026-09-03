@@ -290,6 +290,17 @@ export function getGuncatiBrandEnding(tier) {
 }
 
 /**
+ * Brand-level epilog frames — shown above the personalized volunteer epilog on score screen.
+ * Provides the Guncati brand "voice" wrapper before individual volunteer lines.
+ * @type {Record<'legend'|'decent'|'fail', string>}
+ */
+export const EPILOG_BRAND_FRAMES = {
+  legend: 'Guncati teren je bio u dobrim rukama ovu sezonu. Ovo nije kraj — ovo je arhiva.',
+  decent: 'Guncati teren nagrađuje one koji se trude. Ova sezona je tvoj trag na terenu.',
+  fail: 'Guncati teren je strpljiv. Zemlja čeka — i tim će biti tu sledeće sezone.'
+};
+
+/**
  * Date-aware Guncati Grand Finale event CTA (active 2026-08-20 to 2026-08-30)
  * @returns {{ active: boolean, headline?: string, cta?: string, url?: string }}
  */
