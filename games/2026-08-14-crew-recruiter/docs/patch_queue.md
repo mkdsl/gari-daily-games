@@ -32,7 +32,7 @@
 
 - [x] P3 `src/content/aforizmi.js` — proširiti pool sa 8 na 16 aforizama i uvesti tri triggeri konteksta: (1) synergy ≥ 4 (sadašnji, 6 aforizama "euforiznih"); (2) crisis trigger — Vibe < 30, novi pool od 5 aforizama gorkog tona (Pera u padu: kratke, rezignirane, crnohumore); (3) phase-6 finale trigger — 5 aforizama specifičnih za završni momenat, ton zavisi od Vibe-a pri ulasku u poslednju fazu. Sadašnjih 8 rasporediti po novim poolovima, ne brisati. (done 2026-09-03, commit 7aaf21f)
 
-- [ ] P3 `src/ui.js` + `src/config.js` — phase narrative beat: dodati `PHASE_NARRATIVE` niz od 6 kratkih flavornih rečenica u `config.js` (po jedna po fazi, npr. faza 1: "Ekipa se skuplja. Ko kasni, ko je već otišao.", faza 6: "Ovo je ona noć o kojoj pričaju godinama — ili ne."), prikazivati u `src/ui.js` kao 2.5s overlay pri phase transition bez gameplay pauze.
+- [x] P3 `src/ui.js` + `src/config.js` — phase narrative beat: dodati `PHASE_NARRATIVE` niz od 6 kratkih flavornih rečenica u `config.js` (po jedna po fazi, npr. faza 1: "Ekipa se skuplja. Ko kasni, ko je već otišao.", faza 6: "Ovo je ona noć o kojoj pričaju godinama — ili ne."), prikazivati u `src/ui.js` kao 2.5s overlay pri phase transition bez gameplay pauze. (done 2026-09-03, commit 48c53e6)
 
 - [ ] P3 `src/content/cards_klub.js` — Rare karta react linija: svaka od 12 Rare karata (2 Rare × 6 uloga) dobija opciono polje `react_line` — jedna rečenica u prvom licu koja se prikazuje u synergy feed-u kad ta karta čini deo aktivnog synergy para, umesto generičkog synergy naziva (npr. Tonac Rare: "Bas nisam podešavao ni na Exitu, ali ovde — ovo radi."). Micro-monolog karaktera, ne dijalog — zvuk osobe, ne razgovor.
 
