@@ -5,6 +5,29 @@ import { CONFIG } from '../config.js';
 import { VOLUNTEER_TYPES, getTaskEffectiveness, getEffectivenessLabel } from '../entities/volunteer.js';
 import { getAssignmentSummary, suggestTask } from '../systems/micro.js';
 import { showHUDToast } from './hud.js';
+import { ZABAVNI_PARK_ROLES } from '../content/volunteers_data.js';
+
+/**
+ * Get display role tag for a volunteer type — covers original 7 + 3 Zabavni radni park roles.
+ * @param {string} typeId
+ * @returns {{ emoji: string, label: string }}
+ */
+function getVolunteerRoleTag(typeId) {
+  if (ZABAVNI_PARK_ROLES[typeId]) {
+    const r = ZABAVNI_PARK_ROLES[typeId];
+    return { emoji: r.emoji, label: r.role };
+  }
+  const roleMap = {
+    ana:      { emoji: '🌟', label: 'Sveznalica' },
+    mika:     { emoji: '💪', label: 'Fizikalac' },
+    jovana:   { emoji: '👩‍🍳', label: 'Kuvarica' },
+    dragan:   { emoji: '📷', label: 'Fotograf' },
+    djule:    { emoji: '🏋️', label: 'Fizički radnik' },
+    maja:     { emoji: '🎵', label: 'DJ Maja' },
+    biljana:  { emoji: '📋', label: 'Koordinatorka' }
+  };
+  return roleMap[typeId] || { emoji: '👤', label: typeId };
+}
 
 /** @type {string|null} */
 let _selectedVolunteerId = null;
@@ -123,9 +146,10 @@ function buildVolunteerCard(volunteer, assignedTask, isSelected) {
     <div class="volunteer-card ${isSelected ? 'vol-selected' : ''} ${exhausted ? 'vol-exhausted' : ''}"
          data-vol-id="${volunteer.id}" tabindex="0" role="button"
          aria-label="${volunteer.name}">
-      <div class="vol-emoji">${volunteer.emoji || '👤'}</div>
+      <div class="vol-emoji">${volunteer.emoji || getVolunteerRoleTag(volunteer.typeId).emoji}</div>
       <div class="vol-info">
         <div class="vol-name">${volunteer.name}</div>
+        <div class="vol-role-tag">${getVolunteerRoleTag(volunteer.typeId).label}</div>
         <div class="vol-assigned">${assignedLabel}</div>
       </div>
       <div class="vol-stats">

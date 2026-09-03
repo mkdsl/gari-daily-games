@@ -1,5 +1,43 @@
 /** @fileoverview Volunteer flavor text, dialogs, onboarding lines */
 
+/**
+ * Zabavni radni park — 3 new volunteer roles based on real Guncati imanje positions.
+ * Stat templates for entities/volunteer.js when these types are added.
+ * @type {Record<string, { id: string, name: string, emoji: string, role: string, description: string, strengths: string[], weaknesses: string[] }>}
+ */
+export const ZABAVNI_PARK_ROLES = {
+  majstor_gradnje: {
+    id: 'majstor_gradnje',
+    name: 'Niko',
+    emoji: '🏗️',
+    role: 'Majstor Gradnje',
+    description: 'Ruke koje drže imanje. Niko gradi — od šatre do pozornice. Bez njega, festival nema temelje.',
+    strengths: ['kopanje', 'tesanje'],
+    weaknesses: ['foto', 'admin'],
+    statTemplate: { energija: 90, glad: 70, vibe: 55 }
+  },
+  content_creator: {
+    id: 'content_creator',
+    name: 'Lena',
+    emoji: '📸',
+    role: 'Content Creator',
+    description: 'Lena hvata priče. Svaki momenat je sadržaj — Guncati teren kroz njenu kameru postaje brand.',
+    strengths: ['foto', 'admin', 'bar'],
+    weaknesses: ['kopanje', 'tesanje'],
+    statTemplate: { energija: 65, glad: 75, vibe: 90 }
+  },
+  farmer: {
+    id: 'farmer',
+    name: 'Zoran',
+    emoji: '🌾',
+    role: 'Farmer',
+    description: 'Zoran zna kada seme klija i kada krava treba vode. Hrana sa imanja nije logistika — to je filozofija.',
+    strengths: ['kuvanje', 'kopanje'],
+    weaknesses: ['foto', 'bar'],
+    statTemplate: { energija: 80, glad: 90, vibe: 60 }
+  }
+};
+
 /** Intro dialog shown when volunteer first joins */
 export const VOLUNTEER_INTROS = {
   ana: [
@@ -36,6 +74,21 @@ export const VOLUNTEER_INTROS = {
     'Biljana, koordinatorka. Lista napravljena, raspored spreman. Šta ti treba?',
     'Organizacija je moja supermoć. Samo kaži.',
     'Admin, logistika, koordinacija. Sve na čeklistu.'
+  ],
+  majstor_gradnje: [
+    'Niko, majstor. Šta gradimo?',
+    'Daj mi plan i materijal. Ostatak je moja briga.',
+    'Ruke ne čekaju. Gde počinjemo?'
+  ],
+  content_creator: [
+    'Lena! Drago mi je. Šta snimamo danas?',
+    'Kamera je upaljena. Guncati priča ide na mrežu.',
+    'Svaki momenat je content. Ja sam tu da ga uhvatim.'
+  ],
+  farmer: [
+    'Zoran. Ima posla na imanju?',
+    'Jutros sam pomuzao krave. Šta sad treba?',
+    'Zemlja ne čeka. Ni ja.'
   ]
 };
 
@@ -88,6 +141,30 @@ export const TASK_RESULTS = {
     foto:    ['Biljana snima. Kompozicija po uputstvu.', 'Fotke uredno. Bez emocije.'],
     bar:     ['Biljana za barom. Servis kao sat.', 'Svaka narudžbina zabeležena.'],
     admin:   ['Biljana u svom elementu! Lista kompletna.', 'Raspored perfektan. Sve na čeklistu.']
+  },
+  majstor_gradnje: {
+    kopanje: ['Niko kopa — kao mašina. Teren sređen za sat.', 'Kopato, nivelisano, gotovo. Pravi majstor.'],
+    tesanje: ['Niko sa sekirom je spektakl. Drvena pozornica za dva dana.', 'Precizno. Čekić govori.'],
+    kuvanje: ['Niko u kuhinji. Solidna supa, ne pitaj o receptu.', 'Glad prošla. Majstori jedu kao što rade.'],
+    foto:    ['Niko sa telefonom. Slike malo zamagljene.', 'Dokumentovano. Ne lepo, ali stvarno.'],
+    bar:     ['Niko za barom. Čaše pune, ništa ne pita.', 'Direktan servis. Bez priče.'],
+    admin:   ['Niko i papiri. Lista kratka i jasna.', 'Rukopis majstora — čitljivo, bez detalja.']
+  },
+  content_creator: {
+    kopanje: ['Lena kopa uz reels. Usporena video.', 'Iskopano, ali sad svima zna.'],
+    tesanje: ['Lena teše! "Behind the scenes" content zlato.', 'Sporije, ali dokumentovano za veke.'],
+    kuvanje: ['Lena kuva i snima. Food content Guncatija ide na mrežu.', 'Ukusno i fotogenično. Dvostruka vrednost.'],
+    foto:    ['Lena hvata magičan kadar! Guncati trending.', 'Svaka fotka priča. Nalog raste.'],
+    bar:     ['Lena za barom uz story. "Guncati drinkovi" — reach 2000.', 'Kokteli i content. Simultano.'],
+    admin:   ['Lena piše i snima. Video izveštaj umesto liste.', 'Admin kao content. Čudno, ali radi.']
+  },
+  farmer: {
+    kopanje: ['Zoran kopa — ali po logici tla. Svaki rov ima smisao.', 'Duboko i pravo. Farmer zna zemlju.'],
+    tesanje: ['Zoran teše staro drvo. "Ovo drži 50 godina."', 'Solidno. Seoska graditeljska škola.'],
+    kuvanje: ['Zoran kuva sa imanja. Čorba od povrća koje je juče zebrao.', 'Farmer u kuhinji: hrana kao filozofija.'],
+    foto:    ['Zoran snima jutarnji teren. Mistično.', 'Fotke ne znaju za filter. I to je ok.'],
+    bar:     ['Zoran za barom. Domaće rakije specijalna.', 'Preporučuje ono što poznaje. Lokalna slava.'],
+    admin:   ['Zoran piše. Kratko, tačno, bespotrebno mnogo.', 'Lista ima i faze meseca. Farmer detalj.']
   }
 };
 
@@ -129,7 +206,10 @@ export const BURNOUT_FRAGMENTS = {
   dragan: 'Dragan je odložio kameru. Nije snimio finale. To je rečito.',
   djule: 'Đule je ostao sedeći na kamenu. Telo kaže šta reči ne mogu.',
   maja: 'Maja je isključila muziku sat pre finala. Kada DJ stišava, nešto je pogrešno.',
-  biljana: 'Biljana je napustila svoju listu. Kad ona odustane od rasporeda — stvari su ozbiljne.'
+  biljana: 'Biljana je napustila svoju listu. Kad ona odustane od rasporeda — stvari su ozbiljne.',
+  majstor_gradnje: 'Niko je ostavio alat usred gradilišta. Majstor koji ne završi — nešto je ozbiljno puklo.',
+  content_creator: 'Lena je ugasila kameru. Kada Content Creator ne snima finale — priča je nestala.',
+  farmer: 'Zoran je otišao do njive i nije se vratio. Zemlja ga zove kada festival ne može.'
 };
 
 /**
