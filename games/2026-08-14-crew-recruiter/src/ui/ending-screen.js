@@ -77,7 +77,7 @@ export function showEndingScreen(vibeScore, eventType, crashed, onRestart) {
   // Extra CSS class for crash and legendary endings
   const extraClass = crashed
     ? 'ending-crash'
-    : clampedScore >= 85 ? 'ending-legendary' : '';
+    : clampedScore >= 80 ? 'ending-legendary' : '';
 
   screen.innerHTML = `
     <div class="ending-card ending-${type}${extraClass ? ' ' + extraClass : ''}">
