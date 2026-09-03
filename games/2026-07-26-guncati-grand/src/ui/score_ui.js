@@ -5,7 +5,7 @@ import { calcFinalScore, getWinCondition, checkAchievements, getAchievementInfo,
 import { calcReputationGain, formatReputation, getNextPrestigeThreshold, buildSeasonJournal } from '../systems/prestige.js';
 import { calcCommunityVibe } from '../systems/wellbeing.js';
 import { BRAND_NARRATIVES, getScoreNarrative, getGuncatiBrandEnding, getGuncatiEventCTA } from '../content/brand_hooks.js';
-import { shareScore } from '../share.js';
+import { shareScore, shareSeasonReport } from '../share.js';
 
 /** @type {Function|null} */
 let _onNewGame = null;
@@ -71,6 +71,28 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
       </a>
     </div>
   ` : '';
+
+  const volunteerCTAHTML = breakdown.finalScore >= 7.5 ? `
+    <div class="volunteer-cta panel">
+      <p class="volunteer-cta-text">🌱 Spreman za pravi Guncati?</p>
+      <a class="volunteer-cta-link" href="https://guncati.rs" target="_blank" rel="noopener">
+        Postani pravi volonter Guncatija →
+      </a>
+    </div>
+  ` : '';
+
+  const seasonReportHTML = `
+    <div class="season-report panel">
+      <h4>📊 Sezonski izveštaj</h4>
+      <div class="report-grid">
+        <div class="report-item"><span class="report-label">Sreća publike</span><span class="report-val">${breakdown.crowdHappiness}%</span></div>
+        <div class="report-item"><span class="report-label">Prihod</span><span class="report-val">${breakdown.totalRevenue} GC</span></div>
+        <div class="report-item"><span class="report-label">Community Vibe</span><span class="report-val">${breakdown.communityVibe}%</span></div>
+        <div class="report-item"><span class="report-label">Volonteri</span><span class="report-val">${(state.volunteers || []).length}</span></div>
+      </div>
+      <button class="btn-secondary btn-ig-report" id="btn-ig-report">📲 Podeli IG izveštaj</button>
+    </div>
+  `;
 
   const seasonJournalHTML = winCond.canPrestige
     ? buildSeasonJournal(state).map(line => `<p class="retro-fragment">${line}</p>`).join('')
@@ -139,7 +161,11 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
         ${brandNarrative ? `<p class="brand-ending-sub">${brandNarrative}</p>` : ''}
       </div>
 
+      ${volunteerCTAHTML}
+
       ${eventCTAHTML}
+
+      ${seasonReportHTML}
 
       <div class="score-actions">
         <button class="btn-share" id="btn-share">📤 Podeli rezultat</button>
@@ -278,6 +304,15 @@ function bindScoreEvents(container, winCond, achievements, breakdown) {
     if (confirm('Obriši SVE podatke? Ova akcija je nepovratna.')) {
       clearSave();
       _onNewGame?.();
+    }
+  });
+
+  container.querySelector('#btn-ig-report')?.addEventListener('click', async () => {
+    const state = getState();
+    try {
+      await shareSeasonReport(breakdown, state, winCond);
+    } catch (e) {
+      alert('IG share nije dostupan na ovom uređaju.');
     }
   });
 }
