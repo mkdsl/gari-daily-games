@@ -1,7 +1,7 @@
 // ui.js — HUD updates, phase indicator, resolve breakdown, action area, toasts
 
 import { PHASE_DISPLAY_NAMES, TOTAL_ROUNDS } from './config.js';
-import { getRandomAforizam } from './content/aforizmi.js';
+import { getContextualAforizam } from './content/aforizmi.js';
 
 /**
  * Update phase label and round counter in HUD.
@@ -168,9 +168,11 @@ export function hideResolveOverlay() {
  * Show an aforism overlay flash.
  * Auto-hides after 2.5 seconds.
  * @param {string} [text]
+ * @param {'synergy'|'crisis'|'finale'} [context]
+ * @param {number} [vibeScore]
  */
-export function showAforizam(text) {
-  const msg     = text || getRandomAforizam();
+export function showAforizam(text, context, vibeScore) {
+  const msg     = text || getContextualAforizam(context, vibeScore);
   const overlay = document.getElementById('resolve-overlay');
   if (!overlay) return;
 
