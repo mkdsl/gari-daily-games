@@ -43,6 +43,7 @@ function buildTypeCard(typeInfo, selected) {
 
   if (!unlocked) {
     card.setAttribute('aria-disabled', 'true');
+    card.disabled = true;
     card.setAttribute('title', `Odigraj ${unlockAfter} ${unlockAfter === 1 ? 'partiju' : 'partija'} da otključaš`);
   }
 
