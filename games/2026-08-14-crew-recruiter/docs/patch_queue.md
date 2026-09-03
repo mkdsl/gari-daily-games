@@ -12,7 +12,7 @@
 
 - [x] P2 `styles/ui.css` — dva accessibility duga iz iter 1: (1) `.slot-label { font-size: 0.58rem }` — ~9px na 96dpi, ispod minimuma čitljivosti na low-DPI ekranima, podesi na `0.7rem`; (2) zaključane event type kartice koriste `aria-disabled` bez `disabled` atributa na `<button>` elementima — screen reader i keyboard fokus prolaze kroz zaključane opcije, dodaj `disabled` atribut uz `aria-disabled="true"` (done 2026-09-03, commit fad6d8e)
 
-- [ ] P2 `src/ui/ending-screen.js` — Legendary ending vizuelni burst: ending screen je flat za sve tipove — Legendary (Vibe ≥ 80) ne daje vizuelni "high" koji tera na deljenje i povratak; dodaj CSS keyframe confetti/burst animaciju aktiviranu samo kad `vibeScore >= 80`; čisti CSS, bez biblioteke, bez canvas
+- [x] P2 `src/ui/ending-screen.js` — Legendary ending vizuelni burst: ending screen je flat za sve tipove — Legendary (Vibe ≥ 80) ne daje vizuelni "high" koji tera na deljenje i povratak; dodaj CSS keyframe confetti/burst animaciju aktiviranu samo kad `vibeScore >= 80`; čisti CSS, bez biblioteke, bez canvas (done 2026-09-03, commit 8efb28f)
 
 - [ ] P2 `src/systems/ending.js` + `src/ui/ending-screen.js` — Crash/weak "near miss" dijagnostika: bez razloga za retry, crash ending samo frustrira; `getEndingType()` već zna tip — proširi da vrati i `worstPhase` (faza sa najvećim negativnim deltom); ending screen prikazuje jednorečeničnu lekciju ("Climax je sišao nizbrdo — Tonac je bio slab u toj fazi") koja pretvara frustration u puzzle koji vuče na run 2
 
