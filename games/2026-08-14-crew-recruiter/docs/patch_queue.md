@@ -30,7 +30,7 @@
 
 - [x] P3 `src/ui/menu.js` — MKDSLend "Pro Recruiter" mention posle 10 completed runs: ispod HOF displayja prikazuje mali blok sa linkom ka mkdslend.rs i tagline-om "MKDSLend — Zabavni Radni Park". Konvertuje engaged igrača (10+ partija) u MKDSLend brand awareness, zatvara loop krovnog brenda bez ometanja first-run UX-a. (done 2026-09-03, commit 13f0e7e)
 
-- [ ] P3 `src/content/aforizmi.js` — proširiti pool sa 8 na 16 aforizama i uvesti tri triggeri konteksta: (1) synergy ≥ 4 (sadašnji, 6 aforizama "euforiznih"); (2) crisis trigger — Vibe < 30, novi pool od 5 aforizama gorkog tona (Pera u padu: kratke, rezignirane, crnohumore); (3) phase-6 finale trigger — 5 aforizama specifičnih za završni momenat, ton zavisi od Vibe-a pri ulasku u poslednju fazu. Sadašnjih 8 rasporediti po novim poolovima, ne brisati.
+- [x] P3 `src/content/aforizmi.js` — proširiti pool sa 8 na 16 aforizama i uvesti tri triggeri konteksta: (1) synergy ≥ 4 (sadašnji, 6 aforizama "euforiznih"); (2) crisis trigger — Vibe < 30, novi pool od 5 aforizama gorkog tona (Pera u padu: kratke, rezignirane, crnohumore); (3) phase-6 finale trigger — 5 aforizama specifičnih za završni momenat, ton zavisi od Vibe-a pri ulasku u poslednju fazu. Sadašnjih 8 rasporediti po novim poolovima, ne brisati. (done 2026-09-03, commit 7aaf21f)
 
 - [ ] P3 `src/ui.js` + `src/config.js` — phase narrative beat: dodati `PHASE_NARRATIVE` niz od 6 kratkih flavornih rečenica u `config.js` (po jedna po fazi, npr. faza 1: "Ekipa se skuplja. Ko kasni, ko je već otišao.", faza 6: "Ovo je ona noć o kojoj pričaju godinama — ili ne."), prikazivati u `src/ui.js` kao 2.5s overlay pri phase transition bez gameplay pauze.
 
