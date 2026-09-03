@@ -208,6 +208,13 @@
 }
 
 .synergy-name  { color: var(--color-text); font-weight: 600; font-style: italic; }
+.synergy-codex-tracker {
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+  margin-top: 0.3rem;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
 .synergy-bonus {
   background: rgba(34, 197, 94, 0.2);
   color: var(--vibe-green);

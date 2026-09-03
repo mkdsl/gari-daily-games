@@ -63,3 +63,30 @@ export function calcSynergyTotal(pairs) {
   const raw = pairs.reduce((sum, p) => sum + p.bonus, 0);
   return Math.min(raw, MAX_SYNERGY_PER_ROUND);
 }
+
+const SYNERGY_CODEX_KEY = 'crew-recruiter-synergy-codex';
+
+/**
+ * Persist newly discovered synergy pair keys; returns total discovered count.
+ * @param {string[]} pairKeys
+ * @returns {number}
+ */
+export function recordDiscoveredSynergies(pairKeys) {
+  try {
+    const stored = JSON.parse(localStorage.getItem(SYNERGY_CODEX_KEY) || '[]');
+    const set    = new Set(stored);
+    for (const k of pairKeys) set.add(k);
+    localStorage.setItem(SYNERGY_CODEX_KEY, JSON.stringify([...set]));
+    return set.size;
+  } catch { return 0; }
+}
+
+/**
+ * Return how many unique synergy pairs have been discovered across all runs.
+ * @returns {number}
+ */
+export function getDiscoveredCount() {
+  try {
+    return JSON.parse(localStorage.getItem(SYNERGY_CODEX_KEY) || '[]').length;
+  } catch { return 0; }
+}
