@@ -22,7 +22,7 @@
 
 - [x] P3 `src/content/brand_hooks.js` — Guncati masterclass deep link i narativ: zameni generički Guncati CTA string sa strukturiranim objektom koji nosi url (`guncati.rs/masterclass`), CTA tekst ("Pravi tim se gradi na Guncatiju — prijavi se na masterclass") i kontekst ("Tom Sawyer model: uči kroz pravljenje"). Aktivira se na Legendary i Solid endingu umesto blank linka. (done 2026-09-03, commit 03a2ead)
 
-- [ ] P3 `src/content/cards_outdoor.js` — Guncati Grand Finale signature ekspanzija: dodaj 5 novih karata Guncati tematike kao bonus Outdoor tier (Permakulturni Tonac, Bašta Host, Kompost Logistika, Seoska Content Kreatorka, Prirodnjak Obezbeđenje; power 5, flavor "Guncati Grand Finale 2026 — povratak na selo"). Mešaju se u Outdoor deck na 6+ completed runs, jačaju brand narativ direktno tokom igre.
+- [x] P3 `src/content/cards_outdoor.js` — Guncati Grand Finale signature ekspanzija: dodaj 5 novih karata Guncati tematike kao bonus Outdoor tier (Permakulturni Tonac, Bašta Host, Kompost Logistika, Seoska Content Kreatorka, Prirodnjak Obezbeđenje; power 5, flavor "Guncati Grand Finale 2026 — povratak na selo"). Mešaju se u Outdoor deck na 6+ completed runs, jačaju brand narativ direktno tokom igre. (done 2026-09-03, commit 0c967c1)
 
 - [ ] P3 `src/systems/ending.js` — Sezonski CTA window Guncati Grand (08-20 do 08-30): getCTA proverava `new Date()` i u tom periodu vraća event-specific poziv ("Igrao si regrutera — 23.8. vidimo se na Guncati Grand Finalu. Masterclass prijave: guncati.rs") umesto generickog stringa. Čini igru event companion alatom za taj vikend, nema trošak deploy-a — čisti JS date check.
 
