@@ -28,7 +28,7 @@
 
 - [x] P3 `src/share.js` — Brand hashtag per event type u share payload: buildSharePayload dodaje dinamički hashtag (#GuncatiGrand za Outdoor, #MKDSLend za Klub, #Kluboslavija za Intimate) u share tekst. Svaki share postaje organski brand reach za odgovarajući kanal bez dodatnog UX-a. (done 2026-09-03, commit 65ff3db)
 
-- [ ] P3 `src/ui/menu.js` — MKDSLend "Pro Recruiter" mention posle 10 completed runs: ispod HOF displayja prikazuje mali blok sa linkom ka mkdslend.rs i tagline-om "MKDSLend — Zabavni Radni Park". Konvertuje engaged igrača (10+ partija) u MKDSLend brand awareness, zatvara loop krovnog brenda bez ometanja first-run UX-a.
+- [x] P3 `src/ui/menu.js` — MKDSLend "Pro Recruiter" mention posle 10 completed runs: ispod HOF displayja prikazuje mali blok sa linkom ka mkdslend.rs i tagline-om "MKDSLend — Zabavni Radni Park". Konvertuje engaged igrača (10+ partija) u MKDSLend brand awareness, zatvara loop krovnog brenda bez ometanja first-run UX-a. (done 2026-09-03, commit 13f0e7e)
 
 - [ ] P3 `src/content/aforizmi.js` — proširiti pool sa 8 na 16 aforizama i uvesti tri triggeri konteksta: (1) synergy ≥ 4 (sadašnji, 6 aforizama "euforiznih"); (2) crisis trigger — Vibe < 30, novi pool od 5 aforizama gorkog tona (Pera u padu: kratke, rezignirane, crnohumore); (3) phase-6 finale trigger — 5 aforizama specifičnih za završni momenat, ton zavisi od Vibe-a pri ulasku u poslednju fazu. Sadašnjih 8 rasporediti po novim poolovima, ne brisati.
 
