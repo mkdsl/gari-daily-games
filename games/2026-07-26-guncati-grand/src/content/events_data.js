@@ -282,6 +282,70 @@ export function getVenueEventOverrides(venueId) {
 }
 
 /**
+ * Cross-event decision callbacks — extra options that unlock in later events
+ * based on how the player resolved an earlier event.
+ *
+ * Runtime requirement: finale.js must populate `finaleState.decisions`
+ * as `{ [eventId]: chosenOptionIndex }` when a player picks an option.
+ *
+ * @type {Record<string, Array<Object & { requiresDecision: { eventId: string, chosenOptionIndex: number } }>>}
+ */
+export const CROSS_EVENT_CALLBACKS = {
+  /** bar_shortage (Min 7): if player opened the gate in crowd_surge (Min 3),
+   *  prihodi od kapije cover restock — free restock instead of -150 GC */
+  bar_shortage: [
+    {
+      text: '🍺 Prihodi od kapije pokrivaju (0 GC)',
+      desc: 'Otvorena kapija u Min 3 donela je dovoljno — zalihe se dopunjuju odmah',
+      costDelta: 0,
+      moodDelta: 8,
+      requiresDecision: { eventId: 'crowd_surge', chosenOptionIndex: 0 }
+    }
+  ],
+  /** light_fail (Min 8-12): if player paid for rezervni PA in equipment_fail (Min 4-8),
+   *  same tech crew is already on site — cheaper and faster light fix */
+  light_fail: [
+    {
+      text: '⚡ Isti tim, ista rešenja (-50 GC)',
+      desc: 'PA ekipa je već na terenu od popravke — rasveta ide brže i jeftinije',
+      costDelta: 50,
+      moodDelta: 3,
+      requiresDecision: { eventId: 'equipment_fail', chosenOptionIndex: 0 }
+    }
+  ],
+  /** local_media (Min 10): if player gave backstage access in vip_guest (Min 5),
+   *  VIP opens the media doors — interview in motion, no revenue pause */
+  local_media: [
+    {
+      text: '🌟 VIP otvara medije (bez pauze)',
+      desc: 'Gost iz backstage-a privlači kamere — intervju se daje u hodu, nema pauze',
+      reputationMult: 1.2,
+      revenueDelta: 0,
+      requiresDecision: { eventId: 'vip_guest', chosenOptionIndex: 0 }
+    }
+  ]
+};
+
+/**
+ * Get available options for an event, prepending any cross-event callbacks
+ * unlocked by past player decisions.
+ *
+ * @param {FinaleEvent} event
+ * @param {Record<string, number>} decisions - finaleState.decisions: { [eventId]: chosenOptionIndex }
+ * @returns {Object[]} augmented option list (callbacks first, then base options)
+ */
+export function getAvailableOptions(event, decisions = {}) {
+  const base = event.options || [];
+  const callbacks = CROSS_EVENT_CALLBACKS[event.id] || [];
+
+  const unlocked = callbacks
+    .filter(cb => decisions[cb.requiresDecision.eventId] === cb.requiresDecision.chosenOptionIndex)
+    .map(({ requiresDecision, ...rest }) => ({ ...rest, isCallback: true }));
+
+  return [...unlocked, ...base];
+}
+
+/**
  * Get event by ID
  * @param {string} id
  * @returns {Object|undefined}
