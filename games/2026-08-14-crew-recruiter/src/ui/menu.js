@@ -162,6 +162,24 @@ function buildProgressTracker(completedRuns) {
 }
 
 /**
+ * MKDSLend "Pro Recruiter" brand block shown after 10+ completed runs.
+ * @param {number} completedRuns
+ * @returns {string} HTML string or empty
+ */
+function buildMKDSLendBlock(completedRuns) {
+  if (completedRuns < 10) return '';
+  return `
+    <div class="mkdslend-block">
+      <span class="mkdslend-badge">PRO RECRUITER</span>
+      <p class="mkdslend-text">
+        <a href="https://mkdslend.rs" target="_blank" rel="noopener">MKDSLend</a>
+        — Zabavni radni park gde pro timovi grade stvari.
+      </p>
+    </div>
+  `;
+}
+
+/**
  * Render the main menu screen.
  * @param {import('../state.js').GameState} state
  * @param {(eventType: string) => void} onPlay
@@ -174,6 +192,7 @@ export function renderMenu(state, onPlay) {
   let   selected    = 'klub';
   const hofHTML     = isHOFUnlocked(state) ? buildHOF(state) : '';
   const progressHTML = buildProgressTracker(state.completedRuns);
+  const mkdslendHTML = buildMKDSLendBlock(state.completedRuns);
 
   // Clear and rebuild
   screen.innerHTML = `
@@ -194,6 +213,8 @@ export function renderMenu(state, onPlay) {
       ${progressHTML}
 
       ${hofHTML}
+
+      ${mkdslendHTML}
     </div>
   `;
 

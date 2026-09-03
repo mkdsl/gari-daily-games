@@ -704,6 +704,35 @@
 .tutorial-progress { font-size: 0.75rem; color: var(--color-text-muted); }
 
 /* ════════════════════════════════════════════════════════════
+   MKDSLEND PRO RECRUITER BLOCK
+════════════════════════════════════════════════════════════ */
+.mkdslend-block {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+}
+.mkdslend-badge {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--rarity-rare);
+  background: rgba(240, 180, 41, 0.12);
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  white-space: nowrap;
+}
+.mkdslend-text {
+  font-size: 0.72rem;
+  color: var(--color-text-dim);
+  margin: 0;
+}
+.mkdslend-text a { color: var(--role-logistika); }
+
+/* ════════════════════════════════════════════════════════════
    LEGENDARY BURST ANIMATION
 ════════════════════════════════════════════════════════════ */
 @keyframes legendary-border-pulse {
