@@ -202,6 +202,86 @@ export const FINALE_EVENTS = [
 ];
 
 /**
+ * Venue skin configs for Kluboslavija 2026 tour stops.
+ * Consumed by state.venueSkin (set before game start) — default 'guncati'.
+ * @type {Record<string, { id: string, name: string, crowdCapMult: number, weatherProfile: { rainProbability: number }, brandTagline: string }>}
+ */
+export const VENUE_CONFIGS = {
+  guncati: {
+    id: 'guncati',
+    name: 'Guncati Grand Finale',
+    crowdCapMult: 1.0,
+    weatherProfile: { rainProbability: 0.25 },
+    brandTagline: 'Zabavni radni park povratka na selo — finalna scena sezone.'
+  },
+  strand: {
+    id: 'strand',
+    name: 'Štrand, Novi Sad',
+    crowdCapMult: 1.25,
+    weatherProfile: { rainProbability: 0.30 },
+    brandTagline: 'Štrand reke nosi muziku dalje — voda, svetla, Kluboslavija.'
+  },
+  sarajevo: {
+    id: 'sarajevo',
+    name: 'Sarajevo',
+    crowdCapMult: 0.90,
+    weatherProfile: { rainProbability: 0.40 },
+    brandTagline: 'Sarajevo nosi dah. Sve što se odigra ovde zvuči večito.'
+  }
+};
+
+/**
+ * Get venue config by id, fallback to 'guncati'
+ * @param {string} [venueId]
+ * @returns {Object}
+ */
+export function getVenueConfig(venueId) {
+  return VENUE_CONFIGS[venueId] || VENUE_CONFIGS.guncati;
+}
+
+/**
+ * Venue-specific event override texts — same events, different flavour per venue.
+ * Returns an object keyed by event id, with fields to override (title, description).
+ * @param {string} [venueId]
+ * @returns {Record<string, Partial<FinaleEvent>>}
+ */
+export function getVenueEventOverrides(venueId) {
+  if (venueId === 'strand') {
+    return {
+      rain_cloud: {
+        title: 'Vojvodinska Grmljavina!',
+        description: 'Letnja oluja ide prema Štrandu. Reka je blizu — publika se skuplja. Šta radiš?'
+      },
+      crowd_surge: {
+        title: 'Štrand Se Puni!',
+        description: 'Plažni kapacitet puca po šavovima. Dunavska obala privlači sve više posjetilaca.'
+      },
+      spontaneous_community: {
+        title: 'Komšije sa Reke Pomažu!',
+        description: 'Mještani Novog Sada spontano donose piće i osiguravaju ulaze. Štrand zajednica cveta!'
+      }
+    };
+  }
+  if (venueId === 'sarajevo') {
+    return {
+      rain_cloud: {
+        title: 'Sarajevski Dažd!',
+        description: 'Planinski oblak brzo dolazi. U Sarajevu kiša znači nešto — publika zna to.'
+      },
+      crowd_surge: {
+        title: 'Sarajevo se Budi!',
+        description: 'Manji prostor, veće srce. Više ljudi nego prostora — grad podržava.'
+      },
+      vip_guest: {
+        title: 'Gost iz Regiona!',
+        description: 'Poznato ime iz balkanskog muzičkog kruga želi da prisustvuje. Sarajevo ima domet.'
+      }
+    };
+  }
+  return {};
+}
+
+/**
  * Get event by ID
  * @param {string} id
  * @returns {Object|undefined}

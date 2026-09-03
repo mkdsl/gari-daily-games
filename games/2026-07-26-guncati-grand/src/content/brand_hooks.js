@@ -139,6 +139,62 @@ export function getWeekBrandTip(week) {
 }
 
 /**
+ * Venue-specific branded endings for Kluboslavija 2026 tour stops.
+ * Keyed by venueId, then tier (legend/decent/fail).
+ */
+export const VENUE_BRAND_ENDINGS = {
+  strand: {
+    legend: {
+      title: '🌊 Štrand: Legenda na Reci',
+      body: 'Dunav je bio svedok. Muzika i voda su se spojili u nešto što Novi Sad neće zaboraviti. Kluboslavija je dokazala da teren nije važan koliko tim.',
+      shareMessage: '🌊 Guncati Grand × Štrand Legenda! Dunav je bio svedok — muzika i zajednica pod letnjim nebom Novog Sada.'
+    },
+    decent: {
+      title: '🏖️ Štrand: Dobar Nastup uz Reku',
+      body: 'Plažni festival je specifičan beast — publika je opuštenija, ali i zahtevnija. Ovo je bio dobar korak na turneji. Guncati finale čeka.',
+      shareMessage: '🏖️ Guncati Grand × Štrand nastup — plažni festival, opuštena publika, korak bliže grand finalu.'
+    },
+    fail: {
+      title: '🌊 Štrand: Reka vraća poruku',
+      body: 'Ni Dunav nije prao sve — ali pere. Vrati se u Novi Sad spremniji. Štrand pamti one koji ga poštuju.',
+      shareMessage: '🌊 Guncati Grand × Štrand — reka vraća poruku. Nova sezona, nova šansa.'
+    }
+  },
+  sarajevo: {
+    legend: {
+      title: '🏔️ Sarajevo: Večita Scena',
+      body: 'Sarajevo ne daje titule lako — ali kad da, pamti se. Ovaj festival ušao je u priče koje se prepričavaju. Kluboslavija je dobila grad.',
+      shareMessage: '🏔️ Guncati Grand × Sarajevo Legenda! Grad koji ne daje titule lako — večita scena, zaslužena.'
+    },
+    decent: {
+      title: '🌆 Sarajevo: Dobar Nastup u Gradu Duha',
+      body: 'Sarajevo nosi dah. Nastup je bio dobar — grad je bio korektan. Grand Finale Guncati čeka da vidiš šta si naučio.',
+      shareMessage: '🌆 Guncati Grand × Sarajevo nastup — grad duha bio je korektan. Dalje ka grand finalu.'
+    },
+    fail: {
+      title: '🏔️ Sarajevo: Grad koji uči',
+      body: 'Sarajevo je težak grad za nastup — to je deo legende. Svako ko se vratio spremniji razume. Teren Guncatija čeka tvoju narednu sezonu.',
+      shareMessage: '🏔️ Guncati Grand × Sarajevo — grad koji uči, ne kažnjava. Naredna sezona spremnija.'
+    }
+  }
+};
+
+/**
+ * Get venue-specific branded ending text
+ * Falls back to getGuncatiBrandEnding for 'guncati' venue
+ * @param {string} [venueId] - 'strand'|'sarajevo'|'guncati'
+ * @param {string} tier - 'legend'|'decent'|'fail'
+ * @returns {{ title: string, body: string, shareMessage: string }}
+ */
+export function getVenueBrandEnding(venueId, tier) {
+  if (venueId && VENUE_BRAND_ENDINGS[venueId]) {
+    const endings = VENUE_BRAND_ENDINGS[venueId];
+    return endings[tier] || endings.decent;
+  }
+  return getGuncatiBrandEnding(tier);
+}
+
+/**
  * Rich Guncati brand ending narrative per score tier, for ending screen + share card
  * @param {string} tier - 'legend' | 'decent' | 'fail' (from winCond.tier)
  * @returns {{ title: string, body: string, shareMessage: string }}
