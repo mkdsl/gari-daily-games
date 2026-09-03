@@ -2,6 +2,43 @@
 
 import { CONFIG } from '../config.js';
 import { getState, prestigeReset } from '../state.js';
+import { MASTERCLASS_FRAGMENTS } from '../content/brand_hooks.js';
+
+/**
+ * Get the Masterclass fragment for a specific week in Stara Šaraga mode.
+ * Returns null if not in prestige mode (prestigeRuns < 1).
+ * @param {number} weekNumber - 1-indexed week
+ * @param {number} prestigeRuns - number of completed prestige cycles (>=1 = in prestige)
+ * @returns {{ week: number, theme: string, fragment: string, cta: string } | null}
+ */
+export function getMasterclassFragment(weekNumber, prestigeRuns) {
+  if (!prestigeRuns || prestigeRuns < 1) return null;
+  return MASTERCLASS_FRAGMENTS.find(f => f.week === weekNumber) || null;
+}
+
+/**
+ * Get all Masterclass fragments unlocked so far this prestige run.
+ * A fragment is "unlocked" when its week number <= current completed week.
+ * @param {Object} state - game state
+ * @returns {Array<{ week: number, theme: string, fragment: string, cta: string }>}
+ */
+export function getUnlockedMasterclassFragments(state) {
+  if (!state.prestigeRuns || state.prestigeRuns < 1) return [];
+  const completedWeek = Math.max(0, (state.currentWeek || 1) - 1);
+  return MASTERCLASS_FRAGMENTS.filter(f => f.week <= completedWeek);
+}
+
+/**
+ * Get the fragment just unlocked at the end of a given week (for end-of-week notification).
+ * Returns null if not in prestige mode or no fragment for that week.
+ * @param {number} justCompletedWeek - 1-indexed
+ * @param {number} prestigeRuns
+ * @returns {{ week: number, theme: string, fragment: string, cta: string } | null}
+ */
+export function getNewlyUnlockedFragment(justCompletedWeek, prestigeRuns) {
+  if (!prestigeRuns || prestigeRuns < 1) return null;
+  return MASTERCLASS_FRAGMENTS.find(f => f.week === justCompletedWeek) || null;
+}
 
 /**
  * Calculate reputation from a completed run

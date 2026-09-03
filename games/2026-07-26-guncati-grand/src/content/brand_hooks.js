@@ -1,5 +1,74 @@
 /** @fileoverview Guncati/Kluboslavija/MKDSLend narrative fragments for tooltips and ending */
 
+/**
+ * MKDSLend Masterclass fragments — one per week in Stara Šaraga (prestige) mode.
+ * Locked in normal runs, unlocked week-by-week in prestige run.
+ * Source: MKDSLend metodologija — Tom Sawyer organizovanje, permakultura, event logistika.
+ * @type {Array<{ week: number, theme: string, fragment: string, cta: string }>}
+ */
+export const MASTERCLASS_FRAGMENTS = [
+  {
+    week: 1,
+    theme: 'Tom Sawyer Model',
+    fragment: 'Istinski lider ne primorava — postavlja scenu. Tom Sawyer nije bio snažan; bio je dosadan u PRAVO vreme. Kad volonteri mole da rade, ti si pobedio. Wellbeing ≥ 60% je ulaznica za taj model.',
+    cta: 'MKDSLend Masterclass: kako da tvoja zajednica traži da radi'
+  },
+  {
+    week: 2,
+    theme: 'Zajednica kao Infrastruktura',
+    fragment: 'Beton se gradi jednom. Zajednica se gradi svake nedelje — šacom po šacu. Zajednica kategorija budžeta nije trošak menadžmenta; to je gradnja cevi kroz koje teče sve ostalo. Bez mreže nema protoka.',
+    cta: 'MKDSLend: zašto je svaki volonter čvor kritične infrastrukture'
+  },
+  {
+    week: 3,
+    theme: 'Permakultura Princip: Observiraj Pre Dizajna',
+    fragment: 'Prva sezona nije za gradnju — za gledanje. Gde pada voda? Gde piše? Ko dolazi? Guncati teren ne pita za mišljenja — daje znakove. Dizajneri koji ne slušaju teren grade za sebe, ne za mesto.',
+    cta: 'MKDSLend × Guncati: permakultni pristup event dizajnu'
+  },
+  {
+    week: 4,
+    theme: 'Event Logistika: Par Excellence',
+    fragment: 'Festival nije događaj — to je sistem. Svaki sat koji nije planiran gori dva u gašenju požara. Logistika koja "radi sama" nije sreća; to je 40 malih odluka donešenih ranije te nedelje. Iza svakog "spontanog" momenta stoji nedelja pripreme.',
+    cta: 'MKDSLend: event kao mašina — 7 sistema koja se ne vide'
+  },
+  {
+    week: 5,
+    theme: 'Finansije Imanja: Positive Cash Flow',
+    fragment: 'Imanje ne živi od dobrih namera. Živi od toka novca koji nije negativan. Guncati model: mali prihodi iz više izvora, koji se ne oslanjaju jedan na drugi. Diversifikacija nije luksuz — to je preživljavanje sezone zime.',
+    cta: 'MKDSLend: cash flow za kreativni biznis koji živi na imanju'
+  },
+  {
+    week: 6,
+    theme: 'Brending Kao Priča, Ne Logo',
+    fragment: 'Guncati nema logo — ima priču. Priča: mladi se vraćaju, rade nešto smisleno, muzika je zvučna kolona. Svaki nastup je poglavlje. Svaki volonter je lik. Svaki gost koji se vrati je dokaz da priča drži. Logo dolazi poslednji — priča ide prva.',
+    cta: 'MKDSLend: zašto je Kluboslavija brend koji ne treba reklamirati'
+  },
+  {
+    week: 7,
+    theme: 'Muzika Kao Zajednica: Klasteri Kulture',
+    fragment: 'Muzika nije produkt — katalizator je. Svaki festival koji je izgradio identitet nije prodavao tiket; prodavao je osećaj zajedničkog. Crowd Mood nije metrički podatak — to je puls zajednice koja se formira. Meriti ga svaki sat znači slušati šta grad želi.',
+    cta: 'MKDSLend × Kluboslavija: zašto turneja gradi kulturu, ne samo publiku'
+  },
+  {
+    week: 8,
+    theme: 'Volonterstvo Kao Životni Stil',
+    fragment: 'Volonter koji se vraća nije besplatna radna snaga — to je mreža koja postaje infrastruktura. Ana, Mika, Jovana — svako nosi nešto specifično. Kad se svi nose, festival radi. Kad se niko ne nosi, festival košta dvostruko. Tom Sawyer je znao: osmeh je valuta.',
+    cta: 'MKDSLend: volonterska baza kao long-term strategija'
+  },
+  {
+    week: 9,
+    theme: 'Prestiž Nije Nagrada — Metodologija',
+    fragment: 'Stara Šaraga mode nije teži — iskreniji je. Bez infrastrukture koju si izgradio, vraćaš se na pitanja temelja. Šta zaista drži festival? Reputacija je jedino što prenosiš. Ona je komprimovana historia odluka — svaka nedelja u prethodnoj sezoni je u njoj.',
+    cta: 'MKDSLend: kako reputacija postaje trajni kapital'
+  },
+  {
+    week: 10,
+    theme: 'Grand Finale: Sinteza Sezone',
+    fragment: 'Poslednja noć nije kraj — valorizacija je. Sve nedelje, svi volonteri, sve odluke — sve konvergira u 15 minuta. Grand Finale nije festival; to je dokaz metode. Ako Crowd Mood drži iznad 70 u poslednjem satu, metodologija je prošla test. Teren te nagrađuje za svaki mali korak.',
+    cta: 'MKDSLend Grand Finale masterclass — živi prisustvo i online stream'
+  }
+];
+
 /** Brand-specific narratives per brand */
 export const BRAND_NARRATIVES = {
   guncati: {
