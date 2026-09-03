@@ -10,7 +10,7 @@
 
 - [x] P2 `src/config.js` — Vibe Start bez napetosti: `VIBE_START = 20` uz `CHURN_PENALTY = 3` i `EMPTY_SLOT_PENALTY` čini matematički crash u prvoj rundi skoro nemogućim — igrač nema razloga da pazi; podesi `VIBE_START = 30`, `CHURN_PENALTY = 4`, preračunaj `PHASE_THRESHOLDS` da oba kraja krive (legendary / crash) ostanu dostižni bez novih CRITICAL rizika (done 2026-09-03, commit f472784)
 
-- [ ] P2 `styles/ui.css` — dva accessibility duga iz iter 1: (1) `.slot-label { font-size: 0.58rem }` — ~9px na 96dpi, ispod minimuma čitljivosti na low-DPI ekranima, podesi na `0.7rem`; (2) zaključane event type kartice koriste `aria-disabled` bez `disabled` atributa na `<button>` elementima — screen reader i keyboard fokus prolaze kroz zaključane opcije, dodaj `disabled` atribut uz `aria-disabled="true"`
+- [x] P2 `styles/ui.css` — dva accessibility duga iz iter 1: (1) `.slot-label { font-size: 0.58rem }` — ~9px na 96dpi, ispod minimuma čitljivosti na low-DPI ekranima, podesi na `0.7rem`; (2) zaključane event type kartice koriste `aria-disabled` bez `disabled` atributa na `<button>` elementima — screen reader i keyboard fokus prolaze kroz zaključane opcije, dodaj `disabled` atribut uz `aria-disabled="true"` (done 2026-09-03, commit fad6d8e)
 
 - [ ] P2 `src/ui/ending-screen.js` — Legendary ending vizuelni burst: ending screen je flat za sve tipove — Legendary (Vibe ≥ 80) ne daje vizuelni "high" koji tera na deljenje i povratak; dodaj CSS keyframe confetti/burst animaciju aktiviranu samo kad `vibeScore >= 80`; čisti CSS, bez biblioteke, bez canvas
 
