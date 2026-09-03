@@ -290,6 +290,57 @@ export function getGuncatiBrandEnding(tier) {
 }
 
 /**
+ * Guncati mitologija — 5 fragments about the history and philosophy of Guncati imanje.
+ * Unlocked ONLY when finalScore >= WIN_LEGEND (7.5). Each fragment is a self-contained
+ * story beat that reveals a layer of the Guncati brand mythology.
+ * @type {Array<{ id: string, title: string, fragment: string, unlockHint: string }>}
+ */
+export const GUNCATI_MYTHOLOGY = [
+  {
+    id: 'mito_01',
+    title: 'Prva Šatra',
+    fragment: 'Pre festivala, pre bine, pre svega — bila je jedna šatra. Postavio je jedan čovek, sam, bez pitanja kome. Rekao je: "Ako niko ne dođe, sedim i gledam zvezde." Došli su. Svaki sledeći festival počinje na ovom mestu — u šatri koja ne pita za garantovanu publiku.',
+    unlockHint: 'Legenda otključava mitologiju terena.'
+  },
+  {
+    id: 'mito_02',
+    title: 'Tom Sawyer i Nedelja Bez Plata',
+    fragment: 'Jedne sezone, budžet je bio nula. Umesto da otkaže, osnivač je pozvao komšije na "picanje kolaca". Stiglo je 40 ljudi. Festival te nedelje nije imao ni jednog plaćenog radnika. Tom Sawyer nije literatura — to je strategija koja funkcioniše kad zajednica veruje projektu.',
+    unlockHint: 'Legenda otključava mitologiju terena.'
+  },
+  {
+    id: 'mito_03',
+    title: 'Kiša koja je Pomogla',
+    fragment: 'Najgori festival po prognozi — postao je najvoljeni. Kiša je počela u Min 3, publika je ostala. Nisu ostali zbog muzike — ostali su jer su videli da organizatori ne beže. Loše vreme nije problem festivala; problem je odgovor organizatora na loše vreme. Ovo je princip koji Guncati nosi od te noći.',
+    unlockHint: 'Legenda otključava mitologiju terena.'
+  },
+  {
+    id: 'mito_04',
+    title: 'Permakultura kao Metodologija',
+    fragment: 'Guncati teren nije samo lokacija — to je eksperiment. Permakultura ne znači "rasti nešto". Znači: opserviraj pre nego što odlučiš. Svaka decision u igri je permakulturna vežba — gde ulaziš, kuda ide energija, šta ostaje posle tebe. Festival kao teren, teren kao učiteljica.',
+    unlockHint: 'Legenda otključava mitologiju terena.'
+  },
+  {
+    id: 'mito_05',
+    title: 'Zabavni Radni Park — Manifest',
+    fragment: 'MKDSLend nije korporacija. To je ideja: rad može biti zabavan. Zabava može biti radna. Granica između tih dvaju svetova je veštačka — i Guncati je dokaz. Svaki volonter koji ostane posle finala, sam, bez naplate, da pospremi teren — to je Zabavni Radni Park u akciji. Manifest živi u tim trenucima.',
+    unlockHint: 'Legenda otključava mitologiju terena.'
+  }
+];
+
+/**
+ * Get Guncati mythology fragments unlocked at a given score.
+ * Returns all 5 only at legend tier (>= WIN_LEGEND = 7.5).
+ * Returns empty array below that threshold.
+ * @param {number} finalScore
+ * @returns {Array<{ id: string, title: string, fragment: string, unlockHint: string }>}
+ */
+export function getGuncatiMythology(finalScore) {
+  if (finalScore >= 7.5) return GUNCATI_MYTHOLOGY;
+  return [];
+}
+
+/**
  * Brand-level epilog frames — shown above the personalized volunteer epilog on score screen.
  * Provides the Guncati brand "voice" wrapper before individual volunteer lines.
  * @type {Record<'legend'|'decent'|'fail', string>}

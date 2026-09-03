@@ -29,7 +29,7 @@
 - [x] P3 `src/content/volunteer_arcs.js` — Sezonski arkovi volontera: 3 story beats za svakog od 7 volontera vezana za WB milestone-e (motivisan start, sredinska dilema, finalni momenat) — novi fajl (done 2026-09-03, commit 78b1889)
 - [x] P3 `src/content/endings.js` + `src/content/brand_hooks.js` — Personalizovani epilog baziran na kombinaciji score-a i volonterskih ishoda — novi fajl endings.js (done 2026-09-03, commit a847bb3)
 - [x] P3 `src/content/events_data.js` — Decision callbacks koji povezuju finale event odluke kroz ceo playthrough (choice u Min 3 utiče na dostupnost opcija u Min 11) — cross-event kontinuitet (done 2026-09-03, commit 7ad001a)
-- [ ] P3 `src/content/volunteer_arcs.js` + `src/content/events_data.js` — Volonter-event preseci: specijalni event trigeri kad određeni volonter ima WB < 30% tokom finale-a (lični momenat slabosti koji igrač mora da reši)
+- [x] P3 `src/content/volunteer_arcs.js` + `src/content/events_data.js` — Volonter-event preseci: specijalni event trigeri kad određeni volonter ima WB < 30% tokom finale-a (lični momenat slabosti koji igrač mora da reši) (done 2026-09-03, commit 3a272ba)
 - [ ] P3 `src/content/brand_hooks.js` — Guncati mitologija kao Legend-only unlock: 5 fragmenti o istoriji i filozofiji Guncati imanja koji se otključavaju samo na score >= WIN_LEGEND (7.5)
 
 ## Završeni patčevi
