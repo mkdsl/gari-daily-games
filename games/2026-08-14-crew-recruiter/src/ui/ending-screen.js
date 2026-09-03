@@ -91,7 +91,7 @@ export function showEndingScreen(vibeScore, eventType, crashed, onRestart) {
       </div>
 
       <div class="ending-tagline">${tagline}</div>
-      <div class="ending-cta">${cta}</div>
+      <div class="ending-cta"><a href="${cta.url}" target="_blank" rel="noopener">${cta.text}</a></div>
 
       ${bestLine}
 

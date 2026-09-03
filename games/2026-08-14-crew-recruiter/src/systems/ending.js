@@ -1,5 +1,7 @@
 // systems/ending.js — Ending type logic
 
+import { BRAND_CTAS } from '../content/brand_hooks.js';
+
 /**
  * @param {number} vibeScore
  * @param {boolean} [crashed] - true if vibe hit 0 before final round
@@ -27,13 +29,22 @@ export function getTagline(type) {
 }
 
 /**
- * Return brand CTA text for the ending screen.
+ * Return brand CTA for the ending screen — differentiated by tier and event type.
+ * Always returns a Guncati or MKDSLend hook; never empty.
  * @param {'legendary'|'solid'|'weak'|'crash'} type
- * @param {string} eventType
- * @returns {string}
+ * @param {string} [eventType] - 'outdoor' | 'klub' | 'intimate'
+ * @returns {{ text: string, url: string }}
  */
 export function getCTA(type, eventType) {
-  return 'Pravi tim se gradi na Guncatiju.';
+  const isOutdoor = eventType === 'outdoor';
+  if (type === 'legendary') {
+    return isOutdoor ? BRAND_CTAS.legendary_outdoor : BRAND_CTAS.legendary_default;
+  }
+  if (type === 'solid') {
+    return isOutdoor ? BRAND_CTAS.solid_outdoor : BRAND_CTAS.solid_default;
+  }
+  // weak / crash — Guncati as a place that builds teams over time
+  return BRAND_CTAS.weak_crash;
 }
 
 /**
