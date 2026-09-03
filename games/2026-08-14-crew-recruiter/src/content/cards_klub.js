@@ -21,11 +21,13 @@ export const KLUB_CARDS = [
   },
   {
     defId: 'tk-t5', name: 'Vujo Volumen', role: 'tonac', power: 3, rarity: 'rare', eventSet: 'klub',
-    flavor: 'Kada diže fader, soba ga oseća.'
+    flavor: 'Kada diže fader, soba ga oseća.',
+    react_line: 'Kada dignem fader, soba to oseti — bez pitanja.'
   },
   {
     defId: 'tk-t6', name: 'Slavko Saund', role: 'tonac', power: 4, rarity: 'rare', eventSet: 'klub',
-    flavor: 'Legenda klupske scene. Zna svaki akustični problem pre nego nastane.'
+    flavor: 'Legenda klupske scene. Zna svaki akustični problem pre nego nastane.',
+    react_line: 'Dvadeset godina radim ovo. Svaki akustični problem čujem pre nego nastane.'
   },
 
   // ── HOST (6 cards) ───────────────────────────────────────────────────────────
@@ -47,11 +49,13 @@ export const KLUB_CARDS = [
   },
   {
     defId: 'tk-h5', name: 'Lena Lajv', role: 'host', power: 3, rarity: 'rare', eventSet: 'klub',
-    flavor: 'Sa njom svaka pauza postaje momenat.'
+    flavor: 'Sa njom svaka pauza postaje momenat.',
+    react_line: 'Svaka pauza je moj momenat. Publika ne zna koliko sekundi imam.'
   },
   {
     defId: 'tk-h6', name: 'Braca Bina', role: 'host', power: 4, rarity: 'rare', eventSet: 'klub',
-    flavor: 'Veteran scene. Jedna rečenica i sala je u šaci.'
+    flavor: 'Veteran scene. Jedna rečenica i sala je u šaci.',
+    react_line: 'Jedna rečenica. Sala je moja. Uvek je bila.'
   },
 
   // ── CONTENT CREATOR (6 cards) ────────────────────────────────────────────────
@@ -73,11 +77,13 @@ export const KLUB_CARDS = [
   },
   {
     defId: 'tk-c5', name: 'Nina Narativ', role: 'content', power: 3, rarity: 'rare', eventSet: 'klub',
-    flavor: 'Ne snima nastup — snima priču o nastupu.'
+    flavor: 'Ne snima nastup — snima priču o nastupu.',
+    react_line: 'Ne snimam nastup. Snimam zašto je ovaj nastup važan.'
   },
   {
     defId: 'tk-c6', name: 'Ivo Isnta', role: 'content', power: 4, rarity: 'rare', eventSet: 'klub',
-    flavor: 'Dvadeset hiljada pratilaca pita ga gde je sledeći event.'
+    flavor: 'Dvadeset hiljada pratilaca pita ga gde je sledeći event.',
+    react_line: 'Dvadeset hiljada pratilaca čeka moj story. Daću im razlog.'
   },
 
   // ── LOGISTIKA (6 cards) ──────────────────────────────────────────────────────
@@ -99,11 +105,13 @@ export const KLUB_CARDS = [
   },
   {
     defId: 'tk-l5', name: 'Bora Backstage', role: 'logistika', power: 3, rarity: 'rare', eventSet: 'klub',
-    flavor: 'Zna gde je sve, kada treba, bez pitanja.'
+    flavor: 'Zna gde je sve, kada treba, bez pitanja.',
+    react_line: 'Ne pitaju me gde je šta. Znaju da je tu gde treba.'
   },
   {
     defId: 'tk-l6', name: 'Žika Žica', role: 'logistika', power: 4, rarity: 'rare', eventSet: 'klub',
-    flavor: 'Veteran tehničar. U 20 godina nije pao ni jedan kabal.'
+    flavor: 'Veteran tehničar. U 20 godina nije pao ni jedan kabal.',
+    react_line: 'Dvadeset godina, ni jedan kabal nije pao. Danas neće biti prvi put.'
   },
 
   // ── OBEZBEDJENJE (6 cards) ───────────────────────────────────────────────────
@@ -125,10 +133,12 @@ export const KLUB_CARDS = [
   },
   {
     defId: 'tk-o5', name: 'Nesa Nerv', role: 'obezbedjenje', power: 3, rarity: 'rare', eventSet: 'klub',
-    flavor: 'Situaciju proceni pre nego nastane.'
+    flavor: 'Situaciju proceni pre nego nastane.',
+    react_line: 'Situacija još nije nastala, a ja je već rešavam.'
   },
   {
     defId: 'tk-o6', name: 'Gruja Gvozdeni', role: 'obezbedjenje', power: 4, rarity: 'rare', eventSet: 'klub',
-    flavor: 'Dvadeset godina na klupskoj sceni. Svaki incident, nula eskalacija.'
+    flavor: 'Dvadeset godina na klupskoj sceni. Svaki incident, nula eskalacija.',
+    react_line: 'Nula eskalacija u dvadeset godina. Znam šta radim.'
   }
 ];

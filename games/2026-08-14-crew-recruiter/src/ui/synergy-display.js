@@ -39,7 +39,11 @@ export function showSynergyPairs(pairs, onDone) {
     const pair = pairs[idx++];
     const el   = document.createElement('div');
     el.className   = 'synergy-pair fade-in';
-    el.innerHTML   = `<span class="synergy-name">${pair.name}</span><span class="synergy-bonus">+${pair.bonus}</span>`;
+    el.innerHTML   = `
+      <span class="synergy-name">${pair.name}</span>
+      ${pair.react_line ? `<span class="synergy-react-line">"${pair.react_line}"</span>` : ''}
+      <span class="synergy-bonus">+${pair.bonus}</span>
+    `;
     area.appendChild(el);
 
     // Pulse on entry
