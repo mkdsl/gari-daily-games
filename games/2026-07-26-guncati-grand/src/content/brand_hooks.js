@@ -139,6 +139,32 @@ export function getWeekBrandTip(week) {
 }
 
 /**
+ * Rich Guncati brand ending narrative per score tier, for ending screen + share card
+ * @param {string} tier - 'legend' | 'decent' | 'fail' (from winCond.tier)
+ * @returns {{ title: string, body: string, shareMessage: string }}
+ */
+export function getGuncatiBrandEnding(tier) {
+  const endings = {
+    legend: {
+      title: '🌄 Guncati: Teren koji pamti',
+      body: 'Ovaj teren nije samo zemlja — to je dokaz da zajednica može da napravi nešto što ostaje. Ti si to dokazao. Guncati Grand nije bio festival. Bio je manifest da rad i zabava nisu suprotnosti.',
+      shareMessage: '🌄 Guncati Grand Legenda! Teren koji pamti — zajednica, volonteri, muzika pod zvezdama. Svaki nastup gradi nešto večito.'
+    },
+    decent: {
+      title: '🌱 Guncati: Teren koji raste',
+      body: 'Dobar festival nije slučajnost — to su meseci pažnje, volje i pogrešaka koje uče. Guncati teren to zna. Svaki kamen, svaki volonter, svaki nastup gradi nešto veće od jedne sezone.',
+      shareMessage: '🌱 Guncati Grand — teren koji raste kroz pažnju i zajednicu. Tom Sawyer model u akciji: volonteri rade za osmeh, ne za platu.'
+    },
+    fail: {
+      title: '🏕️ Guncati: Teren koji čeka',
+      body: 'Zemlja ne sudi — čeka. Guncati teren je video mnogo sezoni; ova je bila tvoja škola. Vrati se — teren ima još šta da ti kaže, i tim će biti tu ponovo.',
+      shareMessage: '🏕️ Guncati Grand — teren koji čeka novu sezonu. Svaki pokušaj gradi mudrost. Povratak na selo traži strpljenje.'
+    }
+  };
+  return endings[tier] || endings.fail;
+}
+
+/**
  * Date-aware Guncati Grand Finale event CTA (active 2026-08-20 to 2026-08-30)
  * @returns {{ active: boolean, headline?: string, cta?: string, url?: string }}
  */

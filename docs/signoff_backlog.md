@@ -1,6 +1,8 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Ažurirano:** 2026-09-02 — **0 igara čeka sign-off. Backlog prazan.**
+**Ažurirano:** 2026-09-03 — **0 igara čeka sign-off. Backlog prazan.**
+
+> ⚠️ **KORAK 0c drift (2026-09-03):** Pasoš registry drift: 33 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Gap: 36 released, 3 registered. Jovin posao — brand/copy odluka po igri.
 
 ---
 

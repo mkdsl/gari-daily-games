@@ -4,7 +4,7 @@ import { getState, setState, clearSave, prestigeReset } from '../state.js';
 import { calcFinalScore, getWinCondition, checkAchievements, getAchievementInfo, formatScoreCard } from '../systems/scoring.js';
 import { calcReputationGain, formatReputation, getNextPrestigeThreshold, buildSeasonJournal } from '../systems/prestige.js';
 import { calcCommunityVibe } from '../systems/wellbeing.js';
-import { BRAND_NARRATIVES, getScoreNarrative, getGuncatiEventCTA } from '../content/brand_hooks.js';
+import { BRAND_NARRATIVES, getScoreNarrative, getGuncatiBrandEnding, getGuncatiEventCTA } from '../content/brand_hooks.js';
 import { shareScore } from '../share.js';
 
 /** @type {Function|null} */
@@ -60,6 +60,7 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
   const barHTML = buildScoreBreakdown(breakdown);
   const retroHTML = buildVolunteerRetroHTML(state);
   const brandNarrative = getBrandEndingNarrative(state, winCond.tier);
+  const guncatiBrandEnding = getGuncatiBrandEnding(winCond.tier);
 
   const eventCTA = getGuncatiEventCTA();
   const eventCTAHTML = eventCTA.active ? `
@@ -133,8 +134,9 @@ function buildScoreHTML(breakdown, winCond, achievements, repGain, newRep, nextT
       ${prestigeHTML}
 
       <div class="brand-ending panel">
-        <h4>🎪 Guncati Brand</h4>
-        <p>${brandNarrative}</p>
+        <h4>${guncatiBrandEnding.title}</h4>
+        <p class="brand-ending-body">${guncatiBrandEnding.body}</p>
+        ${brandNarrative ? `<p class="brand-ending-sub">${brandNarrative}</p>` : ''}
       </div>
 
       ${eventCTAHTML}
@@ -243,8 +245,10 @@ function bindScoreEvents(container, winCond, achievements, breakdown) {
   container.querySelector('#btn-share')?.addEventListener('click', async () => {
     const state = getState();
     const card = formatScoreCard(breakdown);
+    const brandEnding = getGuncatiBrandEnding(winCond.tier);
+    const shareText = `${card}\n\n${brandEnding.shareMessage}`;
     try {
-      await shareScore(card, state);
+      await shareScore(shareText, state);
     } catch (e) {
       alert('Share nije dostupan na ovom uređaju.');
     }
