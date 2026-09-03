@@ -47,6 +47,50 @@ export function getCTA(type, eventType) {
   return BRAND_CTAS.weak_crash;
 }
 
+/** @type {Record<string, string[]>} */
+const PHASE_LESSONS = {
+  setup:      ['Setup je bio slab — sledeći put sastavi crew ranije.', 'Bez solidnog setufa, sve pada posle.'],
+  soundcheck: ['Soundcheck je bio problem — Tonac mora biti spremniji.', 'Zvuk u soundchecku određuje noć.'],
+  opening:    ['Opening nije zapalio publiku — Host mora biti bolji izbor.', 'Prva utisak je bio slab.'],
+  climax:     ['Climax je sišao nizbrdo — to je bila ključna faza.', 'Vrhunac nije bio tu kad je trebalo.'],
+  breakdown:  ['Breakdown je izneo crew — sinerija se raspadala.', 'Kraj večeri je bio previše haotičan.'],
+  recap:      ['Recap je ostavio loš ukus — sitnice su se nagomilale.', 'Finale bez kontrole poništava sve pre.']
+};
+
+const GENERIC_CRASH_LESSONS = [
+  'Crew bez sinergije se sipa pod pritiskom.',
+  'Prazan slot u ključnoj fazi košta noć.',
+  'Pravi tim se gradi pažljivo — ne žurom.'
+];
+
+/**
+ * Find the phase with the largest negative vibe delta.
+ * @param {Record<string, number>} phaseDeltas — { phaseName: vibeChange }
+ * @returns {string|null} phase name or null if no negative deltas
+ */
+export function getWorstPhase(phaseDeltas) {
+  if (!phaseDeltas) return null;
+  let worst = null;
+  let worstDelta = 0;
+  for (const [phase, delta] of Object.entries(phaseDeltas)) {
+    if (delta < worstDelta) { worstDelta = delta; worst = phase; }
+  }
+  return worst;
+}
+
+/**
+ * Get a one-sentence diagnostic lesson for a crash/weak ending.
+ * @param {string|null} worstPhase
+ * @returns {string}
+ */
+export function getCrashLesson(worstPhase) {
+  if (worstPhase && PHASE_LESSONS[worstPhase]) {
+    const lines = PHASE_LESSONS[worstPhase];
+    return lines[Math.floor(Math.random() * lines.length)];
+  }
+  return GENERIC_CRASH_LESSONS[Math.floor(Math.random() * GENERIC_CRASH_LESSONS.length)];
+}
+
 /**
  * Return emoji flair for score display.
  * @param {'legendary'|'solid'|'weak'|'crash'} type

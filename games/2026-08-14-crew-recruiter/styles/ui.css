@@ -618,6 +618,16 @@
 .ending-tagline      { font-size: 0.95rem; color: var(--color-text); font-weight: 600; }
 .ending-cta          { font-size: 0.82rem; color: var(--role-logistika); font-style: italic; }
 
+.ending-lesson {
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+  font-style: italic;
+  border-left: 2px solid var(--color-border);
+  padding-left: 0.6rem;
+  text-align: left;
+  max-width: 300px;
+}
+
 .ending-best-score {
   font-size: 0.75rem;
   color: var(--color-text-muted);

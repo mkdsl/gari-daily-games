@@ -1,6 +1,6 @@
 // ui/ending-screen.js — Ending screen: animated score, HOF best, legendary glow
 
-import { getEndingType, getTagline, getCTA, getEndingEmoji } from '../systems/ending.js';
+import { getEndingType, getTagline, getCTA, getEndingEmoji, getWorstPhase, getCrashLesson } from '../systems/ending.js';
 import { shareScore } from '../share.js';
 import { BRAND } from '../content/brand_hooks.js';
 import { loadPersistentState } from '../state.js';
@@ -62,8 +62,9 @@ function buildBestScoreLine(currentScore) {
  * @param {string} eventType
  * @param {boolean} crashed
  * @param {() => void} onRestart
+ * @param {Record<string, number>} [phaseDeltas] - optional vibe delta per phase for diagnostics
  */
-export function showEndingScreen(vibeScore, eventType, crashed, onRestart) {
+export function showEndingScreen(vibeScore, eventType, crashed, onRestart, phaseDeltas) {
   const screen = document.getElementById('ending-screen');
   if (!screen) return;
 
@@ -73,6 +74,10 @@ export function showEndingScreen(vibeScore, eventType, crashed, onRestart) {
   const cta          = getCTA(type, eventType);
   const emoji        = getEndingEmoji(type);
   const bestLine     = buildBestScoreLine(clampedScore);
+
+  const showLesson = (type === 'crash' || type === 'weak');
+  const worstPhase = showLesson ? getWorstPhase(phaseDeltas) : null;
+  const lesson     = showLesson ? getCrashLesson(worstPhase) : null;
 
   // Extra CSS class for crash and legendary endings
   const extraClass = crashed
@@ -91,6 +96,7 @@ export function showEndingScreen(vibeScore, eventType, crashed, onRestart) {
       </div>
 
       <div class="ending-tagline">${tagline}</div>
+      ${lesson ? `<div class="ending-lesson">💡 ${lesson}</div>` : ''}
       <div class="ending-cta"><a href="${cta.url}" target="_blank" rel="noopener">${cta.text}</a></div>
 
       ${bestLine}
