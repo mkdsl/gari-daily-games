@@ -107,6 +107,39 @@ export function getCrashLesson(worstPhase) {
   return GENERIC_CRASH_LESSONS[Math.floor(Math.random() * GENERIC_CRASH_LESSONS.length)];
 }
 
+/** @type {Record<string, Record<string, string>>} 3 event types × 4 ending types */
+const EVENT_ENDINGS = {
+  klub: {
+    legendary: 'Jutro te zatiče sa still-hot mikserom i 400 zadovoljnih lica.',
+    solid:     'Posao je urađen. Veći deo publike odlazi zadovoljan.',
+    weak:      'Par sjajnih momenata. Sutra pokušaj ponovo.',
+    crash:     'Nešto je krenulo naopako. Koji deo ćeš popraviti sledeći put?'
+  },
+  outdoor: {
+    legendary: 'Sve pod nebom je kliknulo. Festival koji se pamti.',
+    solid:     'Priroda je bila tu. Crew — uglavnom.',
+    weak:      'Open air bez solidnog crew-a je izazov. Sledeći put — bolje.',
+    crash:     'Kiša je počela u fazi 4. Niko nije imao plan B.'
+  },
+  intimate: {
+    legendary: 'Intimno do bola. Svako lice u sali pamtiće ovu večer.',
+    solid:     'Trideset ljudi. Svi su ostali do kraja, niko nije uzeo jaknu.',
+    weak:      'Intimni format zahteva savršenu ekipu. Ova — skoro.',
+    crash:     'Trideset gledalaca, trideset neispunjenih očekivanja.'
+  }
+};
+
+/**
+ * Event-specific epilog line — replaces generic tagline.
+ * Falls back to getTagline() when eventType is unknown.
+ * @param {'legendary'|'solid'|'weak'|'crash'} type
+ * @param {string} [eventType]
+ * @returns {string}
+ */
+export function getEventEpilog(type, eventType) {
+  return EVENT_ENDINGS[eventType]?.[type] ?? getTagline(type);
+}
+
 /**
  * Return emoji flair for score display.
  * @param {'legendary'|'solid'|'weak'|'crash'} type

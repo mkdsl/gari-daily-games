@@ -1,6 +1,6 @@
 // ui/ending-screen.js — Ending screen: animated score, HOF best, legendary glow
 
-import { getEndingType, getTagline, getCTA, getEndingEmoji, getWorstPhase, getCrashLesson } from '../systems/ending.js';
+import { getEndingType, getTagline, getEventEpilog, getCTA, getEndingEmoji, getWorstPhase, getCrashLesson } from '../systems/ending.js';
 import { shareScore } from '../share.js';
 import { BRAND } from '../content/brand_hooks.js';
 import { loadPersistentState } from '../state.js';
@@ -70,7 +70,7 @@ export function showEndingScreen(vibeScore, eventType, crashed, onRestart, phase
 
   const clampedScore = Math.max(0, vibeScore);
   const type         = getEndingType(vibeScore, crashed);
-  const tagline      = getTagline(type);
+  const tagline      = getEventEpilog(type, eventType);
   const cta          = getCTA(type, eventType);
   const emoji        = getEndingEmoji(type);
   const bestLine     = buildBestScoreLine(clampedScore);
