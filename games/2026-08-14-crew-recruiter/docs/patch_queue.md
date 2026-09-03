@@ -20,7 +20,7 @@
 
 - [x] P3 `src/ui/synergy-display.js` + `src/systems/synergy.js` — Synergy codex "N/10 otkriveno": igrač ne zna da postoji 10 synergy parova, pa nema meta-cilj između runova; dodaj persistent `discoveredSynergies` set u localStorage; synergy-display prikazuje "{N}/10 kombinacija otkriveno" kao passive tracker ispod aktivnih parova — pretvara igru u kolekcionar loop bez novog content-a (done 2026-09-03, commit 3d0b00b)
 
-- [ ] P3 `src/content/brand_hooks.js` — Guncati masterclass deep link i narativ: zameni generički Guncati CTA string sa strukturiranim objektom koji nosi url (`guncati.rs/masterclass`), CTA tekst ("Pravi tim se gradi na Guncatiju — prijavi se na masterclass") i kontekst ("Tom Sawyer model: uči kroz pravljenje"). Aktivira se na Legendary i Solid endingu umesto blank linka.
+- [x] P3 `src/content/brand_hooks.js` — Guncati masterclass deep link i narativ: zameni generički Guncati CTA string sa strukturiranim objektom koji nosi url (`guncati.rs/masterclass`), CTA tekst ("Pravi tim se gradi na Guncatiju — prijavi se na masterclass") i kontekst ("Tom Sawyer model: uči kroz pravljenje"). Aktivira se na Legendary i Solid endingu umesto blank linka. (done 2026-09-03, commit 03a2ead)
 
 - [ ] P3 `src/content/cards_outdoor.js` — Guncati Grand Finale signature ekspanzija: dodaj 5 novih karata Guncati tematike kao bonus Outdoor tier (Permakulturni Tonac, Bašta Host, Kompost Logistika, Seoska Content Kreatorka, Prirodnjak Obezbeđenje; power 5, flavor "Guncati Grand Finale 2026 — povratak na selo"). Mešaju se u Outdoor deck na 6+ completed runs, jačaju brand narativ direktno tokom igre.
 
