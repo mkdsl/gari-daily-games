@@ -26,7 +26,7 @@
 
 - [x] P3 `src/systems/ending.js` — Sezonski CTA window Guncati Grand (08-20 do 08-30): getCTA proverava `new Date()` i u tom periodu vraća event-specific poziv ("Igrao si regrutera — 23.8. vidimo se na Guncati Grand Finalu. Masterclass prijave: guncati.rs") umesto generickog stringa. Čini igru event companion alatom za taj vikend, nema trošak deploy-a — čisti JS date check. (done 2026-09-03, commit dc298ed)
 
-- [ ] P3 `src/share.js` — Brand hashtag per event type u share payload: buildSharePayload dodaje dinamički hashtag (#GuncatiGrand za Outdoor, #MKDSLend za Klub, #Kluboslavija za Intimate) u share tekst. Svaki share postaje organski brand reach za odgovarajući kanal bez dodatnog UX-a.
+- [x] P3 `src/share.js` — Brand hashtag per event type u share payload: buildSharePayload dodaje dinamički hashtag (#GuncatiGrand za Outdoor, #MKDSLend za Klub, #Kluboslavija za Intimate) u share tekst. Svaki share postaje organski brand reach za odgovarajući kanal bez dodatnog UX-a. (done 2026-09-03, commit 65ff3db)
 
 - [ ] P3 `src/ui/menu.js` — MKDSLend "Pro Recruiter" mention posle 10 completed runs: ispod HOF displayja prikazuje mali blok sa linkom ka mkdslend.rs i tagline-om "MKDSLend — Zabavni Radni Park". Konvertuje engaged igrača (10+ partija) u MKDSLend brand awareness, zatvara loop krovnog brenda bez ometanja first-run UX-a.
 
