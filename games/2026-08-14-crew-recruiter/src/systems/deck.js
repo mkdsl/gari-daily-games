@@ -2,7 +2,7 @@
 
 import { createCard } from '../entities/card.js';
 import { KLUB_CARDS } from '../content/cards_klub.js';
-import { OUTDOOR_CARDS } from '../content/cards_outdoor.js';
+import { OUTDOOR_CARDS, GUNCATI_GRAND_CARDS } from '../content/cards_outdoor.js';
 import { INTIMATE_CARDS } from '../content/cards_intimate.js';
 
 /**
@@ -22,12 +22,15 @@ export function shuffle(arr) {
 /**
  * Build a full deck for the given event type.
  * Outdoor and Intimate include all Klub cards plus their signature cards.
+ * Outdoor with ≥6 completed runs also includes Guncati Grand Finale bonus cards.
  * @param {string} eventType
+ * @param {number} [completedRuns=0]
  * @returns {import('../entities/card.js').Card[]}
  */
-export function createDeck(eventType) {
+export function createDeck(eventType, completedRuns = 0) {
   const defs = [...KLUB_CARDS];
   if (eventType === 'outdoor')  defs.push(...OUTDOOR_CARDS);
+  if (eventType === 'outdoor' && completedRuns >= 6) defs.push(...GUNCATI_GRAND_CARDS);
   if (eventType === 'intimate') defs.push(...INTIMATE_CARDS);
 
   const cards = defs.map(def => createCard(def));
