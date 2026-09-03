@@ -14,7 +14,7 @@
 
 - [x] P2 `src/ui/ending-screen.js` — Legendary ending vizuelni burst: ending screen je flat za sve tipove — Legendary (Vibe ≥ 80) ne daje vizuelni "high" koji tera na deljenje i povratak; dodaj CSS keyframe confetti/burst animaciju aktiviranu samo kad `vibeScore >= 80`; čisti CSS, bez biblioteke, bez canvas (done 2026-09-03, commit 8efb28f)
 
-- [ ] P2 `src/systems/ending.js` + `src/ui/ending-screen.js` — Crash/weak "near miss" dijagnostika: bez razloga za retry, crash ending samo frustrira; `getEndingType()` već zna tip — proširi da vrati i `worstPhase` (faza sa najvećim negativnim deltom); ending screen prikazuje jednorečeničnu lekciju ("Climax je sišao nizbrdo — Tonac je bio slab u toj fazi") koja pretvara frustration u puzzle koji vuče na run 2
+- [x] P2 `src/systems/ending.js` + `src/ui/ending-screen.js` — Crash/weak "near miss" dijagnostika: bez razloga za retry, crash ending samo frustrira; `getEndingType()` već zna tip — proširi da vrati i `worstPhase` (faza sa najvećim negativnim deltom); ending screen prikazuje jednorečeničnu lekciju ("Climax je sišao nizbrdo — Tonac je bio slab u toj fazi") koja pretvara frustration u puzzle koji vuče na run 2 (done 2026-09-03, commit 8c037f8)
 
 - [ ] P2 `src/audio.js` — phase-specific audio klimaks: sve faze zvuče isto (linearan volume ramp), što emocionalno ravna igru; Climax (faza 4) treba bass peak, Breakdown (faza 5) treba inverzan pad — implementiraj kao per-phase parametri (`PHASE_AUDIO_PROFILE`) u postojećem phase tracking-u bez promene arhitekture audio.js
 
