@@ -1,6 +1,6 @@
 // ui.js — HUD updates, phase indicator, resolve breakdown, action area, toasts
 
-import { PHASE_DISPLAY_NAMES, TOTAL_ROUNDS } from './config.js';
+import { PHASE_DISPLAY_NAMES, TOTAL_ROUNDS, PHASE_NARRATIVE } from './config.js';
 import { getContextualAforizam } from './content/aforizmi.js';
 
 /**
@@ -162,6 +162,28 @@ export function showResolveBreakdown(result) {
 export function hideResolveOverlay() {
   const overlay = document.getElementById('resolve-overlay');
   if (overlay) overlay.classList.add('hidden');
+}
+
+/**
+ * Show a phase narrative overlay for 2.5s at phase transition.
+ * Uses resolve-overlay element; does not block gameplay.
+ * @param {number} phaseIndex
+ */
+export function showPhaseNarrative(phaseIndex) {
+  const sentence = PHASE_NARRATIVE[phaseIndex];
+  if (!sentence) return;
+  const overlay = document.getElementById('resolve-overlay');
+  if (!overlay) return;
+
+  const box = document.createElement('div');
+  box.className = 'phase-narrative-box';
+  box.innerHTML = `<p class="phase-narrative-text">${sentence}</p>`;
+
+  overlay.innerHTML = '';
+  overlay.appendChild(box);
+  overlay.classList.remove('hidden');
+
+  setTimeout(() => overlay.classList.add('hidden'), 2500);
 }
 
 /**

@@ -390,6 +390,19 @@
   line-height: 1.65;
 }
 
+.phase-narrative-box {
+  text-align: center;
+  padding: 0.5rem;
+}
+.phase-narrative-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-accent, var(--role-host));
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
 /* ════════════════════════════════════════════════════════════
    TOAST (global, slide-up)
 ════════════════════════════════════════════════════════════ */

@@ -104,5 +104,15 @@ export const RARITY = {
   SIGNATURE: 'signature'
 };
 
+/** Flavor sentence shown as 2.5s overlay at each phase transition (index = phaseIndex) */
+export const PHASE_NARRATIVE = [
+  'Ekipa se skuplja. Ko kasni, ko je već otišao.',
+  'Zvuk se testira. Ovo je momenat istine za svaki kabl.',
+  'Vrata su otvorena. Prvih 50 lica određuje energiju noći.',
+  'Kulminacija. Svi su tu — ili nisu.',
+  'Udarac je prošao. Ko opstaje, ko pada?',
+  'Ovo je ona noć o kojoj pričaju godinama — ili ne.',
+];
+
 export const SAVE_KEY_PERSISTENT = 'crew-recruiter-persistent';
 export const TUTORIAL_DONE_KEY   = 'crew-recruiter-tutorial-done';
