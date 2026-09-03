@@ -24,7 +24,7 @@
 
 - [x] P3 `src/content/cards_outdoor.js` — Guncati Grand Finale signature ekspanzija: dodaj 5 novih karata Guncati tematike kao bonus Outdoor tier (Permakulturni Tonac, Bašta Host, Kompost Logistika, Seoska Content Kreatorka, Prirodnjak Obezbeđenje; power 5, flavor "Guncati Grand Finale 2026 — povratak na selo"). Mešaju se u Outdoor deck na 6+ completed runs, jačaju brand narativ direktno tokom igre. (done 2026-09-03, commit 0c967c1)
 
-- [ ] P3 `src/systems/ending.js` — Sezonski CTA window Guncati Grand (08-20 do 08-30): getCTA proverava `new Date()` i u tom periodu vraća event-specific poziv ("Igrao si regrutera — 23.8. vidimo se na Guncati Grand Finalu. Masterclass prijave: guncati.rs") umesto generickog stringa. Čini igru event companion alatom za taj vikend, nema trošak deploy-a — čisti JS date check.
+- [x] P3 `src/systems/ending.js` — Sezonski CTA window Guncati Grand (08-20 do 08-30): getCTA proverava `new Date()` i u tom periodu vraća event-specific poziv ("Igrao si regrutera — 23.8. vidimo se na Guncati Grand Finalu. Masterclass prijave: guncati.rs") umesto generickog stringa. Čini igru event companion alatom za taj vikend, nema trošak deploy-a — čisti JS date check. (done 2026-09-03, commit dc298ed)
 
 - [ ] P3 `src/share.js` — Brand hashtag per event type u share payload: buildSharePayload dodaje dinamički hashtag (#GuncatiGrand za Outdoor, #MKDSLend za Klub, #Kluboslavija za Intimate) u share tekst. Svaki share postaje organski brand reach za odgovarajući kanal bez dodatnog UX-a.
 
