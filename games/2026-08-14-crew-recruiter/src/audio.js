@@ -10,13 +10,14 @@ let crowdNoise = null;
 let crowdGain = null;
 let audioEnabled = false;
 
-const CROWD_VOLUME_BY_PHASE = {
-  setup:      0.025,
-  soundcheck: 0.05,
-  opening:    0.09,
-  climax:     0.15,
-  breakdown:  0.10,
-  recap:      0.06
+/** Per-phase audio profile: vol = crowd gain, oscFreq = sub rumble Hz, rampTime = gain ramp speed */
+const PHASE_AUDIO_PROFILE = {
+  setup:      { vol: 0.025, oscFreq: 55,  rampTime: 1.2 },
+  soundcheck: { vol: 0.05,  oscFreq: 60,  rampTime: 0.9 },
+  opening:    { vol: 0.09,  oscFreq: 65,  rampTime: 0.7 },
+  climax:     { vol: 0.18,  oscFreq: 90,  rampTime: 0.4 }, // bass peak: loud + punchy sub
+  breakdown:  { vol: 0.07,  oscFreq: 45,  rampTime: 1.5 }, // inverse pad: quiet + low rumble
+  recap:      { vol: 0.05,  oscFreq: 55,  rampTime: 1.0 }
 };
 
 /** Lazily create or resume AudioContext */
@@ -79,15 +80,19 @@ export function initAudio() {
 }
 
 /**
- * Ramp crowd ambient to phase volume.
+ * Ramp crowd ambient to phase volume and oscillator frequency.
  * @param {string} phaseName
  */
 export function setCrowdForPhase(phaseName) {
   if (!audioEnabled || !crowdGain) return;
-  const ac  = getCtx();
-  const vol = CROWD_VOLUME_BY_PHASE[phaseName] ?? 0.05;
+  const ac      = getCtx();
+  const profile = PHASE_AUDIO_PROFILE[phaseName] ?? { vol: 0.05, oscFreq: 60, rampTime: 0.8 };
   crowdGain.gain.cancelScheduledValues(ac.currentTime);
-  crowdGain.gain.setTargetAtTime(vol, ac.currentTime, 0.8);
+  crowdGain.gain.setTargetAtTime(profile.vol, ac.currentTime, profile.rampTime);
+  if (crowdOsc) {
+    crowdOsc.frequency.cancelScheduledValues(ac.currentTime);
+    crowdOsc.frequency.setTargetAtTime(profile.oscFreq, ac.currentTime, profile.rampTime);
+  }
 }
 
 /**
