@@ -1,8 +1,8 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Ažurirano:** 2026-09-03 — **0 igara čeka sign-off. Backlog prazan.**
+**Ažurirano:** 2026-09-04 — **0 igara čeka sign-off. Backlog prazan. Nova igra u concept: Jesenji Tok.**
 
-> ⚠️ **KORAK 0c drift (2026-09-03):** Pasoš registry drift: 33 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Gap: 36 released, 3 registered. Jovin posao — brand/copy odluka po igri.
+> ⚠️ **KORAK 0c drift (2026-09-04):** Pasoš registry drift: 33 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Gap: 36 released, 3 registered. Jovin posao — brand/copy odluka po igri.
 
 ---
 
@@ -140,3 +140,4 @@ Legacy igre (Park Mapa 05-21: failed/superseded, i stariji bez stage polja) se n
 - [2026-08-22] KORAK 0b: 0 unreleased igara. KORAK 0c: Pasoš registry drift 33 (released=36, registered=3 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. KORAK P: Guncati Grand P2 `src/systems/progression.js` + `src/systems/economy.js` — `applyAllocationEffects()` refaktoran da vraća vrednosti umesto da mutira state; `seasonMarketingSpent` dodat u setState() tok. Sledeći trigger: Guncati Grand P2 (score_ui.js + volunteers_data.js retrospektivna kartica) ili Crew Recruiter P2 (keyboard assign flow).
 - [2026-08-23] KORAK 0b: 0 unreleased igara. KORAK 0c: Pasoš drift 33 (released=36, registered=3 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. KORAK P: Guncati Grand P2 `src/ui/score_ui.js` + `src/content/volunteers_data.js` — retrospektivna kartica "Ko je izdržao" sa WB statusom (zeleno/žuto/crveno) i burn-out fragmentima za Tom Sawyer emocionalni udar. Sledeći trigger: Guncati Grand P2 (wellbeing.js milestone notifikacije) ili Crew Recruiter P2 (keyboard assign flow).
 - [2026-09-02] KORAK 0b: 0 unreleased igara. KORAK 0c: Pasoš drift 33 (released=36, registered=3 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. KORAK P: Guncati Grand P2 `src/systems/wellbeing.js` + `src/ui/hud.js` — WB milestone notifikacije: pri prelasku 60% (Tom Sawyer unlock) prikazuje se reakcija volontera, pri padu ispod 40% umor-varijanta (commit 7ca0225). Sledeći trigger: Guncati Grand P2 (finale.js + scoring.js "Ključni momenti") ili Crew Recruiter P2 (keyboard assign flow).
+- [2026-09-04] KORAK 0b: 0 unreleased igara. KORAK 0c: Pasoš drift 33 (released=36, registered=3 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. Svi patch_queue.md su prazni (0 otvorenih stavki). **Nova igra pokrenuta: Jesenji Tok (Seasonal Scheduling Puzzle, Guncati×Kluboslavija)** — concept stage. Iskra brief pre-napisan (tim/iskra/2026-08-17.md), PRIORITET #1. concept.md + premortem.md + gdd.md u toku.
