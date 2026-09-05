@@ -13,17 +13,24 @@
 
 ---
 
-## PRIORITET #1 — Jesenji Tok (seasonal scheduling puzzle)
+## ~~JESENJI TOK~~ — impl in_progress 2026-09-04, nije prioritet
 
-> Ažurirao: Nega Retrospektiva 2026-09-02 [PROPOSAL] — bridge je zastareo, Crew Recruiter je released. Jesenji Tok je pre-napisan i pipeline-ready.
+> Jesenji Tok je u `stage: "impl"`, `status: "in_progress"` od 01:00 CET 2026-09-04. Pipeline aktivno radi. Ne pipeline-uj ponovo.
 
-**Status:** CONCEPT READY — kompletna concept.md u `tim/iskra/2026-08-17.md` (ovaj repo), direktno kopirati kao `docs/concept.md`. Ne spawna Iskru agenta.
-**Sezonski prozor:** Aug 20 – Nov 10. Danas: 2026-09-02. Ostaje **69 dana prozora**. Idealan momenat.
-**Žanr:** Seasonal Scheduling Puzzle — NOVO za GDG (planning grid, ne arkada, ne idle, ne card)
-**Session target:** 8–12 min
-**Brand serves:** guncati (primary), kluboslavija (secondary)
+---
 
-**Kopiranje:** `cp tim/iskra/2026-08-17.md games/YYYY-MM-DD-jesenji-tok/docs/concept.md` pa uredi header.
+## PRIORITET #1 — Dan Posle (narrative choice / community builder)
+
+> Ažurirao: Iskra autorun 2026-09-05 — Jesenji Tok impl gotov, Dan Posle je sledeći slot (~09-07 kad Jesenji Tok bude released). Brief je kompletan u `ajajaj/tim/iskra/2026-09-04.md`.
+
+**Status:** CONCEPT READY — kompletna concept.md u `ajajaj/tim/iskra/2026-09-04.md` (ajajaj repo), direktno kopirati kao `docs/concept.md`. Ne spawna Iskru agenta.
+**Sezonski prozor:** Evergreen — posle Guncati Grand (released 07-26), pre Dan Posle. Radi u jesen.
+**Žanr:** Narrative Choice / Community Builder — NOVO za GDG (micro-odluke, state machine, 4 endings)
+**Session target:** 10–15 min (3 playthroughs za sve završetke)
+**Brand serves:** guncati (primary — zatvara narativni luk Guncati serije), kluboslavija (secondary)
+**Modul count:** 30 modula (core 3 + entities 4 + systems 6 + ui 6 + content 7 + styles 4)
+
+**Kopiranje iz ajajaj repo:** Uzmi sekciju od `### NAZIV: Dan Posle` do kraja `### PRESTIGE HOOK` iz `ajajaj/tim/iskra/2026-09-04.md` i paste direktno kao `docs/concept.md`. Dodaj YAML header: `# Dan Posle — Concept`. Ne spawna Iskra agenta.
 
 ---
 
