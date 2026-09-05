@@ -1,52 +1,124 @@
 /**
  * @module brand_hooks
  * Brand configuration for Guncati and Kluboslavija.
- * Share card texts, CTAs, and event links.
+ *
+ * Jesenji Tok serves two strategic brands:
+ *   1. Guncati — permaculture farm learning, Tom Sawyer model, masterclass hook
+ *   2. Kluboslavija — turneja 2026, community/culture, seasonal event companion
+ *
+ * This module provides:
+ *   - Share text generation
+ *   - CTAs for score screen
+ *   - Event-specific messaging
+ *   - Social media hashtags
+ *   - Deep links for Guncati masterclass enrollment
  */
+
+// ─── Brand Config ─────────────────────────────────────────────────────────────
 
 /**
  * Brand configuration object
+ * @type {Object}
  */
 export const BRAND = {
+  // Guncati
+  guncati_name: 'Guncati',
   guncati_cta: 'Guncati Jesenji Masterclass — nauči planiranje imanja uživo',
   guncati_url: 'https://guncati.rs',
   guncati_tagline: 'Povratak na selo — aktivno, pametno, zajednički.',
   guncati_logo_emoji: '🌿',
+  guncati_cta_short: 'Masterclass Guncati →',
 
+  // Kluboslavija
+  kluboslavija_name: 'Kluboslavija',
   kluboslavija_event: 'Jesenji event Kluboslavija',
   kluboslavija_url: 'https://kluboslavija.rs',
   kluboslavija_tagline: 'Turneja 2026 — muzika, zemlja, zajednica.',
   kluboslavija_logo_emoji: '🎵',
+  kluboslavija_cta_short: 'Turneja 2026 →',
 
+  // MKDSLend
   mkdslend_name: 'MKDSLend',
   mkdslend_tagline: 'Zabavni radni park',
   mkdslend_url: 'https://mkdslend.rs',
 
-  /**
-   * Build share text from score result
-   * @param {string} rang - rank label
-   * @param {number} score - numerical score
-   * @param {string} weatherName - weather preset name
-   * @returns {string}
-   */
-  share_text(rang, score, weatherName) {
-    return `Moja jesenja sezona: ${rang} (${score} poena) 🌾 | Vreme: ${weatherName} | Igraj na Guncati Jesenji Tok`;
-  },
-
-  /**
-   * Share URL for the game
-   */
+  // Game
+  game_name: 'Jesenji Tok',
   share_url: 'https://mkdsl.github.io/gari-daily-games/games/2026-09-04-jesenji-tok/',
 
-  /**
-   * Hashtags for social media sharing
-   */
-  hashtags: ['#Guncati', '#JesenjiTok', '#Kluboslavija', '#MKDSLend'],
+  // Hashtags
+  hashtags: ['#Guncati', '#JesenjiTok', '#Kluboslavija', '#MKDSLend', '#SezonskoPlaniranje'],
 };
 
+// ─── Share Text ───────────────────────────────────────────────────────────────
+
 /**
- * Footer CTAs shown on the score screen
- * @type {Array<{label: string, url: string, emoji: string, primary: boolean}>}
+ * Build share text for social media.
+ * @param {string} rank   - rank label (e.g. "Savršena sezona")
+ * @param {number} score  - numerical score
+ * @param {string} weatherName - weather preset name
+ * @param {{ ecosystem_bonus?: boolean, prestige_bonus?: string|null }} [options]
+ * @returns {string}
+ */
+export function buildShareText(rank, score, weatherName, options = {}) {
+  const { ecosystem_bonus = false, prestige_bonus = null } = options;
+  const ecoStr = ecosystem_bonus ? ' 🌿 Ekosistem bonus!' : '';
+  const hashtags = BRAND.hashtags.slice(0, 3).join(' ');
+  return (
+    `Moja jesenja sezona: ${rank} (${score}p) 🌾\n` +
+    `Vreme: ${weatherName}${ecoStr}\n` +
+    `${BRAND.share_url}\n` +
+    hashtags
+  );
+}
+
+/**
+ * Build a short one-line share text for Web Share API title field.
+ * @param {string} rank
+ * @param {number} score
+ * @returns {string}
+ */
+export function buildShareTitle(rank, score) {
+  return `Jesenji Tok — ${rank} (${score}p)`;
+}
+
+/**
+ * Build a branded share card for a specific score tier.
+ * Returns different CTAs based on score level.
+ * @param {number} score
+ * @param {string} rank
+ * @returns {{ headline: string, body: string, cta: string, cta_url: string }}
+ */
+export function buildScoreCard(score, rank) {
+  if (score >= 900) {
+    return {
+      headline: `🌟 Savršena sezona: ${score}p`,
+      body: 'Sve parcele u optimalnom prozoru. Pravi farmer.',
+      cta: BRAND.guncati_cta,
+      cta_url: BRAND.guncati_url,
+    };
+  }
+  if (score >= 600) {
+    return {
+      headline: `✅ Solidna sezona: ${score}p`,
+      body: 'Dobro planiranje se vidi. Možeš bolje — masterclass?',
+      cta: BRAND.guncati_cta,
+      cta_url: BRAND.guncati_url,
+    };
+  }
+  return {
+    headline: `🌾 ${rank}: ${score}p`,
+    body: 'Svaka sezona uči. Guncati masterclass pomaže.',
+    cta: BRAND.guncati_cta_short,
+    cta_url: BRAND.guncati_url,
+  };
+}
+
+// ─── Score Screen CTAs ────────────────────────────────────────────────────────
+
+/**
+ * Footer CTAs shown on the score screen.
+ * @type {Array<{ label: string, url: string, emoji: string, primary: boolean, description?: string }>}
  */
 export const SCORE_CTAS = [
   {
@@ -54,20 +126,65 @@ export const SCORE_CTAS = [
     url: BRAND.guncati_url,
     emoji: '🌿',
     primary: true,
+    description: 'Nauči permakulturno planiranje imanja uživo sa Branom.',
   },
   {
-    label: 'Kluboslavija Turneja',
+    label: 'Kluboslavija Turneja 2026',
     url: BRAND.kluboslavija_url,
     emoji: '🎵',
     primary: false,
+    description: 'Muzika, zemlja, zajednica — jesenja turneja.',
   },
 ];
 
 /**
- * Educational content link shown after scoring
- * @type {{label: string, url: string}}
+ * Educational content link shown on score screen.
+ * @type {{ label: string, url: string, emoji: string }}
  */
 export const EDU_LINK = {
   label: 'Nauči više o sezonskom planiranju imanja',
   url: BRAND.guncati_url,
+  emoji: '📚',
 };
+
+// ─── Rank-Specific CTAs ───────────────────────────────────────────────────────
+
+/**
+ * Get the appropriate CTA for a given score.
+ * Higher scores get the premium Guncati masterclass pitch.
+ * @param {number} score
+ * @returns {{ label: string, url: string, emoji: string }}
+ */
+export function getCTAForScore(score) {
+  if (score >= 600) {
+    return {
+      label: 'Guncati Masterclass — sledeći nivo',
+      url: BRAND.guncati_url,
+      emoji: '🌿',
+    };
+  }
+  if (score >= 300) {
+    return {
+      label: 'Poboljšaj plan — Guncati resursi',
+      url: BRAND.guncati_url,
+      emoji: '🌱',
+    };
+  }
+  return {
+    label: 'Nauči osnove — Guncati blog',
+    url: BRAND.guncati_url,
+    emoji: '📚',
+  };
+}
+
+/**
+ * Get Kluboslavija event CTA for current season.
+ * @returns {{ label: string, url: string, emoji: string }}
+ */
+export function getEventCTA() {
+  return {
+    label: 'Jesenji Klub event — Brana i ekipa',
+    url: BRAND.kluboslavija_url,
+    emoji: '🎵',
+  };
+}

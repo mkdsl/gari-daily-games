@@ -3,18 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#000">
-  <title>GAME_TITLE — Gari Daily Games</title>
+  <meta name="theme-color" content="#1a2415">
+  <meta name="description" content="Jesenji Tok — Sezonski puzzle rasporeda. Ti si Brana. 12 nedelja pre zime, 6 parcela, 3 radne grupe nedeljno. Planiraš koje radove staviš u koji prozor.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta property="og:title" content="Jesenji Tok — Gari Daily Games">
+  <meta property="og:description" content="Sezonski puzzle rasporeda. Rasporedjuj poslove na imanju pre zimske bure.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mkdsl.github.io/gari-daily-games/games/2026-09-04-jesenji-tok/">
+
+  <title>Jesenji Tok — Gari Daily Games</title>
+
+  <link rel="stylesheet" href="styles/theme.css">
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/ui.css">
   <link rel="stylesheet" href="styles/game.css">
+
+  <style>
+    /* Critical above-fold styles to prevent FOUC */
+    body {
+      background: #1a2415;
+      color: #f5e6c8;
+    }
+
+    /* Prevent layout shift while JS loads */
+    #app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Loading state */
+    #app-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      flex-direction: column;
+      gap: 16px;
+      color: #8bc34a;
+      font-size: 18px;
+    }
+
+    #app-loading .loading-emoji {
+      font-size: 48px;
+      animation: leafSpin 2s linear infinite;
+    }
+
+    @keyframes leafSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-  <div id="game-root">
-    <canvas id="game-canvas"></canvas>
-    <div id="hud"></div>
-    <div id="menu" class="menu-overlay"></div>
+  <div id="app">
+    <!-- Loading placeholder (replaced by JS) -->
+    <div id="app-loading" aria-live="polite">
+      <span class="loading-emoji">🍂</span>
+      <span>Učitavanje sezone...</span>
+    </div>
+
+    <!-- HUD: season info, progress, close-season button -->
+    <div id="hud" role="banner" aria-label="Informacije o sezoni"></div>
+
+    <!-- Forecast bar: 12-week weather overview -->
+    <div id="forecast-bar" role="complementary" aria-label="Vremenska prognoza"></div>
+
+    <!-- Main game grid: 6 task rows × 12 week columns -->
+    <main id="game-grid" role="main" aria-label="Raspored radova"></main>
+
+    <!-- Card palette: task cards for selection -->
+    <div id="card-palette" role="listbox" aria-label="Zadaci za raspoređivanje"></div>
+
+    <!-- Overlay: tutorial, score screen, prestige screen -->
+    <div id="overlay" role="dialog" aria-modal="true" hidden></div>
   </div>
+
   <script type="module" src="src/main.js"></script>
+
+  <script>
+    // Remove loading state once page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      const loading = document.getElementById('app-loading');
+      if (loading) {
+        // JS modules will take over; hide loading after brief delay
+        setTimeout(() => {
+          if (loading) loading.style.display = 'none';
+        }, 200);
+      }
+    });
+  </script>
 </body>
 </html>

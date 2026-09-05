@@ -1,10 +1,11 @@
-// Jova: ovaj fajl wire-uje sve systeme. Importuj iz ./physics.js, ./collision.js itd.
-// i zovi ih po redu u updateSystems.
+/**
+ * @module systems/index
+ * Re-exports all game systems for convenient import.
+ */
 
-export function updateSystems(state, input, dt) {
-  if (state.paused || state.gameOver) return;
-  // updatePhysics(state, dt);
-  // updateCollisions(state);
-  // updateAI(state, dt);
-  // updateProgression(state, dt);
-}
+export * from './weather.js';
+export * from './validation.js';
+export * from './scoring.js';
+export * from './conflict.js';
+export * from './prestige.js';
+export * from './achievements.js';
