@@ -148,8 +148,8 @@ function renderBuraAnimation(overlay, state, scoreResult) {
         const inWindow = taskScore?.in_window ?? false;
         const pts = taskScore?.final ?? 0;
         const taskName = taskScore?.task_name ?? asgn.task_id;
-        const ecoFlag = taskScore?.eco_bonus ? ' 🌿' : '';
-        const penaltyFlag = taskScore?.penalty ? ' ⚠️' : '';
+        const ecoFlag = taskScore?.ecosystem_bonus_applied ? ' 🌿' : '';
+        const penaltyFlag = taskScore?.hot_penalty_applied ? ' ⚠️' : '';
 
         accumulatedScore += pts;
 
@@ -383,8 +383,8 @@ function buildBreakdownRow(b) {
   const statusIcon = b.week === null ? '✗' : (b.in_window ? '✓' : '⚠️');
   const statusLabel = b.week === null ? 'nije raspoređeno' : (b.in_window ? 'u prozoru' : 'van prozora');
   const weekStr = b.week !== null ? `N${b.week}` : '—';
-  const ecoMark = b.eco_bonus ? ' 🌿' : '';
-  const penaltyMark = b.penalty ? ' ⚠️' : '';
+  const ecoMark = b.ecosystem_bonus_applied ? ' 🌿' : '';
+  const penaltyMark = b.hot_penalty_applied ? ' ⚠️' : '';
 
   return `
     <div class="breakdown-row ${statusClass}" role="listitem"

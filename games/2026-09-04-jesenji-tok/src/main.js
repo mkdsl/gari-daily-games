@@ -17,7 +17,7 @@
  *   - Online/offline state tracking
  */
 
-import { STORAGE_KEYS, SAVE_INTERVAL_SEC, DEBUG } from './config.js';
+import { STORAGE_KEYS, SAVE_INTERVAL_SEC, DEBUG, FORECAST_FIRST_ASSIGN_REVEAL } from './config.js';
 import {
   createState,
   loadState,
@@ -37,7 +37,7 @@ import {
 import { TASKS } from './content/tasks.js';
 import { WEATHER_COMMENTS } from './content/brana_dialogs.js';
 
-import { generateWeather } from './systems/weather.js';
+import { generateWeather, revealForecast } from './systems/weather.js';
 import { validateAssign, buildValidationSummary } from './systems/validation.js';
 import { calculateScore } from './systems/scoring.js';
 import { detectConflict, setErrorState, clearErrorState, scanAllConflicts } from './systems/conflict.js';
@@ -487,6 +487,10 @@ function handleAssign(taskId, week) {
   // Assign
   assignTask(state, taskId, week);
 
+  // Reveal forecast progressively on each new assignment
+  revealForecast(state.weather, FORECAST_FIRST_ASSIGN_REVEAL);
+  renderForecastBar(state);
+
   // First assign achievement
   const wasFirst = unlockFirstAssign(state);
   if (wasFirst) {
@@ -655,19 +659,14 @@ function triggerCloseSeason() {
  */
 function handlePlayAgain() {
   const persistedBonus = loadPrestigeBonus();
-  skipPrestige(state);
-  if (persistedBonus === 'extra_group') {
-    state.groups_per_week = 4;
-  }
-
-  // Fresh weather
-  state.weather = generateWeather(state.prestige_bonus);
+  const savedAchievements = { ...state.achievements };
 
   clearState();
   state = createState();
   state.prestige_bonus = persistedBonus;
   if (persistedBonus === 'extra_group') state.groups_per_week = 4;
   state.weather = generateWeather(persistedBonus);
+  state.achievements = savedAchievements;
   saveState(state);
 
   if (overlayEl) overlayEl.hidden = true;
@@ -691,14 +690,16 @@ function handlePrestige(scoreResult) {
       (bonusId) => {
         applyPrestige(state, bonusId);
 
-        // Create fresh state with new prestige
+        // Create fresh state with new prestige, preserve achievements across runs
         const newBonus = bonusId;
         const prevRuns = state.total_runs ?? 0;
+        const savedAchievements = { ...state.achievements };
         state = createState();
         state.prestige_bonus = newBonus;
         if (newBonus === 'extra_group') state.groups_per_week = 4;
         state.weather = generateWeather(newBonus);
         state.total_runs = prevRuns;
+        state.achievements = savedAchievements;
         saveState(state);
 
         if (overlayEl) overlayEl.hidden = true;

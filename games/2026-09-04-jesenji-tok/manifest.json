@@ -5,7 +5,7 @@
   "description": "Ti si Brana. 12 nedelja pre zime, 6 parcela, 3 radne grupe nedeljno — planiraš koje radove staviš u koji prozor. Sezona se zatvara zimskom burom.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-09-04-jesenji-tok/",
   "brand_serves": ["guncati", "kluboslavija"],
-  "stage": "impl",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "src/main.js": "Entry point, DOM game loop, phase transitions (planning→bura→score→prestige)",
