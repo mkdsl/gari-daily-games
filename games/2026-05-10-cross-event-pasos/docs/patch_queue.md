@@ -1,1 +1,1 @@
-- [x] P3 `src/config.js` (pasoš) — dodati slug `2026-09-04-jesenji-tok` u SLUG_WHITELIST + STAMPS (done 2026-09-06, commit PENDING)
+- [x] P3 `src/config.js` (pasoš) — dodati slug `2026-09-04-jesenji-tok` u SLUG_WHITELIST + STAMPS (done 2026-09-06, commit 33dd596)
