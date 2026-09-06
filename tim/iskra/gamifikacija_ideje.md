@@ -13,15 +13,15 @@
 
 ---
 
-## ~~JESENJI TOK~~ — impl in_progress 2026-09-04, nije prioritet
+## ~~JESENJI TOK~~ — released 2026-09-06, nije prioritet
 
-> Jesenji Tok je u `stage: "impl"`, `status: "in_progress"` od 01:00 CET 2026-09-04. Pipeline aktivno radi. Ne pipeline-uj ponovo.
+> Jesenji Tok je released (post_fix_score: 9.0, beta_score_iter2: 8.5). Ne pipeline-uj ponovo.
 
 ---
 
 ## PRIORITET #1 — Dan Posle (narrative choice / community builder)
 
-> Ažurirao: Iskra autorun 2026-09-05 — Jesenji Tok impl gotov, Dan Posle je sledeći slot (~09-07 kad Jesenji Tok bude released). Brief je kompletan u `ajajaj/tim/iskra/2026-09-04.md`.
+> Ažurirao: Iskra autorun 2026-09-06 — Jesenji Tok released, Dan Posle je sledeći slot (22:00 CET danas, gdg-concept-trigger). Brief je kompletan u `ajajaj/tim/iskra/2026-09-04.md`.
 
 **Status:** CONCEPT READY — kompletna concept.md u `ajajaj/tim/iskra/2026-09-04.md` (ajajaj repo), direktno kopirati kao `docs/concept.md`. Ne spawna Iskru agenta.
 **Sezonski prozor:** Evergreen — posle Guncati Grand (released 07-26), pre Dan Posle. Radi u jesen.
