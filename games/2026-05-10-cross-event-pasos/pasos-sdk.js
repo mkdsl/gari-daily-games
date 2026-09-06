@@ -15,6 +15,7 @@ export const SLUG_WHITELIST = [
   'avala-run',          // 2026-05-06, Avala Run (Endless Runner)
   'aforizam-generator', // 2026-05-08, Aforizam Generator (Generative text toy)
   'dj-za-pultom',       // 2026-05-09, DJ za Pultom (Idle/Incremental)
+  'jesenji-tok',          // 2026-09-04, Jesenji Tok (Seasonal Scheduling Puzzle)
   // --- Dodaj sledeće slug-ove ovde ---
 ];
 
