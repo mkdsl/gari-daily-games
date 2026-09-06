@@ -615,7 +615,7 @@ function triggerCloseSeason() {
   state.total_runs = (state.total_runs ?? 0) + 1;
 
   // Save best score
-  saveBestScore(scoreResult.total);
+  scoreResult.is_new_best = saveBestScore(scoreResult.total);
 
   // Check achievements
   const newAchievements = checkAndUnlockAchievements(state, scoreResult);
