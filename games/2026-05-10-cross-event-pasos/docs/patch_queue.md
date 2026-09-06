@@ -1,0 +1,1 @@
+- [ ] P3 `src/config.js` (pasoš) — dodati slug `2026-09-04-jesenji-tok` u SLUG_WHITELIST + STAMPS
