@@ -31,4 +31,4 @@
 ## Završeni patčevi
 
 - [x] P1 `src/main.js` — `total_runs` divergencija: `handlePlayAgain` sada kopira `state.total_runs` u novi state (analogno prestige putu) (done 2026-09-06, commit 502bb0e)
-- [x] P2 `src/main.js` — uklonjen dead import `skipPrestige` (done 2026-09-06, commit PENDING)
+- [x] P2 `src/main.js` — uklonjen dead import `skipPrestige` (done 2026-09-06, commit 9c0223a)
