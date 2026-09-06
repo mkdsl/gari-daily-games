@@ -3,7 +3,6 @@
 ## Otvoreni patčevi
 
 <!-- Nega P1/P2 — tehnički dug, LOW bugovi iz beta, potencijalne regresije -->
-- [ ] P1 `src/main.js` — `total_runs` divergencija: `handlePlayAgain` ne kopira `state.total_runs` u novi state (za razliku od `handlePrestige`), pa achievements koji čitaju `state.total_runs` na play-again putu vide pogrešan broj — treba `state.total_runs = prevRuns` pre `saveState` u `handlePlayAgain` (analogno prestige putu, linija ~694).
 - [ ] P2 `src/main.js` — Dead import `skipPrestige` (linija 44): uvezen iz `./systems/prestige.js` ali nigde se ne poziva — ukloniti iz import liste.
 - [ ] P2 `src/systems/scoring.js` — `is_new_best` polje u ScoreResult uvek `false` (linija 187): caller `triggerCloseSeason` nikad ne ažurira `scoreResult.is_new_best` posle `saveBestScore()` — ili ukloniti dead polje, ili popuniti ga (`scoreResult.is_new_best = scoreResult.total >= loadBestScore()` pre `saveBestScore`-a).
 - [ ] P2 `src/systems/validation.js` — Dead export `checkEcoBonusFeasibility`: eksportovana funkcija nije u manifest.json i nije importovana nigde u igri — ukloniti export ili dodati import gde ima smisla (npr. UI hint u score-screenu).
@@ -32,4 +31,4 @@
 
 ## Završeni patčevi
 
-<!-- (prazno — igra tek released) -->
+- [x] P1 `src/main.js` — `total_runs` divergencija: `handlePlayAgain` sada kopira `state.total_runs` u novi state (analogno prestige putu) (done 2026-09-06, commit PENDING)

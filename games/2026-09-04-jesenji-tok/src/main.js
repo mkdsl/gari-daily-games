@@ -660,12 +660,14 @@ function triggerCloseSeason() {
 function handlePlayAgain() {
   const persistedBonus = loadPrestigeBonus();
   const savedAchievements = { ...state.achievements };
+  const prevRuns = state.total_runs ?? 0;
 
   clearState();
   state = createState();
   state.prestige_bonus = persistedBonus;
   if (persistedBonus === 'extra_group') state.groups_per_week = 4;
   state.weather = generateWeather(persistedBonus);
+  state.total_runs = prevRuns;
   state.achievements = savedAchievements;
   saveState(state);
 
