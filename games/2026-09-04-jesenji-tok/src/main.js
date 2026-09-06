@@ -41,7 +41,7 @@ import { generateWeather, revealForecast } from './systems/weather.js';
 import { validateAssign, buildValidationSummary } from './systems/validation.js';
 import { calculateScore } from './systems/scoring.js';
 import { detectConflict, setErrorState, clearErrorState, scanAllConflicts } from './systems/conflict.js';
-import { applyPrestige, skipPrestige, canPrestige } from './systems/prestige.js';
+import { applyPrestige, canPrestige } from './systems/prestige.js';
 import { checkAndUnlockAchievements, unlockFirstAssign, getAchievementToast } from './systems/achievements.js';
 
 import { initGrid, updateGrid, triggerCellError } from './ui/grid.js';
