@@ -44,6 +44,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-07-18 | Na Vezi ⭐ | Multi-layer Broadcast Management Sim — Guncati × MKDSLend × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-07-18-na-vezi/) |
 | 2026-07-26 | Guncati Grand ⭐ | Multi-layer Festival/Venue Management Sim — Guncati × Kluboslavija × MKDSLend | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-07-26-guncati-grand/) |
 | 2026-08-14 | Crew Recruiter: Izgradi Ekipu ⭐ | Mini deck-builder / crew manager — MKDSLend × Guncati × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-08-14-crew-recruiter/) |
+| 2026-09-04 | Jesenji Tok ⭐ | Seasonal Scheduling Puzzle — Guncati × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-09-04-jesenji-tok/) |
 
 ## Statusi
 

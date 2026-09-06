@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-09-04-jesenji-tok/",
   "brand_serves": ["guncati", "kluboslavija"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Entry point, DOM game loop, phase transitions (planning→bura→score→prestige)",
     "src/config.js": "Task windows, group costs, score values, rank thresholds, weather preset data, STORAGE_KEYS",
@@ -41,8 +41,8 @@
     "total_js": 8376,
     "total_css": 1598
   },
-  "beta_score": null,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
-  "sef_signoff": false
+  "beta_score": 6.5,
+  "beta_score_iter2": 8.5,
+  "post_fix_score": 9.0,
+  "sef_signoff": true
 }
