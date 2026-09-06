@@ -260,43 +260,6 @@ export function getBlockedWeeksForTask(state, taskId) {
   return blocked;
 }
 
-// ─── Schedule Feasibility ─────────────────────────────────────────────────────
-
-/**
- * Check whether the ecosystem bonus is achievable given current weather and capacity.
- * Ecosystem bonus requires Micelij + Jezero + Kompost all in their window simultaneously.
- * @param {import('../state.js').GameState} state
- * @returns {{ feasible: boolean, reason: string|null }}
- */
-export function checkEcoBonusFeasibility(state) {
-  if (!state.weather) return { feasible: false, reason: 'Nema vremenske prognoze' };
-
-  const ecoTasks = ['micelij', 'jezero', 'kompost'];
-  const tasks = ecoTasks.map((id) => TASKS.find((t) => t.id === id)).filter(Boolean);
-
-  // Find weeks where all three tasks are in-window and have collective capacity
-  for (let week = 1; week <= 12; week++) {
-    const allInWindow = tasks.every((t) => isInWindow(t, week, state.weather));
-    if (!allInWindow) continue;
-
-    // Check collective cost
-    let totalCost = 0;
-    for (const task of tasks) {
-      totalCost += getEffectiveTaskCost(state, task);
-    }
-
-    if (totalCost <= state.groups_per_week * 2) {
-      // Could spread across 2 weeks if needed — this is just an approximation
-      return { feasible: true, reason: null };
-    }
-  }
-
-  return {
-    feasible: false,
-    reason: 'Kapacitet grupe ne dozvoljava sve tri u prozoru',
-  };
-}
-
 /**
  * Get a suggestion for the best week to assign an unassigned task.
  * Prefers in-window weeks with available capacity and no rain.

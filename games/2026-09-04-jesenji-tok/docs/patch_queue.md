@@ -3,7 +3,6 @@
 ## Otvoreni patčevi
 
 <!-- Nega P1/P2 — tehnički dug, LOW bugovi iz beta, potencijalne regresije -->
-- [ ] P2 `src/systems/validation.js` — Dead export `checkEcoBonusFeasibility`: eksportovana funkcija nije u manifest.json i nije importovana nigde u igri — ukloniti export ili dodati import gde ima smisla (npr. UI hint u score-screenu).
 - [ ] P2 `src/input.js` + `src/ui.js` — Escape na score/bura overlays bez feedback-a: `handleEscapeOverlay` ne reaguje kad je score overlay otvoren (ne može se dismissati), ali nema ni vizuelnog ni aria feedback-a — dodati kratki shake animaciju na overlay ili aria-live "Zatvorite igru za povratak" poruku za keyboard korisnike.
 
 <!-- Iskra P3 — brand hooks, Guncati/Kluboslavija sprega u narednih 6 meseci -->
@@ -32,3 +31,4 @@
 - [x] P1 `src/main.js` — `total_runs` divergencija: `handlePlayAgain` sada kopira `state.total_runs` u novi state (analogno prestige putu) (done 2026-09-06, commit 502bb0e)
 - [x] P2 `src/main.js` — uklonjen dead import `skipPrestige` (done 2026-09-06, commit 9c0223a)
 - [x] P2 `src/main.js` — `scoreResult.is_new_best` sada popunjen povratnom vrednošću `saveBestScore()` (done 2026-09-06, commit bc398ae)
+- [x] P2 `src/systems/validation.js` — uklonjen dead export `checkEcoBonusFeasibility` (done 2026-09-06, commit PENDING)
