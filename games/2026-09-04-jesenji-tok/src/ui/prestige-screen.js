@@ -62,11 +62,14 @@ export function showPrestigeScreen(overlay, currentBonus, score, onSelectCb, onS
   const motivationText = getPrestigeMotivationText(totalRuns, score);
   const prestigeNarrative = getPrestigeNarrative(totalRuns);
 
+  const isBadRun = score < 300;
+  const prestigeHeading = isBadRun ? 'Zemlja trpi. Brana uči.' : 'Drugi sezon.';
+
   overlay.innerHTML = `
-    <div class="prestige-screen" role="document">
+    <div class="prestige-screen ${isBadRun ? 'prestige-screen-bad-run' : ''}" role="document">
       <div class="prestige-header">
         <div class="prestige-star" aria-hidden="true">⭐</div>
-        <h2 class="prestige-heading">Prestiž</h2>
+        <h2 class="prestige-heading">${prestigeHeading}</h2>
         <p class="prestige-subtitle">
           Resetuj sezonu sa trajnim bonusom.<br>
           Odaberi mudro — ovo ostaje u svim sledećim sezonama.
@@ -126,6 +129,20 @@ export function showPrestigeScreen(overlay, currentBonus, score, onSelectCb, onS
       </div>
     </div>
   `;
+
+  // On bad run (score < 300): hide options for 3s — ambient "Brana pauza" before choice
+  const optionsFieldset = overlay.querySelector('#prestige-options');
+  const actionsEl = overlay.querySelector('.prestige-actions');
+  if (isBadRun && optionsFieldset && actionsEl) {
+    optionsFieldset.hidden = true;
+    actionsEl.hidden = true;
+    setTimeout(() => {
+      optionsFieldset.hidden = false;
+      actionsEl.hidden = false;
+      const firstOpt = overlay.querySelector('.prestige-option');
+      firstOpt?.focus();
+    }, 3000);
+  }
 
   // Wire option selection
   const optionEls = overlay.querySelectorAll('.prestige-option');
