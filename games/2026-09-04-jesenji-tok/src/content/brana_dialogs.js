@@ -208,6 +208,24 @@ export const PRESTIGE_BRANA_VOICE = {
   full_forecast: 'Naučio sam da ne igram na sreću sa kišom. Hoću celu sliku.',
 };
 
+// ─── Weather Arc Opening Monologs ────────────────────────────────────────────
+
+/**
+ * Brana's opening monolog per weather preset — shown once at session start in side panel.
+ * Not a tooltip — a single Brana sentence that sets the seasonal mood.
+ * @type {Record<string, string>}
+ */
+export const BRANA_WEATHER_OPENING = {
+  suva_jesen:
+    'Lepo vreme vara — ko sedne, propustio je prozor.',
+  kisna_jesen:
+    'Kiša te ne pita. Plan mora da je spreman i kad nebo ne pristaje.',
+  rani_mraz:
+    'Magla ne znači kraj — znači da moraš da znaš šta radiš i bez sunca.',
+  vatreno_lisce:
+    'Svaka nedelja je priča za sebe. Raspored mora da izdrži sve četiri.',
+};
+
 // ─── Task Placement Micronarratives ──────────────────────────────────────────
 
 /**
