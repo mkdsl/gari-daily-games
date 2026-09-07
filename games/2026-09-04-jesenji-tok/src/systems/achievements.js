@@ -17,7 +17,7 @@
  */
 
 import { ACHIEVEMENT_MSGS } from '../content/brana_dialogs.js';
-export { BRANA_COMBO_DIALOGS } from '../content/brana_dialogs.js';
+export { BRANA_COMBO_DIALOGS, BRANA_MODE_UNLOCKS } from '../content/brana_dialogs.js';
 import { loadTotalRuns } from '../state.js';
 
 // ─── Typedefs ──────────────────────────────────────────────────────────────────
@@ -283,6 +283,52 @@ export function getAchievementProgressText(state) {
   const count = countUnlocked(state);
   const total = ACHIEVEMENT_DEFS.length;
   return `${count}/${total} dostignuća`;
+}
+
+// ─── Brana Mode Layer Detection ───────────────────────────────────────────────
+
+/**
+ * Check which Brana Mode layer a player has reached.
+ * Layer 1: first run with all 6 tasks in-window (any weather)
+ * Layer 2: second+ prestige run with all 6 tasks in-window
+ * Layer 3: 3+ total runs, all 4 weather presets survived (tracked in state)
+ *
+ * @param {import('../state.js').GameState} state
+ * @param {import('./scoring.js').ScoreResult} scoreResult
+ * @returns {1|2|3|null} newly reached layer, or null if no new layer
+ */
+export function checkBranaModeLayer(state, scoreResult) {
+  const allInWindow = scoreResult.breakdown.every((b) => b.week !== null && b.in_window);
+  if (!allInWindow) return null;
+
+  const totalRuns = loadTotalRuns();
+
+  // Track survived presets in state
+  if (!state.survived_presets) state.survived_presets = {};
+  if (state.weather?.preset) {
+    state.survived_presets[state.weather.preset] = true;
+  }
+  const survivedCount = Object.keys(state.survived_presets).length;
+
+  // Layer 3: 3+ runs, all 4 presets survived
+  if (totalRuns >= 3 && survivedCount >= 4 && !state.brana_mode_layer) {
+    state.brana_mode_layer = 3;
+    return 3;
+  }
+
+  // Layer 2: prestige run (has prestige bonus), all in window, 2+ total runs
+  if (state.prestige_bonus && totalRuns >= 2 && (!state.brana_mode_layer || state.brana_mode_layer < 2)) {
+    state.brana_mode_layer = 2;
+    return 2;
+  }
+
+  // Layer 1: first all-in-window run
+  if (!state.brana_mode_layer) {
+    state.brana_mode_layer = 1;
+    return 1;
+  }
+
+  return null;
 }
 
 // ─── Inter-Task Easter Egg Detection ─────────────────────────────────────────

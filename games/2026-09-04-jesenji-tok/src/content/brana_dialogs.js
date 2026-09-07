@@ -266,6 +266,64 @@ export const WEATHER_AGR_ADVICE = {
     'Magla ne kvasi duboko — graditeljski rade, ali kompost traži okretanje.',
 };
 
+// ─── Brana Mode — Multi-Layer Unlock ─────────────────────────────────────────
+
+/**
+ * CSS "memory" illustrations for Brana Mode layer 2 (Run 2, all-in-window on prestige).
+ * Pure CSS descriptions — no external files. One per task.
+ * @type {Record<string, { css_class: string, caption: string }>}
+ */
+export const BRANA_MEMORY_IMAGES = {
+  micelij: {
+    css_class: 'memory-micelij',
+    caption: 'Šuma od pre — bukovač na bukvi, jutarnja rosa, Branin otac.',
+  },
+  ozimo: {
+    css_class: 'memory-ozimo',
+    caption: 'Bakin ogrtač u njivi, seme u šaci, zemlja topla ispod dlana.',
+  },
+  jezero: {
+    css_class: 'memory-jezero',
+    caption: 'Riba pod ledom, led tanak, Brana na ivici s motkom.',
+  },
+  graditeljski: {
+    css_class: 'memory-graditeljski',
+    caption: 'Suvi zid bez malte, kamen na kamenu, deda proverava rukom.',
+  },
+  rezidba: {
+    css_class: 'memory-rezidba',
+    caption: 'Škare u ruci, grana pada, voćnjak svetliji posle.',
+  },
+  kompost: {
+    css_class: 'memory-kompost',
+    caption: 'Gomila na uglu dvorišta, miris, okretanje viljuškom u pari.',
+  },
+};
+
+/**
+ * Brana Mode unlock messages per layer.
+ * @type {Record<'layer1'|'layer2'|'layer3', string>}
+ */
+export const BRANA_MODE_UNLOCKS = {
+  layer1: 'Brana pamti — svaka parcela ima svoju priču.',
+  layer2: 'Brana otvara slike — zemlja se seća duže od nas.',
+  layer3: 'Brana otkriva tajnu parcelu — nešto što niko ne zna dok ne preživi tri zime.',
+};
+
+/**
+ * Tajna parcela task data — appears as a 7th task from Brana Mode layer 3 onward.
+ * Full gameplay integration requires additional patch (tasks.js + scoring.js scope).
+ */
+export const TAJNA_PARCELA = {
+  id: 'zimska_pcelinja',
+  name: 'Zimska pčelinja priprema',
+  emoji: '🐝',
+  window_start: 2,
+  window_end: 5,
+  tooltip: 'Košnice treba zatvoriti pre prvog mraza — pčele prezimljuju u toplom i tihom. Prozor oktobar 1–novembar 1.',
+  brana_intro: 'Pčele ne traže mnogo — samo da ih ne zaboraviš kad se vreme menja.',
+};
+
 // ─── Inter-Task Combo Dialogs ─────────────────────────────────────────────────
 
 /**
