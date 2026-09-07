@@ -208,6 +208,28 @@ export const PRESTIGE_BRANA_VOICE = {
   full_forecast: 'Naučio sam da ne igram na sreću sa kišom. Hoću celu sliku.',
 };
 
+// ─── Task Placement Micronarratives ──────────────────────────────────────────
+
+/**
+ * Brana's micronarrative overlay shown when player places a task card on the grid.
+ * One short anegdota per task — appears as a Brana overlay at placement moment.
+ * @type {Record<string, string>}
+ */
+export const BRANA_TASK_STORY = {
+  micelij:
+    'Dedina šuma još uvek miriše na bukovač. On se ne seje — pamti se mesto.',
+  ozimo:
+    'Baka bi rekla: žito u zemlju pre Miholjdana i zima ne može da te iznenadi.',
+  jezero:
+    'Riba ne čeka da ti bude zgodno. Pripremiš je ti, ili zima pripremi nju.',
+  graditeljski:
+    'Zid koji se diže pre kiše stoji trideset godina. Zid koji čeka proljeće — čeka.',
+  rezidba:
+    'Voćnjak koji ne odrežeš vrati ti duplo manje sledeće proleće — drvo ne zaboravlja.',
+  kompost:
+    'Sve što baciš, vraća se. Pitanje je samo — kad i u kakvom obliku.',
+};
+
 // ─── Agroecological Weather Advice ───────────────────────────────────────────
 
 /**
