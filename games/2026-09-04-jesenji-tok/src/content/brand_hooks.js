@@ -203,3 +203,15 @@ export function getEventCTA() {
     emoji: '🎵',
   };
 }
+
+/**
+ * Build share text optimized for Instagram Stories caption (brief, visual).
+ * @param {string} rank
+ * @param {number} score
+ * @param {{ ecosystem_bonus?: boolean }} [options]
+ * @returns {string}
+ */
+export function buildStoriesShareText(rank, score, options = {}) {
+  const ecoLine = options.ecosystem_bonus ? '\n🌿 Ekosistem bonus' : '';
+  return `🌾 ${rank} · ${score}p${ecoLine}\n${BRAND.hashtags.slice(0, 2).join(' ')}\n${BRAND.share_url}`;
+}
