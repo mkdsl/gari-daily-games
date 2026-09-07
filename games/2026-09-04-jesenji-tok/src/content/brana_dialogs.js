@@ -266,6 +266,15 @@ export const WEATHER_AGR_ADVICE = {
     'Magla ne kvasi duboko — graditeljski rade, ali kompost traži okretanje.',
 };
 
+// ─── Ecosystem Trio Voice ─────────────────────────────────────────────────────
+
+/**
+ * Brana's special overlay text when all three ecosystem tasks are placed in-window.
+ * Shown once on the score screen next to the ×1.5 multiplier.
+ */
+export const BRANA_ECOSYSTEM_VOICE =
+  'Zemlja je šuma, voda i trulež. Ko razume ovo, razume zašto se ne gradi bez komposta, ne zasejava bez gljiva, ne zimi bez jezera. Sve ostalo je dekoracija.';
+
 // ─── Task Diagnostics ─────────────────────────────────────────────────────────
 
 /**

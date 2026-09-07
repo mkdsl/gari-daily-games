@@ -20,7 +20,7 @@ import {
   BURA_POST_REVEAL_DELAY,
   ANIM,
 } from '../config.js';
-import { BRANA_DIALOGS, BRANA_VERDICTS_EXTENDED, BRANA_TASK_DIAGNOSE } from '../content/brana_dialogs.js';
+import { BRANA_DIALOGS, BRANA_VERDICTS_EXTENDED, BRANA_TASK_DIAGNOSE, BRANA_ECOSYSTEM_VOICE } from '../content/brana_dialogs.js';
 import { BRAND, SCORE_CTAS, buildShareText, buildShareTitle, getCTAForScore } from '../content/brand_hooks.js';
 import { weekLabel } from '../content/tasks.js';
 import { loadBestScore } from '../state.js';
@@ -274,7 +274,14 @@ function renderScoreResult(overlay, scoreResult, state) {
           <span class="score-unit">poena</span>
         </div>
         ${isNewBest ? '<div class="score-new-best" role="status">🏆 Novi rekord!</div>' : `<div class="score-prev-best">Rekord: ${bestScore}p</div>`}
-        ${scoreResult.ecosystem_bonus ? '<div class="score-ecosystem-badge" role="status">🌿 Ekosistem bonus aktiviran! ×1.5</div>' : ''}
+        ${scoreResult.ecosystem_bonus ? `
+          <div class="score-ecosystem-badge" role="status">
+            <span class="eco-badge-icon">🌿⭐</span> Ekosistem bonus ×1.5
+          </div>
+          <div class="score-ecosystem-voice" aria-label="Brana o ekosistemu">
+            "${BRANA_ECOSYSTEM_VOICE}"
+          </div>
+        ` : ''}
       </div>
 
       <div class="score-brana-comment" aria-label="Brana kaže">
