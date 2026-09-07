@@ -351,3 +351,17 @@
   from { opacity: 0; transform: translateY(3px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ─── Overlay keyboard-feedback shake ────────────────────────────────────────
+   Applied by shakeOverlay() in ui.js when user presses Escape on a
+   non-dismissible overlay (score / bura screen). Provides visible feedback
+   that the key was received even though the overlay cannot be closed. */
+@keyframes overlay-shake {
+  0%,  100% { transform: translateX(0); }
+  20%, 60%  { transform: translateX(-8px); }
+  40%, 80%  { transform: translateX(8px); }
+}
+
+.overlay-shake {
+  animation: overlay-shake 0.4s ease;
+}

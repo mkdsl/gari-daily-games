@@ -123,9 +123,9 @@ export function handleKeyboard(event, state) {
 
   switch (event.key) {
     case 'Escape':
+      event.preventDefault();
       // Deselect current task
       if (state.selected_task_id !== null && onCardSelect) {
-        event.preventDefault();
         onCardSelect(null);
       }
       break;
