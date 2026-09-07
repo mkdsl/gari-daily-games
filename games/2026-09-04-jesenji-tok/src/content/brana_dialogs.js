@@ -207,3 +207,16 @@ export const PRESTIGE_BRANA_VOICE = {
   cheap_micelij: 'Micelij oduzima previše snage — kad košta manje, sve ostalo diše.',
   full_forecast: 'Naučio sam da ne igram na sreću sa kišom. Hoću celu sliku.',
 };
+
+// ─── Task Diagnostics ─────────────────────────────────────────────────────────
+
+/**
+ * Brana's diagnose messages for the "Šta je puklo" section on the score screen.
+ * Placeholders: {task} = task name, {week} = week number, {pts} = lost points.
+ * @type {Record<string, string>}
+ */
+export const BRANA_TASK_DIAGNOSE = {
+  skipped: '{task} nije raspoređen — {pts}p propušteno. Zemlja ne čeka.',
+  out_window: '{task} dodeljen u nedelji {week}, van prozora — {pts}p izgubljeno.',
+  hot_penalty: '{task} kažnjen toplinom ranog perioda — {pts}p izgubljeno.',
+};

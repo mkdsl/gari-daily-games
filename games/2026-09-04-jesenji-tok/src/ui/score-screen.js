@@ -20,7 +20,7 @@ import {
   BURA_POST_REVEAL_DELAY,
   ANIM,
 } from '../config.js';
-import { BRANA_DIALOGS, BRANA_VERDICTS_EXTENDED } from '../content/brana_dialogs.js';
+import { BRANA_DIALOGS, BRANA_VERDICTS_EXTENDED, BRANA_TASK_DIAGNOSE } from '../content/brana_dialogs.js';
 import { BRAND, SCORE_CTAS, buildShareText, buildShareTitle, getCTAForScore } from '../content/brand_hooks.js';
 import { weekLabel } from '../content/tasks.js';
 import { loadBestScore } from '../state.js';
@@ -314,6 +314,8 @@ function renderScoreResult(overlay, scoreResult, state) {
         ` : ''}
       </details>
 
+      ${buildWhatBrokeSummary(scoreResult)}
+
       <div class="score-weather-info">
         <span class="weather-label">Vreme ove sezone:</span>
         <span class="weather-preset">
@@ -386,6 +388,45 @@ function renderScoreResult(overlay, scoreResult, state) {
 
   // Focus play-again by default
   setTimeout(() => playAgainBtn?.focus(), 200);
+}
+
+// ─── What Broke Summary ───────────────────────────────────────────────────────
+
+/**
+ * Build the "Šta je puklo" section — top 1–2 worst-performing tasks with Brana's diagnosis.
+ * Returns empty string if no problems exist.
+ * @param {import('../systems/scoring.js').ScoreResult} scoreResult
+ * @returns {string}
+ */
+function buildWhatBrokeSummary(scoreResult) {
+  const problems = scoreResult.breakdown
+    .filter(b => b.week === null || !b.in_window || b.hot_penalty_applied)
+    .sort((a, b) => a.final - b.final)
+    .slice(0, 2);
+
+  if (problems.length === 0) return '';
+
+  const items = problems.map(b => {
+    let cause = 'out_window';
+    if (b.week === null) cause = 'skipped';
+    else if (b.hot_penalty_applied && b.in_window) cause = 'hot_penalty';
+
+    const lostPts = Math.abs(b.final) || 0;
+    const template = BRANA_TASK_DIAGNOSE[cause] ?? BRANA_TASK_DIAGNOSE.out_window;
+    const text = template
+      .replace('{task}', b.task_name)
+      .replace('{week}', String(b.week ?? '?'))
+      .replace('{pts}', String(lostPts));
+
+    return `<li class="what-broke-item">${text}</li>`;
+  }).join('');
+
+  return `
+    <div class="score-what-broke" aria-label="Šta je puklo">
+      <p class="what-broke-label">🧑‍🌾 Šta je puklo:</p>
+      <ul class="what-broke-list">${items}</ul>
+    </div>
+  `;
 }
 
 // ─── Breakdown Row Builder ────────────────────────────────────────────────────
