@@ -21,6 +21,7 @@
  */
 
 import { TASKS } from './content/tasks.js';
+import { announce } from './ui.js';
 
 // ─── Module State ──────────────────────────────────────────────────────────────
 
@@ -127,6 +128,8 @@ export function handleKeyboard(event, state) {
       if (state.selected_task_id !== null && onCardSelect) {
         event.preventDefault();
         onCardSelect(null);
+      } else if (state.phase === 'score' || state.phase === 'bura') {
+        announce('Ovaj ekran se zatvara dugmetom, ne Escape-om.');
       }
       break;
 
