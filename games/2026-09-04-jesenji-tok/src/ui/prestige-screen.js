@@ -25,7 +25,7 @@ import {
   getBonusDetailDescription,
   getPrestigeMotivationText,
 } from '../systems/prestige.js';
-import { PRESTIGE_BRANA_VOICE } from '../content/brana_dialogs.js';
+import { PRESTIGE_BRANA_VOICE, getPrestigeNarrative } from '../content/brana_dialogs.js';
 
 // ─── Module State ──────────────────────────────────────────────────────────────
 
@@ -60,6 +60,7 @@ export function showPrestigeScreen(overlay, currentBonus, score, onSelectCb, onS
 
   const currentBonusInfo = getActiveBonusInfo(currentBonus);
   const motivationText = getPrestigeMotivationText(totalRuns, score);
+  const prestigeNarrative = getPrestigeNarrative(totalRuns);
 
   overlay.innerHTML = `
     <div class="prestige-screen" role="document">
@@ -86,6 +87,11 @@ export function showPrestigeScreen(overlay, currentBonus, score, onSelectCb, onS
             <p class="current-bonus-desc">Ovo je tvoj prvi prestiž — svaka opcija je nova!</p>
           </div>
         `}
+      </div>
+
+      <div class="prestige-brana-narrative" aria-label="Brana kaže">
+        <span class="brana-narrative-avatar" aria-hidden="true">🧑‍🌾</span>
+        <p class="brana-narrative-text">"${prestigeNarrative}"</p>
       </div>
 
       <fieldset class="prestige-options" id="prestige-options"

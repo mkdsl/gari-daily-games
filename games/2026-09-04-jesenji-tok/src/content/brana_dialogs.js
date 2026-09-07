@@ -266,6 +266,20 @@ export const WEATHER_AGR_ADVICE = {
     'Magla ne kvasi duboko — graditeljski rade, ali kompost traži okretanje.',
 };
 
+// ─── Prestige Arc Narrative ───────────────────────────────────────────────────
+
+/**
+ * Brana's intro monolog on the prestige screen, varying by number of completed runs.
+ * Shown before the three bonus options appear.
+ * @param {number} runCount - total completed runs (1-indexed)
+ * @returns {string}
+ */
+export function getPrestigeNarrative(runCount) {
+  if (runCount <= 1) return 'Prošao si zimu. Nije malo.';
+  if (runCount === 2) return 'Drugi krug je drugačiji — znaš kuda vodi svaka greška.';
+  return 'Stari majstor ne planira jer mora. Planira jer je to jedini način da zemlja ostane zemlja.';
+}
+
 // ─── Ecosystem Trio Voice ─────────────────────────────────────────────────────
 
 /**
