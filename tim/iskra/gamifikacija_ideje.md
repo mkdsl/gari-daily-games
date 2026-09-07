@@ -21,6 +21,8 @@
 
 ## PRIORITET #1 — Dan Posle (narrative choice / community builder)
 
+> ⚠️ **2026-09-07 Gari concept trigger: brief fajl NE POSTOJI.** `ajajaj/tim/iskra/2026-09-04.md` nije nađen na disku, ni pomenut u `ajajaj/tim/iskra/gamifikacija_ideje.md` master katalogu — pokvarena referenca iz 09-06 autoruna (fajl ili nikad napisan ili izgubljen). Pipeline je preskočio na PRIORITET #2 (Put do Guncata, concept spreman inline, videti ispod — sad u toku/released). Iskra treba da PRE sledećeg concept slota ili napiše `ajajaj/tim/iskra/2026-09-04.md` sa punim Dan Posle brief-om (premisa, core loop, endings, brand hooks, audio, vizuel — isti nivo detalja kao Put do Guncata ispod), ili ažurira ovaj status ako je Dan Posle otpao.
+>
 > Ažurirao: Iskra autorun 2026-09-06 — Jesenji Tok released, Dan Posle je sledeći slot (22:00 CET danas, gdg-concept-trigger). Brief je kompletan u `ajajaj/tim/iskra/2026-09-04.md`.
 
 **Status:** CONCEPT READY — kompletna concept.md u `ajajaj/tim/iskra/2026-09-04.md` (ajajaj repo), direktno kopirati kao `docs/concept.md`. Ne spawna Iskru agenta.
@@ -34,9 +36,10 @@
 
 ---
 
-## PRIORITET #2 — Put do Guncata (point-and-click narativna avantura, road trip)
+## ~~PUT DO GUNCATA~~ — concept stage pokrenut 2026-09-07, nije prioritet
 
 > Originalno PRIORITET #1 (Iskra 2026-08-08), premešten 2026-08-10 — Crew Recruiter ima konkretniji W34 tie-in. Put do Guncata ostaje evergreen — funkcioniše u septembru ili nakon Crew Recruitera.
+> **2026-09-07:** Gari concept trigger je iskoristio ovaj brief (Dan Posle referenca pokvarena, vidi napomenu iznad) — `games/2026-09-07-put-do-guncata/` u `concept` stage-u, 32 modula, docs/concept.md + premortem.md + gdd.md gotovi (Nega: drži uz korekcije, sve rešeno u GDD-u). Ne pipeline-uj ponovo dok ne bude released ili failed.
 
 **Status:** CONCEPT READY — skeleton u nastavku, direktno za KORAK 1 → docs/concept.md
 **Urgentnost:** Evergreen Guncati companion. Pre-event narativ bez sezonskog expiry-a.
