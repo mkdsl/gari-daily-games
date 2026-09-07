@@ -150,31 +150,46 @@ export const EDU_LINK = {
 // ─── Rank-Specific CTAs ───────────────────────────────────────────────────────
 
 /**
- * Get the appropriate CTA for a given score.
- * Higher scores get the premium Guncati masterclass pitch.
+ * Masterclass CTA content indexed by rank tier.
+ * `overlay_text` and `overlay_subtitle` are available for richer display contexts.
+ * @type {Record<'perfect'|'solid'|'lower', { label: string, url: string, emoji: string, overlay_text: string, overlay_subtitle: string, cta_button: string }>}
+ */
+export const MASTERCLASS_CTA_BY_RANK = {
+  perfect: {
+    label: 'Ti si spreman za Guncati masterclass',
+    url: BRAND.guncati_url,
+    emoji: '🌟',
+    overlay_text: 'Ti si spreman za Guncati masterclass — prava farmerska sezona.',
+    overlay_subtitle: 'Datum: proleće 2027 · Guncati imanje · Živa nastava.',
+    cta_button: 'Rezerviši mesto →',
+  },
+  solid: {
+    label: 'Evo šta ćeš naučiti na masterclassu',
+    url: BRAND.guncati_url,
+    emoji: '🌿',
+    overlay_text: 'Evo šta ćeš naučiti na Guncati masterclassu.',
+    overlay_subtitle: 'Planiranje imanja · Micelij · Zimska priprema · Jezero.',
+    cta_button: 'Pogledaj program →',
+  },
+  lower: {
+    label: 'Masterclass je za tebe — počni ponovo i pripremi se',
+    url: BRAND.guncati_url,
+    emoji: '🌱',
+    overlay_text: 'Masterclass je za tebe — počni ponovo i pripremi se.',
+    overlay_subtitle: 'Besplatni resursi na Guncati blogu dok ne budeš spreman.',
+    cta_button: 'Nauči osnove →',
+  },
+};
+
+/**
+ * Get the appropriate masterclass CTA for a given score.
  * @param {number} score
- * @returns {{ label: string, url: string, emoji: string }}
+ * @returns {{ label: string, url: string, emoji: string, overlay_text: string, overlay_subtitle: string, cta_button: string }}
  */
 export function getCTAForScore(score) {
-  if (score >= 600) {
-    return {
-      label: 'Guncati Masterclass — sledeći nivo',
-      url: BRAND.guncati_url,
-      emoji: '🌿',
-    };
-  }
-  if (score >= 300) {
-    return {
-      label: 'Poboljšaj plan — Guncati resursi',
-      url: BRAND.guncati_url,
-      emoji: '🌱',
-    };
-  }
-  return {
-    label: 'Nauči osnove — Guncati blog',
-    url: BRAND.guncati_url,
-    emoji: '📚',
-  };
+  if (score >= 900) return MASTERCLASS_CTA_BY_RANK.perfect;
+  if (score >= 600) return MASTERCLASS_CTA_BY_RANK.solid;
+  return MASTERCLASS_CTA_BY_RANK.lower;
 }
 
 /**
