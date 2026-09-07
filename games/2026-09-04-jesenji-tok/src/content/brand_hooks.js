@@ -215,3 +215,27 @@ export function buildStoriesShareText(rank, score, options = {}) {
   const ecoLine = options.ecosystem_bonus ? '\n🌿 Ekosistem bonus' : '';
   return `🌾 ${rank} · ${score}p${ecoLine}\n${BRAND.hashtags.slice(0, 2).join(' ')}\n${BRAND.share_url}`;
 }
+
+// ─── Kluboslavija Grand Finale Cross-Promo ────────────────────────────────────
+
+/**
+ * Kluboslavija grand finale overlay config.
+ * Triggered after "Savršena sezona" rank (score >= 900).
+ * @type {{ overlay_text: string, overlay_subtitle: string, cta_button: string, url: string, emoji: string }}
+ */
+export const KLUBOSLAVIJA_FINALE_CTA = {
+  overlay_text: 'Guncati slavi — grand finale masterclass, datum TBD. Pridrži mesto.',
+  overlay_subtitle: 'Kluboslavija grand finale · Guncati imanje · Turneja 2026',
+  cta_button: 'Pridrži mesto →',
+  url: BRAND.kluboslavija_url,
+  emoji: '🎵',
+};
+
+/**
+ * Returns Kluboslavija grand finale CTA if score qualifies (>= 900), otherwise null.
+ * @param {number} score
+ * @returns {typeof KLUBOSLAVIJA_FINALE_CTA | null}
+ */
+export function getFinalePromo(score) {
+  return score >= 900 ? KLUBOSLAVIJA_FINALE_CTA : null;
+}
