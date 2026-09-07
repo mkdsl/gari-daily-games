@@ -25,6 +25,7 @@ import {
   getBonusDetailDescription,
   getPrestigeMotivationText,
 } from '../systems/prestige.js';
+import { PRESTIGE_BRANA_VOICE } from '../content/brana_dialogs.js';
 
 // ─── Module State ──────────────────────────────────────────────────────────────
 
@@ -192,6 +193,11 @@ function buildOptionHTML(opt, currentBonus) {
         ${effectSummary ? `
           <p class="prestige-opt-effect" aria-label="Efekat: ${effectSummary}">
             → ${effectSummary}
+          </p>
+        ` : ''}
+        ${PRESTIGE_BRANA_VOICE[opt.id] ? `
+          <p class="prestige-opt-brana-voice" aria-label="Brana kaže">
+            "${PRESTIGE_BRANA_VOICE[opt.id]}"
           </p>
         ` : ''}
         ${isCurrentBonus ? `

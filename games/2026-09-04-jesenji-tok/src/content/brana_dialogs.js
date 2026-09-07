@@ -194,3 +194,16 @@ export const TASK_INFO = {
     tip: 'Tri do četiri nedelje fermentacije su minimum. Počni u avgustu — kompost je spreman u oktobru. U toplim N1–N2 ima -10% poena.',
   },
 };
+
+// ─── Prestige Voice ───────────────────────────────────────────────────────────
+
+/**
+ * Brana's first-person voice for each prestige option.
+ * Shown as a subtle italic line below the option card's mechanical description.
+ * @type {Record<string, string>}
+ */
+export const PRESTIGE_BRANA_VOICE = {
+  extra_group: 'Prošle sezone mi je falilo jedno jutro. Ovaj put hoću rezervu.',
+  cheap_micelij: 'Micelij oduzima previše snage — kad košta manje, sve ostalo diše.',
+  full_forecast: 'Naučio sam da ne igram na sreću sa kišom. Hoću celu sliku.',
+};
