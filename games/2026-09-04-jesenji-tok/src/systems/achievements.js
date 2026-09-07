@@ -17,6 +17,7 @@
  */
 
 import { ACHIEVEMENT_MSGS } from '../content/brana_dialogs.js';
+export { BRANA_COMBO_DIALOGS } from '../content/brana_dialogs.js';
 import { loadTotalRuns } from '../state.js';
 
 // ─── Typedefs ──────────────────────────────────────────────────────────────────
@@ -282,4 +283,53 @@ export function getAchievementProgressText(state) {
   const count = countUnlocked(state);
   const total = ACHIEVEMENT_DEFS.length;
   return `${count}/${total} dostignuća`;
+}
+
+// ─── Inter-Task Easter Egg Detection ─────────────────────────────────────────
+
+/**
+ * Detect inter-task combo easter eggs from the final score result.
+ * Returns combo IDs that fired — callers show BRANA_COMBO_DIALOGS[id].
+ *
+ * Combos:
+ *   rezidba_jezero_adjacent     — Rezidba and Jezero placed in adjacent weeks
+ *   graditeljski_ozimo_same_week — Graditeljski and Ozimo placed in the same week
+ *   all_in_window_mixed_weather  — All tasks in-window on vatreno_lisce (mixed) weather
+ *
+ * @param {import('../state.js').GameState} state
+ * @param {import('./scoring.js').ScoreResult} scoreResult
+ * @returns {string[]} fired combo IDs
+ */
+export function checkInterTaskEasterEggs(state, scoreResult) {
+  const fired = [];
+  const byId = /** @type {Record<string, number|null>} */ ({});
+  for (const b of scoreResult.breakdown) {
+    byId[b.task_id ?? ''] = b.week;
+  }
+
+  // (1) Rezidba and Jezero in adjacent weeks (|diff| === 1)
+  const rezWeek = byId['rezidba'];
+  const jezWeek = byId['jezero'];
+  if (rezWeek !== null && rezWeek !== undefined && jezWeek !== null && jezWeek !== undefined) {
+    if (Math.abs(rezWeek - jezWeek) === 1) {
+      fired.push('rezidba_jezero_adjacent');
+    }
+  }
+
+  // (2) Graditeljski and Ozimo placed in the exact same week
+  const gradWeek = byId['graditeljski'];
+  const ozimoWeek = byId['ozimo'];
+  if (gradWeek !== null && gradWeek !== undefined && ozimoWeek !== null && ozimoWeek !== undefined) {
+    if (gradWeek === ozimoWeek) {
+      fired.push('graditeljski_ozimo_same_week');
+    }
+  }
+
+  // (3) All 6 tasks in-window on mixed/vatreno_lisce weather
+  const allInWindow = scoreResult.breakdown.every((b) => b.week !== null && b.in_window);
+  if (allInWindow && state.weather?.preset === 'vatreno_lisce') {
+    fired.push('all_in_window_mixed_weather');
+  }
+
+  return fired;
 }

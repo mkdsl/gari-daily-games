@@ -266,6 +266,22 @@ export const WEATHER_AGR_ADVICE = {
     'Magla ne kvasi duboko — graditeljski rade, ali kompost traži okretanje.',
 };
 
+// ─── Inter-Task Combo Dialogs ─────────────────────────────────────────────────
+
+/**
+ * Brana's easter-egg dialog for specific task combination achievements.
+ * Keyed by combo ID, detected by achievements.js checkInterTaskEasterEggs().
+ * @type {Record<string, string>}
+ */
+export const BRANA_COMBO_DIALOGS = {
+  rezidba_jezero_adjacent:
+    'Nož i voda — prvo odrežeš što je odslužilo, pa uliješ što treba da prezimi. Red nije slučajnost.',
+  graditeljski_ozimo_same_week:
+    'Kad sve grupe rade odjednom, nema greške — samo ritam.',
+  all_in_window_mixed_weather:
+    'Zemlja je uzela šta je njena i ostavila šta je tvoje. Eto celog sporazuma.',
+};
+
 // ─── Prestige Arc Narrative ───────────────────────────────────────────────────
 
 /**
