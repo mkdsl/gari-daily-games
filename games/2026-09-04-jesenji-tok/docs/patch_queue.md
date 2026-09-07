@@ -3,7 +3,6 @@
 ## Otvoreni patčevi
 
 <!-- Nega P1/P2 — tehnički dug, LOW bugovi iz beta, potencijalne regresije -->
-- [ ] P2 `src/input.js` + `src/ui.js` — Escape na score/bura overlays bez feedback-a: `handleEscapeOverlay` ne reaguje kad je score overlay otvoren (ne može se dismissati), ali nema ni vizuelnog ni aria feedback-a — dodati kratki shake animaciju na overlay ili aria-live "Zatvorite igru za povratak" poruku za keyboard korisnike.
 
 <!-- Iskra P3 — brand hooks, Guncati/Kluboslavija sprega u narednih 6 meseci -->
 - [ ] P3 `src/content/brand_hooks.js` — Dinamičan masterclass CTA per rang: "Savršena sezona" rang (900+) prikazuje "Ti si spreman za Guncati masterclass" overlay sa direktnim URL-om i datumom; "Solidna" rang (600-899) prikazuje "Evo šta ćeš naučiti" preview; niži rangovi prikazuju "Masterclass je za tebe — počni ponovo i pripremi se". Trenutni SCORE_CTAS su statički niz — refaktorovati u objekat indeksiran po rang tipu.
@@ -28,6 +27,7 @@
 
 ## Završeni patčevi
 
+- [x] P2 `src/input.js` + `src/ui.js` + `styles/game.css` — Escape feedback na score/bura overlay: shake animacija + aria-live poruka (done 2026-09-07, commit f49c944)
 - [x] P1 `src/main.js` — `total_runs` divergencija: `handlePlayAgain` sada kopira `state.total_runs` u novi state (analogno prestige putu) (done 2026-09-06, commit 502bb0e)
 - [x] P2 `src/main.js` — uklonjen dead import `skipPrestige` (done 2026-09-06, commit 9c0223a)
 - [x] P2 `src/main.js` — `scoreResult.is_new_best` sada popunjen povratnom vrednošću `saveBestScore()` (done 2026-09-06, commit bc398ae)
