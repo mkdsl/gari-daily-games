@@ -208,6 +208,24 @@ export const PRESTIGE_BRANA_VOICE = {
   full_forecast: 'Naučio sam da ne igram na sreću sa kišom. Hoću celu sliku.',
 };
 
+// ─── Agroecological Weather Advice ───────────────────────────────────────────
+
+/**
+ * Deeper agroecological advice per weather preset.
+ * Double-serves as in-game dialog and Guncati edu-snippet shareable on Stories.
+ * @type {Record<string, string>}
+ */
+export const WEATHER_AGR_ADVICE = {
+  kisna_jesen:
+    'Kiša u avgustu znači graditeljski radovi gotovi do 25. — uvek imam plan B.',
+  suva_jesen:
+    'Suva sezona: micelij inokulacija može i do kraja oktobra, jezero treba više vode.',
+  rani_mraz:
+    'Pazi na oklop — prognoza laže svakih 10 dana u jesen.',
+  vatreno_lisce:
+    'Magla ne kvasi duboko — graditeljski rade, ali kompost traži okretanje.',
+};
+
 // ─── Task Diagnostics ─────────────────────────────────────────────────────────
 
 /**
