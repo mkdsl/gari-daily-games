@@ -194,3 +194,184 @@ export const TASK_INFO = {
     tip: 'Tri do četiri nedelje fermentacije su minimum. Počni u avgustu — kompost je spreman u oktobru. U toplim N1–N2 ima -10% poena.',
   },
 };
+
+// ─── Prestige Voice ───────────────────────────────────────────────────────────
+
+/**
+ * Brana's first-person voice for each prestige option.
+ * Shown as a subtle italic line below the option card's mechanical description.
+ * @type {Record<string, string>}
+ */
+export const PRESTIGE_BRANA_VOICE = {
+  extra_group: 'Prošle sezone mi je falilo jedno jutro. Ovaj put hoću rezervu.',
+  cheap_micelij: 'Micelij oduzima previše snage — kad košta manje, sve ostalo diše.',
+  full_forecast: 'Naučio sam da ne igram na sreću sa kišom. Hoću celu sliku.',
+};
+
+// ─── Weather Arc Opening Monologs ────────────────────────────────────────────
+
+/**
+ * Brana's opening monolog per weather preset — shown once at session start in side panel.
+ * Not a tooltip — a single Brana sentence that sets the seasonal mood.
+ * @type {Record<string, string>}
+ */
+export const BRANA_WEATHER_OPENING = {
+  suva_jesen:
+    'Lepo vreme vara — ko sedne, propustio je prozor.',
+  kisna_jesen:
+    'Kiša te ne pita. Plan mora da je spreman i kad nebo ne pristaje.',
+  rani_mraz:
+    'Magla ne znači kraj — znači da moraš da znaš šta radiš i bez sunca.',
+  vatreno_lisce:
+    'Svaka nedelja je priča za sebe. Raspored mora da izdrži sve četiri.',
+};
+
+// ─── Task Placement Micronarratives ──────────────────────────────────────────
+
+/**
+ * Brana's micronarrative overlay shown when player places a task card on the grid.
+ * One short anegdota per task — appears as a Brana overlay at placement moment.
+ * @type {Record<string, string>}
+ */
+export const BRANA_TASK_STORY = {
+  micelij:
+    'Dedina šuma još uvek miriše na bukovač. On se ne seje — pamti se mesto.',
+  ozimo:
+    'Baka bi rekla: žito u zemlju pre Miholjdana i zima ne može da te iznenadi.',
+  jezero:
+    'Riba ne čeka da ti bude zgodno. Pripremiš je ti, ili zima pripremi nju.',
+  graditeljski:
+    'Zid koji se diže pre kiše stoji trideset godina. Zid koji čeka proljeće — čeka.',
+  rezidba:
+    'Voćnjak koji ne odrežeš vrati ti duplo manje sledeće proleće — drvo ne zaboravlja.',
+  kompost:
+    'Sve što baciš, vraća se. Pitanje je samo — kad i u kakvom obliku.',
+};
+
+// ─── Agroecological Weather Advice ───────────────────────────────────────────
+
+/**
+ * Deeper agroecological advice per weather preset.
+ * Double-serves as in-game dialog and Guncati edu-snippet shareable on Stories.
+ * @type {Record<string, string>}
+ */
+export const WEATHER_AGR_ADVICE = {
+  kisna_jesen:
+    'Kiša u avgustu znači graditeljski radovi gotovi do 25. — uvek imam plan B.',
+  suva_jesen:
+    'Suva sezona: micelij inokulacija može i do kraja oktobra, jezero treba više vode.',
+  rani_mraz:
+    'Pazi na oklop — prognoza laže svakih 10 dana u jesen.',
+  vatreno_lisce:
+    'Magla ne kvasi duboko — graditeljski rade, ali kompost traži okretanje.',
+};
+
+// ─── Brana Mode — Multi-Layer Unlock ─────────────────────────────────────────
+
+/**
+ * CSS "memory" illustrations for Brana Mode layer 2 (Run 2, all-in-window on prestige).
+ * Pure CSS descriptions — no external files. One per task.
+ * @type {Record<string, { css_class: string, caption: string }>}
+ */
+export const BRANA_MEMORY_IMAGES = {
+  micelij: {
+    css_class: 'memory-micelij',
+    caption: 'Šuma od pre — bukovač na bukvi, jutarnja rosa, Branin otac.',
+  },
+  ozimo: {
+    css_class: 'memory-ozimo',
+    caption: 'Bakin ogrtač u njivi, seme u šaci, zemlja topla ispod dlana.',
+  },
+  jezero: {
+    css_class: 'memory-jezero',
+    caption: 'Riba pod ledom, led tanak, Brana na ivici s motkom.',
+  },
+  graditeljski: {
+    css_class: 'memory-graditeljski',
+    caption: 'Suvi zid bez malte, kamen na kamenu, deda proverava rukom.',
+  },
+  rezidba: {
+    css_class: 'memory-rezidba',
+    caption: 'Škare u ruci, grana pada, voćnjak svetliji posle.',
+  },
+  kompost: {
+    css_class: 'memory-kompost',
+    caption: 'Gomila na uglu dvorišta, miris, okretanje viljuškom u pari.',
+  },
+};
+
+/**
+ * Brana Mode unlock messages per layer.
+ * @type {Record<'layer1'|'layer2'|'layer3', string>}
+ */
+export const BRANA_MODE_UNLOCKS = {
+  layer1: 'Brana pamti — svaka parcela ima svoju priču.',
+  layer2: 'Brana otvara slike — zemlja se seća duže od nas.',
+  layer3: 'Brana otkriva tajnu parcelu — nešto što niko ne zna dok ne preživi tri zime.',
+};
+
+/**
+ * Tajna parcela task data — appears as a 7th task from Brana Mode layer 3 onward.
+ * Full gameplay integration requires additional patch (tasks.js + scoring.js scope).
+ */
+export const TAJNA_PARCELA = {
+  id: 'zimska_pcelinja',
+  name: 'Zimska pčelinja priprema',
+  emoji: '🐝',
+  window_start: 2,
+  window_end: 5,
+  tooltip: 'Košnice treba zatvoriti pre prvog mraza — pčele prezimljuju u toplom i tihom. Prozor oktobar 1–novembar 1.',
+  brana_intro: 'Pčele ne traže mnogo — samo da ih ne zaboraviš kad se vreme menja.',
+};
+
+// ─── Inter-Task Combo Dialogs ─────────────────────────────────────────────────
+
+/**
+ * Brana's easter-egg dialog for specific task combination achievements.
+ * Keyed by combo ID, detected by achievements.js checkInterTaskEasterEggs().
+ * @type {Record<string, string>}
+ */
+export const BRANA_COMBO_DIALOGS = {
+  rezidba_jezero_adjacent:
+    'Nož i voda — prvo odrežeš što je odslužilo, pa uliješ što treba da prezimi. Red nije slučajnost.',
+  graditeljski_ozimo_same_week:
+    'Kad sve grupe rade odjednom, nema greške — samo ritam.',
+  all_in_window_mixed_weather:
+    'Zemlja je uzela šta je njena i ostavila šta je tvoje. Eto celog sporazuma.',
+};
+
+// ─── Prestige Arc Narrative ───────────────────────────────────────────────────
+
+/**
+ * Brana's intro monolog on the prestige screen, varying by number of completed runs.
+ * Shown before the three bonus options appear.
+ * @param {number} runCount - total completed runs (1-indexed)
+ * @returns {string}
+ */
+export function getPrestigeNarrative(runCount) {
+  if (runCount <= 1) return 'Prošao si zimu. Nije malo.';
+  if (runCount === 2) return 'Drugi krug je drugačiji — znaš kuda vodi svaka greška.';
+  return 'Stari majstor ne planira jer mora. Planira jer je to jedini način da zemlja ostane zemlja.';
+}
+
+// ─── Ecosystem Trio Voice ─────────────────────────────────────────────────────
+
+/**
+ * Brana's special overlay text when all three ecosystem tasks are placed in-window.
+ * Shown once on the score screen next to the ×1.5 multiplier.
+ */
+export const BRANA_ECOSYSTEM_VOICE =
+  'Zemlja je šuma, voda i trulež. Ko razume ovo, razume zašto se ne gradi bez komposta, ne zasejava bez gljiva, ne zimi bez jezera. Sve ostalo je dekoracija.';
+
+// ─── Task Diagnostics ─────────────────────────────────────────────────────────
+
+/**
+ * Brana's diagnose messages for the "Šta je puklo" section on the score screen.
+ * Placeholders: {task} = task name, {week} = week number, {pts} = lost points.
+ * @type {Record<string, string>}
+ */
+export const BRANA_TASK_DIAGNOSE = {
+  skipped: '{task} nije raspoređen — {pts}p propušteno. Zemlja ne čeka.',
+  out_window: '{task} dodeljen u nedelji {week}, van prozora — {pts}p izgubljeno.',
+  hot_penalty: '{task} kažnjen toplinom ranog perioda — {pts}p izgubljeno.',
+};

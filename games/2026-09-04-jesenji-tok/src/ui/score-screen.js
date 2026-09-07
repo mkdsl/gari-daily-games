@@ -20,7 +20,7 @@ import {
   BURA_POST_REVEAL_DELAY,
   ANIM,
 } from '../config.js';
-import { BRANA_DIALOGS, BRANA_VERDICTS_EXTENDED } from '../content/brana_dialogs.js';
+import { BRANA_DIALOGS, BRANA_VERDICTS_EXTENDED, BRANA_TASK_DIAGNOSE, BRANA_ECOSYSTEM_VOICE } from '../content/brana_dialogs.js';
 import { BRAND, SCORE_CTAS, buildShareText, buildShareTitle, getCTAForScore } from '../content/brand_hooks.js';
 import { weekLabel } from '../content/tasks.js';
 import { loadBestScore } from '../state.js';
@@ -115,6 +115,10 @@ function renderBuraAnimation(overlay, state, scoreResult) {
     if (currentWeek > totalWeeks) {
       clearInterval(buraInterval);
       buraInterval = null;
+      if (scoreResult.total < 300) {
+        const subtitle = overlay.querySelector('.bura-subtitle');
+        if (subtitle) subtitle.textContent = 'Zemlja beleži svaki propušten prozor.';
+      }
       // Pause then show final score screen
       setTimeout(() => {
         // Play end fanfare based on score tier
@@ -173,6 +177,13 @@ function renderBuraAnimation(overlay, state, scoreResult) {
     weekEl.hidden = false;
     weekEl.classList.add('bura-reveal');
 
+    if (scoreResult.total >= 900) {
+      weekEl.querySelectorAll('.in-win').forEach(el => {
+        el.classList.add('bura-cell-pulse');
+        setTimeout(() => el.classList.remove('bura-cell-pulse'), 600);
+      });
+    }
+
     // Update progress
     if (progressBar) {
       progressBar.style.width = `${(currentWeek / totalWeeks) * 100}%`;
@@ -191,8 +202,14 @@ function renderBuraAnimation(overlay, state, scoreResult) {
     weekEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
+  const weekDelay = scoreResult.total >= 900
+    ? Math.floor(BURA_WEEK_DELAY * 0.6)
+    : scoreResult.total < 300
+      ? Math.floor(BURA_WEEK_DELAY * 1.6)
+      : BURA_WEEK_DELAY;
+
   setTimeout(() => {
-    buraInterval = setInterval(revealNextWeek, BURA_WEEK_DELAY);
+    buraInterval = setInterval(revealNextWeek, weekDelay);
   }, BURA_INITIAL_DELAY);
 }
 
@@ -257,7 +274,14 @@ function renderScoreResult(overlay, scoreResult, state) {
           <span class="score-unit">poena</span>
         </div>
         ${isNewBest ? '<div class="score-new-best" role="status">🏆 Novi rekord!</div>' : `<div class="score-prev-best">Rekord: ${bestScore}p</div>`}
-        ${scoreResult.ecosystem_bonus ? '<div class="score-ecosystem-badge" role="status">🌿 Ekosistem bonus aktiviran! ×1.5</div>' : ''}
+        ${scoreResult.ecosystem_bonus ? `
+          <div class="score-ecosystem-badge" role="status">
+            <span class="eco-badge-icon">🌿⭐</span> Ekosistem bonus ×1.5
+          </div>
+          <div class="score-ecosystem-voice" aria-label="Brana o ekosistemu">
+            "${BRANA_ECOSYSTEM_VOICE}"
+          </div>
+        ` : ''}
       </div>
 
       <div class="score-brana-comment" aria-label="Brana kaže">
@@ -296,6 +320,8 @@ function renderScoreResult(overlay, scoreResult, state) {
           </div>
         ` : ''}
       </details>
+
+      ${buildWhatBrokeSummary(scoreResult)}
 
       <div class="score-weather-info">
         <span class="weather-label">Vreme ove sezone:</span>
@@ -369,6 +395,45 @@ function renderScoreResult(overlay, scoreResult, state) {
 
   // Focus play-again by default
   setTimeout(() => playAgainBtn?.focus(), 200);
+}
+
+// ─── What Broke Summary ───────────────────────────────────────────────────────
+
+/**
+ * Build the "Šta je puklo" section — top 1–2 worst-performing tasks with Brana's diagnosis.
+ * Returns empty string if no problems exist.
+ * @param {import('../systems/scoring.js').ScoreResult} scoreResult
+ * @returns {string}
+ */
+function buildWhatBrokeSummary(scoreResult) {
+  const problems = scoreResult.breakdown
+    .filter(b => b.week === null || !b.in_window || b.hot_penalty_applied)
+    .sort((a, b) => a.final - b.final)
+    .slice(0, 2);
+
+  if (problems.length === 0) return '';
+
+  const items = problems.map(b => {
+    let cause = 'out_window';
+    if (b.week === null) cause = 'skipped';
+    else if (b.hot_penalty_applied && b.in_window) cause = 'hot_penalty';
+
+    const lostPts = Math.abs(b.final) || 0;
+    const template = BRANA_TASK_DIAGNOSE[cause] ?? BRANA_TASK_DIAGNOSE.out_window;
+    const text = template
+      .replace('{task}', b.task_name)
+      .replace('{week}', String(b.week ?? '?'))
+      .replace('{pts}', String(lostPts));
+
+    return `<li class="what-broke-item">${text}</li>`;
+  }).join('');
+
+  return `
+    <div class="score-what-broke" aria-label="Šta je puklo">
+      <p class="what-broke-label">🧑‍🌾 Šta je puklo:</p>
+      <ul class="what-broke-list">${items}</ul>
+    </div>
+  `;
 }
 
 // ─── Breakdown Row Builder ────────────────────────────────────────────────────

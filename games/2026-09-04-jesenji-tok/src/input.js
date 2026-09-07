@@ -124,9 +124,9 @@ export function handleKeyboard(event, state) {
 
   switch (event.key) {
     case 'Escape':
+      event.preventDefault();
       // Deselect current task
       if (state.selected_task_id !== null && onCardSelect) {
-        event.preventDefault();
         onCardSelect(null);
       } else if (state.phase === 'score' || state.phase === 'bura') {
         announce('Ovaj ekran se zatvara dugmetom, ne Escape-om.');

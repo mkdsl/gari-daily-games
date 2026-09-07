@@ -77,12 +77,32 @@ export function initUI() {
     }
   });
 
-  // Close tooltip on Escape
+  // Close tooltip on Escape; shake score/bura overlay if it's visible
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && tooltipEl && !tooltipEl.hidden) {
       hideTooltip();
+    } else if (e.key === 'Escape') {
+      const overlayEl = document.getElementById('overlay');
+      if (overlayEl && !overlayEl.hidden) {
+        e.preventDefault();
+        announce('Igra je završena. Pritisnite R za restart ili osvežite stranicu.');
+        shakeOverlay(overlayEl);
+      }
     }
   });
+}
+
+/**
+ * Briefly shake an overlay element to give keyboard feedback.
+ * Adds `.overlay-shake` CSS class for 400 ms, then removes it.
+ * @param {HTMLElement} el
+ */
+function shakeOverlay(el) {
+  el.classList.remove('overlay-shake'); // reset if already animating
+  // Force reflow so removing+re-adding the class restarts the animation
+  void el.offsetWidth;
+  el.classList.add('overlay-shake');
+  setTimeout(() => el.classList.remove('overlay-shake'), 400);
 }
 
 // ─── HUD Update ───────────────────────────────────────────────────────────────

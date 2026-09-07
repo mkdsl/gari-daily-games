@@ -15,7 +15,7 @@
  *   4. Legacy execCommand copy
  */
 
-import { BRAND, buildShareText, buildShareTitle } from './content/brand_hooks.js';
+import { BRAND, buildShareText, buildShareTitle, buildStoriesShareText } from './content/brand_hooks.js';
 
 // ─── Main Share Entry ─────────────────────────────────────────────────────────
 
@@ -178,6 +178,149 @@ export function removeShareCard(card) {
   if (card && card.parentNode) {
     card.parentNode.removeChild(card);
   }
+}
+
+// ─── Stories Card (9:16 Portrait) ────────────────────────────────────────────
+
+/**
+ * Build a 9:16 portrait share card for Instagram Stories.
+ * Score + rank in top third; ecosystem status icons in middle; Guncati wordmark in bottom strip.
+ * Card is appended off-screen; caller must remove it after html2canvas capture.
+ * @param {import('./systems/scoring.js').ScoreResult} scoreResult
+ * @param {import('./state.js').GameState} state
+ * @returns {HTMLElement}
+ */
+export function buildStoriesCard(scoreResult, state) {
+  const ecoTasks = [
+    { key: 'micelij', label: 'Micelij' },
+    { key: 'jezero', label: 'Jezero' },
+    { key: 'kompost', label: 'Kompost' },
+  ];
+  const placedTaskIds = scoreResult.breakdown
+    .filter((b) => b.week !== null && b.in_window)
+    .map((b) => b.task_id ?? b.task_name?.toLowerCase());
+
+  const ecoRows = ecoTasks.map((t) => {
+    const done = placedTaskIds.some((id) => id && id.includes(t.key));
+    return `<div style="display:flex;align-items:center;gap:8px;margin:4px 0;font-size:15px">
+      <span style="color:${done ? '#8bc34a' : '#5a6b50'};font-size:18px">${done ? '✓' : '○'}</span>
+      <span style="color:${done ? '#d4e8a0' : '#6b7d60'}">${t.label}</span>
+    </div>`;
+  }).join('');
+
+  const card = document.createElement('div');
+  card.className = 'share-card share-card-stories';
+  card.setAttribute('aria-hidden', 'true');
+  card.style.cssText = [
+    'width:405px',
+    'height:720px',
+    'background:#1a2415',
+    'color:#f5e6c8',
+    'font-family:system-ui,sans-serif',
+    'position:absolute',
+    'left:-9999px',
+    'top:0',
+    'z-index:-1',
+    'display:flex',
+    'flex-direction:column',
+    'overflow:hidden',
+  ].join(';');
+
+  card.innerHTML = `
+    <!-- top third: score + rank -->
+    <div style="flex:0 0 240px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:#1f2e18">
+      <div style="font-size:56px;line-height:1">${scoreResult.rank_emoji}</div>
+      <div style="font-size:22px;font-weight:700;color:${scoreResult.rank_color ?? '#f5a623'};margin:8px 0 4px;text-align:center">${scoreResult.rank_label}</div>
+      <div style="font-size:72px;font-weight:800;color:#f5a623;line-height:1">${scoreResult.total}</div>
+      <div style="font-size:13px;color:#a89880;letter-spacing:1px">POENA</div>
+    </div>
+
+    <!-- middle: ecosystem status -->
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px 32px;background:#1a2415">
+      <div style="font-size:12px;color:#6b7d60;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">Ekosistem</div>
+      ${ecoRows}
+      ${scoreResult.ecosystem_bonus ? `
+        <div style="margin-top:10px;padding:6px 10px;background:#2d3d20;border-radius:6px;font-size:13px;color:#8bc34a">
+          🌿 Ekosistem bonus × 1.5
+        </div>
+      ` : ''}
+      ${state.weather?.preset_name ? `
+        <div style="margin-top:16px;font-size:12px;color:#6b7d60">
+          ${state.weather.preset_emoji ?? ''} ${state.weather.preset_name}
+        </div>
+      ` : ''}
+    </div>
+
+    <!-- bottom strip: Guncati wordmark -->
+    <div style="flex:0 0 80px;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#0f1a0b;border-top:1px solid #2d3d20">
+      <div style="font-size:13px;color:#8bc34a;font-weight:600;letter-spacing:1px">🌿 GUNCATI</div>
+      <div style="font-size:11px;color:#4a5e40;margin-top:2px">${BRAND.guncati_url}</div>
+      <div style="font-size:10px;color:#3a4e30;margin-top:1px">🌾 Jesenji Tok · Gari Daily Games</div>
+    </div>
+  `;
+
+  document.body.appendChild(card);
+  return card;
+}
+
+/**
+ * Share a Stories-format card via Web Share API or clipboard fallback.
+ * @param {import('./systems/scoring.js').ScoreResult} scoreResult
+ * @param {import('./state.js').GameState} state
+ * @returns {Promise<{ success: boolean, method: string }>}
+ */
+export async function shareStories(scoreResult, state) {
+  const text = buildStoriesShareText(
+    scoreResult.rank_label,
+    scoreResult.total,
+    { ecosystem_bonus: scoreResult.ecosystem_bonus }
+  );
+  const url = BRAND.share_url;
+
+  let screenshotBlob = null;
+  const card = buildStoriesCard(scoreResult, state);
+  if (typeof window.html2canvas === 'function') {
+    try {
+      const canvas = await window.html2canvas(card, {
+        backgroundColor: '#1a2415',
+        scale: 2,
+        useCORS: false,
+        allowTaint: false,
+        logging: false,
+      });
+      screenshotBlob = await canvasToBlob(canvas, 'image/png', 0.92);
+    } catch (e) {
+      console.warn('[JT Stories] html2canvas failed:', e?.message ?? e);
+    }
+  }
+  removeShareCard(card);
+
+  if (navigator.share && screenshotBlob) {
+    try {
+      const file = new File([screenshotBlob], 'jesenji-tok-stories.png', { type: 'image/png' });
+      const canShareFile = navigator.canShare?.({ files: [file] });
+      await navigator.share({
+        title: 'Moja jesenja sezona',
+        text,
+        url,
+        files: canShareFile ? [file] : undefined,
+      });
+      return { success: true, method: 'web-share-stories' };
+    } catch (e) {
+      if (e?.name === 'AbortError') return { success: false, method: 'cancelled' };
+    }
+  }
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: 'Moja jesenja sezona', text, url });
+      return { success: true, method: 'web-share-text' };
+    } catch (e) {
+      if (e?.name === 'AbortError') return { success: false, method: 'cancelled' };
+    }
+  }
+
+  return copyToClipboard(`${text}\n${url}`);
 }
 
 // ─── Platform-Specific Text Builders ─────────────────────────────────────────

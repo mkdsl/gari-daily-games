@@ -32,6 +32,7 @@
  * @property {boolean} blocked_by_rain- Whether rain blocks this task
  * @property {string}  emoji          - Emoji icon
  * @property {string}  tooltip_edu    - Short educational blurb (for grid cell tooltip)
+ * @property {string}  edu_deep_link  - Guncati blog/video URL for "Saznaj više →" tooltip CTA
  */
 
 // ─── Task Definitions ─────────────────────────────────────────────────────────
@@ -51,6 +52,7 @@ export const TASKS = [
     emoji: '🍄',
     tooltip_edu:
       'Bukovač inokulacija traži hlad i vreme za rast. Van avgusta–oktobra, micelijum ne stiže pre mraza. Berba novembar.',
+    edu_deep_link: 'https://guncati.rs/blog/kako-inokulisem-bukovac',
   },
   {
     id: 'ozimo',
@@ -65,6 +67,7 @@ export const TASKS = [
     emoji: '🌾',
     tooltip_edu:
       'Seje se do 20. septembra — posle toga zemlja se hladi, klijanje kasni, prinos pada. Proleće žetva.',
+    edu_deep_link: 'https://guncati.rs/blog/setva-ozimog-na-guncatiju',
   },
   {
     id: 'jezero',
@@ -79,6 +82,7 @@ export const TASKS = [
     emoji: '🐟',
     tooltip_edu:
       'Ribe prezimljuju bolje uz oktobarska/novembarska aeracija. Bez pripreme, kiseonik pada pod ledom.',
+    edu_deep_link: 'https://guncati.rs/blog/zimska-priprema-jezera-ribe-i-filtracija',
   },
   {
     id: 'graditeljski',
@@ -93,6 +97,7 @@ export const TASKS = [
     emoji: '🪨',
     tooltip_edu:
       'Kamen i malta ne drže u vlazi. Suvi prozor avgusta–septembra je jedini pravi; dockan kišni rad pravi pukotine do proleća.',
+    edu_deep_link: 'https://guncati.rs/blog/suvozid-zidamo-pre-kise',
   },
   {
     id: 'rezidba',
@@ -107,6 +112,7 @@ export const TASKS = [
     emoji: '✂️',
     tooltip_edu:
       'Reže se posle prvih mrazeva, pre dubokog mirovanja. Prozor sept 15 – okt 31. Ranije ili dockan = prinos −20% idućeg proleća.',
+    edu_deep_link: 'https://guncati.rs/blog/vocnjak-posle-leta',
   },
   {
     id: 'kompost',
@@ -121,6 +127,7 @@ export const TASKS = [
     emoji: '♻️',
     tooltip_edu:
       'Fermentacija je aktivna dok temperatura drži. Posle 20. oktobra mikrobi usporavaju — prolećno gnojivo gubi moć.',
+    edu_deep_link: 'https://guncati.rs/blog/zimski-kompost-sta-bacam-sta-ne',
   },
 ];
 

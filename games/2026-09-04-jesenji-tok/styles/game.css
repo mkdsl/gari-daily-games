@@ -351,3 +351,26 @@
   from { opacity: 0; transform: translateY(3px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ─── Overlay keyboard-feedback shake ────────────────────────────────────────
+   Applied by shakeOverlay() in ui.js when user presses Escape on a
+   non-dismissible overlay (score / bura screen). Provides visible feedback
+   that the key was received even though the overlay cannot be closed. */
+@keyframes overlay-shake {
+  0%,  100% { transform: translateX(0); }
+  20%, 60%  { transform: translateX(-8px); }
+  40%, 80%  { transform: translateX(8px); }
+}
+
+.overlay-shake {
+  animation: overlay-shake 0.4s ease;
+}
+
+/* ─── Bura cell pulse (dobar run ≥ 900) ─── */
+@keyframes bura-cell-pulse {
+  0%, 100% { background-color: transparent; }
+  40% { background-color: rgba(139, 195, 74, 0.25); }
+}
+.bura-cell-pulse {
+  animation: bura-cell-pulse 0.6s ease;
+}

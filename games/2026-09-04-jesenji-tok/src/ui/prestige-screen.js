@@ -25,6 +25,7 @@ import {
   getBonusDetailDescription,
   getPrestigeMotivationText,
 } from '../systems/prestige.js';
+import { PRESTIGE_BRANA_VOICE, getPrestigeNarrative } from '../content/brana_dialogs.js';
 
 // ─── Module State ──────────────────────────────────────────────────────────────
 
@@ -59,12 +60,16 @@ export function showPrestigeScreen(overlay, currentBonus, score, onSelectCb, onS
 
   const currentBonusInfo = getActiveBonusInfo(currentBonus);
   const motivationText = getPrestigeMotivationText(totalRuns, score);
+  const prestigeNarrative = getPrestigeNarrative(totalRuns);
+
+  const isBadRun = score < 300;
+  const prestigeHeading = isBadRun ? 'Zemlja trpi. Brana uči.' : 'Drugi sezon.';
 
   overlay.innerHTML = `
-    <div class="prestige-screen" role="document">
+    <div class="prestige-screen ${isBadRun ? 'prestige-screen-bad-run' : ''}" role="document">
       <div class="prestige-header">
         <div class="prestige-star" aria-hidden="true">⭐</div>
-        <h2 class="prestige-heading">Prestiž</h2>
+        <h2 class="prestige-heading">${prestigeHeading}</h2>
         <p class="prestige-subtitle">
           Resetuj sezonu sa trajnim bonusom.<br>
           Odaberi mudro — ovo ostaje u svim sledećim sezonama.
@@ -85,6 +90,11 @@ export function showPrestigeScreen(overlay, currentBonus, score, onSelectCb, onS
             <p class="current-bonus-desc">Ovo je tvoj prvi prestiž — svaka opcija je nova!</p>
           </div>
         `}
+      </div>
+
+      <div class="prestige-brana-narrative" aria-label="Brana kaže">
+        <span class="brana-narrative-avatar" aria-hidden="true">🧑‍🌾</span>
+        <p class="brana-narrative-text">"${prestigeNarrative}"</p>
       </div>
 
       <fieldset class="prestige-options" id="prestige-options"
@@ -119,6 +129,20 @@ export function showPrestigeScreen(overlay, currentBonus, score, onSelectCb, onS
       </div>
     </div>
   `;
+
+  // On bad run (score < 300): hide options for 3s — ambient "Brana pauza" before choice
+  const optionsFieldset = overlay.querySelector('#prestige-options');
+  const actionsEl = overlay.querySelector('.prestige-actions');
+  if (isBadRun && optionsFieldset && actionsEl) {
+    optionsFieldset.hidden = true;
+    actionsEl.hidden = true;
+    setTimeout(() => {
+      optionsFieldset.hidden = false;
+      actionsEl.hidden = false;
+      const firstOpt = overlay.querySelector('.prestige-option');
+      firstOpt?.focus();
+    }, 3000);
+  }
 
   // Wire option selection
   const optionEls = overlay.querySelectorAll('.prestige-option');
@@ -192,6 +216,11 @@ function buildOptionHTML(opt, currentBonus) {
         ${effectSummary ? `
           <p class="prestige-opt-effect" aria-label="Efekat: ${effectSummary}">
             → ${effectSummary}
+          </p>
+        ` : ''}
+        ${PRESTIGE_BRANA_VOICE[opt.id] ? `
+          <p class="prestige-opt-brana-voice" aria-label="Brana kaže">
+            "${PRESTIGE_BRANA_VOICE[opt.id]}"
           </p>
         ` : ''}
         ${isCurrentBonus ? `
