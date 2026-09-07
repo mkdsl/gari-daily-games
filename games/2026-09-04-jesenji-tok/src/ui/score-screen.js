@@ -115,6 +115,10 @@ function renderBuraAnimation(overlay, state, scoreResult) {
     if (currentWeek > totalWeeks) {
       clearInterval(buraInterval);
       buraInterval = null;
+      if (scoreResult.total < 300) {
+        const subtitle = overlay.querySelector('.bura-subtitle');
+        if (subtitle) subtitle.textContent = 'Zemlja beleži svaki propušten prozor.';
+      }
       // Pause then show final score screen
       setTimeout(() => {
         // Play end fanfare based on score tier
@@ -173,6 +177,13 @@ function renderBuraAnimation(overlay, state, scoreResult) {
     weekEl.hidden = false;
     weekEl.classList.add('bura-reveal');
 
+    if (scoreResult.total >= 900) {
+      weekEl.querySelectorAll('.in-win').forEach(el => {
+        el.classList.add('bura-cell-pulse');
+        setTimeout(() => el.classList.remove('bura-cell-pulse'), 600);
+      });
+    }
+
     // Update progress
     if (progressBar) {
       progressBar.style.width = `${(currentWeek / totalWeeks) * 100}%`;
@@ -191,8 +202,14 @@ function renderBuraAnimation(overlay, state, scoreResult) {
     weekEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
+  const weekDelay = scoreResult.total >= 900
+    ? Math.floor(BURA_WEEK_DELAY * 0.6)
+    : scoreResult.total < 300
+      ? Math.floor(BURA_WEEK_DELAY * 1.6)
+      : BURA_WEEK_DELAY;
+
   setTimeout(() => {
-    buraInterval = setInterval(revealNextWeek, BURA_WEEK_DELAY);
+    buraInterval = setInterval(revealNextWeek, weekDelay);
   }, BURA_INITIAL_DELAY);
 }
 

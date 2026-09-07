@@ -365,3 +365,12 @@
 .overlay-shake {
   animation: overlay-shake 0.4s ease;
 }
+
+/* ─── Bura cell pulse (dobar run ≥ 900) ─── */
+@keyframes bura-cell-pulse {
+  0%, 100% { background-color: transparent; }
+  40% { background-color: rgba(139, 195, 74, 0.25); }
+}
+.bura-cell-pulse {
+  animation: bura-cell-pulse 0.6s ease;
+}
