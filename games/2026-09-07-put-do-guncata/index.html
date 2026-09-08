@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1c1c28">
+  <meta property="og:title" content="Put do Guncata">
+  <meta property="og:description" content="5 etapa · 1 vožnja · Pripremljenost se meri. Putuj od Beograda do Guncatija.">
+  <meta property="og:image" content="https://mkdsl.github.io/gari-daily-games/games/2026-09-07-put-do-guncata/og.png">
+  <meta property="og:url" content="https://mkdsl.github.io/gari-daily-games/games/2026-09-07-put-do-guncata/">
+  <title>Put do Guncata</title>
+
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/game.css">
+  <link rel="stylesheet" href="styles/ui.css">
+
+  <style>
+    /* Minimal inline bootstrap — ensures visibility before CSS loads */
+    body { margin: 0; background: #1c1c28; color: #e8dcc8; font-family: system-ui, sans-serif; }
+    #loading {
+      position: fixed; inset: 0; display: flex; align-items: center;
+      justify-content: center; background: #1c1c28; z-index: 9999;
+      font-size: 1.2rem; color: #f5d87a; letter-spacing: 0.05em;
+      transition: opacity 0.4s ease;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+<div id="loading">▶ Učitavam put...</div>
+
+<div id="game-container">
+  <div id="hud" role="banner" aria-label="Status igre">
+    <!-- Populated by ui.js -->
+  </div>
+  <main id="game-stage" role="main" aria-live="polite" aria-atomic="false">
+    <!-- Stages mount/unmount here -->
+  </main>
+</div>
+
+<script type="module">
+  import { initAudio } from './src/audio.js';
+
+  // Hide loading screen once module graph resolves
+  document.addEventListener('DOMContentLoaded', () => {
+    const loading = document.getElementById('loading');
+    if (loading) {
+      setTimeout(() => loading.classList.add('hidden'), 200);
+    }
+  });
+
+  // Lazy AudioContext init on first user gesture (browser policy)
+  document.addEventListener('pointerdown', function _initAudioOnce() {
+    initAudio();
+    document.removeEventListener('pointerdown', _initAudioOnce);
+  }, { once: false, passive: true });
+</script>
+
+<script type="module" src="src/main.js"></script>
+
+</body>
+</html>

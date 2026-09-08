@@ -5,7 +5,7 @@
   "description": "Igrač putuje od Beograda do Guncatija u 5 etapa — svaka etapa je drugačija mini-igra, izbori na putu oblikuju dolazak na jezero.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-09-07-put-do-guncata/",
   "brand_serves": ["guncati", "kluboslavija"],
-  "stage": "concept",
+  "stage": "impl",
   "status": "in_progress",
   "modules": {
     "src/main.js": "Bootstrap, etapa progression, wire modules, session start/restart",
@@ -35,6 +35,7 @@
     "src/content/aforizmi.js": "Pera Period aforizam pool (radio overlay + etapa 5 finale)",
     "src/content/brand_hooks.js": "Branine akvakulturne linije (sve 3 rute, puna verzija na jednoj) + Guncati Grand crosslink copy",
     "src/content/branching-tree.js": "Etapa3→4→5 grananje definicije, route×etapa4 mapiranje, epilog fragment matrica",
+    "src/share.js": "Cross-event glue — Pasoš SDK stamp, shareResult wrapper",
     "src/audio.js": "Web Audio API: city/highway/radio/šuma/jezero ambient + noćna/večernja varijanta",
     "styles/base.css": "Layout, mobile-first, scene container",
     "styles/game.css": "Etapa background color-scheme tranzicije (fade/wipe), sprite stilovi",
@@ -42,8 +43,8 @@
     "styles/theme.css": "Paleta varijable, etapa-po-etapa color-scheme mapiranje, dan/noć varijante"
   },
   "line_counts": {
-    "total_js": 0,
-    "total_css": 0
+    "total_js": 4586,
+    "total_css": 1251
   },
   "beta_score": null,
   "beta_score_iter2": null,

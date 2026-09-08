@@ -1,0 +1,137 @@
+/**
+ * theme.css — CSS custom properties
+ * Paleta varijable, etapa-specifični tokeni
+ * "Put do Guncata" — Guncati × Kluboslavija brand igra
+ */
+
+:root {
+  /* === Globalna paleta === */
+  --stage-bg:          #1c1c28;
+  --stage-accent:      #f5d87a;
+  --stage-text:        #e8dcc8;
+  --stage-surface:     #2a2a3a;
+  --stage-surface-2:   #353548;
+  --stage-border:      rgba(245, 216, 122, 0.18);
+
+  /* Semantičke boje */
+  --color-success:     #5a9a4a;
+  --color-success-bg:  rgba(90, 154, 74, 0.15);
+  --color-warning:     #f5a030;
+  --color-warning-bg:  rgba(245, 160, 48, 0.15);
+  --color-danger:      #e85a3a;
+  --color-danger-bg:   rgba(232, 90, 58, 0.15);
+
+  /* Tekst */
+  --color-text-primary:   #e8dcc8;
+  --color-text-secondary: rgba(232, 220, 200, 0.65);
+  --color-text-muted:     rgba(232, 220, 200, 0.38);
+  --color-text-on-accent: #1c1c28;
+
+  /* Tipografija */
+  --font-main:    'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-display: 'Segoe UI Semibold', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'Cascadia Code', 'Fira Code', monospace;
+
+  /* Spacing */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  40px;
+  --space-2xl: 64px;
+
+  /* Tranzicije */
+  --transition-stage:  0.6s ease;
+  --transition-quick:  0.2s ease;
+  --transition-medium: 0.35s ease;
+
+  /* Z-index slojevi */
+  --z-scene:    1;
+  --z-hud:      100;
+  --z-overlay:  200;
+  --z-dialog:   300;
+  --z-modal:    400;
+  --z-toast:    500;
+
+  /* Border radius */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-pill: 999px;
+
+  /* Senke */
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.25);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.4);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.6);
+  --shadow-glow-accent: 0 0 16px rgba(245, 216, 122, 0.3);
+}
+
+/* === Etapa-specifični tokeni === */
+/* Setuju se JS-om na body[data-stage="N"] */
+
+/* Etapa 1 — Beograd, grad, noć */
+body[data-stage="1"] {
+  --etapa-bg:       #12121e;
+  --etapa-accent:   #a78aff;
+  --etapa-overlay:  rgba(18, 18, 30, 0.82);
+  --etapa-road:     #2a2a3a;
+  --etapa-sky:      #0a0a18;
+}
+
+/* Etapa 2 — Autoput, jutro */
+body[data-stage="2"] {
+  --etapa-bg:       #1a1e2e;
+  --etapa-accent:   #f5a030;
+  --etapa-overlay:  rgba(26, 30, 46, 0.78);
+  --etapa-road:     #2c3044;
+  --etapa-sky:      #1e2850;
+}
+
+/* Etapa 3 — Raskrsnica, dan */
+body[data-stage="3"] {
+  --etapa-bg:       #1e2a18;
+  --etapa-accent:   #7db85a;
+  --etapa-overlay:  rgba(30, 42, 24, 0.75);
+  --etapa-road:     #2e3c28;
+  --etapa-sky:      #3a5a38;
+}
+
+/* Etapa 4 — Šuma, popodne */
+body[data-stage="4"] {
+  --etapa-bg:       #141e10;
+  --etapa-accent:   #5a9a4a;
+  --etapa-overlay:  rgba(20, 30, 16, 0.82);
+  --etapa-road:     #1e2c1a;
+  --etapa-sky:      #223820;
+}
+
+/* Etapa 5 — Jezero, dolazak */
+body[data-stage="5"] {
+  --etapa-bg:       #1a2e28;
+  --etapa-accent:   #f5d87a;
+  --etapa-overlay:  rgba(26, 46, 40, 0.78);
+  --etapa-road:     #2a4438;
+  --etapa-sky:      #1e3a30;
+}
+
+/* Night mode (prestige) — tamlja varijanta */
+body.night-mode {
+  --etapa-bg: color-mix(in srgb, var(--etapa-bg, #1c1c28) 60%, #000 40%);
+  --etapa-sky: color-mix(in srgb, var(--etapa-sky, #0a0a18) 60%, #000 40%);
+  --stage-bg: color-mix(in srgb, #1c1c28 60%, #000 40%);
+}
+
+/* Score bucket klase za end screen */
+body[data-bucket="green"] {
+  --bucket-color: var(--color-success);
+  --bucket-bg:    var(--color-success-bg);
+}
+body[data-bucket="yellow"] {
+  --bucket-color: var(--color-warning);
+  --bucket-bg:    var(--color-warning-bg);
+}
+body[data-bucket="humor"] {
+  --bucket-color: var(--color-danger);
+  --bucket-bg:    var(--color-danger-bg);
+}

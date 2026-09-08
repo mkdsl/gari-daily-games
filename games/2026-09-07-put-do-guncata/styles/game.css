@@ -1,0 +1,326 @@
+/**
+ * game.css — etapa background color-scheme, tranzicije, sprite stilovi
+ * Fade/wipe tranzicije između etapa, obstacle sprites, scene backgrounds
+ */
+
+/* === Stage tranzicije === */
+.stage-enter {
+  animation: stageFadeIn 0.6s ease forwards;
+}
+
+.stage-exit {
+  animation: stageFadeOut 0.4s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes stageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes stageFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* Wipe tranzicija (lateralna) */
+.stage-wipe-enter {
+  animation: stageWipeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.stage-wipe-exit {
+  animation: stageWipeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes stageWipeIn {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+
+@keyframes stageWipeOut {
+  from { clip-path: inset(0 0% 0 0); }
+  to   { clip-path: inset(0 0 0 100%); }
+}
+
+/* === Screen shake === */
+.screen-shake {
+  animation: screenShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes screenShake {
+  10%, 90%  { transform: translateX(-2px); }
+  20%, 80%  { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60%  { transform: translateX(4px); }
+  100%      { transform: translateX(0); }
+}
+
+/* === Etapa background scenes === */
+
+/* Baze pozadina po etapama — dopunjene iz theme.css var-ova */
+body[data-stage="1"] #scene-bg {
+  background: linear-gradient(
+    180deg,
+    var(--etapa-sky, #0a0a18) 0%,
+    var(--etapa-bg, #12121e) 60%,
+    var(--etapa-road, #2a2a3a) 100%
+  );
+}
+
+body[data-stage="2"] #scene-bg {
+  background: linear-gradient(
+    180deg,
+    var(--etapa-sky, #1e2850) 0%,
+    var(--etapa-bg, #1a1e2e) 55%,
+    var(--etapa-road, #2c3044) 100%
+  );
+}
+
+body[data-stage="3"] #scene-bg {
+  background: linear-gradient(
+    180deg,
+    var(--etapa-sky, #3a5a38) 0%,
+    var(--etapa-bg, #1e2a18) 50%,
+    var(--etapa-road, #2e3c28) 100%
+  );
+}
+
+body[data-stage="4"] #scene-bg {
+  background: linear-gradient(
+    180deg,
+    var(--etapa-sky, #223820) 0%,
+    var(--etapa-bg, #141e10) 45%,
+    var(--etapa-road, #1e2c1a) 100%
+  );
+}
+
+body[data-stage="5"] #scene-bg {
+  background: linear-gradient(
+    180deg,
+    var(--etapa-sky, #1e3a30) 0%,
+    var(--etapa-bg, #1a2e28) 50%,
+    #0e1e18 100%
+  );
+}
+
+/* Scene background layer */
+#scene-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transition: background var(--transition-stage, 0.6s ease);
+}
+
+/* === CSS Sprite shapes — obstacle div-ovi === */
+
+.obstacle {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Kamen/prepreka na putu */
+.obstacle--rock {
+  width: 32px;
+  height: 22px;
+  background: #4a4a5e;
+  border-radius: 50% 50% 48% 52% / 60% 60% 40% 40%;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.08),
+              0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* Krava na putu */
+.obstacle--cow {
+  width: 48px;
+  height: 36px;
+  background: #c8b090;
+  border-radius: 40% 60% 55% 45% / 50% 50% 60% 40%;
+  position: relative;
+}
+.obstacle--cow::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 6px;
+  width: 20px;
+  height: 14px;
+  background: #c8b090;
+  border-radius: 50% 50% 30% 30%;
+}
+
+/* Radovi (putni čunj) */
+.obstacle--cone {
+  width: 20px;
+  height: 32px;
+  background: linear-gradient(180deg, #f5a030 0%, #f5a030 50%, #fff 50%, #fff 62%, #f5a030 62%);
+  clip-path: polygon(15% 100%, 85% 100%, 70% 0%, 30% 0%);
+}
+
+/* Kamion */
+.obstacle--truck {
+  width: 56px;
+  height: 28px;
+  background: #3a5a7a;
+  border-radius: 4px 8px 4px 4px;
+  position: relative;
+}
+.obstacle--truck::before {
+  content: '';
+  position: absolute;
+  right: -14px;
+  top: 2px;
+  width: 14px;
+  height: 22px;
+  background: #4a7a9a;
+  border-radius: 0 6px 4px 0;
+}
+.obstacle--truck::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 6px;
+  width: 10px;
+  height: 10px;
+  background: #222;
+  border-radius: 50%;
+  box-shadow: 28px 0 0 #222;
+}
+
+/* === Drum particles (road markings) === */
+.road-line {
+  position: absolute;
+  width: 4px;
+  height: 24px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 2px;
+}
+
+/* === Jezero (etapa5 background element) === */
+.lake-surface {
+  position: absolute;
+  bottom: 0;
+  left: -10%;
+  right: -10%;
+  height: 40%;
+  background: linear-gradient(
+    180deg,
+    rgba(42, 122, 74, 0.4) 0%,
+    rgba(26, 78, 60, 0.7) 60%,
+    rgba(14, 40, 30, 0.9) 100%
+  );
+  border-radius: 40% 40% 0 0;
+  overflow: hidden;
+}
+
+.lake-ripple {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  animation: lakeRipple 3s ease-out infinite;
+}
+
+.lake-ripple:nth-child(2) { animation-delay: 1s; width: 120px; height: 28px; }
+.lake-ripple:nth-child(3) { animation-delay: 2s; width: 60px;  height: 15px; }
+
+@keyframes lakeRipple {
+  0%   { opacity: 0.5; transform: translateX(-50%) scale(0.8); }
+  100% { opacity: 0;   transform: translateX(-50%) scale(1.6); }
+}
+
+/* === Stars (etapa1 i night mode) === */
+.star-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
+  animation: starTwinkle var(--twinkle-dur, 3s) ease-in-out infinite;
+  animation-delay: var(--twinkle-delay, 0s);
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.8; }
+  50%      { opacity: 0.2; }
+}
+
+/* === Putni znakovi (etapa3) === */
+.road-sign {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.road-sign__board {
+  background: #f5f5e8;
+  border: 3px solid #8a7a4a;
+  border-radius: 4px;
+  padding: 8px 14px;
+  color: #2a2a1a;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.road-sign__post {
+  width: 6px;
+  height: 32px;
+  background: #8a7a4a;
+}
+
+/* === Progress vizuelni element === */
+.route-marker {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.route-marker__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-text-muted, rgba(232,220,200,0.38));
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.route-marker__dot.active {
+  background: var(--stage-accent, #f5d87a);
+  transform: scale(1.3);
+}
+
+.route-marker__dot.done {
+  background: var(--color-success, #5a9a4a);
+}
+
+/* === Night mode overlay tint === */
+body.night-mode #scene-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 30, 0.35);
+  pointer-events: none;
+}
