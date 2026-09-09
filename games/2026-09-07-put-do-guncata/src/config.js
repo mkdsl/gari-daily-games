@@ -71,7 +71,7 @@ export const OBSTACLE_TYPES = [
 
 // Prestige
 export const PRESTIGE = {
-  RUNS_REQUIRED: 1,
+  RUNS_REQUIRED: 3,
 };
 
 // Score buckets

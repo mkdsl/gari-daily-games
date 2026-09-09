@@ -3,7 +3,9 @@
  */
 import { loadState, initState, saveState, state, computeScore, getScoreBucket } from './state.js';
 import { init as routerInit, registerScene, goToStage, onGameEnd } from './router.js';
-import { attachTo } from './input.js';
+import './input.js';
+import { initHUD } from './ui.js';
+import { resetBranching } from './systems/branching.js';
 import { mount as mountEtapa1, unmount as unmountEtapa1 } from './entities/scenes/etapa1-parking.js';
 import { mount as mountEtapa2, unmount as unmountEtapa2 } from './entities/scenes/etapa2-autoput.js';
 import { mount as mountEtapa3, unmount as unmountEtapa3 } from './entities/scenes/etapa3-skretanje.js';
@@ -20,6 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   routerInit(gameStage);
 
+  const gameContainer = document.getElementById('game-container');
+  if (gameContainer) {
+    initHUD(gameContainer, { pripremljenost: state.pripremljenost ?? 0, currentEtapa: 0 });
+  }
+
   // Register all scenes
   registerScene(0, { mount: mountMenu, unmount: (c) => { c.innerHTML = ''; } });
   registerScene(1, { mount: mountEtapa1, unmount: unmountEtapa1 });
@@ -31,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   registerScene(5, {
     mount: (container, st, cbs) => {
       import('./entities/scenes/etapa5-dolazak.js')
-        .then(mod => { container.innerHTML = ''; mod.mount(container, st, cbs); })
+        .then(mod => { container.innerHTML = ''; mod.mount(container, st, { ...cbs, onPlayAgain: cbs.onEnd || cbs.next }); })
         .catch(() => mountFallbackEnd(container, st, cbs));
       return () => {};
     },
@@ -112,6 +119,7 @@ function mountMenu(container, st, callbacks) {
   startBtn.addEventListener('pointerdown', () => {
     const night = state.isNightMode;
     initState();
+    resetBranching();
     state.isNightMode = night;
     state.isRunning = true;
     saveState();

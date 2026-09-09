@@ -101,7 +101,8 @@ export function mount(container, state, callbacks) {
       setTimeout(() => { eventOvl.hidden = true; }, 2200);
     },
     onEventResult: (correct, delta) => {
-      scoreEl.textContent = state.pripremljenost;
+      scoreEl.style.color = delta >= 0 ? '#4caf50' : '#f44336';
+      setTimeout(() => { scoreEl.style.color = ''; }, 800);
       _floatDelta(container, delta);
     },
     onComplete: (data) => {
