@@ -9,9 +9,16 @@ const CARD_H = 315;
 
 /** Boje po score bucketu */
 const BUCKET_COLORS = {
-  green:  { bg: '#1a2e28', accent: '#5a9a4a', icon: '🌿' },
-  yellow: { bg: '#2a1e10', accent: '#f5a030', icon: '⏰' },
-  humor:  { bg: '#2a1018', accent: '#e85a3a', icon: '🗺️' }
+  green:  { accent: '#5a9a4a', icon: '🌿' },
+  yellow: { accent: '#f5a030', icon: '⏰' },
+  humor:  { accent: '#e85a3a', icon: '🗺️' }
+};
+
+/** Background po ruti — igrač deli identitet "kojim putem sam išao" */
+const ROUTE_BG = {
+  brze:        { bg: '#1c2130', stripe: '#2d3450', label: '⚡ Brzi put' },        // beton/asfalt
+  slikovitije: { bg: '#1e2010', stripe: '#2e3018', label: '🌾 Slikovitiji put' }, // žito/polje
+  sigurnije:   { bg: '#0f2018', stripe: '#162a1e', label: '🌲 Sigurniji put' }    // šuma
 };
 
 // ============================================================
@@ -25,7 +32,8 @@ const BUCKET_COLORS = {
  */
 export function renderShareCard(canvas, cardState) {
   const { score, scoreBucket = 'green', route = 'sigurnije' } = cardState;
-  const colors = BUCKET_COLORS[scoreBucket] || BUCKET_COLORS.green;
+  const colors = BUCKET_COLORS[scoreBucket] || BUCKET_COLORS.yellow;
+  const routeBg = ROUTE_BG[route] || ROUTE_BG.sigurnije;
 
   canvas.width  = CARD_W;
   canvas.height = CARD_H;
@@ -33,14 +41,25 @@ export function renderShareCard(canvas, cardState) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  // Background
-  ctx.fillStyle = colors.bg;
+  // Background — ruta određuje paletu
+  ctx.fillStyle = routeBg.bg;
   ctx.fillRect(0, 0, CARD_W, CARD_H);
+
+  // Subtle diagonal stripe texture (route identity)
+  ctx.fillStyle = routeBg.stripe;
+  for (let x = -CARD_H; x < CARD_W + CARD_H; x += 40) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x + CARD_H, CARD_H);
+    ctx.lineTo(x + CARD_H + 16, CARD_H);
+    ctx.lineTo(x + 16, 0);
+    ctx.fill();
+  }
 
   // Gradient overlay
   const grad = ctx.createLinearGradient(0, 0, CARD_W, CARD_H);
-  grad.addColorStop(0, 'rgba(0,0,0,0.15)');
-  grad.addColorStop(1, 'rgba(0,0,0,0.45)');
+  grad.addColorStop(0, 'rgba(0,0,0,0.2)');
+  grad.addColorStop(1, 'rgba(0,0,0,0.55)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, CARD_W, CARD_H);
 
@@ -79,10 +98,9 @@ export function renderShareCard(canvas, cardState) {
   ctx.fillText('Stigao sam do Guncatija!', 36, CARD_H - 68);
 
   // Ruta info
-  const routeLabels = { brze: '⚡ Brzi put', slikovitije: '🌿 Slikovitiji put', sigurnije: '🛡️ Sigurniji put' };
   ctx.fillStyle = 'rgba(232,220,200,0.5)';
   ctx.font = '400 13px "Segoe UI", system-ui, sans-serif';
-  ctx.fillText(routeLabels[route] || '', 36, CARD_H - 48);
+  ctx.fillText(routeBg.label, 36, CARD_H - 48);
 
   // === URL ===
   ctx.fillStyle = 'rgba(232,220,200,0.4)';
