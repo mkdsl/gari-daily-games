@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   registerScene(5, {
     mount: (container, st, cbs) => {
       import('./entities/scenes/etapa5-dolazak.js')
-        .then(mod => { container.innerHTML = ''; mod.mount(container, st, { ...cbs, onPlayAgain: cbs.onEnd || cbs.next }); })
+        .then(mod => { container.innerHTML = ''; mod.mount(container, st, { ...cbs, onPlayAgain: cbs.onEnd || cbs.next || (() => console.warn('[put-do-guncata] onPlayAgain: both onEnd and next are nullish')) }); })
         .catch(() => mountFallbackEnd(container, st, cbs));
       return () => {};
     },
