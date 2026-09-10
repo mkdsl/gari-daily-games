@@ -6,8 +6,8 @@
 - [x] P1 `index.html` + `src/ui.js` — ukloniti statički `#hud` div iz HTML-a (duplikat ID, invalid HTML), `initHUD` ga već dinamički kreira (done 2026-09-10, no-op — hud div bio uklonjen u polish commit de3822d)
 - [x] P1 `src/main.js` — dodati guard log kad su `cbs.onEnd` i `cbs.next` oba nullish u `onPlayAgain` fallback-u (silent no-op edge case) (done 2026-09-10, commit e8ccbe8)
 - [x] P2 `src/systems/branching.js` + `src/state.js` — `resetBranching()` se poziva samo u `startBtn` click-u, dodati i u `initState()` da bude idempotentan (done 2026-09-10, commit 88e425c)
-- [x] P2 `src/input.js` — `detachFrom` eksportovan ali niko ga ne zove; kompletirati par `attachTo`/`detachFrom` u `router.js` stage tranzicijama da se spreči potencijalni listener leak (done 2026-09-10, commit TBD)
-- [ ] P2 `src/entities/scenes/etapa2-autoput.js` — color-hint na `scoreEl` maskira ali ne rešava konfuziju (igrač vidi "+3" i isti broj); dodati kratki tooltip/aria-live "biće uračunato na kraju etape"
+- [x] P2 `src/input.js` — `detachFrom` eksportovan ali niko ga ne zove; kompletirati par `attachTo`/`detachFrom` u `router.js` stage tranzicijama da se spreči potencijalni listener leak (done 2026-09-10, commit 7497c27)
+- [x] P2 `src/entities/scenes/etapa2-autoput.js` — color-hint na `scoreEl` maskira ali ne rešava konfuziju (igrač vidi "+3" i isti broj); dodati kratki tooltip/aria-live "biće uračunato na kraju etape" (done 2026-09-10, commit TBD)
 
 ### Iskra (P3 — brand hooks)
 - [ ] P3 `src/content/brand_hooks.js` — masterclass CTA prikazan samo za zeleni score bucket; proširiti na sve tri varijante sa sezonskim copy-em za celogodišnji Guncati masterclass funnel

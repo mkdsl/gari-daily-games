@@ -57,6 +57,7 @@ export function mount(container, state, callbacks) {
         <div class="e2-score-wrap">
           <div class="e2-hud-label">Pripr.</div>
           <div id="e2-score" class="e2-score">${state.pripremljenost}</div>
+          <span id="e2-score-hint" aria-live="polite" aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap"></span>
         </div>
       </div>
 
@@ -68,8 +69,9 @@ export function mount(container, state, callbacks) {
   const clockEl   = container.querySelector('#e2-clock');
   const fuelBar   = container.querySelector('#e2-fuel-bar');
   const fuelTrack = container.querySelector('#e2-fuel-track');
-  const scoreEl   = container.querySelector('#e2-score');
-  const eventOvl  = container.querySelector('#e2-event-overlay');
+  const scoreEl      = container.querySelector('#e2-score');
+  const scoreHintEl  = container.querySelector('#e2-score-hint');
+  const eventOvl     = container.querySelector('#e2-event-overlay');
 
   attachRadio(container.querySelector('#e2-radio'), 9000);
 
@@ -104,6 +106,10 @@ export function mount(container, state, callbacks) {
       scoreEl.style.color = delta >= 0 ? '#4caf50' : '#f44336';
       setTimeout(() => { scoreEl.style.color = ''; }, 800);
       _floatDelta(container, delta);
+      if (scoreHintEl) {
+        scoreHintEl.textContent = 'biće uračunato na kraju etape';
+        setTimeout(() => { scoreHintEl.textContent = ''; }, 1500);
+      }
     },
     onComplete: (data) => {
       const d = finalizeEtapa2(data);
