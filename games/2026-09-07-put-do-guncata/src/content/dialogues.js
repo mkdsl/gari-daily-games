@@ -117,6 +117,54 @@ export function getEtapa3SignThought(sign, score) {
 }
 
 /**
+ * Unutrašnji monolog umornog vozača po vrsti prepreke u etapi 4.
+ * Daje osobnost šumskoj sekciji bez dodirivanja mehaničkih sistema.
+ * Tip: zamor, crni humor, resignacija.
+ * @type {Record<string, string[]>}
+ */
+export const ETAPA4_OBSTACLE_MONOLOG = {
+  /** Mehanički problem — šaraf, guma, kvar */
+  saraf: [
+    'Zvuk koji ne želiš da čuješ u šumi.',
+    'Tri minute na strani puta. Tri minute kojih nema na sat-u.'
+  ],
+  /** Makadamski blato, teški teren */
+  blato: [
+    'Auto ulazi u blato kao da je znao da ovo dolazi.',
+    'Gasiti gas ili pritisnuti? Vozač koji ne zna — zapne. Znaš.'
+  ],
+  /** Grana na putu, prepreka */
+  grana: [
+    'Grana. Debela. Niko je nije pomerio jer niko ovde ne prolazi.',
+    'Ruke na kori drveta, jutarnja rosa. Makneš. Nastaviš.'
+  ],
+  /** Kamion / kolona na šumskom putu */
+  kolona: [
+    'Neko ispred tebe ne žuri. Šuma za to nije kriva.',
+    'Truba ne pomaže. Strpljenje — možda.'
+  ],
+  /** Radovi / prepreka na putu */
+  radovi: [
+    'Čovek sa zastavom. Uvek čovek sa zastavom.',
+    'Čekaš. Autoput nema ovu strpljivost — ali ima ovu grešku.'
+  ],
+  /** Mirna vožnja bez prepreke — introspekcija */
+  mir: [
+    'Šuma ćuti. Auto se kreće. Misli dolaze kad ih ne zoveš.',
+    'Kilometar bez ničega. Najredji luksuz na ovom putu.'
+  ]
+};
+
+/**
+ * Vraća monolog linije za datu vrstu prepreke u etapi 4.
+ * @param {string} obstacleType - 'saraf'|'blato'|'grana'|'kolona'|'radovi'|'mir'
+ * @returns {string[]}
+ */
+export function getEtapa4ObstacleMonolog(obstacleType) {
+  return ETAPA4_OBSTACLE_MONOLOG[obstacleType] || ETAPA4_OBSTACLE_MONOLOG.mir;
+}
+
+/**
  * Vraća intro linije za etapu.
  * Za etapu 5 — po score bucketu.
  * @param {number} etapa - 1–5
