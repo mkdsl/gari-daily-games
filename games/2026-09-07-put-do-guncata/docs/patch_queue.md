@@ -12,7 +12,7 @@
 ### Iskra (P3 — brand hooks)
 - [x] P3 `src/content/brand_hooks.js` + `src/ui/end-screen.js` — masterclass CTA prikazan samo za zeleni score bucket; proširiti na sve tri varijante sa sezonskim copy-em za celogodišnji Guncati masterclass funnel (done 2026-09-10, commit 7bdc2d3)
 - [x] P3 `src/ui/end-screen.js` — dodati "bio sam tamo" path via localStorage bridge sa Guncati Grand/Pasošem za povratnike, pretvara igru u keepsake ne samo teaser (done 2026-09-10, commit 44b1944)
-- [ ] P3 `src/content/aforizmi.js` — dodati event-tied Pera Period linije za svaku Kluboslavija stanicu turneje (Avala, Štrand, Sarajevo, Guncati) u radio overlay pool
+- [x] P3 `src/content/aforizmi.js` — dodati event-tied Pera Period linije za svaku Kluboslavija stanicu turneje (Avala, Štrand, Sarajevo, Guncati) u radio overlay pool (done 2026-09-10, commit TBD)
 - [ ] P3 `src/share.js` + `src/content/brand_hooks.js` — event-specifičan share copy za Guncati Grand finalni period (sept-okt 2026), svaki share postaje direktan promo
 
 ### Dule (P2/P3 — retention i emocionalna kriva)

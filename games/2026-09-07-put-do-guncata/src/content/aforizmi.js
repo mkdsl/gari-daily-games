@@ -53,20 +53,49 @@ export function getFinaleAforizam(route, bucket) {
 }
 
 /**
+ * Event-tied aforizmi po Kluboslavija stanici — Pera Period edicija turneje 2026.
+ * Svaka stanica ima 2-3 linije koje ulaze i u opšti radio pool.
+ * @type {Record<string, string[]>}
+ */
+export const KLUBOSLAVIJA_AFORIZMI = {
+  avala: [
+    'Avala gleda sa vrha. DJ set, sat-dva. Sve ostalo je beg od rutine.',
+    'Trčanje gore-dole je sport. Trčanje bez cilja je šetnja. Razlika je zvučnik.'
+  ],
+  strandFest: [
+    'Štrand ne pravi pravila. Štrand čuva sećanja.',
+    'Peščani sat se ne okreće na Štrandu — tamo vreme stoji i gleda u vodu.'
+  ],
+  sarajevo: [
+    'Sarajevo pamti. Ne sve — ali dovoljno da te nauči nešto kad prođeš.',
+    'Ćevap i muzika su isti jezik, samo drugačiji alfabet.'
+  ],
+  guncati: [
+    'Guncati nije destinacija. Guncati je dokaz da si stigao.',
+    'Jezero se ne otključava ključem — otključava se kilometrima.',
+    'Na kraju svakog pravog puta čeka neko ko nije znao da te čeka.'
+  ]
+};
+
+/** Svi event aforizmi spljošteni u jedan niz — za upadanje u radio pool */
+const _EVENT_FLAT = Object.values(KLUBOSLAVIJA_AFORIZMI).flat();
+
+/**
  * Vraća slučajni radio aforizam.
  * Može da isključi već prikazane (po indeksu).
  * @param {Set<number>} [shownIndices]
  * @returns {{ text: string, index: number }}
  */
 export function getRandomRadioAforizam(shownIndices = new Set()) {
-  const available = RADIO_AFORIZMI
+  const pool = [...RADIO_AFORIZMI, ..._EVENT_FLAT];
+  const available = pool
     .map((text, index) => ({ text, index }))
     .filter(({ index }) => !shownIndices.has(index));
 
   if (available.length === 0) {
     // Sve prikazano — resetuj i kreni iznova
-    const index = Math.floor(Math.random() * RADIO_AFORIZMI.length);
-    return { text: RADIO_AFORIZMI[index], index };
+    const index = Math.floor(Math.random() * pool.length);
+    return { text: pool[index], index };
   }
 
   const picked = available[Math.floor(Math.random() * available.length)];
