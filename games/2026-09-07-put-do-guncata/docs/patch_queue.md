@@ -18,7 +18,7 @@
 ### Dule (P2/P3 — retention i emocionalna kriva)
 - [x] P2 `src/ui/end-screen.js` + `src/systems/prestige.js` — end-screen ne komunicira koliko varijanti igrač još nije video (ruta×dan/noć kombinatorika), dodati vizuelni signal tipa "Ostale ti 2 rute + noćna vožnja" da prestige unlock bude pull, ne push (done 2026-09-10, commit 93e669c)
 - [x] P2 `src/ui/end-screen.js` — epilog nema personalizovan trag koji igrač prepoznaje kao "moj run": ubaciti jedan konkretan detalj puta (ime rute + aforizam koji je čuo na radiju etape 1–2) u zaključnu karticu da dolazak oseća earned, ne generički (done 2026-09-10, commit 72c8e29)
-- [x] P2 `src/ui/share-card.js` — share karta uvek koristi jezero paletu bez obzira na rutu — personalizovati background po etapa-3 izboru (beton za brzinu / žito za slikovitost / šuma za sigurnost) jer igrač deli identitet "kojim putem sam išao", ne samo score (done 2026-09-10, commit TBD)
+- [x] P2 `src/ui/share-card.js` — share karta uvek koristi jezero paletu bez obzira na rutu — personalizovati background po etapa-3 izboru (beton za brzinu / žito za slikovitost / šuma za sigurnost) jer igrač deli identitet "kojim putem sam išao", ne samo score (done 2026-09-10, commit 648799f)
 - [ ] P3 `src/content/dialogues.js` — etapa 2 (~3 min, najduža) nema mid-journey emocionalni break: dodati kratak unutrašnji monolog aktiviran prvom promenom radio stanice koji spušta napon i daje psihološki "predah" pre random eventa, bez promene mehanike
 - [ ] P3 `src/systems/branching.js` + `src/content/branching-tree.js` — etapa 4 počinje bez reference na izbor iz etape 3, što slabi osećaj posledica: dodati jednu "naknadnu misao" liniju na ulasku u etapu 4 koja direktno imenuje izabranu rutu ("Brži put — ali niko nije rekao da je i ravniji.")
 
