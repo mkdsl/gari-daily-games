@@ -23,7 +23,7 @@
 - [x] P3 `src/systems/branching.js` + `src/content/branching-tree.js` — etapa 4 počinje bez reference na izbor iz etape 3, što slabi osećaj posledica: dodati jednu "naknadnu misao" liniju na ulasku u etapu 4 koja direktno imenuje izabranu rutu ("Brži put — ali niko nije rekao da je i ravniji.") (done 2026-09-10, commit b2bb5fb)
 
 ### Sine (P3 — narativna ekspanzija)
-- [ ] P3 `src/content/aforizmi.js` — ruta-specifičan Pera Period aforizam pool za radio overlay (svaka od 3 rute u etapi 2 čuje drugačije citate, svaki run je unikatna "radio emisija")
+- [x] P3 `src/content/aforizmi.js` — ruta-specifičan Pera Period aforizam pool za radio overlay (svaka od 3 rute u etapi 2 čuje drugačije citate, svaki run je unikatna "radio emisija") (done 2026-09-10, commit TBD)
 - [ ] P3 `src/content/dialogues.js` — etapa 3: unutrašnje misli pred svaku tablu (9 varijanti — 3 table × 3 raspoloženja), igrač oseća dramsku dilemu a ne samo UI labelu
 - [ ] P3 `src/content/branching-tree.js` — "putničke beleške" micro-tekst na kraju etape 4 koji zatvara narativni luk odabrane rute pre epiloga, daje koheziju celom run-u
 - [ ] P3 `src/content/brand_hooks.js` — sezonske varijante Braninih linija (mart/jun/septembar) da igra funkcioniše kao evergreen Guncati companion, ne samo avgustovska promo

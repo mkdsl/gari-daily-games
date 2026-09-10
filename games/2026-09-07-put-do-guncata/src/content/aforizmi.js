@@ -81,13 +81,39 @@ export const KLUBOSLAVIJA_AFORIZMI = {
 const _EVENT_FLAT = Object.values(KLUBOSLAVIJA_AFORIZMI).flat();
 
 /**
+ * Mood-specifičan aforizam pool za etapa 2 radio overlay.
+ * Svaka mood promena (Rock/Jazz/Folk) donosi drugačije citate —
+ * svaki run je unikatna "radio emisija".
+ * @type {Record<string, string[]>}
+ */
+export const MOOD_AFORIZMI = {
+  rock: [
+    'Gitara nikad ne traži dozvolu. Put je isti princip.',
+    'Buka je samo signal bez pravca. Muzika zna kuda ide.',
+    'Rock postoji da podsetiti da si živ — put to potvrdi.'
+  ],
+  jazz: [
+    'Jazz nema plan. Put sa planom je ipak bolji.',
+    'Improvizacija je strategija koja zvuči dobro. Na sceni. Na putu — manje.',
+    'Neke note su tu samo da bi sledeća imala smisao.'
+  ],
+  folk: [
+    'Folk pamti. Pesme iz kola traju duže od asfalata.',
+    'Neko je tu pesmu pevao pešice. Ti je pušteš sa sto na sat.',
+    'Tradicionalno znači: nije prvi put da neko ovo prolazi.'
+  ]
+};
+
+/**
  * Vraća slučajni radio aforizam.
- * Može da isključi već prikazane (po indeksu).
+ * Mood filter: kad je aktivan, 50% šansa da tekst dođe iz mood-specifičnog pool-a.
  * @param {Set<number>} [shownIndices]
+ * @param {string|null} [mood] - 'rock'|'jazz'|'folk'|null
  * @returns {{ text: string, index: number }}
  */
-export function getRandomRadioAforizam(shownIndices = new Set()) {
-  const pool = [...RADIO_AFORIZMI, ..._EVENT_FLAT];
+export function getRandomRadioAforizam(shownIndices = new Set(), mood = null) {
+  const moodLines = mood && MOOD_AFORIZMI[mood] ? MOOD_AFORIZMI[mood] : [];
+  const pool = [...RADIO_AFORIZMI, ..._EVENT_FLAT, ...moodLines];
   const available = pool
     .map((text, index) => ({ text, index }))
     .filter(({ index }) => !shownIndices.has(index));
