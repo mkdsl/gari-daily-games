@@ -16,7 +16,7 @@
 - [ ] P3 `src/share.js` + `src/content/brand_hooks.js` — event-specifičan share copy za Guncati Grand finalni period (sept-okt 2026), svaki share postaje direktan promo
 
 ### Dule (P2/P3 — retention i emocionalna kriva)
-- [ ] P2 `src/ui/end-screen.js` + `src/systems/prestige.js` — end-screen ne komunicira koliko varijanti igrač još nije video (ruta×dan/noć kombinatorika), dodati vizuelni signal tipa "Ostale ti 2 rute + noćna vožnja" da prestige unlock bude pull, ne push
+- [x] P2 `src/ui/end-screen.js` + `src/systems/prestige.js` — end-screen ne komunicira koliko varijanti igrač još nije video (ruta×dan/noć kombinatorika), dodati vizuelni signal tipa "Ostale ti 2 rute + noćna vožnja" da prestige unlock bude pull, ne push (done 2026-09-10, commit TBD)
 - [ ] P2 `src/ui/end-screen.js` — epilog nema personalizovan trag koji igrač prepoznaje kao "moj run": ubaciti jedan konkretan detalj puta (ime rute + aforizam koji je čuo na radiju etape 1–2) u zaključnu karticu da dolazak oseća earned, ne generički
 - [ ] P2 `src/ui/share-card.js` — share karta uvek koristi jezero paletu bez obzira na rutu — personalizovati background po etapa-3 izboru (beton za brzinu / žito za slikovitost / šuma za sigurnost) jer igrač deli identitet "kojim putem sam išao", ne samo score
 - [ ] P3 `src/content/dialogues.js` — etapa 2 (~3 min, najduža) nema mid-journey emocionalni break: dodati kratak unutrašnji monolog aktiviran prvom promenom radio stanice koji spušta napon i daje psihološki "predah" pre random eventa, bez promene mehanike

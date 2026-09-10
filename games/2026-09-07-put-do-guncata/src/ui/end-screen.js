@@ -7,6 +7,7 @@ import { buildEpilog } from '../content/branching-tree.js';
 import { getFinaleAforizam } from '../content/aforizmi.js';
 import { GUNCATI_GRAND_LINK, GUNCATI_GRAND_CTA, MASTERCLASS_CTA } from '../content/brand_hooks.js';
 import { mountShareWidget } from './share-card.js';
+import { trackCompletedRoute, getVariantsRemaining } from '../systems/prestige.js';
 
 /**
  * @typedef {{
@@ -65,6 +66,9 @@ export function mountEndScreen(opts) {
   const bucketName = BUCKET_NAMES[scoreBucket] || 'Putnik';
   const masterclass = MASTERCLASS_CTA[scoreBucket] || MASTERCLASS_CTA.green;
 
+  trackCompletedRoute(route, isNightMode);
+  const variantsLeft = getVariantsRemaining();
+
   // Postavi data-bucket na body za CSS tokene
   document.body.dataset.bucket = scoreBucket;
 
@@ -99,6 +103,12 @@ export function mountEndScreen(opts) {
 
       <!-- Share card -->
       <div id="es-share-wrap"></div>
+
+      <!-- Replay hook — neistražene varijante -->
+      ${variantsLeft.length > 0 ? `
+      <div class="end-screen__variants-hint" aria-label="Neistražene varijante puta">
+        🗺️ Ostale ti ${_escape(variantsLeft.join(' + '))}
+      </div>` : ''}
 
       <!-- Akcijski dugmad -->
       <div class="end-screen__actions">
