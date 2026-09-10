@@ -39,6 +39,16 @@ const ROUTE_LABELS = {
   sigurnije:   { name: 'Sigurnijom rutom',  icon: '🌲' }
 };
 
+/** Detektuje da li igrač ima Pasoš stamp za ovu igru ili je povratnik. */
+function _isReturner(completedRuns) {
+  if (completedRuns > 0) return true;
+  try {
+    // Pasoš localStorage bridge: ključ koji Pasoš SDK piše kad igrač osvoji stamp
+    const stamps = JSON.parse(localStorage.getItem('gari_pasos_stamps') || '[]');
+    return stamps.includes('put-do-guncata');
+  } catch { return false; }
+}
+
 // ============================================================
 // Mount / unmount
 // ============================================================
@@ -72,6 +82,7 @@ export function mountEndScreen(opts) {
   const bucketName = BUCKET_NAMES[scoreBucket] || 'Putnik';
   const masterclass = MASTERCLASS_CTA[scoreBucket] || MASTERCLASS_CTA.green;
   const routeLabel = ROUTE_LABELS[route] || { name: route, icon: '🗺️' };
+  const returner = _isReturner(completedRuns);
 
   trackCompletedRoute(route, isNightMode);
   const variantsLeft = getVariantsRemaining();
@@ -103,6 +114,12 @@ export function mountEndScreen(opts) {
       <div class="end-screen__route-trace" aria-label="Tvoj put">
         ${_escape(routeLabel.icon)} Tvoj put: <strong>${_escape(routeLabel.name)}</strong>${isNightMode ? ' 🌙' : ''}
       </div>
+
+      <!-- Povratnik / keepsake poruka -->
+      ${returner ? `
+      <div class="end-screen__returner-badge" role="status" aria-live="polite">
+        🏕️ Bio si ovde — igra pamti tvoj put do Guncatija
+      </div>` : ''}
 
       <!-- Epilog tekst -->
       <h1 class="end-screen__title">${_escape(epilog.title)}</h1>
