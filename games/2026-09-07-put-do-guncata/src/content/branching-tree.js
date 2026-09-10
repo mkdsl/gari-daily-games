@@ -94,6 +94,17 @@ export function buildEpilog({ route, scoreBucket, isNightMode }) {
 }
 
 /**
+ * Naknadne misli na ulasku u etapu 4 — direktno imenuju izabranu rutu iz etape 3.
+ * Daju osećaj posledica pre nego što prepreke počnu.
+ * @type {Record<string, string>}
+ */
+export const ETAPA4_INTRO_THOUGHTS = {
+  brze:        'Brži put — ali niko nije rekao da je i ravniji.',
+  slikovitije: 'Slikovitiji put — slike ostaju. Vreme ne čeka.',
+  sigurnije:   'Sigurniji put — i dalje put. I dalje šuma.'
+};
+
+/**
  * Etapa4 grananje — prepreke na putu po ruti
  * Svaka ruta ima drugačiji skup prepreka.
  * @type {Record<string, Array<{ id: string, label: string, deltaRange: [number, number], icon: string }>>}

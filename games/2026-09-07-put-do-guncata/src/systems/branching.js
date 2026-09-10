@@ -48,3 +48,18 @@ export function getRouteInfo(route) {
 export function computeDelta3() {
   return 0;
 }
+
+/**
+ * Vraća "naknadnu misao" za etapu 4 — referencira izabranu rutu iz etape 3.
+ * Poziva se na mount etape 4 za narativni kontekst pre prepreka.
+ * @returns {string|null}
+ */
+export function getEtapa4Thought() {
+  if (!_selected) return null;
+  const thoughts = {
+    brze:        'Brži put — ali niko nije rekao da je i ravniji.',
+    slikovitije: 'Slikovitiji put — slike ostaju. Vreme ne čeka.',
+    sigurnije:   'Sigurniji put — i dalje put. I dalje šuma.'
+  };
+  return thoughts[_selected] ?? null;
+}
