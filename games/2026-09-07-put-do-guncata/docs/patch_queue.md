@@ -10,7 +10,7 @@
 - [x] P2 `src/entities/scenes/etapa2-autoput.js` — color-hint na `scoreEl` maskira ali ne rešava konfuziju (igrač vidi "+3" i isti broj); dodati kratki tooltip/aria-live "biće uračunato na kraju etape" (done 2026-09-10, commit 3dddadf)
 
 ### Iskra (P3 — brand hooks)
-- [ ] P3 `src/content/brand_hooks.js` — masterclass CTA prikazan samo za zeleni score bucket; proširiti na sve tri varijante sa sezonskim copy-em za celogodišnji Guncati masterclass funnel
+- [x] P3 `src/content/brand_hooks.js` + `src/ui/end-screen.js` — masterclass CTA prikazan samo za zeleni score bucket; proširiti na sve tri varijante sa sezonskim copy-em za celogodišnji Guncati masterclass funnel (done 2026-09-10, commit TBD)
 - [ ] P3 `src/ui/end-screen.js` — dodati "bio sam tamo" path via localStorage bridge sa Guncati Grand/Pasošem za povratnike, pretvara igru u keepsake ne samo teaser
 - [ ] P3 `src/content/aforizmi.js` — dodati event-tied Pera Period linije za svaku Kluboslavija stanicu turneje (Avala, Štrand, Sarajevo, Guncati) u radio overlay pool
 - [ ] P3 `src/share.js` + `src/content/brand_hooks.js` — event-specifičan share copy za Guncati Grand finalni period (sept-okt 2026), svaki share postaje direktan promo

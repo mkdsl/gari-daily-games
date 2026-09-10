@@ -5,7 +5,7 @@
 
 import { buildEpilog } from '../content/branching-tree.js';
 import { getFinaleAforizam } from '../content/aforizmi.js';
-import { GUNCATI_GRAND_LINK, GUNCATI_GRAND_CTA } from '../content/brand_hooks.js';
+import { GUNCATI_GRAND_LINK, GUNCATI_GRAND_CTA, MASTERCLASS_CTA } from '../content/brand_hooks.js';
 import { mountShareWidget } from './share-card.js';
 
 /**
@@ -63,7 +63,7 @@ export function mountEndScreen(opts) {
   const aforizam = getFinaleAforizam(route, scoreBucket);
   const bucketIcon = BUCKET_ICONS[scoreBucket] || '🌿';
   const bucketName = BUCKET_NAMES[scoreBucket] || 'Putnik';
-  const showGuncati = scoreBucket === 'green';
+  const masterclass = MASTERCLASS_CTA[scoreBucket] || MASTERCLASS_CTA.green;
 
   // Postavi data-bucket na body za CSS tokene
   document.body.dataset.bucket = scoreBucket;
@@ -102,11 +102,12 @@ export function mountEndScreen(opts) {
 
       <!-- Akcijski dugmad -->
       <div class="end-screen__actions">
-        ${showGuncati ? `
-          <button class="btn-primary" id="es-btn-grand" type="button">
-            🎮 ${_escape(GUNCATI_GRAND_CTA)}
-          </button>
-        ` : ''}
+        <a class="btn-primary" id="es-btn-masterclass" href="${_escape(masterclass.url)}" target="_blank" rel="noopener" aria-label="${_escape(masterclass.label)}">
+          🌱 ${_escape(masterclass.text)}
+        </a>
+        <button class="btn-primary" id="es-btn-grand" type="button" style="margin-top:0.5rem">
+          🎮 ${_escape(GUNCATI_GRAND_CTA)}
+        </button>
         <button class="btn-secondary" id="es-btn-again" type="button">
           🔄 Odigraj ponovo${completedRuns > 0 ? ` (${completedRuns}. put)` : ''}
         </button>
@@ -133,13 +134,10 @@ export function mountEndScreen(opts) {
   }
 
   // Event listeners
-  const btnGrand = el.querySelector('#es-btn-grand');
-  if (btnGrand) {
-    btnGrand.addEventListener('click', () => {
-      if (onGuncatiGrand) onGuncatiGrand();
-      else window.open(GUNCATI_GRAND_LINK, '_blank', 'noopener');
-    });
-  }
+  el.querySelector('#es-btn-grand').addEventListener('click', () => {
+    if (onGuncatiGrand) onGuncatiGrand();
+    else window.open(GUNCATI_GRAND_LINK, '_blank', 'noopener');
+  });
 
   const btnAgain = el.querySelector('#es-btn-again');
   if (btnAgain) {

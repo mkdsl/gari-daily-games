@@ -60,3 +60,24 @@ export const SEASONAL_CONTEXT = {
   month: 'septembar',
   teaser: 'Grand finale turneja čeka — a ti si tek stigao.'
 };
+
+/**
+ * Masterclass CTA per score bucket — celogodišnji Guncati funnel
+ */
+export const MASTERCLASS_CTA = {
+  green: {
+    text: 'Pripremi se za pravo putovanje — Guncati Masterclass →',
+    url: 'https://guncati.rs/masterclass',
+    label: 'Masterclass prijava'
+  },
+  yellow: {
+    text: 'Sledeći put — bolje spreman. Guncati Masterclass →',
+    url: 'https://guncati.rs/masterclass',
+    label: 'Masterclass prijava'
+  },
+  humor: {
+    text: 'Možda masterclass pomaže? Guncati te čeka →',
+    url: 'https://guncati.rs/masterclass',
+    label: 'Masterclass prijava'
+  }
+};
