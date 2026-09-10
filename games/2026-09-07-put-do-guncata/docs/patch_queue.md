@@ -25,7 +25,7 @@
 ### Sine (P3 — narativna ekspanzija)
 - [x] P3 `src/content/aforizmi.js` — ruta-specifičan Pera Period aforizam pool za radio overlay (svaka od 3 rute u etapi 2 čuje drugačije citate, svaki run je unikatna "radio emisija") (done 2026-09-10, commit 8412228)
 - [x] P3 `src/content/dialogues.js` — etapa 3: unutrašnje misli pred svaku tablu (9 varijanti — 3 table × 3 raspoloženja), igrač oseća dramsku dilemu a ne samo UI labelu (done 2026-09-10, commit 5b03b79)
-- [ ] P3 `src/content/branching-tree.js` — "putničke beleške" micro-tekst na kraju etape 4 koji zatvara narativni luk odabrane rute pre epiloga, daje koheziju celom run-u
+- [x] P3 `src/content/branching-tree.js` — "putničke beleške" micro-tekst na kraju etape 4 koji zatvara narativni luk odabrane rute pre epiloga, daje koheziju celom run-u (done 2026-09-10, commit 0b6a94e)
 - [ ] P3 `src/content/brand_hooks.js` — sezonske varijante Braninih linija (mart/jun/septembar) da igra funkcioniše kao evergreen Guncati companion, ne samo avgustovska promo
 - [ ] P3 `src/content/dialogues.js` — etapa 4: "umorni vozač" inner monologue per vrsta prepreke (šaraf/blato/grana), daje osobnost šumskoj sekciji bez dodirivanja mehaničkih sistema
 
