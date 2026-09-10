@@ -62,6 +62,21 @@ export const SEASONAL_CONTEXT = {
 };
 
 /**
+ * Guncati Grand finalni period (sept-okt 2026) — share postaje direktan event promo.
+ * ISO date range: 2026-09-01 do 2026-10-31 (inclusive).
+ */
+export const GUNCATI_GRAND_SHARE = {
+  periodStart: '2026-09-01',
+  periodEnd:   '2026-10-31',
+  texts: {
+    green:  '🎪 Guncati Grand je tu! Stigao/la sam spreman/a — {score}% pripremljenosti. Vidi se na jezeru!',
+    yellow: '🎪 Guncati Grand se sprema! Put do Guncata: {score}%. Je li si ti spreman/a?',
+    humor:  '🎪 Guncati Grand čeka bolje pripremljene od mene — ali stigao/la sam! {score}%'
+  },
+  url: 'https://guncati.rs/grand'
+};
+
+/**
  * Masterclass CTA per score bucket — celogodišnji Guncati funnel
  */
 export const MASTERCLASS_CTA = {
