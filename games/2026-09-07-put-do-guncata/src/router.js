@@ -3,7 +3,7 @@
  * Stage sequence: 0=menu, 1-5=etape, looping back to 0 on end
  */
 import { state, saveState } from './state.js';
-import { attachTo, clearAll } from './input.js';
+import { attachTo, detachFrom, clearAll } from './input.js';
 
 /** @type {Map<number, {mount: Function, unmount: Function}>} */
 const sceneRegistry = new Map();
@@ -50,6 +50,7 @@ export function goToStage(n) {
   }
 
   clearAll();
+  detachFrom(_container);
   _container.innerHTML = '';
   attachTo(_container);
 
