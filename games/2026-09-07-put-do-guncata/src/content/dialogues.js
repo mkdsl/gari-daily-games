@@ -80,6 +80,43 @@ export const ETAPA_DIALOGUES = {
 };
 
 /**
+ * Unutrašnje misli pred svaku tablu u etapi 3 — 3 table × 3 raspoloženja = 9 varijanti.
+ * Raspoloženje se određuje po pripremljenosti: 'high' (>70), 'mid' (40-70), 'low' (<40).
+ * Igrač oseća dramsku dilemu, ne samo UI labelu.
+ * @type {Record<string, Record<string, string>>}
+ */
+export const ETAPA3_SIGN_THOUGHTS = {
+  brze: {
+    high: 'Stigao sam ovde dovoljno brzo. Zašto da sad usporem?',
+    mid:  'Brža ruta. Ima smisla — ako gorivo drži.',
+    low:  'Možda nije trenutak za eksperiment sa brzinom.'
+  },
+  slikovitije: {
+    high: 'Ima još vremena. Zašto ne videti nešto usput?',
+    mid:  'Sela imaju šta da kažu. Pitanje je da li ima uha za to.',
+    low:  'Lepše, ali sporije. Imam li luksuz sporosti?'
+  },
+  sigurnije: {
+    high: 'Zašto bezbednost kad sam spreman? Ali... šuma ne pita.',
+    mid:  'Zaobilazan put. Manje rizika — manje priče.',
+    low:  'Nije trenutak za junačenje. Sigurniji put.'
+  }
+};
+
+/**
+ * Vraća unutrašnju misao za dati znak i raspoloženje igrača.
+ * @param {'brze'|'slikovitije'|'sigurnije'} sign
+ * @param {number} score - trenutna pripremljenost
+ * @returns {string}
+ */
+export function getEtapa3SignThought(sign, score) {
+  const mood = score > 70 ? 'high' : score >= 40 ? 'mid' : 'low';
+  const signData = ETAPA3_SIGN_THOUGHTS[sign];
+  if (!signData) return '';
+  return signData[mood] || signData.mid;
+}
+
+/**
  * Vraća intro linije za etapu.
  * Za etapu 5 — po score bucketu.
  * @param {number} etapa - 1–5
