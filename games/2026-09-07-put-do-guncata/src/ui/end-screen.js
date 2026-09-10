@@ -33,6 +33,12 @@ const BUCKET_NAMES = {
   humor:  'Slobodni putnik'
 };
 
+const ROUTE_LABELS = {
+  brze:        { name: 'Brzom rutom',       icon: '🛣️' },
+  slikovitije: { name: 'Slikovitom rutom',  icon: '🌾' },
+  sigurnije:   { name: 'Sigurnijom rutom',  icon: '🌲' }
+};
+
 // ============================================================
 // Mount / unmount
 // ============================================================
@@ -65,6 +71,7 @@ export function mountEndScreen(opts) {
   const bucketIcon = BUCKET_ICONS[scoreBucket] || '🌿';
   const bucketName = BUCKET_NAMES[scoreBucket] || 'Putnik';
   const masterclass = MASTERCLASS_CTA[scoreBucket] || MASTERCLASS_CTA.green;
+  const routeLabel = ROUTE_LABELS[route] || { name: route, icon: '🗺️' };
 
   trackCompletedRoute(route, isNightMode);
   const variantsLeft = getVariantsRemaining();
@@ -91,6 +98,11 @@ export function mountEndScreen(opts) {
 
       <!-- Bucket naziv -->
       <div class="end-screen__score-label">${_escape(bucketName)}</div>
+
+      <!-- Personalizovan trag: kojim putem je igrač prošao -->
+      <div class="end-screen__route-trace" aria-label="Tvoj put">
+        ${_escape(routeLabel.icon)} Tvoj put: <strong>${_escape(routeLabel.name)}</strong>${isNightMode ? ' 🌙' : ''}
+      </div>
 
       <!-- Epilog tekst -->
       <h1 class="end-screen__title">${_escape(epilog.title)}</h1>

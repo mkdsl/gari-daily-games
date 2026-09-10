@@ -457,6 +457,16 @@
   width: 100%;
 }
 
+.end-screen__route-trace {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  text-align: center;
+  padding: 0.35rem 0.7rem;
+  border-left: 3px solid rgba(245, 216, 122, 0.5);
+  margin: 0.2rem 0;
+  width: 100%;
+}
+
 .end-screen__variants-hint {
   font-size: 0.82rem;
   opacity: 0.72;
