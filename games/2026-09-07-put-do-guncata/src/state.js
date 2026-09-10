@@ -1,5 +1,6 @@
 /** @module state — game state, save/load, computeScore */
 import { STORAGE_KEY } from './config.js';
+import { resetBranching } from './systems/branching.js';
 
 const defaultState = {
   currentStage: 0,
@@ -27,6 +28,7 @@ export function initState() {
   state = JSON.parse(JSON.stringify(defaultState));
   state.completedRuns = completedRuns;
   state.prestigeUnlocked = prestigeUnlocked;
+  resetBranching();
 }
 
 /** Persist full state to localStorage */
