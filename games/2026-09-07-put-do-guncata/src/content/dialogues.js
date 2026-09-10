@@ -122,6 +122,27 @@ export function getAmbient(etapa) {
 }
 
 /**
+ * Etapa 2 — mid-journey unutrašnji monolog, aktivira se prvom promenom radio stanice.
+ * Ton: introspekcija, kratko snimanje daha pre random eventa. Bez promene mehanike.
+ * @type {string[]}
+ */
+export const ETAPA2_RADIO_MONOLOG = [
+  'Promenio/la si stanicu.',
+  'Nova melodija — isto nebo.',
+  'Autoput je samo linija koja spaja dve odluke.',
+  '...',
+  'Vozi dalje.'
+];
+
+/**
+ * Vraća monolog linije za etapa 2 radio break.
+ * @returns {string[]}
+ */
+export function getEtapa2RadioMonolog() {
+  return ETAPA2_RADIO_MONOLOG;
+}
+
+/**
  * Inline dialogue linije za ključne momente u igri.
  * Koriste se u scene overlay-u van etapa intro/outro.
  */

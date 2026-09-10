@@ -6,9 +6,11 @@ import { createResourceBalance } from '../../systems/resource-balance.js';
 import { attachRadio, detachRadio } from '../../systems/radio.js';
 import { finalizeEtapa2 } from '../../systems/pripremljenost.js';
 import { saveState } from '../../state.js';
+import { getEtapa2RadioMonolog } from '../../content/dialogues.js';
 
 let _balance = null;
 let _cleanup = null;
+let _radioBreakShown = false;
 
 /**
  * @param {HTMLElement} container
@@ -121,11 +123,18 @@ export function mount(container, state, callbacks) {
     }
   });
 
+  _radioBreakShown = false;
+
   container.querySelectorAll('.mood-btn').forEach(btn => {
     btn.addEventListener('pointerdown', () => {
       container.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       _balance?.changeMood(btn.dataset.genre);
+
+      if (!_radioBreakShown) {
+        _radioBreakShown = true;
+        _showRadioBreak(container, getEtapa2RadioMonolog());
+      }
     });
   });
 
@@ -138,6 +147,25 @@ export function mount(container, state, callbacks) {
 export function unmount(container) {
   if (_cleanup) { _cleanup(); _cleanup = null; }
   container.innerHTML = '';
+}
+
+function _showRadioBreak(container, lines) {
+  const el = document.createElement('div');
+  el.style.cssText = `
+    position:absolute; inset:0; background:rgba(10,13,24,0.82);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:0.5rem; z-index:50; animation:fadeIn 0.4s;
+    font-family:system-ui,sans-serif; color:#e8dcc8; text-align:center; padding:2rem;
+  `;
+  el.innerHTML = lines.map(l =>
+    `<p style="margin:0;font-size:${l === '...' ? '1.4rem' : '1rem'};opacity:${l === '...' ? '0.45' : '0.85'}">${l}</p>`
+  ).join('');
+  container.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = 'opacity 0.5s';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 520);
+  }, 2800);
 }
 
 function _floatDelta(container, delta) {
