@@ -1,0 +1,19 @@
+{
+  "name": "Dan Posle",
+  "genre": "Narrative choice / community builder",
+  "date": "2026-09-11",
+  "description": "Jutro posle festivala na Guncati imanju — 12 sati, 4 resursa, ~30 micro-odluka. Zatvoriš dan ili gradiš zajednicu.",
+  "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-09-11-dan-posle/",
+  "brand_serves": ["guncati", "kluboslavija"],
+  "stage": "concept",
+  "status": "in_progress",
+  "modules": {},
+  "line_counts": {
+    "total_js": 0,
+    "total_css": 0
+  },
+  "beta_score": null,
+  "beta_score_iter2": null,
+  "post_fix_score": null,
+  "sef_signoff": false
+}
