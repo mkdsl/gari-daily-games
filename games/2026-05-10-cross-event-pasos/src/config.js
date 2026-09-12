@@ -36,6 +36,15 @@ export const STAMPS = [
     game_url: 'https://mkdsl.github.io/gari-daily-games/games/2026-09-04-jesenji-tok/',
     description: 'Ti si Brana. 12 nedelja pre zime, 6 parcela, radovi koji ne čekaju.',
     event_date: '2026-09-04'
+  },
+  {
+    slug: 'put-do-guncata',
+    display_name: 'Put do Guncata',
+    color: '#3B6E52',
+    claim_type: 'manual',
+    game_url: 'https://mkdsl.github.io/gari-daily-games/games/2026-09-07-put-do-guncata/',
+    description: 'Vozio/la si od Beograda do Guncatija. Pet etapa, jedan dolazak.',
+    event_date: '2026-09-07'
   }
   // TODO: buduće igre — dodaj slug ovde I u pasos-sdk.js SLUG_WHITELIST
   // Format: { slug, display_name, color, claim_type: 'auto'|'manual', game_url, description, event_date }

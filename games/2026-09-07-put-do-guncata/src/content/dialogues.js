@@ -80,6 +80,91 @@ export const ETAPA_DIALOGUES = {
 };
 
 /**
+ * Unutrašnje misli pred svaku tablu u etapi 3 — 3 table × 3 raspoloženja = 9 varijanti.
+ * Raspoloženje se određuje po pripremljenosti: 'high' (>70), 'mid' (40-70), 'low' (<40).
+ * Igrač oseća dramsku dilemu, ne samo UI labelu.
+ * @type {Record<string, Record<string, string>>}
+ */
+export const ETAPA3_SIGN_THOUGHTS = {
+  brze: {
+    high: 'Stigao sam ovde dovoljno brzo. Zašto da sad usporem?',
+    mid:  'Brža ruta. Ima smisla — ako gorivo drži.',
+    low:  'Možda nije trenutak za eksperiment sa brzinom.'
+  },
+  slikovitije: {
+    high: 'Ima još vremena. Zašto ne videti nešto usput?',
+    mid:  'Sela imaju šta da kažu. Pitanje je da li ima uha za to.',
+    low:  'Lepše, ali sporije. Imam li luksuz sporosti?'
+  },
+  sigurnije: {
+    high: 'Zašto bezbednost kad sam spreman? Ali... šuma ne pita.',
+    mid:  'Zaobilazan put. Manje rizika — manje priče.',
+    low:  'Nije trenutak za junačenje. Sigurniji put.'
+  }
+};
+
+/**
+ * Vraća unutrašnju misao za dati znak i raspoloženje igrača.
+ * @param {'brze'|'slikovitije'|'sigurnije'} sign
+ * @param {number} score - trenutna pripremljenost
+ * @returns {string}
+ */
+export function getEtapa3SignThought(sign, score) {
+  const mood = score > 70 ? 'high' : score >= 40 ? 'mid' : 'low';
+  const signData = ETAPA3_SIGN_THOUGHTS[sign];
+  if (!signData) return '';
+  return signData[mood] || signData.mid;
+}
+
+/**
+ * Unutrašnji monolog umornog vozača po vrsti prepreke u etapi 4.
+ * Daje osobnost šumskoj sekciji bez dodirivanja mehaničkih sistema.
+ * Tip: zamor, crni humor, resignacija.
+ * @type {Record<string, string[]>}
+ */
+export const ETAPA4_OBSTACLE_MONOLOG = {
+  /** Mehanički problem — šaraf, guma, kvar */
+  saraf: [
+    'Zvuk koji ne želiš da čuješ u šumi.',
+    'Tri minute na strani puta. Tri minute kojih nema na sat-u.'
+  ],
+  /** Makadamski blato, teški teren */
+  blato: [
+    'Auto ulazi u blato kao da je znao da ovo dolazi.',
+    'Gasiti gas ili pritisnuti? Vozač koji ne zna — zapne. Znaš.'
+  ],
+  /** Grana na putu, prepreka */
+  grana: [
+    'Grana. Debela. Niko je nije pomerio jer niko ovde ne prolazi.',
+    'Ruke na kori drveta, jutarnja rosa. Makneš. Nastaviš.'
+  ],
+  /** Kamion / kolona na šumskom putu */
+  kolona: [
+    'Neko ispred tebe ne žuri. Šuma za to nije kriva.',
+    'Truba ne pomaže. Strpljenje — možda.'
+  ],
+  /** Radovi / prepreka na putu */
+  radovi: [
+    'Čovek sa zastavom. Uvek čovek sa zastavom.',
+    'Čekaš. Autoput nema ovu strpljivost — ali ima ovu grešku.'
+  ],
+  /** Mirna vožnja bez prepreke — introspekcija */
+  mir: [
+    'Šuma ćuti. Auto se kreće. Misli dolaze kad ih ne zoveš.',
+    'Kilometar bez ničega. Najredji luksuz na ovom putu.'
+  ]
+};
+
+/**
+ * Vraća monolog linije za datu vrstu prepreke u etapi 4.
+ * @param {string} obstacleType - 'saraf'|'blato'|'grana'|'kolona'|'radovi'|'mir'
+ * @returns {string[]}
+ */
+export function getEtapa4ObstacleMonolog(obstacleType) {
+  return ETAPA4_OBSTACLE_MONOLOG[obstacleType] || ETAPA4_OBSTACLE_MONOLOG.mir;
+}
+
+/**
  * Vraća intro linije za etapu.
  * Za etapu 5 — po score bucketu.
  * @param {number} etapa - 1–5
@@ -119,6 +204,27 @@ export function getAmbient(etapa) {
   const key = `etapa${etapa}`;
   const data = ETAPA_DIALOGUES[key];
   return data ? (data.ambient || null) : null;
+}
+
+/**
+ * Etapa 2 — mid-journey unutrašnji monolog, aktivira se prvom promenom radio stanice.
+ * Ton: introspekcija, kratko snimanje daha pre random eventa. Bez promene mehanike.
+ * @type {string[]}
+ */
+export const ETAPA2_RADIO_MONOLOG = [
+  'Promenio/la si stanicu.',
+  'Nova melodija — isto nebo.',
+  'Autoput je samo linija koja spaja dve odluke.',
+  '...',
+  'Vozi dalje.'
+];
+
+/**
+ * Vraća monolog linije za etapa 2 radio break.
+ * @returns {string[]}
+ */
+export function getEtapa2RadioMonolog() {
+  return ETAPA2_RADIO_MONOLOG;
 }
 
 /**

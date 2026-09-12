@@ -77,14 +77,27 @@ export function mount(container, state, callbacks) {
           'Ja sam taj put išao sa traktorom — 2 sata, ali slike vrede.'
         ]));
         setTimeout(() => _proceed(route, callbacks, saveState, branaPopup), 2600);
+      } else if (route === 'brze') {
+        _showToast(container, 'Kraća ruta — vidiš se u šumskom putu.', () => _proceed(route, callbacks, saveState));
       } else {
-        setTimeout(() => _proceed(route, callbacks, saveState), 650);
+        _showToast(container, 'Poznata ruta — pažljivo napred.', () => _proceed(route, callbacks, saveState));
       }
     });
   });
 
   _cleanup = () => {};
   return _cleanup;
+}
+
+function _showToast(container, message, onDone) {
+  const toast = document.createElement('div');
+  toast.className = 'e3-toast';
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.remove();
+    onDone();
+  }, 1500);
 }
 
 function _proceed(route, callbacks, saveState, popupEl) {
@@ -141,6 +154,16 @@ function _applyCSS() {
       25% { transform:rotate(-5deg); }
       75% { transform:rotate(5deg); }
       100%{ transform:rotate(0deg); }
+    }
+    .e3-toast {
+      position:absolute; bottom:5rem; left:50%; transform:translateX(-50%);
+      background:rgba(42,42,26,0.92); color:#f5f0c0; border-radius:8px;
+      padding:0.65rem 1.2rem; font-size:0.9rem; white-space:nowrap;
+      z-index:50; animation:e3toastIn 0.25s ease;
+    }
+    @keyframes e3toastIn {
+      from { opacity:0; transform:translateX(-50%) translateY(8px); }
+      to   { opacity:1; transform:translateX(-50%) translateY(0); }
     }
   `;
   document.head.appendChild(s);

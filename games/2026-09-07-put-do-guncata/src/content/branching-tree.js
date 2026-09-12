@@ -94,6 +94,51 @@ export function buildEpilog({ route, scoreBucket, isNightMode }) {
 }
 
 /**
+ * Naknadne misli na ulasku u etapu 4 — direktno imenuju izabranu rutu iz etape 3.
+ * Daju osećaj posledica pre nego što prepreke počnu.
+ * @type {Record<string, string>}
+ */
+export const ETAPA4_INTRO_THOUGHTS = {
+  brze:        'Brži put — ali niko nije rekao da je i ravniji.',
+  slikovitije: 'Slikovitiji put — slike ostaju. Vreme ne čeka.',
+  sigurnije:   'Sigurniji put — i dalje put. I dalje šuma.'
+};
+
+/**
+ * Putničke beleške — zatvaraju narativni luk izabrane rute na kraju etape 4, pre epiloga.
+ * 3 rute × 3 score bucket-a = 9 varijanti.
+ * @type {Record<string, Record<string, string>>}
+ */
+export const PUTNICKE_BELEZKE = {
+  brze: {
+    green:  'Autoput je bio surov. I dalje si stigao prvi. Guncati to pamti.',
+    yellow: 'Brzina te je koštala mira. Ali vremena ima — jezero čeka.',
+    humor:  'Kamion, radovi, čekanje na pumpi. Ipak si tu. Nekako.'
+  },
+  slikovitije: {
+    green:  'Brana te je pogledala s međe. Neke ljude vidiš jednom i zapamtiš. On je takav.',
+    yellow: 'Sela si prolazio brže nego što bi trebalo. Sledeći put — stani.',
+    humor:  'Krava, makadan, Brana koji nešto viče za tobom. Klasičan put do Guncatija.'
+  },
+  sigurnije: {
+    green:  'Naplatna rampa, zaobilaznica, tišina. Plan je radio. Plan uvek radi kad mu veruješ.',
+    yellow: 'Bezbedan put je i spor put. Stigao si — to je poenta.',
+    humor:  'Zaobilazan put bez table. Kompas unutra govori gore. A ti si tu — nekako.'
+  }
+};
+
+/**
+ * Vraća putničku belešku za datu rutu i score bucket.
+ * @param {string} route - 'brze'|'slikovitije'|'sigurnije'
+ * @param {string} scoreBucket - 'green'|'yellow'|'humor'
+ * @returns {string}
+ */
+export function getPutnickebelezke(route, scoreBucket) {
+  const routeData = PUTNICKE_BELEZKE[route] || PUTNICKE_BELEZKE.sigurnije;
+  return routeData[scoreBucket] || routeData.yellow;
+}
+
+/**
  * Etapa4 grananje — prepreke na putu po ruti
  * Svaka ruta ima drugačiji skup prepreka.
  * @type {Record<string, Array<{ id: string, label: string, deltaRange: [number, number], icon: string }>>}

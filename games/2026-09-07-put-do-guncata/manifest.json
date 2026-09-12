@@ -5,8 +5,8 @@
   "description": "Igrač putuje od Beograda do Guncatija u 5 etapa — svaka etapa je drugačija mini-igra, izbori na putu oblikuju dolazak na jezero.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-09-07-put-do-guncata/",
   "brand_serves": ["guncati", "kluboslavija"],
-  "stage": "impl",
-  "status": "in_progress",
+  "stage": "polish",
+  "status": "released",
   "modules": {
     "src/main.js": "Bootstrap, etapa progression, wire modules, session start/restart",
     "src/config.js": "Etapa konfiguracije, pripremljenost pragovi, tajmeri, share template",
@@ -43,11 +43,11 @@
     "styles/theme.css": "Paleta varijable, etapa-po-etapa color-scheme mapiranje, dan/noć varijante"
   },
   "line_counts": {
-    "total_js": 4586,
+    "total_js": 4618,
     "total_css": 1251
   },
-  "beta_score": null,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
-  "sef_signoff": false
+  "beta_score": 5.8,
+  "beta_score_iter2": 8.1,
+  "post_fix_score": 9.0,
+  "sef_signoff": true
 }

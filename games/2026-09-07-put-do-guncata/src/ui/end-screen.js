@@ -5,8 +5,9 @@
 
 import { buildEpilog } from '../content/branching-tree.js';
 import { getFinaleAforizam } from '../content/aforizmi.js';
-import { GUNCATI_GRAND_LINK, GUNCATI_GRAND_CTA } from '../content/brand_hooks.js';
+import { GUNCATI_GRAND_LINK, GUNCATI_GRAND_CTA, MASTERCLASS_CTA } from '../content/brand_hooks.js';
 import { mountShareWidget } from './share-card.js';
+import { trackCompletedRoute, getVariantsRemaining } from '../systems/prestige.js';
 
 /**
  * @typedef {{
@@ -31,6 +32,22 @@ const BUCKET_NAMES = {
   yellow: 'Zamišljeni putnik',
   humor:  'Slobodni putnik'
 };
+
+const ROUTE_LABELS = {
+  brze:        { name: 'Brzom rutom',       icon: '🛣️' },
+  slikovitije: { name: 'Slikovitom rutom',  icon: '🌾' },
+  sigurnije:   { name: 'Sigurnijom rutom',  icon: '🌲' }
+};
+
+/** Detektuje da li igrač ima Pasoš stamp za ovu igru ili je povratnik. */
+function _isReturner(completedRuns) {
+  if (completedRuns > 0) return true;
+  try {
+    // Pasoš localStorage bridge: ključ koji Pasoš SDK piše kad igrač osvoji stamp
+    const stamps = JSON.parse(localStorage.getItem('gari_pasos_stamps') || '[]');
+    return stamps.includes('put-do-guncata');
+  } catch { return false; }
+}
 
 // ============================================================
 // Mount / unmount
@@ -63,7 +80,12 @@ export function mountEndScreen(opts) {
   const aforizam = getFinaleAforizam(route, scoreBucket);
   const bucketIcon = BUCKET_ICONS[scoreBucket] || '🌿';
   const bucketName = BUCKET_NAMES[scoreBucket] || 'Putnik';
-  const showGuncati = scoreBucket === 'green';
+  const masterclass = MASTERCLASS_CTA[scoreBucket] || MASTERCLASS_CTA.green;
+  const routeLabel = ROUTE_LABELS[route] || { name: route, icon: '🗺️' };
+  const returner = _isReturner(completedRuns);
+
+  trackCompletedRoute(route, isNightMode);
+  const variantsLeft = getVariantsRemaining();
 
   // Postavi data-bucket na body za CSS tokene
   document.body.dataset.bucket = scoreBucket;
@@ -88,6 +110,17 @@ export function mountEndScreen(opts) {
       <!-- Bucket naziv -->
       <div class="end-screen__score-label">${_escape(bucketName)}</div>
 
+      <!-- Personalizovan trag: kojim putem je igrač prošao -->
+      <div class="end-screen__route-trace" aria-label="Tvoj put">
+        ${_escape(routeLabel.icon)} Tvoj put: <strong>${_escape(routeLabel.name)}</strong>${isNightMode ? ' 🌙' : ''}
+      </div>
+
+      <!-- Povratnik / keepsake poruka -->
+      ${returner ? `
+      <div class="end-screen__returner-badge" role="status" aria-live="polite">
+        🏕️ Bio si ovde — igra pamti tvoj put do Guncatija
+      </div>` : ''}
+
       <!-- Epilog tekst -->
       <h1 class="end-screen__title">${_escape(epilog.title)}</h1>
       <p class="end-screen__flavor">${_escape(epilog.flavor)}</p>
@@ -100,13 +133,20 @@ export function mountEndScreen(opts) {
       <!-- Share card -->
       <div id="es-share-wrap"></div>
 
+      <!-- Replay hook — neistražene varijante -->
+      ${variantsLeft.length > 0 ? `
+      <div class="end-screen__variants-hint" aria-label="Neistražene varijante puta">
+        🗺️ Ostale ti ${_escape(variantsLeft.join(' + '))}
+      </div>` : ''}
+
       <!-- Akcijski dugmad -->
       <div class="end-screen__actions">
-        ${showGuncati ? `
-          <button class="btn-primary" id="es-btn-grand" type="button">
-            🎮 ${_escape(GUNCATI_GRAND_CTA)}
-          </button>
-        ` : ''}
+        <a class="btn-primary" id="es-btn-masterclass" href="${_escape(masterclass.url)}" target="_blank" rel="noopener" aria-label="${_escape(masterclass.label)}">
+          🌱 ${_escape(masterclass.text)}
+        </a>
+        <button class="btn-primary" id="es-btn-grand" type="button" style="margin-top:0.5rem">
+          🎮 ${_escape(GUNCATI_GRAND_CTA)}
+        </button>
         <button class="btn-secondary" id="es-btn-again" type="button">
           🔄 Odigraj ponovo${completedRuns > 0 ? ` (${completedRuns}. put)` : ''}
         </button>
@@ -133,13 +173,10 @@ export function mountEndScreen(opts) {
   }
 
   // Event listeners
-  const btnGrand = el.querySelector('#es-btn-grand');
-  if (btnGrand) {
-    btnGrand.addEventListener('click', () => {
-      if (onGuncatiGrand) onGuncatiGrand();
-      else window.open(GUNCATI_GRAND_LINK, '_blank', 'noopener');
-    });
-  }
+  el.querySelector('#es-btn-grand').addEventListener('click', () => {
+    if (onGuncatiGrand) onGuncatiGrand();
+    else window.open(GUNCATI_GRAND_LINK, '_blank', 'noopener');
+  });
 
   const btnAgain = el.querySelector('#es-btn-again');
   if (btnAgain) {

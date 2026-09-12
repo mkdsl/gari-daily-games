@@ -457,6 +457,37 @@
   width: 100%;
 }
 
+.end-screen__route-trace {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  text-align: center;
+  padding: 0.35rem 0.7rem;
+  border-left: 3px solid rgba(245, 216, 122, 0.5);
+  margin: 0.2rem 0;
+  width: 100%;
+}
+
+.end-screen__returner-badge {
+  font-size: 0.82rem;
+  color: #f5d87a;
+  text-align: center;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(245, 216, 122, 0.1);
+  width: 100%;
+}
+
+.end-screen__variants-hint {
+  font-size: 0.82rem;
+  opacity: 0.72;
+  text-align: center;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  width: 100%;
+}
+
 .end-screen__actions {
   display: flex;
   flex-direction: column;
