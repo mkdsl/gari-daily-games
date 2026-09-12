@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dan Posle</title>
+  <meta name="description" content="Jutro posle festivala na Guncati imanju — 12 sati, 4 resursa, 32 micro-odluka. Zatvoriš dan ili gradiš zajednicu.">
+  <meta name="theme-color" content="#f5e6c8">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Dan Posle">
+  <meta property="og:description" content="Jutro posle festivala. 12 sati. Šta ostaje od juče?">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mkdsl.github.io/gari-daily-games/games/2026-09-11-dan-posle/">
+
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/atmosphere.css">
+  <link rel="stylesheet" href="styles/theme.css">
+</head>
+<body>
+
+<div class="game-wrapper scene-texture">
+
+  <!-- ── INTRO SCREEN ─────────────────────────────────────────── -->
+  <section id="screen-intro" class="screen" role="main">
+    <div>
+      <p class="intro-eyebrow">Guncati imanje · Festival aftermath</p>
+      <h1 class="intro-title">Dan Posle</h1>
+      <p class="intro-subtitle">07:00 — 19:00. Jedan dan. Tvoje odluke.</p>
+    </div>
+
+    <p class="intro-text" style="white-space:pre-line">Jutro je 07:00.
+
+Festival na Guncati imanju je završen.
+Sunce je tu, livada je ugažena, i ti si i dalje ovde.
+
+Imaš 12 sati da zatvoriš dan — i odlučiš šta od juče gradi nešto, a šta nestaje.
+
+Nisi sam. Ali na kraju — to je tvoja odluka.</p>
+
+    <div class="intro-resources" aria-label="Početni resursi">
+      <div class="intro-res-item">
+        <span class="intro-res-icon" aria-hidden="true">⚡</span>
+        <span class="intro-res-label">Energija</span>
+        <span class="intro-res-start num">6/10</span>
+      </div>
+      <div class="intro-res-item">
+        <span class="intro-res-icon" aria-hidden="true">🤝</span>
+        <span class="intro-res-label">Veze</span>
+        <span class="intro-res-start num">3/10</span>
+      </div>
+      <div class="intro-res-item">
+        <span class="intro-res-icon" aria-hidden="true">📸</span>
+        <span class="intro-res-label">Sećanja</span>
+        <span class="intro-res-start num">2/10</span>
+      </div>
+      <div class="intro-res-item">
+        <span class="intro-res-icon" aria-hidden="true">🗑️</span>
+        <span class="intro-res-label">Nered (manje = bolje)</span>
+        <span class="intro-res-start num">10/10</span>
+      </div>
+    </div>
+
+    <div class="intro-actions">
+      <button id="btn-start" class="btn-primary">Počni dan →</button>
+      <button id="btn-prestige" class="btn-secondary" hidden>
+        <span class="prestige-badge">↩ Prestige</span>
+        Sledeće leto — drugi put
+      </button>
+    </div>
+
+    <p style="font-size:0.78rem; color:var(--text-muted); font-family:var(--font-mono);">
+      Audio se pokreće na prvi klik · Guncati × Kluboslavija 2026
+    </p>
+  </section>
+
+  <!-- ── GAME SCREEN ───────────────────────────────────────────── -->
+  <section id="screen-game" class="screen" hidden role="main" aria-label="Igra">
+
+    <!-- Sticky header sa HUD-om -->
+    <header class="game-header" role="banner">
+      <div class="header-top">
+        <span class="game-title-small">Dan Posle</span>
+        <div class="header-controls">
+          <button id="btn-mute" aria-label="Toggle zvuk" aria-pressed="false" title="Toggle zvuk">🔊</button>
+        </div>
+      </div>
+
+      <!-- Resource bars -->
+      <div id="hud" aria-label="Resursi">
+        <!-- Energija -->
+        <div class="resource-bar" data-resource="energija" aria-label="Energija">
+          <span class="bar-label">Energija</span>
+          <div class="bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="6">
+            <div class="bar-fill" style="width:60%; background:#4a7c59;"></div>
+          </div>
+          <span class="bar-value num">6</span>
+        </div>
+
+        <!-- Veze -->
+        <div class="resource-bar" data-resource="veze" aria-label="Veze">
+          <span class="bar-label">Veze</span>
+          <div class="bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="3">
+            <div class="bar-fill" style="width:30%; background:#3a6a9e;"></div>
+          </div>
+          <span class="bar-value num">3</span>
+        </div>
+
+        <!-- Sećanja -->
+        <div class="resource-bar" data-resource="secanja" aria-label="Sećanja">
+          <span class="bar-label">Sećanja</span>
+          <div class="bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="2">
+            <div class="bar-fill" style="width:20%; background:#c8820a;"></div>
+          </div>
+          <span class="bar-value num">2</span>
+        </div>
+
+        <!-- Nered — INVERTED -->
+        <div class="resource-bar" data-resource="nered" aria-label="Nered — manje je bolje">
+          <span class="bar-label bar-label-nered">Nered ↓</span>
+          <div class="bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="10">
+            <div class="bar-fill" style="width:100%; background:#b03030;"></div>
+          </div>
+          <span class="bar-value num">10</span>
+          <div class="nered-icons" aria-label="Nered ikone">🗑️🗑️🗑️🗑️🗑️</div>
+        </div>
+
+        <!-- Community Score -->
+        <div class="cs-display">
+          <span class="cs-label">CS</span>
+          <span id="cs-value" class="num">-3.0</span>
+          <span style="font-size:0.65rem; color:var(--text-muted); font-family:var(--font-mono); margin-left:auto;">= Veze + Sećanja − Nered/2</span>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-track" role="progressbar" aria-label="Napredak u igri" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="progress-fill"></div>
+      </div>
+      <div class="hour-label-row">
+        <span id="hour-label" class="num">07:00</span>
+        <span id="atm-label">Zora</span>
+      </div>
+    </header>
+
+    <!-- Game area — dynamic content -->
+    <main id="game-area" role="main" aria-live="polite" aria-atomic="false">
+      <!-- Renderuje se kroz JS -->
+    </main>
+
+  </section>
+
+  <!-- ── ENDING SCREEN ─────────────────────────────────────────── -->
+  <section id="screen-ending" class="screen" hidden role="main" aria-label="Kraj igre">
+    <div>
+      <p class="ending-eyebrow">19:00 · Kraj dana</p>
+      <div class="ending-emoji" aria-hidden="true">🌱</div>
+      <h1 class="ending-title">Zajednica nastaje</h1>
+      <p class="ending-headline">Nije bio samo festival.</p>
+    </div>
+
+    <p class="ending-body">
+      Veze koje si izgradio ovog dana nisu nestale sa šatorima.
+    </p>
+
+    <div class="ending-cs num">Community Score: 0.0</div>
+
+    <div class="ending-resources" aria-label="Finalni resursi">
+      <!-- Popunjava se kroz JS -->
+    </div>
+
+    <blockquote class="ending-tag">
+      Nisi bio organizator. Bio si katalizator.
+    </blockquote>
+
+    <p class="ending-aforizam">
+      "Posle svakog festivala, zemlja se vraća sebi."
+    </p>
+
+    <div class="ending-achievements" hidden>
+      <h3>Novi uspesi</h3>
+      <div class="ach-list">
+        <!-- Popunjava se kroz JS -->
+      </div>
+    </div>
+
+    <p class="ending-prestige-msg" hidden>
+      Prestige unlock: Toma pamti. Novi scenariji dostupni.
+    </p>
+
+    <div class="ending-actions">
+      <button id="btn-share" class="btn-primary">Podeli rezultat ↗</button>
+      <button id="btn-restart" class="btn-secondary">Igraj ponovo</button>
+    </div>
+
+    <p class="guncati-mark">Guncati × Kluboslavija 2026 · Dan Posle</p>
+  </section>
+
+</div>
+
+<!-- Hour transition overlay -->
+<div id="hour-overlay" hidden aria-live="assertive" aria-atomic="true">
+  <div class="overlay-time">08:00</div>
+  <div class="overlay-text">Jutro ulazi.</div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

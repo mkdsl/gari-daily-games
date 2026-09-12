@@ -1,0 +1,138 @@
+/* atmosphere.css — Dnevne promene svetlosti i boje */
+
+/* Background tranzicija definisana u base.css na body */
+
+/* ── Atmosferski text efekti ────────────────────────────────── */
+/* Sat 07-11: svetla, jutarnja paleta */
+/* Sat 12-16: podnevna, neutralna */
+/* Sat 17-19: sumračna, tamna */
+
+/* Prikaz scene u headeru */
+.atmosphere-scene {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-muted);
+  padding-block: var(--space-1);
+}
+
+/* ── Vizuelni indikatori sata ───────────────────────────────── */
+.hour-dot-track {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hour-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  flex-shrink: 0;
+  transition: background 0.4s ease;
+}
+
+.hour-dot.done {
+  background: var(--amber);
+}
+
+.hour-dot.current {
+  background: var(--atm-text);
+  opacity: 0.7;
+}
+
+/* ── Sunčev luk (vizuelni element) ─────────────────────────── */
+.sun-arc {
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    #f5e6c8 0%,
+    #f0d090 10%,
+    #f5e84e 30%,
+    #f7f2a0 45%,
+    #d4e088 60%,
+    #e8c880 75%,
+    #d47050 90%,
+    #804050 100%
+  );
+  border-radius: 2px;
+  margin-block: var(--space-2);
+  opacity: 0.6;
+  position: relative;
+}
+
+.sun-arc::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #c8820a;
+  box-shadow: 0 0 8px rgba(200, 130, 10, 0.6);
+  transition: left 0.8s ease;
+}
+
+/* ── Vreme dana vizuelni indikator ──────────────────────────── */
+.time-period-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+
+/* ── Nered vizualni indikator (sidebar/inline) ──────────────── */
+.nered-meter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.nered-meter-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Podnevna belina ────────────────────────────────────────── */
+.noon-glow {
+  /* Podnevna 12:00 — blagi sjaj na kartici */
+  box-shadow: 0 0 20px rgba(247, 242, 160, 0.4);
+}
+
+/* ── Sumrak efekti ──────────────────────────────────────────── */
+.dusk-text {
+  color: var(--atm-text);
+}
+
+/* ── Seasonal color stops za specifične sate ────────────────── */
+[data-hour="7"]  .card-time { color: #a07828; }
+[data-hour="11"] .card-time { color: #786000; }
+[data-hour="17"] .card-time { color: #a06010; }
+[data-hour="18"] .card-time { color: #d47050; }
+[data-hour="19"] .card-time { color: #c090a0; }
+
+/* ── Animacija dnevne svetlosti (opciona, smanjuje motion) ──── */
+@media (prefers-reduced-motion: no-preference) {
+  .hour-time {
+    transition: opacity 0.3s ease;
+  }
+}
+
+/* ── Mobile adjustments ─────────────────────────────────────── */
+@media (max-width: 420px) {
+  .hour-dot {
+    width: 5px;
+    height: 5px;
+  }
+}

@@ -1,0 +1,192 @@
+/* base.css — Layout, tipografija, osnove */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&display=swap');
+
+/* ── Token sistem ────────────────────────────────────────────── */
+:root {
+  /* Atmosfera (runtime-override sa JS) */
+  --atm-bg: #f5e6c8;
+  --atm-text: #2a1a0e;
+
+  /* Statični tokeni (svetla tema) */
+  --surface: #fffdf7;
+  --surface-raised: #faf7ef;
+  --surface-card: rgba(255, 252, 244, 0.92);
+  --border: rgba(42, 26, 14, 0.12);
+  --border-strong: rgba(42, 26, 14, 0.24);
+  --text-primary: #2a1a0e;
+  --text-secondary: #6b4c2a;
+  --text-muted: #9a7a58;
+  --text-inverse: #faf7ef;
+
+  /* Akcentne boje */
+  --amber: #c8820a;
+  --amber-light: #e8a030;
+  --green: #4a7c59;
+  --blue: #3a6a9e;
+  --red: #b03030;
+
+  /* Font famile */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'DM Mono', 'Courier New', monospace;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Breakpoint max-width za content */
+  --max-content: 640px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #1a1208;
+    --surface-raised: #221a0c;
+    --surface-card: rgba(30, 22, 10, 0.94);
+    --border: rgba(245, 230, 200, 0.10);
+    --border-strong: rgba(245, 230, 200, 0.20);
+    --text-primary: #f0e4c8;
+    --text-secondary: #c4a87a;
+    --text-muted: #8a7050;
+    --text-inverse: #1a1208;
+    --amber: #e8a030;
+    --amber-light: #f0b840;
+    --green: #6ab87a;
+    --blue: #5a9abe;
+    --red: #d05050;
+  }
+}
+
+:root[data-theme="dark"] {
+  --surface: #1a1208;
+  --surface-raised: #221a0c;
+  --surface-card: rgba(30, 22, 10, 0.94);
+  --border: rgba(245, 230, 200, 0.10);
+  --border-strong: rgba(245, 230, 200, 0.20);
+  --text-primary: #f0e4c8;
+  --text-secondary: #c4a87a;
+  --text-muted: #8a7050;
+  --text-inverse: #1a1208;
+  --amber: #e8a030;
+  --amber-light: #f0b840;
+  --green: #6ab87a;
+  --blue: #5a9abe;
+  --red: #d05050;
+}
+
+/* ── Reset i osnove ──────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--atm-text);
+  background-color: var(--atm-bg);
+  transition: background-color 1.2s ease, color 0.8s ease;
+  min-height: 100vh;
+  padding-inline: var(--space-4);
+  padding-block: 0;
+}
+
+/* iOS: bez transition na background */
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}
+
+/* ── Tipografija ────────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); }
+h2 { font-size: clamp(1.2rem, 3.5vw, 1.6rem); }
+h3 { font-size: clamp(1rem, 2.5vw, 1.2rem); }
+
+p {
+  font-size: 1rem;
+  line-height: 1.8;
+  max-width: 60ch;
+  color: var(--atm-text);
+}
+
+/* ── Layout wrapper ─────────────────────────────────────────── */
+.game-wrapper {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding-block: var(--space-4);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Screens ────────────────────────────────────────────────── */
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen[hidden] {
+  display: none !important;
+}
+
+/* ── Utility ────────────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+img, svg {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-body);
+  border: none;
+  background: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+/* ── Numerički vrednosti ────────────────────────────────────── */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}

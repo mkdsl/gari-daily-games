@@ -1,0 +1,174 @@
+/* theme.css — Guncati / Kluboslavija brand-specific stilovi */
+
+/* ── Guncati brand paleta ───────────────────────────────────── */
+/* Zelena zemlja, toplа žutina, prirodni materijali */
+
+.brand-guncati {
+  --brand-primary: #4a7c59;     /* Zelena trava */
+  --brand-secondary: #8b6914;   /* Slama/drvo */
+  --brand-accent: #c8820a;      /* Jesen, žitarice */
+}
+
+/* ── Kluboslavija brand ─────────────────────────────────────── */
+.brand-kl {
+  --brand-primary: #3a6a9e;
+  --brand-secondary: #1a3a6e;
+  --brand-accent: #5a9abe;
+}
+
+/* ── Festival aftermath vizuelni jezik ──────────────────────── */
+/* Ugažena trava, prirodni ostaci — tipografski znakovi */
+
+.festival-mark {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  background: currentColor;
+  opacity: 0.4;
+  margin-inline: 4px;
+  vertical-align: middle;
+}
+
+/* ── Toma signature element ─────────────────────────────────── */
+.toma-accent {
+  border-left: 2px solid var(--amber);
+  padding-left: var(--space-3);
+  margin-block: var(--space-2);
+}
+
+.toma-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ── Hand-drawn feel (border dashes za organic look) ────────── */
+.organic-border {
+  border: 1px dashed var(--border-strong);
+  border-radius: 6px;
+}
+
+/* ── Sponzorski element (N2 / N7) ───────────────────────────── */
+.sponsor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+  padding: 2px 7px;
+  border: 1px solid rgba(58, 106, 158, 0.3);
+  border-radius: 3px;
+  background: rgba(58, 106, 158, 0.06);
+}
+
+/* ── Imanje scene textura ───────────────────────────────────── */
+.scene-texture {
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(74, 124, 89, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(200, 130, 10, 0.03) 0%, transparent 50%);
+}
+
+/* ── Aforizam styling ───────────────────────────────────────── */
+.aforizam-card {
+  padding: var(--space-5) var(--space-6);
+  background: var(--surface-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  text-align: center;
+  position: relative;
+}
+
+.aforizam-card::before {
+  content: '"';
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-4);
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--amber);
+  opacity: 0.3;
+}
+
+.aforizam-text {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+/* ── Progress dots (alternativa za sat tracking) ────────────── */
+.hour-progress-row {
+  display: flex;
+  gap: 3px;
+  margin-block: var(--space-2);
+}
+
+.hour-tick {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  transition: background 0.5s ease;
+}
+
+.hour-tick.passed {
+  background: var(--amber);
+}
+
+.hour-tick.current {
+  background: var(--atm-text);
+  opacity: 0.6;
+}
+
+/* ── Score card (za share) ──────────────────────────────────── */
+.score-card {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: var(--space-4);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  white-space: pre-wrap;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* ── Guncati footer brand mark ──────────────────────────────── */
+.guncati-mark {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 420px) {
+  .aforizam-card {
+    padding: var(--space-4);
+  }
+
+  .aforizam-card::before {
+    font-size: 2rem;
+  }
+}
+
+/* ── Dark theme brand adjustments ───────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    .badge-toma {
+      background: rgba(200, 130, 10, 0.2);
+    }
+    .badge-kl {
+      background: rgba(58, 106, 158, 0.2);
+    }
+  }
+}
