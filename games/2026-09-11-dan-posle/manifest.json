@@ -6,7 +6,7 @@
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-09-11-dan-posle/",
   "brand_serves": ["guncati", "kluboslavija"],
   "stage": "polish",
-  "status": "in_progress",
+  "status": "released",
   "modules": {
     "src/main.js": "Entry point — boot, game loop, option handling, hour advance, ending",
     "src/config.js": "Konstante: HOURS, RESOURCES, ATMOSPHERE boje, AUDIO_CONFIG, ENDINGS, ACHIEVEMENTS_DEF",
@@ -45,7 +45,7 @@
     "total_css": 1368
   },
   "beta_score": 7.3,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
-  "sef_signoff": false
+  "beta_score_iter2": 8.5,
+  "post_fix_score": 9.0,
+  "sef_signoff": true
 }

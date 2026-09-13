@@ -46,6 +46,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-08-14 | Crew Recruiter: Izgradi Ekipu ⭐ | Mini deck-builder / crew manager — MKDSLend × Guncati × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-08-14-crew-recruiter/) |
 | 2026-09-04 | Jesenji Tok ⭐ | Seasonal Scheduling Puzzle — Guncati × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-09-04-jesenji-tok/) |
 | 2026-09-07 | Put do Guncata | Text/Narrative Adventure — Guncati × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-09-07-put-do-guncata/) |
+| 2026-09-11 | Dan Posle | Narrative choice / community builder — Guncati × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-09-11-dan-posle/) |
 
 ## Statusi
 
