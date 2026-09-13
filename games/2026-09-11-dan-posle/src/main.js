@@ -71,7 +71,7 @@ function boot() {
       const nowMuted = !isMuted();
       setMuted(nowMuted);
       updateMuteButton(nowMuted);
-      if (!nowMuted && audioStarted) {
+      if (state && !nowMuted && audioStarted) {
         startAmbient(getCurrentHour(state));
       }
     });

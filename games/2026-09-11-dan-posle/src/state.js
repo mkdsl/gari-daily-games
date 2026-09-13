@@ -74,7 +74,7 @@ export function loadState() {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     // Validacija osnovnih polja
-    if (!parsed.resources || parsed.currentHourIndex === undefined) return null;
+    if (!parsed.resources || parsed.currentHourIndex === undefined || parsed.currentHourIndex >= HOURS.length) return null;
     return parsed;
   } catch (e) {
     return null;

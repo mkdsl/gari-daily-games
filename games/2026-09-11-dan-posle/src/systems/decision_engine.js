@@ -102,6 +102,11 @@ export function getOptionsForNode(node, resources) {
     if (eDelta > bestE) bestE = eDelta;
   }
 
+  // Ako nijedna opcija ne pomaže energiji, sve ostaju enabled
+  if (bestE <= 0) {
+    return node.options.map(o => ({ ...o, disabled: false, auto: false }));
+  }
+
   return node.options.map(opt => {
     const eDelta = opt.delta?.e ?? 0;
     const isBest = eDelta === bestE;

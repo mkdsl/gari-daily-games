@@ -80,6 +80,9 @@ export function renderDecisionCard(node, options, onChoose, isPrestige = false) 
   title.className = 'card-title';
   title.textContent = node.title;
 
+  header.appendChild(time);
+  header.appendChild(title);
+
   // Badge (Toma / Kluboslavija)
   if (node.toma) {
     const badge = document.createElement('span');
@@ -93,9 +96,6 @@ export function renderDecisionCard(node, options, onChoose, isPrestige = false) 
     badge.textContent = '🎵 Kluboslavija';
     header.appendChild(badge);
   }
-
-  header.appendChild(time);
-  header.appendChild(title);
   card.appendChild(header);
 
   // Tekst
