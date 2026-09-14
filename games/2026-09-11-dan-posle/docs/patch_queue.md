@@ -7,7 +7,7 @@
 - [x] P3 `src/config.js` + `src/ui.js` + `styles/ui.css` — endings screen footer link "Sledeća Kluboslavija stanica →" sa NEXT_EVENT konstantom (done 2026-09-14, commit 0b378b3)
 - [x] P3 `src/content/brand_hooks.js` + `src/ui.js` + `styles/ui.css` — A3 achievement Kluboslavija promo u notifikaciji (done 2026-09-14, commit 7d38c78)
 - [x] P3 `src/atmosphere.js` + `styles/atmosphere.css` + `src/main.js` — pre-ending horizon signal: na satu 18 (Sumrak), ambijentalni CSS filter počinje blagi warm shift — emocionalni signal da se dan zatvara bez teksta (done 2026-09-14, commit a2fb094)
-- [ ] P3 `src/state.js` + `src/content/aforizmi.js` — prestige ton marker: N9B i N26B Tomin aforizam se prikazuje u italic + blago drugačijoj boji uz prefix "(Toma: '...')" — vizuelna razlika od prvog playthrough-a
+- [x] P3 `src/content/aforizmi.js` + `src/main.js` + `styles/ui.css` — prestige ton marker: N9B i N26B Tomin aforizam u italic uz prefix "(Toma: '...')" (done 2026-09-14, commit 73f06d8)
 - [ ] P3 `src/content/dialogue.js` — "prolog" monolog na intro screenu (menja se po prestige runu): run 0 = "Jutros ništa ne znaš. To je prednost."; run 1+ = "Prošle noći si napravio izbor. Toma pamti. Slavko pamti. Ti si zaboravio."
 - [ ] P3 `src/content/dialogue.js` + `src/systems/prestige.js` — Toma prestige epilog (N26B) zavisi od Slavko statusa: pomiren = "Rekao je da ste vi dokaz da se može."; ogorčen = "Rekao je da si selektivan sa mirenjem."
 - [ ] P3 `src/content/dialogue.js` — Slavko arc treća tačka: novi N17 varijanta dostupna samo ako je pomirenje (N3) pre podne — Slavko šalje poruku oko 14:00 sa pozivom za zajednički projekt
