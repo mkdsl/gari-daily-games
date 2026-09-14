@@ -2,25 +2,13 @@
 
 ## Otvoreni patčevi
 
-### P1 — Bug (brand / UX šteta)
-- [x] P1 `src/share.js` — ispraviti URL u generateScoreCard (done 2026-09-14, commit ff42382)
-- [x] P1 `src/systems/prestige.js` + `src/state.js` — konsolidovati loadPrestige() na keš (done 2026-09-14, commit d7cd43e)
-
-### P2 — Polish (vidno poboljšanje)
-- [x] P2 `src/ui.js` — resource bar fill clamp dodat (done 2026-09-14, commit 0a4c68d)
-- [x] P2 `src/main.js` — dead import-i renderHUD + loadAchievements uklonjeni (done 2026-09-14, commit 0a4c68d)
-- [x] P2 `src/systems/decision_engine.js` — dead partitionNodes() uklonjena (done 2026-09-14, commit 0a4c68d)
-- [x] P2 `src/ui.js` + `styles/ui.css` — midgame CS hint na satu 12 (done 2026-09-14, commit bd16ff2)
-- [x] P2 `src/main.js` + `src/ui.js` — CS start reframe: Nered: 10 initial text (done 2026-09-14, commit bd16ff2)
-- [x] P2 `src/main.js` + `src/ui.js` + `styles/ui.css` — momentum cue (done 2026-09-14, commit bd16ff2)
-
 ### P3 — Content / Feature expansion
 - [ ] P3 `src/content/brand_hooks.js` — dodati Guncati volonterski CTA u "Zajednica nastaje" ending: dugme "Prijavi se za Guncati tim 2027 →" sa href="https://guncati.rs/volonteri" (novi tab, ne prekida igru)
 - [ ] P3 `src/content/brand_hooks.js` — prestige ending "Sledeće leto" dobija Guncati loyalty hook: dialog node prikazuje "Toma zna — Guncati grand finale čeka." + subtekst "Budi prvi koji zna kad karte izađu → guncati.rs" (samo 2. playthrough, CS >= 8)
-- [ ] P3 `src/share.js` — generateScoreCard dodaje Kluboslavija hashtag u share tekst: "#KluboslavijaTurneja2026 #DanPosle" + play_url
+- [x] P3 `src/share.js` — generateScoreCard dodaje Kluboslavija hashtag u share tekst: "#KluboslavijaTurneja2026 #DanPosle" + play_url (done 2026-09-14, commit bb9db6c)
 - [ ] P3 `src/content/brand_hooks.js` + `src/ui.js` — endings screen (sva 4 endinga) dobija footer link "Sledeća Kluboslavija stanica →" sa NEXT_EVENT konstantom iz config.js; ako je null — link se ne prikazuje
 - [ ] P3 `src/content/brand_hooks.js` — achievement A3 unlock reward: Kluboslavija promo placeholder koji šef zamenjuje pre narednog event-a; do tada "Prati Kluboslavija → instagram.com/kluboslavija"
-- [ ] P3 `src/ui.js` + `styles/game.css` — pre-ending horizon signal: na satu 18 (Sumrak), ambijentalni CSS filter počinje blagi warm shift — emocionalni signal da se dan zatvara bez teksta
+- [x] P3 `src/atmosphere.js` + `styles/atmosphere.css` + `src/main.js` — pre-ending horizon signal: na satu 18 (Sumrak), ambijentalni CSS filter počinje blagi warm shift — emocionalni signal da se dan zatvara bez teksta (done 2026-09-14, commit a2fb094)
 - [ ] P3 `src/state.js` + `src/content/aforizmi.js` — prestige ton marker: N9B i N26B Tomin aforizam se prikazuje u italic + blago drugačijoj boji uz prefix "(Toma: '...')" — vizuelna razlika od prvog playthrough-a
 - [ ] P3 `src/content/dialogue.js` — "prolog" monolog na intro screenu (menja se po prestige runu): run 0 = "Jutros ništa ne znaš. To je prednost."; run 1+ = "Prošle noći si napravio izbor. Toma pamti. Slavko pamti. Ti si zaboravio."
 - [ ] P3 `src/content/dialogue.js` + `src/systems/prestige.js` — Toma prestige epilog (N26B) zavisi od Slavko statusa: pomiren = "Rekao je da ste vi dokaz da se može."; ogorčen = "Rekao je da si selektivan sa mirenjem."
@@ -30,4 +18,13 @@
 
 ## Završeni patčevi
 
-_(prazan)_
+- [x] P1 `src/share.js` — ispraviti URL u generateScoreCard (done 2026-09-14, commit ff42382)
+- [x] P1 `src/systems/prestige.js` + `src/state.js` — konsolidovati loadPrestige() na keš (done 2026-09-14, commit d7cd43e)
+- [x] P2 `src/ui.js` — resource bar fill clamp dodat (done 2026-09-14, commit 0a4c68d)
+- [x] P2 `src/main.js` — dead import-i renderHUD + loadAchievements uklonjeni (done 2026-09-14, commit 0a4c68d)
+- [x] P2 `src/systems/decision_engine.js` — dead partitionNodes() uklonjena (done 2026-09-14, commit 0a4c68d)
+- [x] P2 `src/ui.js` + `styles/ui.css` — midgame CS hint na satu 12 (done 2026-09-14, commit bd16ff2)
+- [x] P2 `src/main.js` + `src/ui.js` — CS start reframe: Nered: 10 initial text (done 2026-09-14, commit bd16ff2)
+- [x] P2 `src/main.js` + `src/ui.js` + `styles/ui.css` — momentum cue (done 2026-09-14, commit bd16ff2)
+- [x] P3 `src/share.js` — generateScoreCard dodaje Kluboslavija hashtag u share tekst: "#KluboslavijaTurneja2026 #DanPosle" + play_url (done 2026-09-14, commit bb9db6c)
+- [x] P3 `src/atmosphere.js` + `styles/atmosphere.css` + `src/main.js` — pre-ending horizon signal: na satu 18 (Sumrak), ambijentalni CSS filter počinje blagi warm shift — emocionalni signal da se dan zatvara bez teksta (done 2026-09-14, commit a2fb094)
