@@ -4,17 +4,26 @@
 
 import { loadPrestige, savePrestige, clearState } from '../state.js';
 
+/** Modul-nivo keš — jedan localStorage read po page loadu */
+let _cache = null;
+
+function _get() {
+  if (!_cache) _cache = loadPrestige();
+  return _cache;
+}
+
 /**
  * Unlock prestige na osnovu "Sledeće leto" endinga
  * @returns {{ unlocked: boolean, count: number }}
  */
 export function unlockPrestige() {
-  const current = loadPrestige();
+  const current = _get();
   const updated = {
     unlocked: true,
     count: (current.count || 0) + 1
   };
   savePrestige(updated);
+  _cache = updated;
   return updated;
 }
 
@@ -22,16 +31,14 @@ export function unlockPrestige() {
  * Da li je prestige unlock-ovan?
  */
 export function isPrestigeUnlocked() {
-  const p = loadPrestige();
-  return p.unlocked === true;
+  return _get().unlocked === true;
 }
 
 /**
  * Broj prestige run-ova
  */
 export function prestigeRunCount() {
-  const p = loadPrestige();
-  return p.count || 0;
+  return _get().count || 0;
 }
 
 /**
