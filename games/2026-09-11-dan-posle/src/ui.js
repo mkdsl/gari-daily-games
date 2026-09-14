@@ -11,6 +11,7 @@ import { getAllUnlockedAchievements } from './systems/achievements.js';
 import { generateScoreCard } from './share.js';
 import { neredIcons } from './entities/event_aftermath.js';
 import { formatHour } from './systems/timer.js';
+import { guncatiCTA } from './content/brand_hooks.js';
 
 /**
  * Prikaži intro screen
@@ -127,6 +128,24 @@ export function showEndingScreen(state, endingId, newAchievements, onShare, onRe
 
   const restartBtn = screen.querySelector('#btn-restart');
   if (restartBtn) restartBtn.addEventListener('click', onRestart);
+
+  // Guncati / Kluboslavija CTA za specifične endinge
+  const actionsEl = screen.querySelector('.ending-actions');
+  if (actionsEl) {
+    const existingCTA = actionsEl.querySelector('.brand-cta');
+    if (existingCTA) existingCTA.remove();
+    const cta = guncatiCTA(endingId, state.isPrestige, cs);
+    if (cta) {
+      const ctaBtn = document.createElement('a');
+      ctaBtn.className = 'brand-cta';
+      ctaBtn.href = cta.url;
+      ctaBtn.target = '_blank';
+      ctaBtn.rel = 'noopener noreferrer';
+      ctaBtn.textContent = cta.label;
+      if (cta.tooltip) ctaBtn.title = cta.tooltip;
+      actionsEl.appendChild(ctaBtn);
+    }
+  }
 
   showScreen('screen-ending');
 }
