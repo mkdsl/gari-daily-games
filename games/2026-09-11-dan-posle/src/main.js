@@ -25,7 +25,7 @@ import {
   showCSHint, setInitialCSText, showMomentumCue
 } from './ui.js';
 import { shareResult } from './share.js';
-import { hourIntroText, hourTransitionText, optionReaction, prologMonolog } from './content/dialogue.js';
+import { hourIntroText, hourTransitionText, optionReaction, prologMonolog, tomaEpilogN26B } from './content/dialogue.js';
 import { tomaPretigeAforizam } from './content/aforizmi.js';
 import { locationByHour } from './entities/location.js';
 import { INTRO_TEXT } from './entities/organizer.js';
@@ -259,11 +259,18 @@ async function onOptionChosen(option) {
 
       // Toma prestige ton marker
       if (state.isPrestige) {
-        const tomaQ = tomaPretigeAforizam(option.id);
-        if (tomaQ) {
+        let tomaText = null;
+        if (option.id === 'N26B') {
+          const slavkoReconciled = !!state.chosenOptions?.N4A;
+          tomaText = tomaEpilogN26B(slavkoReconciled);
+        } else {
+          const q = tomaPretigeAforizam(option.id);
+          if (q) tomaText = `(Toma: '${q}')`;
+        }
+        if (tomaText) {
           const tomaEl = document.createElement('p');
           tomaEl.className = 'toma-prestige-marker';
-          tomaEl.textContent = `(Toma: '${tomaQ}')`;
+          tomaEl.textContent = tomaText;
           card.appendChild(tomaEl);
         }
       }

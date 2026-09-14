@@ -85,6 +85,16 @@ export function hourIntroText(hour) {
  * @returns {string}
  */
 /**
+ * Toma epilog za N26B opciju u prestige runu — zavisi od Slavko statusa
+ * @param {boolean} slavkoReconciled - da li je N4A izabran (Slavko pomiren)
+ * @returns {string}
+ */
+export function tomaEpilogN26B(slavkoReconciled) {
+  if (slavkoReconciled) return '(Toma: \'Rekao je da ste vi dokaz da se može.\')';
+  return '(Toma: \'Rekao je da si selektivan sa mirenjem.\')';
+}
+
+/**
  * Prolog monolog na intro screenu — menja se po prestige runu
  * @param {number} runCount - 0 = prvi prolaz, 1+ = prestige
  * @returns {string}
