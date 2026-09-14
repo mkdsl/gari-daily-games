@@ -3,8 +3,8 @@
 ## Otvoreni patčevi
 
 ### P1 — Bug (brand / UX šteta)
-- [ ] P1 `src/share.js` — ispraviti URL u generateScoreCard (`gari-daily-games.mkdsl.github.io` → `mkdsl.github.io/gari-daily-games`); pogrešan link znači broken share kad se feature aktivira — direktna brand šteta
-- [ ] P1 `src/prestige.js` + `src/state.js` — `loadPrestige()` se poziva i u boot() i kroz `isPrestigeUnlocked()` — dva odvojena localStorage čitanja, potencijalni desync u dve kartice; konsolidovati na jedan poziv u boot() koji kešira rezultat
+- [x] P1 `src/share.js` — ispraviti URL u generateScoreCard (done 2026-09-14, commit ff42382)
+- [x] P1 `src/systems/prestige.js` + `src/state.js` — konsolidovati loadPrestige() na keš (done 2026-09-14, commit d7cd43e)
 
 ### P2 — Polish (vidno poboljšanje)
 - [ ] P2 `src/ui.js` — resource bar fill (~linija 188) nema `Math.min(100, value)` clamp — overflow vrednosti crta bar van granica, vizuelni glitch vidljiv na prestige reset-u ili abnormalnom state-u
