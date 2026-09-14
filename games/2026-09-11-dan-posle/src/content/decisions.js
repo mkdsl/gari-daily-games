@@ -503,6 +503,27 @@ export const DECISIONS = [
 
   // ── 14:00 POPODNE ────────────────────────────────────────────
   {
+    id: 'N14_ANA',
+    hour: 14,
+    requires: ['N1A', 'N1B'],
+    title: 'Ana javlja da je stigla',
+    text: 'SMS od Ane: "Stigla sam. Hvala ti za sve — ima li mesta za Guncati sledeće leto?" Nisi očekivao ovako brzo.',
+    options: [
+      {
+        id: 'N14AA',
+        label: 'Pišeš odmah — naravno',
+        delta: { e: 0, v: 2, s: 1, n: 0 },
+        text: '"Naravno. Link ti šaljem čim izađe." Ana odgovara za 10 sekundi.'
+      },
+      {
+        id: 'N14AB',
+        label: 'Ostaviš za večeras',
+        delta: { e: 0, v: 1, s: 0, n: 0 },
+        text: 'Ana čeka. Znaš da će biti tu i kad odgovoriš.'
+      }
+    ]
+  },
+  {
     id: 'N17_SLAVKO',
     hour: 14,
     requires: 'N4A',

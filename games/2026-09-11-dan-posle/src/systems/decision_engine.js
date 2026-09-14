@@ -63,7 +63,10 @@ export function selectNodesForHour(hour, isPrestige = false, seenNodes = [], cho
   const all = getNodesForHour(hour, isPrestige);
   return all.filter(n => {
     if (seenNodes.includes(n.id)) return false;
-    if (n.requires && !chosenOptions[n.requires]) return false;
+    if (n.requires) {
+      const reqs = Array.isArray(n.requires) ? n.requires : [n.requires];
+      if (!reqs.some(r => chosenOptions[r])) return false;
+    }
     return true;
   });
 }
