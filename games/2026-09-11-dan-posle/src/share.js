@@ -83,6 +83,7 @@ export function generateScoreCard(state, endingId, endingTitle) {
     ``,
     `Community Score: ${cs.toFixed(1)}`,
     ``,
+    `#KluboslavijaTurneja2026 #DanPosle`,
     `https://mkdsl.github.io/gari-daily-games/games/2026-09-11-dan-posle/`
   ].join('\n');
 }
