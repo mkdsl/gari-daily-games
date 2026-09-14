@@ -67,6 +67,10 @@ export function selectNodesForHour(hour, isPrestige = false, seenNodes = [], cho
       const reqs = Array.isArray(n.requires) ? n.requires : [n.requires];
       if (!reqs.some(r => chosenOptions[r])) return false;
     }
+    if (n.requiresAll) {
+      const reqs = Array.isArray(n.requiresAll) ? n.requiresAll : [n.requiresAll];
+      if (!reqs.every(r => chosenOptions[r])) return false;
+    }
     return true;
   });
 }

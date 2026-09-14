@@ -655,6 +655,27 @@ export const DECISIONS = [
     ]
   },
   {
+    id: 'N22_TIHI',
+    hour: 15,
+    requiresAll: ['N4A', 'N3A'],
+    title: 'Jova dodaje rečenicu',
+    text: 'Menadžer prosleđuje tvoj recap Jovi. Jova doda jedno: "i komšije su za nas — i to nešto znači." Nisi ga molio.',
+    options: [
+      {
+        id: 'N22TA',
+        label: 'Ostaviš kao što je',
+        delta: { e: 0, v: 2, s: 1, n: 0 },
+        text: 'Tri rečenice plus jedna. Festival ima svedoka kojih nisi ni znao.'
+      },
+      {
+        id: 'N22TB',
+        label: 'Pitaš Jovu kako je saznao',
+        delta: { e: -1, v: 2, s: 2, n: 0 },
+        text: '"Slavko mu pomenuo. Kaže cela ulica gledala sa trijema." Utisak koji nisi planirao.'
+      }
+    ]
+  },
+  {
     id: 'N23',
     hour: 15,
     title: 'Poslednji volonter odlazi',
