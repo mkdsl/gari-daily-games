@@ -489,6 +489,13 @@
   color: var(--amber);
 }
 
+.achievement-notif .ach-promo {
+  display: block;
+  font-size: 0.72rem;
+  opacity: 0.75;
+  margin-top: 2px;
+}
+
 .notif-visible {
   transform: translateX(-50%) translateY(0);
   opacity: 1;

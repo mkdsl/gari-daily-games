@@ -11,7 +11,7 @@ import { getAllUnlockedAchievements } from './systems/achievements.js';
 import { generateScoreCard } from './share.js';
 import { neredIcons } from './entities/event_aftermath.js';
 import { formatHour } from './systems/timer.js';
-import { guncatiCTA } from './content/brand_hooks.js';
+import { guncatiCTA, achievementA3Promo } from './content/brand_hooks.js';
 
 /**
  * Prikaži intro screen
@@ -176,7 +176,8 @@ export function showAchievementNotification(achievementId) {
 
   const notif = document.createElement('div');
   notif.className = 'achievement-notif';
-  notif.innerHTML = `<span class="ach-icon">${def.icon}</span> <span class="ach-title">${def.title}</span>`;
+  const promo = achievementId === 'A3' ? achievementA3Promo() : null;
+  notif.innerHTML = `<span class="ach-icon">${def.icon}</span> <span class="ach-title">${def.title}</span>${promo ? `<span class="ach-promo">${promo}</span>` : ''}`;
   document.body.appendChild(notif);
 
   requestAnimationFrame(() => {
