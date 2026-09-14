@@ -10,9 +10,9 @@
 - [x] P2 `src/ui.js` — resource bar fill clamp dodat (done 2026-09-14, commit 0a4c68d)
 - [x] P2 `src/main.js` — dead import-i renderHUD + loadAchievements uklonjeni (done 2026-09-14, commit 0a4c68d)
 - [x] P2 `src/systems/decision_engine.js` — dead partitionNodes() uklonjena (done 2026-09-14, commit 0a4c68d)
-- [ ] P2 `src/ui.js` + `styles/ui.css` — midgame CS progress hint: na satu 12 (podne) prikaži netametni tooltip "Trenutno: CS X — za 'Dobar posao' trebaš 6+ do 19:00" sa progress barom koji nestaje posle 4s
-- [ ] P2 `src/state.js` + `src/ui.js` — CS start reframe: umesto "CS: 0.0" na startu, prikaži "Nered: 10 — danas krećeš od nule" kao vizuelni ankor (psihološki prioritet je čišćenje, ne apsolutni skor)
-- [ ] P2 `src/ui.js` + `styles/ui.css` — decision momentum cue: kad igrač donese 3 uzastopne odluke u isti ending-pravac (sve Veze++ ili sve Nered--), kratki ambient flash + tekst "Nešto se kristališe..." (2s, bez spoilovana ishoda)
+- [x] P2 `src/ui.js` + `styles/ui.css` — midgame CS hint na satu 12 (done 2026-09-14, commit bd16ff2)
+- [x] P2 `src/main.js` + `src/ui.js` — CS start reframe: Nered: 10 initial text (done 2026-09-14, commit bd16ff2)
+- [x] P2 `src/main.js` + `src/ui.js` + `styles/ui.css` — momentum cue (done 2026-09-14, commit bd16ff2)
 
 ### P3 — Content / Feature expansion
 - [ ] P3 `src/content/brand_hooks.js` — dodati Guncati volonterski CTA u "Zajednica nastaje" ending: dugme "Prijavi se za Guncati tim 2027 →" sa href="https://guncati.rs/volonteri" (novi tab, ne prekida igru)
