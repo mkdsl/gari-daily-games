@@ -185,7 +185,7 @@ export function updateHUD(resources) {
     const valEl = hud.querySelector(`[data-resource="${key}"] .bar-value`);
     const iconsEl = hud.querySelector(`[data-resource="${key}"] .nered-icons`);
 
-    if (fill) fill.style.width = `${(val / def.max) * 100}%`;
+    if (fill) fill.style.width = `${Math.min(100, (val / def.max) * 100)}%`;
     if (valEl) valEl.textContent = val;
     if (iconsEl && key === 'nered') iconsEl.textContent = neredIcons(val);
   });

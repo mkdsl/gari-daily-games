@@ -5,7 +5,7 @@
 import { HOURS, ATMOSPHERE } from './config.js';
 import {
   createInitialState, loadState, saveState, clearState,
-  computeCS, currentHour, loadPrestige, loadAchievements
+  computeCS, currentHour, loadPrestige
 } from './state.js';
 import { applyDelta, formatDeltaDisplay } from './systems/resource_manager.js';
 import { getOrderedNodesForHour } from './systems/event_selector.js';
@@ -18,7 +18,7 @@ import { getCurrentHour, advanceHour, progressRatio, hoursLeft, formatHour } fro
 import { setAtmosphere, initAtmosphere } from './atmosphere.js';
 import { hourTransition, fadeIn, slideUp } from './transitions.js';
 import { initAudio, startAmbient, sfxClick, sfxGain, sfxLoss, sfxEndingSwell, sfxAchievement, setMuted, isMuted } from './audio.js';
-import { renderDecisionCard, renderHUD, renderChoiceResult, renderDeltaDisplay, renderHourHeader, renderProgress, flashResourceBars } from './render.js';
+import { renderDecisionCard, renderChoiceResult, renderDeltaDisplay, renderHourHeader, renderProgress, flashResourceBars } from './render.js';
 import {
   showIntroScreen, showEndingScreen, showScreen, updateHUD, updateCS,
   showHourTransition, updateMuteButton, showAchievementNotification, showShareToast

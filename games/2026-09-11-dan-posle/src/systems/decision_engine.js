@@ -38,17 +38,6 @@ function isReplacedByPrestige(nodeId) {
 }
 
 /**
- * Nodi koji se uvek prikazuju (Toma nodovi, branded nodovi) vs random pool
- * @param {Array} nodes
- * @returns {{ required: Array, optional: Array }}
- */
-export function partitionNodes(nodes) {
-  const required = nodes.filter(n => n.toma || n.kluboslavija || n.prestige);
-  const optional = nodes.filter(n => !n.toma && !n.kluboslavija && !n.prestige);
-  return { required, optional };
-}
-
-/**
  * Shuffle array (Fisher-Yates)
  * @param {Array} arr
  * @returns {Array}
