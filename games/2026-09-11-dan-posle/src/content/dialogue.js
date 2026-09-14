@@ -84,6 +84,16 @@ export function hourIntroText(hour) {
  * @param {number} toHour
  * @returns {string}
  */
+/**
+ * Prolog monolog na intro screenu — menja se po prestige runu
+ * @param {number} runCount - 0 = prvi prolaz, 1+ = prestige
+ * @returns {string}
+ */
+export function prologMonolog(runCount) {
+  if (runCount === 0) return 'Jutros ništa ne znaš. To je prednost.';
+  return 'Prošle noći si napravio izbor. Toma pamti. Slavko pamti. Ti si zaboravio.';
+}
+
 export function hourTransitionText(fromHour, toHour) {
   const transitions = {
     '7-8':   'Jutro ulazi.',

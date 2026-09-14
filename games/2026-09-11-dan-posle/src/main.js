@@ -13,7 +13,7 @@ import { getOptionsForNode, isLastHour as isLastHourIdx } from './systems/decisi
 import { markNodeSeen, recordChoice, trackTomaChoice, trackHelpUsage } from './systems/narrative_state.js';
 import { detectEnding } from './systems/endings.js';
 import { checkEndgameAchievements, unlockMidgameAchievement } from './systems/achievements.js';
-import { unlockPrestige, isPrestigeUnlocked, startPrestigeRun, prestigeBonus } from './systems/prestige.js';
+import { unlockPrestige, isPrestigeUnlocked, startPrestigeRun, prestigeBonus, prestigeRunCount } from './systems/prestige.js';
 import { getCurrentHour, advanceHour, progressRatio, hoursLeft, formatHour } from './systems/timer.js';
 import { setAtmosphere, initAtmosphere, initAtmosphereFilter } from './atmosphere.js';
 import { hourTransition, fadeIn, slideUp } from './transitions.js';
@@ -25,7 +25,7 @@ import {
   showCSHint, setInitialCSText, showMomentumCue
 } from './ui.js';
 import { shareResult } from './share.js';
-import { hourIntroText, hourTransitionText, optionReaction } from './content/dialogue.js';
+import { hourIntroText, hourTransitionText, optionReaction, prologMonolog } from './content/dialogue.js';
 import { tomaPretigeAforizam } from './content/aforizmi.js';
 import { locationByHour } from './entities/location.js';
 import { INTRO_TEXT } from './entities/organizer.js';
@@ -55,7 +55,9 @@ function boot() {
     startGame(false);
   } else {
     // Show intro
-    showIntroScreen(INTRO_TEXT, isPrestigeUnlocked(), (isPrestige) => {
+    const prolog = prologMonolog(prestigeRunCount());
+    const fullIntroText = `${prolog}\n\n${INTRO_TEXT}`;
+    showIntroScreen(fullIntroText, isPrestigeUnlocked(), (isPrestige) => {
       if (isPrestige) {
         startPrestigeRun();
         state = createInitialState(true);
