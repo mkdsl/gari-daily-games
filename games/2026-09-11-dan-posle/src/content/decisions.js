@@ -503,6 +503,27 @@ export const DECISIONS = [
 
   // ── 14:00 POPODNE ────────────────────────────────────────────
   {
+    id: 'N17_SLAVKO',
+    hour: 14,
+    requires: 'N4A',
+    title: 'Slavko šalje poruku',
+    text: 'Slavko: "Imam jednu ideju za komšijski projekt. Kad imaš 5 min?" Nisi očekivao ovo.',
+    options: [
+      {
+        id: 'N17SA',
+        label: 'Odgovaraš odmah — kad hoćeš',
+        delta: { e: -1, v: 2, s: 1, n: 0 },
+        text: 'Slavko odgovori za minut. Govori o zajedničkom dvorišnom bunaru. Stvarno.'
+      },
+      {
+        id: 'N17SB',
+        label: '"Sutra" — danas nisi za to',
+        delta: { e: 0, v: 0, s: 0, n: 0 },
+        text: 'Slavko šalje "ok". Možda ima i to smisla.'
+      }
+    ]
+  },
+  {
     id: 'N19',
     hour: 14,
     title: 'Baštenski sto slomljen',

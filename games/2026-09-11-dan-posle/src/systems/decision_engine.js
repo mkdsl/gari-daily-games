@@ -59,10 +59,13 @@ function shuffle(arr) {
  * @param {Array<string>} seenNodes - već viđeni node ID-ovi (ne ponavljamo)
  * @returns {Array<DecisionNode>}
  */
-export function selectNodesForHour(hour, isPrestige = false, seenNodes = []) {
+export function selectNodesForHour(hour, isPrestige = false, seenNodes = [], chosenOptions = {}) {
   const all = getNodesForHour(hour, isPrestige);
-  // Filter already seen (ne bi trebalo da se desi u normal flow)
-  return all.filter(n => !seenNodes.includes(n.id));
+  return all.filter(n => {
+    if (seenNodes.includes(n.id)) return false;
+    if (n.requires && !chosenOptions[n.requires]) return false;
+    return true;
+  });
 }
 
 /**

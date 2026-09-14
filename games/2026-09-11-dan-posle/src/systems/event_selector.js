@@ -14,8 +14,8 @@ import { HOURS } from '../config.js';
  * @param {Array<string>} seenNodes
  * @returns {Array<DecisionNode>}
  */
-export function getOrderedNodesForHour(hour, isPrestige = false, seenNodes = []) {
-  const nodes = selectNodesForHour(hour, isPrestige, seenNodes);
+export function getOrderedNodesForHour(hour, isPrestige = false, seenNodes = [], chosenOptions = {}) {
+  const nodes = selectNodesForHour(hour, isPrestige, seenNodes, chosenOptions);
 
   // Sortiraj: regular → kluboslavija → toma
   const regular = nodes.filter(n => !n.toma && !n.kluboslavija);

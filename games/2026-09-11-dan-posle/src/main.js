@@ -119,7 +119,7 @@ function startGame(fresh) {
 // ── Hour Management ──────────────────────────────────────────────
 function loadCurrentHourNodes() {
   const hour = getCurrentHour(state);
-  currentNodes = getOrderedNodesForHour(hour, state.isPrestige, state.seenNodes);
+  currentNodes = getOrderedNodesForHour(hour, state.isPrestige, state.seenNodes, state.chosenOptions || {});
   currentNodeIndex = 0;
 
   // Update hour label
