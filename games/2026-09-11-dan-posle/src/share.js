@@ -83,6 +83,6 @@ export function generateScoreCard(state, endingId, endingTitle) {
     ``,
     `Community Score: ${cs.toFixed(1)}`,
     ``,
-    `gari-daily-games.mkdsl.github.io`
+    `https://mkdsl.github.io/gari-daily-games/games/2026-09-11-dan-posle/`
   ].join('\n');
 }
