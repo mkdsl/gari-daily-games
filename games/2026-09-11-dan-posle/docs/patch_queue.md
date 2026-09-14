@@ -7,9 +7,9 @@
 - [x] P1 `src/systems/prestige.js` + `src/state.js` — konsolidovati loadPrestige() na keš (done 2026-09-14, commit d7cd43e)
 
 ### P2 — Polish (vidno poboljšanje)
-- [ ] P2 `src/ui.js` — resource bar fill (~linija 188) nema `Math.min(100, value)` clamp — overflow vrednosti crta bar van granica, vizuelni glitch vidljiv na prestige reset-u ili abnormalnom state-u
-- [ ] P2 `src/main.js` — ukloniti dead import-e: `renderHUD` (koristi se `updateHUD` iz ui.js) i `loadAchievements` (uvezen samo u deklaraciji, nikad pozvan)
-- [ ] P2 `src/systems/decision_engine.js` — ukloniti dead funkciju `partitionNodes()` — nekorišćena, zbunjuje pri extend-ovanju logike energija/opcije
+- [x] P2 `src/ui.js` — resource bar fill clamp dodat (done 2026-09-14, commit 0a4c68d)
+- [x] P2 `src/main.js` — dead import-i renderHUD + loadAchievements uklonjeni (done 2026-09-14, commit 0a4c68d)
+- [x] P2 `src/systems/decision_engine.js` — dead partitionNodes() uklonjena (done 2026-09-14, commit 0a4c68d)
 - [ ] P2 `src/ui.js` + `styles/ui.css` — midgame CS progress hint: na satu 12 (podne) prikaži netametni tooltip "Trenutno: CS X — za 'Dobar posao' trebaš 6+ do 19:00" sa progress barom koji nestaje posle 4s
 - [ ] P2 `src/state.js` + `src/ui.js` — CS start reframe: umesto "CS: 0.0" na startu, prikaži "Nered: 10 — danas krećeš od nule" kao vizuelni ankor (psihološki prioritet je čišćenje, ne apsolutni skor)
 - [ ] P2 `src/ui.js` + `styles/ui.css` — decision momentum cue: kad igrač donese 3 uzastopne odluke u isti ending-pravac (sve Veze++ ili sve Nered--), kratki ambient flash + tekst "Nešto se kristališe..." (2s, bez spoilovana ishoda)
