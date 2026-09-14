@@ -259,3 +259,47 @@ export function showShareToast(method) {
     setTimeout(() => toast.remove(), 400);
   }, 2000);
 }
+
+/**
+ * Noon CS hint (podne signal)
+ * @param {number} cs
+ */
+export function showCSHint(cs) {
+  const existing = document.querySelector('.cs-hint-toast');
+  if (existing) existing.remove();
+  const hint = document.createElement('div');
+  hint.className = 'cs-hint-toast';
+  const note = cs >= 6 ? 'Na dobrom putu!' : "za 'Dobar posao' trebaš CS 6+ do 19:00";
+  hint.textContent = `Trenutno CS: ${cs.toFixed(1)} — ${note}`;
+  document.body.appendChild(hint);
+  setTimeout(() => hint.classList.add('cs-hint-visible'), 10);
+  setTimeout(() => {
+    hint.classList.remove('cs-hint-visible');
+    setTimeout(() => hint.remove(), 400);
+  }, 4000);
+}
+
+/**
+ * Postavi inicijalni tekst CS labele (pre prve odluke)
+ */
+export function setInitialCSText() {
+  const csEl = document.getElementById('cs-value');
+  if (csEl) csEl.textContent = 'Nered: 10 — danas krećeš od nule';
+}
+
+/**
+ * Prikaži momentum cue posle 3 uzastopne odluke u istom pravcu
+ */
+export function showMomentumCue() {
+  const existing = document.querySelector('.momentum-cue');
+  if (existing) return;
+  const cue = document.createElement('div');
+  cue.className = 'momentum-cue';
+  cue.textContent = 'Nešto se kristališe…';
+  document.body.appendChild(cue);
+  setTimeout(() => cue.classList.add('momentum-cue-visible'), 10);
+  setTimeout(() => {
+    cue.classList.remove('momentum-cue-visible');
+    setTimeout(() => cue.remove(), 400);
+  }, 2000);
+}

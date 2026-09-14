@@ -516,6 +516,50 @@
   opacity: 1;
 }
 
+/* ── CS hint toast (podne, sat 12) ──────────────────────────── */
+.cs-hint-toast {
+  position: fixed;
+  bottom: calc(var(--space-5) + 56px);
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: rgba(20, 20, 20, 0.92);
+  color: #f7f2a0;
+  border: 1px solid rgba(247, 242, 160, 0.3);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.82rem;
+  z-index: 300;
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none;
+  max-width: 90vw;
+  text-align: center;
+}
+.cs-hint-visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ── Momentum cue ────────────────────────────────────────────── */
+.momentum-cue {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(180, 220, 180, 0.9);
+  font-size: 1rem;
+  font-style: italic;
+  letter-spacing: 0.03em;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 300;
+  text-shadow: 0 0 16px rgba(100, 200, 100, 0.5);
+}
+.momentum-cue-visible {
+  opacity: 1;
+}
+
 /* ── Resource flash animations ───────────────────────────────── */
 .flash-positive {
   animation: flash-pos 0.5s ease;
@@ -857,6 +901,8 @@
   .btn-continue,
   .achievement-notif,
   .share-toast,
+  .cs-hint-toast,
+  .momentum-cue,
   #hour-overlay {
     transition: none !important;
     animation: none !important;

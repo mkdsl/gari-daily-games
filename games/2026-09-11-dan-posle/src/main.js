@@ -21,7 +21,8 @@ import { initAudio, startAmbient, sfxClick, sfxGain, sfxLoss, sfxEndingSwell, sf
 import { renderDecisionCard, renderChoiceResult, renderDeltaDisplay, renderHourHeader, renderProgress, flashResourceBars } from './render.js';
 import {
   showIntroScreen, showEndingScreen, showScreen, updateHUD, updateCS,
-  showHourTransition, updateMuteButton, showAchievementNotification, showShareToast
+  showHourTransition, updateMuteButton, showAchievementNotification, showShareToast,
+  showCSHint, setInitialCSText, showMomentumCue
 } from './ui.js';
 import { shareResult } from './share.js';
 import { hourIntroText, hourTransitionText, optionReaction } from './content/dialogue.js';
@@ -33,6 +34,7 @@ let state = null;
 let currentNodes = [];
 let currentNodeIndex = 0;
 let audioStarted = false;
+let momentumStack = []; // track last 3 decision directions for momentum cue
 
 // ── DOM refs ─────────────────────────────────────────────────────
 const gameArea = document.getElementById('game-area');
@@ -100,6 +102,7 @@ function startGame(fresh) {
   initAtmosphere(getCurrentHour(state));
   updateHUD(state.resources);
   updateCS(computeCS(state));
+  if (fresh) setInitialCSText();
   renderProgressBar();
 
   if (fresh) {
@@ -118,6 +121,9 @@ function loadCurrentHourNodes() {
 
   // Update hour label
   if (hourLabelEl) hourLabelEl.textContent = formatHour(hour);
+
+  // Noon CS progress hint
+  if (hour === 12) showCSHint(computeCS(state));
 
   // Update atmosphere
   setAtmosphere(hour);
@@ -193,6 +199,18 @@ async function onOptionChosen(option) {
   // Update HUD
   updateHUD(state.resources);
   updateCS(computeCS(state));
+
+  // Momentum cue tracking
+  const csChange = (actualDelta.veze || 0) + (actualDelta.secanja || 0) - (actualDelta.nered || 0) / 2;
+  if (csChange !== 0) {
+    const dir = csChange > 0 ? 'up' : 'down';
+    momentumStack.push(dir);
+    if (momentumStack.length > 3) momentumStack.shift();
+    if (momentumStack.length === 3 && momentumStack.every(d => d === dir)) {
+      showMomentumCue();
+      momentumStack = [];
+    }
+  }
 
   // Record choice
   recordChoice(state, option.id);
