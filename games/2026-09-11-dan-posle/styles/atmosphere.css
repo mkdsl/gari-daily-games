@@ -115,6 +115,18 @@
   color: var(--atm-text);
 }
 
+/* Sat 18+ — blagi topli filter kao emocionalni signal zatvaranja dana */
+.atm-sumrak {
+  filter: sepia(0.18) saturate(1.1) hue-rotate(-8deg);
+  transition: filter 1.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atm-sumrak {
+    transition: none;
+  }
+}
+
 /* ── Seasonal color stops za specifične sate ────────────────── */
 [data-hour="7"]  .card-time { color: #a07828; }
 [data-hour="11"] .card-time { color: #786000; }

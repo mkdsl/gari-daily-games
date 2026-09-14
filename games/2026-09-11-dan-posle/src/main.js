@@ -15,7 +15,7 @@ import { detectEnding } from './systems/endings.js';
 import { checkEndgameAchievements, unlockMidgameAchievement } from './systems/achievements.js';
 import { unlockPrestige, isPrestigeUnlocked, startPrestigeRun, prestigeBonus } from './systems/prestige.js';
 import { getCurrentHour, advanceHour, progressRatio, hoursLeft, formatHour } from './systems/timer.js';
-import { setAtmosphere, initAtmosphere } from './atmosphere.js';
+import { setAtmosphere, initAtmosphere, initAtmosphereFilter } from './atmosphere.js';
 import { hourTransition, fadeIn, slideUp } from './transitions.js';
 import { initAudio, startAmbient, sfxClick, sfxGain, sfxLoss, sfxEndingSwell, sfxAchievement, setMuted, isMuted } from './audio.js';
 import { renderDecisionCard, renderChoiceResult, renderDeltaDisplay, renderHourHeader, renderProgress, flashResourceBars } from './render.js';
@@ -127,6 +127,7 @@ function loadCurrentHourNodes() {
 
   // Update atmosphere
   setAtmosphere(hour);
+  initAtmosphereFilter(hour);
 
   // Audio
   if (audioStarted && !isMuted()) {

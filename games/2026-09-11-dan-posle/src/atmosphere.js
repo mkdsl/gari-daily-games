@@ -40,6 +40,20 @@ function applyAtmosphere(atm) {
 }
 
 /**
+ * Postavi warm filter signal za sumrak (sat 18+)
+ * @param {number} hour
+ */
+export function initAtmosphereFilter(hour) {
+  const gameArea = document.getElementById('game-area');
+  if (!gameArea) return;
+  if (hour >= 18) {
+    gameArea.classList.add('atm-sumrak');
+  } else {
+    gameArea.classList.remove('atm-sumrak');
+  }
+}
+
+/**
  * Vrati tekst boju za trenutni sat
  * @param {number} hour
  * @returns {string} CSS hex boja
