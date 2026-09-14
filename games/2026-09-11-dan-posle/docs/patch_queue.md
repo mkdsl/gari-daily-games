@@ -3,9 +3,7 @@
 ## Otvoreni patčevi
 
 ### P3 — Content / Feature expansion
-- [ ] P3 `src/content/brand_hooks.js` — dodati Guncati volonterski CTA u "Zajednica nastaje" ending: dugme "Prijavi se za Guncati tim 2027 →" sa href="https://guncati.rs/volonteri" (novi tab, ne prekida igru)
-- [ ] P3 `src/content/brand_hooks.js` — prestige ending "Sledeće leto" dobija Guncati loyalty hook: dialog node prikazuje "Toma zna — Guncati grand finale čeka." + subtekst "Budi prvi koji zna kad karte izađu → guncati.rs" (samo 2. playthrough, CS >= 8)
-- [x] P3 `src/share.js` — generateScoreCard dodaje Kluboslavija hashtag u share tekst: "#KluboslavijaTurneja2026 #DanPosle" + play_url (done 2026-09-14, commit bb9db6c)
+- [x] P3 `src/content/brand_hooks.js` + `src/ui.js` + `styles/ui.css` — Guncati CTA u "Zajednica nastaje" ending + prestige loyalty hook (done 2026-09-14, commit 8fe5adc)
 - [ ] P3 `src/content/brand_hooks.js` + `src/ui.js` — endings screen (sva 4 endinga) dobija footer link "Sledeća Kluboslavija stanica →" sa NEXT_EVENT konstantom iz config.js; ako je null — link se ne prikazuje
 - [ ] P3 `src/content/brand_hooks.js` — achievement A3 unlock reward: Kluboslavija promo placeholder koji šef zamenjuje pre narednog event-a; do tada "Prati Kluboslavija → instagram.com/kluboslavija"
 - [x] P3 `src/atmosphere.js` + `styles/atmosphere.css` + `src/main.js` — pre-ending horizon signal: na satu 18 (Sumrak), ambijentalni CSS filter počinje blagi warm shift — emocionalni signal da se dan zatvara bez teksta (done 2026-09-14, commit a2fb094)
