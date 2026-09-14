@@ -899,6 +899,18 @@
   border-color: rgba(74, 124, 89, 0.8);
 }
 
+.next-event-link {
+  display: block;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--atm-text);
+  opacity: 0.7;
+  text-decoration: underline;
+  padding: var(--space-1) 0;
+}
+
+.next-event-link:hover { opacity: 1; }
+
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 420px) {
   .resource-bar {

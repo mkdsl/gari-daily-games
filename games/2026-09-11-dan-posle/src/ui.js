@@ -2,7 +2,7 @@
  * ui.js — UI management: screens, HUD, ending, achievements, modali
  */
 
-import { RESOURCES, ACHIEVEMENTS_DEF } from './config.js';
+import { RESOURCES, ACHIEVEMENTS_DEF, NEXT_EVENT } from './config.js';
 import { computeCS } from './state.js';
 import { getEndingData } from './content/endings_data.js';
 import { aforizmForEnding } from './content/aforizmi.js';
@@ -144,6 +144,22 @@ export function showEndingScreen(state, endingId, newAchievements, onShare, onRe
       ctaBtn.textContent = cta.label;
       if (cta.tooltip) ctaBtn.title = cta.tooltip;
       actionsEl.appendChild(ctaBtn);
+    }
+  }
+
+  // Sledeća Kluboslavija stanica footer (šef puni NEXT_EVENT u config.js)
+  const guncatiMark = screen.querySelector('.guncati-mark');
+  if (guncatiMark) {
+    const existingLink = screen.querySelector('.next-event-link');
+    if (existingLink) existingLink.remove();
+    if (NEXT_EVENT) {
+      const link = document.createElement('a');
+      link.className = 'next-event-link';
+      link.href = NEXT_EVENT.url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = `Sledeća Kluboslavija stanica: ${NEXT_EVENT.label} →`;
+      guncatiMark.insertAdjacentElement('beforebegin', link);
     }
   }
 

@@ -84,6 +84,9 @@ export const ACHIEVEMENTS_DEF = {
   A8: { id: 'A8', title: 'Fondaš',              icon: '💛', desc: 'Novčanicu daj u fond festivala (N25C)' }
 };
 
+/** Sledeća Kluboslavija stanica — šef upisuje pre event-a, null = sakrij link */
+export const NEXT_EVENT = null;
+
 /** localStorage ključevi */
 export const STORAGE_KEYS = {
   GAME_STATE:   'danposle_state',
