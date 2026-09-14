@@ -11,8 +11,8 @@
 - [x] P3 `src/content/dialogue.js` + `src/main.js` — prolog monolog na intro screenu menja se po prestige runu (done 2026-09-14, commit c212c29)
 - [x] P3 `src/content/dialogue.js` + `src/main.js` — Toma epilog N26B zavisi od Slavko pomirenja (done 2026-09-14, commit 29a2bd2)
 - [x] P3 `src/content/decisions.js` + `src/systems/decision_engine.js` + `src/systems/event_selector.js` + `src/main.js` — N17_SLAVKO node: Slavko SMS ako je N4A pomirenje (done 2026-09-14, commit cc9849a)
-- [ ] P3 `src/content/dialogue.js` — Ana zatvaranje: ako je N1 outcome "helped", dodati SMS node oko N14 (14:00) gde Ana javlja je li stigla i sadi Kluboslavija hook
-- [ ] P3 `src/content/dialogue.js` — "tihi svedok" node za N22 (Jova Instagram pitch): ako igrač ima i pomirenog Slavka i dobar Toma odnos, Jova dodaje "i komšije su za nas" — mala narativna nagrada za poseban playthrough
+- [x] P3 `src/content/dialogue.js` — Ana zatvaranje: ako je N1 outcome "helped", dodati SMS node oko N14 (14:00) gde Ana javlja je li stigla i sadi Kluboslavija hook (done 2026-09-14, commit e4b8ce2)
+- [x] P3 `src/content/dialogue.js` + `src/content/decisions.js` + `src/systems/decision_engine.js` — "tihi svedok" node za N22 (Jova Instagram pitch): ako igrač ima i pomirenog Slavka i dobar Toma odnos, Jova dodaje "i komšije su za nas" — mala narativna nagrada za poseban playthrough (done 2026-09-14, commit 8c999f3)
 
 ## Završeni patčevi
 
