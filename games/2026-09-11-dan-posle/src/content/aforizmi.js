@@ -43,6 +43,21 @@ export function aforizmForEnding(endingId) {
   return map[endingId] || AFORIZMI[0];
 }
 
+/** Toma aforistički markeri za prestige prolaz — N9B i N26B opcije */
+const TOMA_PRESTIGE = {
+  N9B:  'Odmori. Sledećeg leta nećeš imati tu luksuznost.',
+  N26B: 'Neke novčanice se vraćaju. Ovaj festival je jedna od njih.'
+};
+
+/**
+ * Vrati Tomin aforizam za opciju (samo u prestige modu)
+ * @param {string} optionId
+ * @returns {string|null}
+ */
+export function tomaPretigeAforizam(optionId) {
+  return TOMA_PRESTIGE[optionId] || null;
+}
+
 /**
  * Share text za Instagram/Web Share
  * @param {string} endingId

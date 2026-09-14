@@ -26,6 +26,7 @@ import {
 } from './ui.js';
 import { shareResult } from './share.js';
 import { hourIntroText, hourTransitionText, optionReaction } from './content/dialogue.js';
+import { tomaPretigeAforizam } from './content/aforizmi.js';
 import { locationByHour } from './entities/location.js';
 import { INTRO_TEXT } from './entities/organizer.js';
 
@@ -253,6 +254,17 @@ async function onOptionChosen(option) {
       }
 
       card.appendChild(resultEl);
+
+      // Toma prestige ton marker
+      if (state.isPrestige) {
+        const tomaQ = tomaPretigeAforizam(option.id);
+        if (tomaQ) {
+          const tomaEl = document.createElement('p');
+          tomaEl.className = 'toma-prestige-marker';
+          tomaEl.textContent = `(Toma: '${tomaQ}')`;
+          card.appendChild(tomaEl);
+        }
+      }
 
       // Continue button
       const continueBtn = document.createElement('button');

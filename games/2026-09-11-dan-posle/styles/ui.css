@@ -489,6 +489,16 @@
   color: var(--amber);
 }
 
+.toma-prestige-marker {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: #a07828;
+  margin-top: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-left: 2px solid rgba(160, 120, 40, 0.4);
+  opacity: 0.85;
+}
+
 .achievement-notif .ach-promo {
   display: block;
   font-size: 0.72rem;
