@@ -1,0 +1,162 @@
+/* game.css — card flip animation, transitions, city color effects */
+
+/* Card flip */
+@keyframes card-appear {
+  from { opacity: 0; transform: translateY(16px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.card {
+  animation: card-appear 0.3s ease forwards;
+}
+
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.10s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+.card:nth-child(4) { animation-delay: 0.20s; }
+
+/* City screen entrance */
+@keyframes screen-enter {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.screen {
+  animation: screen-enter 0.3s ease forwards;
+}
+
+/* HUD bar pulse on change */
+@keyframes bar-pulse {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(1.4); }
+}
+
+.hud-bar.changed {
+  animation: bar-pulse 0.4s ease;
+}
+
+/* City color glow on header */
+.screen-budget .city-header,
+.screen-cards .cards-header,
+.screen-results .results-header {
+  position: relative;
+}
+
+.screen-budget .city-emoji,
+.screen-cards .cards-header h2,
+.screen-results .results-city {
+  text-shadow: 0 0 20px var(--city-color, transparent);
+}
+
+/* Card option selected flash */
+@keyframes option-flash {
+  0%   { background: rgba(82,183,136,0.4); }
+  100% { background: var(--bg3); }
+}
+
+.card-option.selected-anim {
+  animation: option-flash 0.3s ease;
+}
+
+/* Dot bounce for transit */
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40%           { transform: scale(1.2); opacity: 1; }
+}
+
+/* Ending glow */
+@keyframes ending-glow {
+  0%, 100% { text-shadow: 0 0 20px var(--ending-color, #ffd700); }
+  50%      { text-shadow: 0 0 40px var(--ending-color, #ffd700), 0 0 60px var(--ending-color, #ffd700); }
+}
+
+.ending-title {
+  animation: ending-glow 2s ease-in-out infinite;
+}
+
+/* Prestige star spin */
+@keyframes star-spin {
+  from { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.2); }
+  to   { transform: rotate(360deg) scale(1); }
+}
+
+.prestige-icon {
+  animation: star-spin 3s linear infinite;
+  display: inline-block;
+}
+
+/* Resource bar transitions */
+.hud-bar {
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s;
+}
+
+/* Card done overlay */
+.card-done .card-front,
+.card-done .card-back {
+  opacity: 0.55;
+}
+
+/* Viral flash */
+@keyframes viral-flash {
+  0%, 100% { background: var(--bg2); }
+  50%      { background: rgba(46,196,182,0.2); }
+}
+
+.viral-event {
+  animation: viral-flash 0.8s ease 2;
+  border-radius: var(--radius);
+  padding: 8px;
+}
+
+/* Incident warning pulse */
+@keyframes incident-pulse {
+  0%, 100% { border-color: var(--accent3); }
+  50%      { border-color: #ff9900; box-shadow: 0 0 8px rgba(247,127,0,0.5); }
+}
+
+.incident-box {
+  animation: incident-pulse 1.5s ease infinite;
+}
+
+/* Screen-transit van bounce */
+@keyframes van-bounce {
+  0%, 100% { transform: translateY(0); }
+  30%      { transform: translateY(-6px); }
+  60%      { transform: translateY(-3px); }
+}
+
+.transit-anim .transit-icon {
+  display: inline-block;
+  animation: van-bounce 1s ease infinite;
+}
+
+/* Route dot pulse for active */
+@keyframes route-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px currentColor; }
+  50%      { box-shadow: 0 0 0 5px currentColor; }
+}
+
+.route-dot.active {
+  animation: route-pulse 1.5s ease infinite;
+}
+
+/* Stat row highlight */
+@keyframes stat-highlight {
+  from { background: rgba(82,183,136,0.2); }
+  to   { background: transparent; }
+}
+
+.stat-row.new {
+  animation: stat-highlight 1s ease forwards;
+}
+
+/* Crew selected ripple */
+@keyframes crew-ripple {
+  0% { box-shadow: 0 0 0 0 rgba(82,183,136,0.4); }
+  100% { box-shadow: 0 0 0 10px rgba(82,183,136,0); }
+}
+
+.crew-card.selected {
+  animation: crew-ripple 0.5s ease;
+}
