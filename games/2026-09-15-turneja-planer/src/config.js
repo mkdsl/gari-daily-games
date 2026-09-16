@@ -15,6 +15,7 @@ export const MAX_CREW_SIZE = 5;
 export const MIN_CREW_SIZE = 2;
 
 export const CARDS_PER_CITY = 4;
+export const TICKET_PRICE_EUR = 8;
 
 /** @type {Record<string, Record<string, number>>} travel costs u EUR */
 export const TRAVEL_COSTS = {

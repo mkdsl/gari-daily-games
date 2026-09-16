@@ -11,6 +11,7 @@ import { crewMoodDecay, applyMoodDelta } from './systems/crew_mood.js';
 import { totalCityReachGain, addReach } from './systems/reach.js';
 import { rollBorderIncident, checkViralMoment, rollEquipmentRisk, rollCrowdSurge } from './systems/random_events.js';
 import { splitTotal, deductCrewCost, transportAllocEffects, techAllocCQ, promoMult, promoReachGain } from './systems/budget.js';
+import { calcRouteCost } from './systems/routing.js';
 import { createProgression, currentCityId, advanceCity, checkGuncatiGate } from './systems/progression.js';
 import { accumulateFanDB, performPrestige, createPrestigeState } from './systems/prestige.js';
 import { CARDS_PER_CITY, BORDER_EXTRA_COST, BORDER_EXTRA_MOOD } from './config.js';
@@ -60,7 +61,9 @@ function wireEvents() {
   });
 
   on('route_selected', (route) => {
-    setState({ ...state, route, city_index: 0, screen: 'crew_select' });
+    const travel_cost = calcRouteCost(route);
+    const new_state = applyResourceDelta(state, { budget: -travel_cost });
+    setState({ ...new_state, route, city_index: 0, screen: 'crew_select' });
   });
 
   on('toggle_crew', (crew_id) => {
@@ -245,6 +248,11 @@ function computeCityResults(newState) {
   const base_crowd = rollCrowd(city.crowd_min, city.crowd_max);
   const attendance = Math.round(base_crowd * rollCrowdSurge(city.risk));
 
+  // Revenue from ticket sales
+  const pm = promoMult(split.promo || 0);
+  const TICKET_PRICE = 8; // EUR
+  const revenue = Math.round(attendance * TICKET_PRICE * pm);
+
   // CQ: start at 5, add transport/tech effects, add crew skills, add card bonuses
   let cq = 5.0;
   const transport_eff = transportAllocEffects(split.transport || 0);
@@ -290,13 +298,14 @@ function computeCityResults(newState) {
     attendance,
     crowd_quality: cq,
     rep_gain,
-    budget_delta: -(totalDailyRate(crew) + splitTotal(split)),
+    budget_delta: revenue - (totalDailyRate(crew) + splitTotal(split)),
   };
 
   const finalState = {
     ...newState,
     resources: {
       ...newState.resources,
+      budget: newState.resources.budget + revenue,
       reputation: new_rep,
       reach: Math.min(50, new_reach + viral_reach),
     },
@@ -316,6 +325,26 @@ function doTransit() {
   const new_mood = applyMoodDelta(state.resources.crew_mood, mood_decay + mood_penalty);
 
   const next_index = state.city_index + 1;
+
+  // Guncati gate check — pre nego igrač plati event
+  const next_city_id = state.route[next_index];
+  if (next_city_id === 'guncati') {
+    const gate = checkGuncatiGate(state.resources.reputation);
+    if (!gate.ok) {
+      const new_prestige = accumulateFanDB(state.prestige, state.city_results, 'GUNCATI_ZATVOREN');
+      setState({
+        ...state,
+        resources: { ...state.resources, crew_mood: new_mood },
+        city_index: next_index,
+        ending_id: 'GUNCATI_ZATVOREN',
+        prestige: new_prestige,
+        screen: 'ending',
+        next_city_mood_penalty: 0,
+      });
+      return;
+    }
+  }
+
   setState({
     ...state,
     city_index: next_index,

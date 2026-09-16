@@ -167,7 +167,9 @@ function renderCityBudget(state) {
   const city_id = state.route[state.city_index];
   const city = CITY_MAP.get(city_id);
   const flavor = CITY_FLAVOR[city_id] || {};
-  const available = state.resources.budget;
+  const crew = state.selected_crew_ids.map(id => CREW_MAP.get(id)).filter(Boolean);
+  const crew_cost = totalDailyRate(crew);
+  const available = Math.max(0, state.resources.budget - crew_cost);
   const split = state.budget_split;
   const total_spent = splitTotal(split);
   const remaining = available - total_spent;

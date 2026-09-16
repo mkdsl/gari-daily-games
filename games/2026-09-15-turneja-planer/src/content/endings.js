@@ -92,7 +92,6 @@ export function evaluateEnding(state) {
   if (state.budget > 2000 && state.reputation >= 9.0 && state.reach >= 40) return 'TURNEJA_LEGENDA';
   if (state.budget > 500 && state.reputation >= 6.0) return 'ZAVRSENO_I_PLACENO';
   if (state.budget <= 0) return 'POREZ_I_DUG';
-  if (state.budget > 500 && state.reach >= 40) return 'ZAVRSENO_I_PLACENO';
   if (state.budget > 0 && state.budget <= 500) return 'ZAVRSENO_I_PLACENO';
   return 'POREZ_I_DUG';
 }
