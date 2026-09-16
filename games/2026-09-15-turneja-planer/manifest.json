@@ -5,8 +5,8 @@
   "description": "Organizuješ DJ turneju kroz 5 gradova — biraš redosled, crew i budžet; Guncati je finalni Reputation gate.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-09-15-turneja-planer/",
   "brand_serves": ["kluboslavija", "mkdslend", "guncati"],
-  "stage": "impl",
-  "status": "in_progress",
+  "stage": "polish",
+  "status": "released",
   "modules": {
     "index.html": "ES6 module loader, app shell, HUD DOM structure",
     "src/main.js": "Entry point, game loop, event wiring, city result computation",
@@ -46,8 +46,9 @@
     "total_js": 3697,
     "total_css": 1036
   },
-  "beta_score": null,
-  "beta_score_iter2": null,
-  "post_fix_score": null,
-  "sef_signoff": false
+  "beta_score": 5.0,
+  "beta_score_iter2": 7.8,
+  "beta_score_iter3": 8.5,
+  "post_fix_score": 9.0,
+  "sef_signoff": true
 }
