@@ -88,14 +88,15 @@ function wireEvents() {
   });
 
   on('budget_slider', ({ key, value }) => {
+    const crew = state.selected_crew_ids.map(id => CREW_MAP.get(id)).filter(Boolean);
+    const available = Math.max(0, state.resources.budget - totalDailyRate(crew));
     const split = { ...state.budget_split, [key]: value };
     const total = splitTotal(split);
-    if (total > state.resources.budget) {
-      // Clamp this slider
-      split[key] = Math.max(0, state.resources.budget - splitTotal({ ...split, [key]: 0 }));
+    if (total > available) {
+      split[key] = Math.max(0, available - splitTotal({ ...split, [key]: 0 }));
     }
     state = { ...state, budget_split: split };
-    updateBudgetPreview(split, state.resources.budget);
+    updateBudgetPreview(split, available);
   });
 
   on('budget_confirmed', () => {
