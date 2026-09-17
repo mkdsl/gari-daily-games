@@ -1,0 +1,123 @@
+/* theme.css — Kluboslavija brand palette + Guncati green */
+
+:root {
+  /* Kluboslavija primary */
+  --klub-red: #E63946;
+  --klub-dark: #0d1b2a;
+  --klub-mid: #1a2d42;
+
+  /* Guncati green */
+  --guncati-green: #52B788;
+  --guncati-dark: #2d6a4f;
+  --guncati-light: #95d5b2;
+
+  /* City accents */
+  --city-beograd: #E63946;
+  --city-novi-sad: #2EC4B6;
+  --city-nis: #F77F00;
+  --city-sarajevo: #A8DADC;
+  --city-guncati: #52B788;
+
+  /* MKDSLend */
+  --mkdsl-blue: #A8DADC;
+  --mkdsl-mid: #457B9D;
+
+  /* Font weights */
+  --weight-body: 400;
+  --weight-bold: 700;
+  --weight-black: 900;
+}
+
+/* Kluboslavija header accent */
+#app::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    var(--klub-red) 0%,
+    var(--city-novi-sad) 25%,
+    var(--city-nis) 50%,
+    var(--city-sarajevo) 75%,
+    var(--guncati-green) 100%
+  );
+  flex-shrink: 0;
+}
+
+/* City-specific screen tints */
+.screen-budget[style*="--city-color: #E63946"] { --city-glow: rgba(230,57,70,0.08); }
+.screen-budget[style*="--city-color: #2EC4B6"] { --city-glow: rgba(46,196,182,0.08); }
+.screen-budget[style*="--city-color: #F77F00"] { --city-glow: rgba(247,127,0,0.08); }
+.screen-budget[style*="--city-color: #A8DADC"] { --city-glow: rgba(168,218,220,0.08); }
+.screen-budget[style*="--city-color: #52B788"] { --city-glow: rgba(82,183,136,0.08); }
+
+/* Guncati finale green overlay */
+.screen-ending[style*="--ending-color: #52B788"] {
+  background: radial-gradient(ellipse at top, rgba(82,183,136,0.06) 0%, transparent 60%);
+}
+
+/* TURNEJA LEGENDA gold shimmer */
+.screen-ending[style*="--ending-color: #FFD700"] {
+  background: radial-gradient(ellipse at top, rgba(255,215,0,0.08) 0%, transparent 60%);
+}
+
+/* Fail state red tint */
+.screen-ending[style*="--ending-color: #E63946"] {
+  background: radial-gradient(ellipse at top, rgba(230,57,70,0.06) 0%, transparent 60%);
+}
+
+/* Brand colors used in copy */
+.brand-kluboslavija { color: var(--klub-red); font-weight: 700; }
+.brand-guncati { color: var(--guncati-green); font-weight: 700; }
+.brand-mkdslend { color: var(--mkdsl-blue); font-weight: 700; }
+
+/* HUD rep bar — golden at high rep */
+#hud-rep-bar {
+  background: linear-gradient(to right, var(--accent3), var(--gold));
+}
+
+/* Route arrow gradient */
+.route-arrow {
+  background: linear-gradient(to right, var(--klub-red), var(--guncati-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Menu gradient bg */
+.screen-menu {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(230,57,70,0.12) 0%,
+    rgba(82,183,136,0.06) 50%,
+    transparent 100%
+  );
+  border-radius: var(--radius);
+}
+
+/* Prestige rainbow border */
+.screen-prestige {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(123,45,139,0.15) 0%,
+    rgba(230,57,70,0.08) 50%,
+    transparent 100%
+  );
+}
+
+/* Scrollbar themed */
+::-webkit-scrollbar-thumb {
+  background: var(--guncati-dark);
+}
+
+/* City map color dots in HUD */
+.route-dot[title="beograd"] { color: var(--city-beograd); }
+.route-dot[title="novi_sad"] { color: var(--city-novi-sad); }
+.route-dot[title="nis"] { color: var(--city-nis); }
+.route-dot[title="sarajevo"] { color: var(--city-sarajevo); }
+.route-dot[title="guncati"] { color: var(--city-guncati); }
+
+/* Gold highlight for budget value in HUD */
+#hud-budget {
+  color: var(--gold) !important;
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Turneja Planer — Kluboslavija 2026</title>
+  <meta name="description" content="Organizuj DJ turneju kroz 5 gradova Balkana. Strategy igra — birasi rutu, crew i budžet. Guncati grand finale čeka.">
+  <meta property="og:title" content="Turneja Planer — Kluboslavija 2026">
+  <meta property="og:description" content="5 gradova · 40 kartica · 4 završetka · Guncati grand finale">
+  <meta property="og:image" content="https://mkdsl.github.io/gari-daily-games/games/2026-09-15-turneja-planer/og.png">
+
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+  <link rel="stylesheet" href="styles/theme.css">
+</head>
+<body>
+  <div id="app">
+    <!-- HUD — always visible during game -->
+    <div id="hud" style="display:none">
+      <div class="hud-item">
+        <div class="hud-label">Budžet</div>
+        <div id="hud-budget" class="hud-value">€ 3,500</div>
+        <div class="hud-bar-track">
+          <div id="hud-budget-bar" class="hud-bar" style="width:70%"></div>
+        </div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-label">Crew Mood</div>
+        <div id="hud-mood" class="hud-value">Odlično 🔥</div>
+        <div class="hud-bar-track">
+          <div id="hud-mood-bar" class="hud-bar" style="width:100%;background:#52b788"></div>
+        </div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-label">Reputacija</div>
+        <div id="hud-rep" class="hud-value">⭐ 0.0</div>
+        <div class="hud-bar-track">
+          <div id="hud-rep-bar" class="hud-bar" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-label">Reach <span id="hud-reach-val" style="color:#2ec4b6">0k</span></div>
+        <div id="hud-reach" class="hud-value">Nepoznat 🌱</div>
+        <div class="hud-bar-track">
+          <div id="hud-reach-bar" class="hud-bar" style="width:0%;background:#2ec4b6"></div>
+        </div>
+      </div>
+      <div id="hud-route-wrap">
+        <span style="font-size:11px;color:#8fa3b8;white-space:nowrap">Ruta:</span>
+        <div id="hud-route"></div>
+      </div>
+    </div>
+
+    <!-- Main game area -->
+    <div id="game-root">
+      <!-- Rendered by JS -->
+      <div style="display:flex;align-items:center;justify-content:center;height:60vh;flex-direction:column;gap:16px">
+        <div style="font-size:48px">🎧</div>
+        <div style="font-size:20px;font-weight:700">Turneja Planer</div>
+        <div style="font-size:13px;color:#8fa3b8">Učitavanje...</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { init } from './src/main.js';
+    import { CARD_MAP } from './src/content/cards.js';
+
+    // Make CARD_MAP globally accessible (used in main.js handleCardOption)
+    window.__CARD_MAP = CARD_MAP;
+
+    // Show HUD once game starts (after menu)
+    const origInit = init;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      init();
+    });
+
+    // Show HUD when leaving menu
+    const hudEl = document.getElementById('hud');
+    const observer = new MutationObserver(() => {
+      const root = document.getElementById('game-root');
+      if (root && !root.querySelector('.screen-menu') && root.querySelector('.screen')) {
+        if (hudEl) hudEl.style.display = '';
+      } else {
+        if (hudEl && root?.querySelector('.screen-menu')) hudEl.style.display = 'none';
+      }
+    });
+
+    const gameRoot = document.getElementById('game-root');
+    if (gameRoot) {
+      observer.observe(gameRoot, { childList: true, subtree: true });
+    }
+  </script>
+</body>
+</html>

@@ -47,6 +47,7 @@ Chronological log svih napravljenih igara. Remote agent ažurira ovaj fajl na kr
 | 2026-09-04 | Jesenji Tok ⭐ | Seasonal Scheduling Puzzle — Guncati × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-09-04-jesenji-tok/) |
 | 2026-09-07 | Put do Guncata | Text/Narrative Adventure — Guncati × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-09-07-put-do-guncata/) |
 | 2026-09-11 | Dan Posle | Narrative choice / community builder — Guncati × Kluboslavija | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-09-11-dan-posle/) |
+| 2026-09-15 | Turneja Planer ⭐ | Strategy / Route Optimizer — DJ turneja kroz Balkan — Kluboslavija × MKDSLend × Guncati | ✅ | [Play](https://mkdsl.github.io/gari-daily-games/games/2026-09-15-turneja-planer/) |
 
 ## Statusi
 
