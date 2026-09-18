@@ -41,6 +41,20 @@ export function createBatchJob(recipe, startDay, passiveDays, inputQty, outputQt
 }
 
 /**
+ * Kreira pasivni posao (simplified interface za task brief).
+ * @param {string} type - Recipe id
+ * @param {number} start_day
+ * @param {number} end_day
+ * @param {number} input_qty
+ * @returns {BatchJob}
+ */
+export function createPassiveJob(type, start_day, end_day, input_qty) {
+  const passiveDays = end_day - start_day;
+  const outputQty = input_qty; // caller sets actual output in createBatchJob
+  return createBatchJob(type, start_day, passiveDays, input_qty, outputQty, type);
+}
+
+/**
  * Proverava koji job-ovi su završeni za dati dan.
  * @param {BatchJob[]} jobs
  * @param {number} currentDay

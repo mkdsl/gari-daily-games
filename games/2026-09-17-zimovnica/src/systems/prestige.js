@@ -7,6 +7,58 @@ import { totalJarValue } from '../entities/jar.js';
 import { ENDINGS_DATA } from '../content/endings_data.js';
 
 /**
+ * Alias za isPrestigeEligible — kompatibilnost sa task brief imenima.
+ * @param {object} state
+ * @returns {boolean}
+ */
+export function checkPrestigeCondition(state) {
+  return isPrestigeEligible(state);
+}
+
+/**
+ * Primenjuje prestige — ažurira persistent, daje bonuse za sledeći run.
+ * @param {object} state
+ * @param {object} persistent
+ * @returns {{ state: object, persistent: object }}
+ */
+export function applyPrestige(state, persistent) {
+  const bonuses = calcPrestigeBonuses(state, persistent);
+  const updated_persistent = {
+    ...persistent,
+    run_number: (persistent.run_number || 1) + 1,
+    total_runs: (persistent.total_runs || 0) + 1,
+    best_kasa: Math.max(persistent.best_kasa || 0, state.kasa),
+    best_jars: Math.max(persistent.best_jars || 0, state.tegle.reduce((s, j) => s + j.qty, 0)),
+    endings_seen: [...new Set([...(persistent.endings_seen || []), state.ending])].filter(Boolean),
+    carry_bonuses: bonuses,
+    lifetime_stats: {
+      total_jars_made: (persistent.lifetime_stats?.total_jars_made || 0) + state.tegle.reduce((s, j) => s + j.qty, 0),
+      total_kasa_earned: (persistent.lifetime_stats?.total_kasa_earned || 0) + state.kasa,
+      bačva_successes: (persistent.lifetime_stats?.bačva_successes || 0) + (state.bačva_status === 'ready' ? 1 : 0),
+      bačva_failures: (persistent.lifetime_stats?.bačva_failures || 0) + (state.bačva_status === 'failed' ? 1 : 0),
+      rakija_L_total: (persistent.lifetime_stats?.rakija_L_total || 0) + (state.rakija_reserve_L || 0),
+    },
+    // track for medenjaci unlock
+    has_rakija: (persistent.has_rakija || state.rakija_reserve_L > 0),
+    has_dried_plums: (persistent.has_dried_plums || state.tegle.some(j => j.type === 'sušene_šljive')),
+  };
+
+  const new_state = {
+    ...state,
+    prestige_active: true,
+    prestige_bonuses: {
+      recipe_efficiency: 1.20,
+      market_unlocked: true,
+      commander_bačva: true,
+      extra_shelf: bonuses.extra_shelf || false,
+    },
+    run_number: updated_persistent.run_number,
+  };
+
+  return { state: new_state, persistent: updated_persistent };
+}
+
+/**
  * Proverava da li je igrač dostigao prestige threshold.
  * @param {object} state
  * @returns {boolean}

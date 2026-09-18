@@ -3,6 +3,8 @@
  * Pijaca je unlocked posle prestige-a.
  */
 
+import { JAR_PRICES } from '../config.js';
+
 /**
  * @typedef {Object} MarketListing
  * @property {string} id - Ingredient id
@@ -51,4 +53,22 @@ export function calcSellRevenue(ingredientId, kg) {
  */
 export function getListing(id) {
   return MARKET_LISTINGS.find(m => m.id === id);
+}
+
+/**
+ * Prodajne cene sirovine (din/kg) — quick lookup.
+ * Isti podaci kao u MARKET_LISTINGS.sell_price.
+ */
+export const MARKET_PRICES = Object.fromEntries(
+  MARKET_LISTINGS.map(m => [m.id, m.sell_price])
+);
+
+/**
+ * Vraća cenu tegle (din/kg) sa opcionim prestige multiplikatorom.
+ * @param {string} type - Tip tegle
+ * @param {number} [prestige_mult=1.0]
+ * @returns {number}
+ */
+export function getJarPrice(type, prestige_mult = 1.0) {
+  return Math.round((JAR_PRICES[type] || 0) * prestige_mult);
 }

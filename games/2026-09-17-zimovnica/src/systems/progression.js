@@ -42,6 +42,15 @@ export function checkProgressionUnlocks(state) {
 }
 
 /**
+ * Alias za checkProgressionUnlocks — kompatibilnost sa task brief imenima.
+ * @param {object} state
+ * @returns {object}
+ */
+export function checkUnlocks(state) {
+  return checkProgressionUnlocks(state);
+}
+
+/**
  * Vraća opis narednog unlock-a za UI hint.
  * @param {object} unlocks
  * @param {number} day

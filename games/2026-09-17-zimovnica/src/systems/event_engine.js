@@ -52,6 +52,31 @@ export function resolveImmediateEvent(event, state, persistent) {
 }
 
 /**
+ * Primenjuje izabrani event sa izborom igrača.
+ * @param {object} state
+ * @param {string} eventId - Id eventa (npr. 'komsija_menja')
+ * @param {number} choice - 0 = prihvati, 1 = odbij
+ * @param {object} [persistent]
+ * @returns {{ state: object, persistent: object }}
+ */
+export function resolveEvent(state, eventId, choice, persistent = {}) {
+  const eventDef = EVENTS_DATA.find(e => e.id === eventId);
+  if (!eventDef) return { state, persistent };
+
+  // Immediate events (no choice)
+  if (eventDef.immediate && eventDef.effect) {
+    return eventDef.effect(state, persistent);
+  }
+
+  // Choice-based events
+  const choices = eventDef.choices || [];
+  const selected = choices[choice];
+  if (!selected || !selected.effect) return { state, persistent };
+
+  return selected.effect(state, persistent);
+}
+
+/**
  * Emituje BARREL_FAIL event ako bačva propada.
  * Poziva se iz barrel_init.js kad status ide na 'failed'.
  * @param {object} state

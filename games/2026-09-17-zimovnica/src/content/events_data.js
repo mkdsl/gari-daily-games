@@ -96,10 +96,11 @@ export const EVENTS_DATA = [
         label: 'Prodaj (bonus cena)',
         tooltip: 'Prodaješ sve tegle po +20% ceni',
         effect: (state, persistent) => {
+          // JAR_PRICES are baked into the jar objects, use sell_price per type
+          const JAR_BASE = { ajvar: 850, sos: 450, pelat: 380, dzem: 520, pekmez: 690, tursija: 420, medenjaci: 1800 };
           let revenue = 0;
-          const { JAR_PRICES } = require('../config.js');
           for (const jar of state.tegle) {
-            revenue += (JAR_PRICES[jar.type] || 0) * jar.qty * 1.2;
+            revenue += (JAR_BASE[jar.type] || 0) * jar.qty * 1.2;
           }
           return { state: { ...state, tegle: [], kasa: state.kasa + revenue }, persistent };
         }
@@ -174,13 +175,14 @@ export const EVENTS_DATA = [
         label: 'Da, prodaj (prestige cene)',
         tooltip: 'Ajvar i rakija po prestige cenama',
         effect: (state, persistent) => {
+          const JAR_BASE = { ajvar: 850, sos: 450, pelat: 380, dzem: 520, pekmez: 690, tursija: 420, medenjaci: 1800 };
+          const PRESTIGE_MULT = { ajvar: 1400/850, sos: 700/450, pelat: 580/380, dzem: 850/520, pekmez: 1050/690, tursija: 640/420 };
           let revenue = 0;
-          const { JAR_PRICES } = require('../config.js');
           const newTegle = [];
           for (const jar of state.tegle) {
             if (jar.type === 'ajvar' || jar.type === 'rakija') {
-              const mult = JAR_PRICES.prestige_mult?.[jar.type] || 1.5;
-              revenue += (JAR_PRICES[jar.type] || 0) * jar.qty * mult;
+              const mult = PRESTIGE_MULT[jar.type] || 1.5;
+              revenue += (JAR_BASE[jar.type] || 3000) * jar.qty * mult;
             } else {
               newTegle.push(jar);
             }

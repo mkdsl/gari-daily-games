@@ -2,7 +2,7 @@
  * trade.js — Buy/sell operacije: market cena, kasa debit/credit.
  */
 
-import { calcBuyCost, calcSellRevenue, getListing } from '../entities/market.js';
+import { calcBuyCost, calcSellRevenue, getListing, MARKET_LISTINGS } from '../entities/market.js';
 import { addLog } from '../state.js';
 import { JAR_PRICES } from '../config.js';
 import { totalQtyByType } from '../entities/jar.js';
@@ -31,6 +31,27 @@ export function buyIngredient(state, ingredientId, kg) {
   const newSirovine = { ...state.sirovine, [ingredientId]: (state.sirovine[ingredientId] || 0) + kg };
   let s = { ...state, kasa: state.kasa - cost, sirovine: newSirovine };
   s = addLog(s, `🛒 Kupljeno ${kg} kg ${ingredientId} za ${cost} din.`, 'info');
+  return { state: s, error: null };
+}
+
+/**
+ * Instant prodaja sirovine mesnoj zajednici po tržišnoj ceni.
+ * @param {object} state
+ * @param {number} kg
+ * @param {string} sirovina - Id sirovine (npr. 'paprike')
+ * @returns {{ state: object, error: string|null }}
+ */
+export function mesnaOtkup(state, kg, sirovina) {
+  const listing = MARKET_LISTINGS.find(m => m.id === sirovina);
+  if (!listing) return { state, error: `Nepoznata sirovina: ${sirovina}` };
+  if ((state.sirovine[sirovina] || 0) < kg) {
+    return { state, error: `Nema dovoljno ${sirovina} (ima ${(state.sirovine[sirovina] || 0).toFixed(1)} kg).` };
+  }
+
+  const revenue = calcSellRevenue(sirovina, kg);
+  const newSirovine = { ...state.sirovine, [sirovina]: state.sirovine[sirovina] - kg };
+  let s = { ...state, sirovine: newSirovine, kasa: state.kasa + revenue };
+  s = addLog(s, `🏫 Mesna zajednica: ${kg} kg ${sirovina} → ${revenue.toFixed(0)} din.`, 'success');
   return { state: s, error: null };
 }
 
