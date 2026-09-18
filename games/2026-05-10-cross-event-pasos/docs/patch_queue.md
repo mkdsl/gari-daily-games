@@ -1,3 +1,4 @@
 - [x] P3 `src/config.js` (pasoš) — dodati slug `2026-09-04-jesenji-tok` u SLUG_WHITELIST + STAMPS (done 2026-09-06, commit 33dd596)
 - [x] P3 `src/config.js` (pasoš) — dodati slug `2026-09-07-put-do-guncata` u SLUG_WHITELIST + STAMPS (done 2026-09-10, commit 93f1de9)
 - [x] P3 `src/config.js` (pasoš) — dodati slug `2026-09-11-dan-posle` u SLUG_WHITELIST + STAMPS (done 2026-09-14, commit 7014dae)
+- [ ] P3 `src/config.js` (pasoš) — dodati slug `2026-09-15-turneja-planer` u SLUG_WHITELIST + STAMPS
