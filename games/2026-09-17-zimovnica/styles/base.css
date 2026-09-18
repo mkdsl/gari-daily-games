@@ -1,0 +1,99 @@
+/**
+ * base.css — Layout, tipografija, reset, full-screen DOM setup.
+ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #1A120B;
+  --warm: #E25822;
+  --cool: #4A7C59;
+  --neutral: #C8A97E;
+  --text: #F5E6C8;
+  --text-dim: #A89070;
+  --alert: #D62828;
+  --surface: #2A1E14;
+  --surface-2: #3D2B1E;
+  --border: #5A4030;
+
+  --font-main: 'Georgia', 'Times New Roman', serif;
+  --font-ui: system-ui, -apple-system, sans-serif;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --gap: 12px;
+  --gap-sm: 6px;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-main);
+  color: var(--neutral);
+  letter-spacing: 0.02em;
+}
+
+h1 { font-size: 1.8rem; }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+
+p { color: var(--text-dim); margin-bottom: 0.5em; }
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.scroll-y {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.flex-row { display: flex; flex-direction: row; align-items: center; }
+.flex-col  { display: flex; flex-direction: column; }
+.gap       { gap: var(--gap); }
+.gap-sm    { gap: var(--gap-sm); }
+.fill      { flex: 1 1 auto; overflow: hidden; }
+.center    { display: flex; align-items: center; justify-content: center; }
+
+/* Mobile gutter */
+.padded { padding: 0 16px; }

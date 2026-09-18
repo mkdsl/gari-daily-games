@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Zimovnica</title>
+  <meta name="description" content="14 dana da preradiš berbu u zimovnicu. Ajvar, turšija, kiseli kupus — strategija prezimljavanja.">
+
+  <!-- Brand meta -->
+  <meta property="og:title" content="Zimovnica — Guncati x MKDSLend">
+  <meta property="og:description" content="Sezonska strategija: 4 akcije dnevno, 14 dana, 6 načina da prezimiš.">
+  <meta name="theme-color" content="#1A120B">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/ui.css">
+  <link rel="stylesheet" href="styles/game.css">
+  <link rel="stylesheet" href="styles/theme.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Render target — sadržaj ubacuje render.js -->
+    <div id="loading" style="
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #C8A97E;
+      font-family: Georgia, serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+    ">
+      🫙 Zimovnica se učitava...
+    </div>
+  </div>
+
+  <!-- Toast kontejner (izvan #app da ne bude clipovan) -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ES6 Module entry point -->
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

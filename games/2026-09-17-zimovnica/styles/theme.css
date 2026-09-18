@@ -1,0 +1,177 @@
+/**
+ * theme.css — Jesenji zemlja-tonovi: #1A120B bg, #E25822 akcenat, #4A7C59 hladni.
+ * Brand-specific: Guncati paleta, MKDSLend neutral.
+ */
+
+/* ── Menu Screen ── */
+.menu-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 24px;
+  background: var(--bg);
+  padding: 32px 16px;
+}
+
+.menu-title {
+  font-family: var(--font-main);
+  font-size: 2.5rem;
+  color: var(--neutral);
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.menu-subtitle {
+  font-size: 1rem;
+  color: var(--text-dim);
+  text-align: center;
+  max-width: 360px;
+  line-height: 1.6;
+}
+
+.menu-brand {
+  font-size: 0.75rem;
+  color: var(--cool);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.menu-btn {
+  padding: 14px 32px;
+  background: var(--warm);
+  color: #fff;
+  border-radius: var(--radius);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  letter-spacing: 0.02em;
+}
+
+.menu-btn:hover { opacity: 0.9; }
+
+.menu-btn.secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  padding: 10px 24px;
+}
+
+/* ── Ending Screen ── */
+.ending-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 32px 16px;
+  gap: 20px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.ending-icon { font-size: 4rem; }
+
+.ending-title {
+  font-family: var(--font-main);
+  font-size: 2rem;
+  color: var(--neutral);
+}
+
+.ending-subtitle {
+  font-size: 1rem;
+  color: var(--warm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.ending-description {
+  max-width: 400px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  font-family: var(--font-main);
+}
+
+.ending-aforizam {
+  font-style: italic;
+  color: var(--neutral);
+  font-family: var(--font-main);
+  font-size: 1.05rem;
+  max-width: 380px;
+  border-left: 3px solid var(--warm);
+  padding-left: 12px;
+  text-align: left;
+}
+
+.ending-stats {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 16px 24px;
+  font-size: 0.85rem;
+}
+
+.ending-stat-label { color: var(--text-dim); }
+.ending-stat-value { color: var(--text); font-weight: 700; font-size: 1.1rem; }
+
+/* ── Guncati Brand Accents ── */
+.guncati-accent {
+  color: var(--cool);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Prestige Screen ── */
+.prestige-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px;
+  gap: 16px;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.prestige-badge {
+  font-size: 3rem;
+}
+
+.prestige-bonuses {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.prestige-bonus-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.prestige-bonus-row .bonus-label { color: var(--text-dim); }
+.prestige-bonus-row .bonus-value { color: var(--cool); font-weight: 700; }
+
+/* ── Shelf Upgrade ── */
+.shelf-upgrade-btn {
+  padding: 8px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--cool);
+  border-radius: var(--radius-sm);
+  color: var(--cool);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.shelf-upgrade-btn:hover { background: var(--surface); }
