@@ -1,5 +1,6 @@
 /**
  * base.css — Layout, tipografija, reset, full-screen DOM setup.
+ * Mobile-first: radi na 375px, bez horizontal scroll.
  */
 
 *, *::before, *::after {
@@ -38,10 +39,14 @@ html, body {
   font-size: 16px;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
+  /* Prevent horizontal scroll on mobile */
+  max-width: 100vw;
 }
 
 #app {
   width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -67,6 +72,8 @@ button {
   background: none;
   font: inherit;
   color: inherit;
+  /* 44px minimum touch target */
+  min-height: 44px;
 }
 
 button:disabled {
@@ -95,5 +102,19 @@ button:disabled {
 .fill      { flex: 1 1 auto; overflow: hidden; }
 .center    { display: flex; align-items: center; justify-content: center; }
 
-/* Mobile gutter */
+/* Mobile gutter: 16px sidewall */
 .padded { padding: 0 16px; }
+
+/* Utility */
+.text-muted { color: var(--text-dim); }
+.text-warm  { color: var(--warm); }
+.text-cool  { color: var(--cool); }
+.text-alert { color: var(--alert); }
+.text-neutral { color: var(--neutral); }
+.fw-bold { font-weight: 700; }
+
+/* Responsive: 375px phones work fine because max-width: 600px on #app */
+@media (max-width: 400px) {
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.1rem; }
+}

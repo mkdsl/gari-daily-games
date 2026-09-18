@@ -1,14 +1,61 @@
 /**
- * game.css — Police, jar grid, fermentacija bubble animacija, screen shake.
+ * game.css — Police, jar grid, fermentacija bubble animacija, screen shake,
+ * calendar strip, passive jobs, ingredients panel.
  */
 
-/* ── Shelf Layout ── */
+/* ── Shelf Section (scrollable middle area) ── */
 .shelf-section {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding: var(--gap);
+  overflow-x: hidden;
+  padding: var(--gap) 16px;
+  -webkit-overflow-scrolling: touch;
 }
 
+/* ── Category Row (one type of jar) ── */
+.jar-category {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--surface-2);
+  min-height: 52px;
+}
+
+.jar-category.empty {
+  opacity: 0.4;
+}
+
+.jar-cat-icon { font-size: 1.4rem; flex-shrink: 0; }
+
+.jar-cat-info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.jar-cat-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jar-cat-qty {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.jar-cat-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* ── Classic Shelf / Jar Grid ── */
 .shelf {
   display: flex;
   flex-direction: row;
@@ -44,12 +91,45 @@
   width: 44px;
   cursor: pointer;
   transition: transform 0.15s;
+  min-height: 44px;
+  justify-content: center;
 }
 
-.jar:hover { transform: scale(1.1); }
+.jar:hover { transform: scale(1.12); }
 
 .jar-icon { font-size: 1.5rem; line-height: 1; }
 .jar-qty  { font-size: 0.6rem; color: var(--text-dim); margin-top: 2px; }
+
+/* ── Capacity Bar ── */
+.capacity-bar-wrap {
+  margin: 4px 0 8px;
+}
+
+.capacity-bar-track {
+  height: 6px;
+  background: var(--surface-2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.capacity-bar-fill {
+  height: 100%;
+  background: var(--cool);
+  border-radius: 3px;
+  transition: width 0.35s ease;
+  min-width: 2px;
+}
+
+.capacity-bar-fill.warn { background: var(--warm); }
+.capacity-bar-fill.full { background: var(--alert); }
+
+.capacity-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
 
 /* ── Fermentacija Animacija ── */
 .fermenting-indicator {
@@ -75,15 +155,54 @@
   100% { opacity: 0; transform: translateY(-8px) scale(0.5); }
 }
 
-/* ── Sirovina Panel ── */
+/* ── Bačva Progress Bar (HUD — critical window) ── */
+.bacva-progress-wrap {
+  padding: 3px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.bacva-progress-track {
+  height: 5px;
+  background: var(--surface-2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bacva-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.bacva-progress-fill.critical {
+  background: var(--alert);
+  animation: pulse-red 1s ease-in-out infinite;
+}
+
+.bacva-progress-fill.fermenting { background: var(--cool); }
+.bacva-progress-fill.ready      { background: #5fb865; }
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── Sirovina / Ingredients Panel ── */
 .ingredients-panel {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 8px 16px;
+  gap: 5px;
+  padding: 6px 16px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ingredients-panel.empty {
+  display: none;
 }
 
 .ingredient-chip {
@@ -93,13 +212,15 @@
   padding: 3px 8px;
   border: 1px solid var(--border);
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   background: var(--surface-2);
+  min-height: 28px;
 }
 
 .ingredient-chip .ing-icon { font-size: 1rem; }
 .ingredient-chip .ing-qty  { color: var(--text-dim); font-size: 0.7rem; }
 .ingredient-chip.decay-warn { border-color: var(--alert); }
+.ingredient-chip.decay-warn .ing-qty { color: var(--alert); }
 
 /* ── Screen Shake ── */
 .screen-shake {
@@ -124,7 +245,12 @@
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
   flex-shrink: 0;
+  /* Hide scrollbar but allow scroll */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+
+.calendar-strip::-webkit-scrollbar { display: none; }
 
 .cal-day {
   display: flex;
@@ -134,10 +260,11 @@
   padding: 4px 3px;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--text-dim);
   cursor: default;
   flex-shrink: 0;
+  transition: background 0.15s;
 }
 
 .cal-day.today {
@@ -147,11 +274,20 @@
 }
 
 .cal-day.past {
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
-.cal-day-num { font-weight: 700; }
-.cal-weather { font-size: 0.85rem; }
+.cal-day .cal-day-num { font-weight: 700; font-size: 0.78rem; }
+.cal-day .cal-weather { font-size: 0.8rem; margin-top: 1px; }
+
+/* job dot on calendar */
+.cal-day .cal-job-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--cool);
+  margin-top: 2px;
+}
 
 /* ── Passive Jobs Tracker ── */
 .passive-jobs-list {
@@ -165,11 +301,24 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   font-size: 0.78rem;
   color: var(--text-dim);
-  padding: 2px 0;
+  padding: 3px 0;
   border-bottom: 1px solid var(--surface-2);
+  min-height: 28px;
 }
 
 .job-row .job-name { color: var(--text); }
-.job-row .job-days { color: var(--cool); }
+.job-row .job-days { color: var(--cool); font-weight: 700; }
+
+/* ── Section Headers in shelf ── */
+.section-header {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  padding: 6px 0 3px;
+  border-bottom: 1px solid var(--surface-2);
+  margin-bottom: 4px;
+}

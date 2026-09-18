@@ -3,6 +3,19 @@
  * Brand-specific: Guncati paleta, MKDSLend neutral.
  */
 
+:root {
+  --bg: #1A120B;
+  --warm: #E25822;
+  --cool: #4A7C59;
+  --neutral: #C8A97E;
+  --text: #F5E6C8;
+  --alert: #D62828;
+  --text-muted: #8A7A6A;
+  --border: #3A2A1A;
+  --btn-bg: #2A1A0A;
+  --btn-hover: #3A2A1A;
+}
+
 /* ── Menu Screen ── */
 .menu-screen {
   display: flex;
@@ -60,6 +73,12 @@
   padding: 10px 24px;
 }
 
+.menu-run-info {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
 /* ── Ending Screen ── */
 .ending-screen {
   display: flex;
@@ -71,6 +90,7 @@
   gap: 20px;
   background: var(--bg);
   text-align: center;
+  overflow-y: auto;
 }
 
 .ending-icon { font-size: 4rem; }
