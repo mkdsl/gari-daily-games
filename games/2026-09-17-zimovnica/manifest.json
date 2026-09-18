@@ -5,7 +5,7 @@
   "description": "14 dana do prve ruje, pun podrum sirovine. Odlučuješ šta postaje zimovnica, šta truli. Ajvar, turšija, kiseli kupus — strategija prezimljavanja.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-09-17-zimovnica/",
   "brand_serves": ["guncati", "mkdslend"],
-  "stage": "concept",
+  "stage": "impl",
   "status": "in_progress",
   "modules": {
     "index.html": "ES6 module loader, app shell",
@@ -15,6 +15,9 @@
     "src/audio.js": "Web Audio — kuhinjski ambijent, zvek tegli, bačva KO heavy, rakija hum",
     "src/input.js": "Event bus, touch/click handlers za action slot selection",
     "src/render.js": "DOM orchestrator — screen router (menu/day/event/ending)",
+    "src/render/calendar_renderer.js": "Day calendar vizualizacija, action slot prikaz",
+    "src/render/hud.js": "HUD komponente — countdown, kasa, storage bar",
+    "src/render/shelf_renderer.js": "Polica vizualizacija, tegla ikone, fermentation bubble",
     "src/ui.js": "HUD: countdown, kasa, storage bar, forecast strip, toast",
     "src/share.js": "html2canvas screenshot, Web Share API",
     "src/entities/ingredient.js": "Ingredient types, decay rates, kg tracking",
@@ -43,12 +46,12 @@
     "src/content/brand_hooks.js": "Masterclass facts po receptu (MKDSLend), Guncati branding",
     "styles/base.css": "Layout, full-screen DOM, countdown header",
     "styles/ui.css": "HUD, shelf-list mobile, action slots, event card, toast",
-    "styles/shelf.css": "Shelf categories, jar icons, fermentation bubble animation",
+    "styles/game.css": "Shelf categories, jar icons, fermentation bubble animation",
     "styles/theme.css": "Jesenji zemlja-tonovi: #1A120B bg, #E25822 akcenat, #4A7C59 hladni"
   },
   "line_counts": {
-    "total_js": null,
-    "total_css": null
+    "total_js": 4638,
+    "total_css": 1045
   },
   "beta_score": null,
   "beta_score_iter2": null,
