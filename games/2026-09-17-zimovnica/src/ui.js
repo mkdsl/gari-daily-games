@@ -1,19 +1,25 @@
 /**
  * ui.js — Event wiring, toast notifikacije, generic modal.
- * Koristi event delegation na #app — ne veže listenere po dugmetu.
+ * Koristi event delegation na #app — listener se veže JEDNOM, uvek koristi
+ * poslednji state preko referenci (ne re-veže posle svakog rendera).
  */
 
 /** @type {HTMLElement|null} */
 let toastContainer = null;
 
+/** Stanja za delegirani listener (ne re-veže na svaki render) */
+let _delegatedAttached = false;
+let _currentState = null;
+let _currentPersistent = null;
+
 /**
- * Inicijalizuje toast container (poziva se jednom pri init-u, opcionalno).
+ * Vraća ili kreira toast container.
+ * @returns {HTMLElement}
  */
 function getToastContainer() {
   if (!toastContainer) {
     toastContainer = document.getElementById('toast-container');
     if (!toastContainer) {
-      // Fallback: napravi ga
       toastContainer = document.createElement('div');
       toastContainer.className = 'toast-container';
       toastContainer.id = 'toast-container';
@@ -27,7 +33,7 @@ function getToastContainer() {
  * Prikazuje toast obaveštenje.
  * @param {string} message
  * @param {'info'|'warn'|'success'|'error'} type
- * @param {number} [duration=3000] ms — koliko traje pre remove-a
+ * @param {number} [duration=3000] ms
  */
 export function showToast(message, type = 'info', duration = 3000) {
   const container = getToastContainer();
@@ -36,18 +42,17 @@ export function showToast(message, type = 'info', duration = 3000) {
   toast.textContent = message;
   container.appendChild(toast);
 
-  // Auto-remove posle duration
   setTimeout(() => {
     if (toast.parentNode) toast.parentNode.removeChild(toast);
-  }, duration + 100); // malo više od animation duration
+  }, duration + 200);
 }
 
 /**
  * Prikazuje generic modal sa overlay-om.
  * @param {string} title
- * @param {string|HTMLElement} content - Tekst ili DOM element
+ * @param {string|HTMLElement} content
  * @param {Array<{label: string, type?: string, onClick: function}>} buttons
- * @returns {HTMLElement} overlay element (za programatsko zatvaranje)
+ * @returns {HTMLElement} overlay element
  */
 export function showModal(title, content, buttons = []) {
   const overlay = document.createElement('div');
@@ -56,7 +61,6 @@ export function showModal(title, content, buttons = []) {
   const box = document.createElement('div');
   box.className = 'modal-box';
 
-  // Title
   if (title) {
     const titleEl = document.createElement('div');
     titleEl.className = 'modal-title';
@@ -64,7 +68,6 @@ export function showModal(title, content, buttons = []) {
     box.appendChild(titleEl);
   }
 
-  // Content
   const contentEl = document.createElement('div');
   contentEl.className = 'modal-content';
   if (typeof content === 'string') {
@@ -74,7 +77,6 @@ export function showModal(title, content, buttons = []) {
   }
   box.appendChild(contentEl);
 
-  // Buttons
   if (buttons.length > 0) {
     const btnRow = document.createElement('div');
     btnRow.className = 'modal-buttons';
@@ -93,10 +95,9 @@ export function showModal(title, content, buttons = []) {
 
   overlay.appendChild(box);
 
-  // Klik van box-a zatvara modal
   overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-      if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    if (e.target === overlay && overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
     }
   });
 
@@ -105,23 +106,25 @@ export function showModal(title, content, buttons = []) {
 }
 
 /**
- * Wires event listeners na sve action dugmadi koristeći event delegation na #app.
- * Ova funkcija se poziva jednom posle svakog re-renderovanja.
+ * Wires event delegation na #app (jednom) i ažurira state reference.
+ * Poziva se posle svakog re-renderovanja iz render.js.
  * @param {object} state
  * @param {object} persistent
  */
 export function renderUI(state, persistent) {
-  // Event delegation — sve akcije prolaze kroz #app
+  // Ažuriraj referenci — handler uvek koristi poslednju verziju
+  _currentState = state;
+  _currentPersistent = persistent;
+
+  if (_delegatedAttached) return; // Listener je već vezan — ne dodaj ponovo
+
   const app = document.getElementById('app');
   if (!app) return;
 
-  // Ukloni stari delegirani listener (zamena klona)
-  const newApp = app.cloneNode(true); // plitki klon — bez event listenera
-  app.parentNode.replaceChild(newApp, app);
-
-  newApp.addEventListener('click', (e) => {
-    handleDelegatedClick(e, state, persistent);
+  app.addEventListener('click', (e) => {
+    handleDelegatedClick(e, _currentState, _currentPersistent);
   });
+  _delegatedAttached = true;
 }
 
 /**
@@ -137,7 +140,7 @@ function handleDelegatedClick(e, state, persistent) {
   const action = target.dataset.action;
   const params = buildParams(target.dataset);
 
-  // Dinamički import da ne bude circular dependency
+  // Dinamički import sprečava circular dependency
   import('./main.js').then(({ handleAction, nextDay, startNewRun, setScreen }) => {
     switch (action) {
       case 'start_game':
@@ -200,7 +203,6 @@ function buildParams(dataset) {
   for (const key of Object.keys(dataset)) {
     if (key === 'action') continue;
     const val = dataset[key];
-    // Pokušaj numeričku konverziju
     if (val === 'all') {
       params[key] = 'all';
     } else if (!isNaN(val) && val !== '') {
@@ -213,7 +215,7 @@ function buildParams(dataset) {
 }
 
 /**
- * Ažurira prikaz kase u HUD-u (legacy helper, bez full re-rendera).
+ * Ažurira prikaz kase u HUD-u (micro-update bez full re-rendera).
  * @param {number} kasa
  */
 export function updateKasa(kasa) {
@@ -227,29 +229,22 @@ export function updateKasa(kasa) {
  * @param {number} capacity - Ukupan kapacitet kg
  */
 export function updateStorageBar(used, capacity) {
-  const fill = document.querySelector('.storage-bar-fill, .capacity-bar-fill');
-  const label = document.querySelector('.storage-bar-label, .capacity-bar-label');
+  const fill = document.querySelector('.capacity-bar-fill, .storage-bar-fill');
   if (fill) {
     const pct = capacity > 0 ? Math.min(used / capacity, 1) : 0;
     fill.style.width = `${Math.round(pct * 100)}%`;
-    fill.className = fill.className.replace(/ (warn|full)/g, '');
+    fill.className = fill.className.replace(/ ?(warn|full)/g, '');
     if (pct >= 1.0) fill.className += ' full';
     else if (pct >= 0.75) fill.className += ' warn';
-  }
-  if (label) {
-    // Pokušaj ažurirati drugi span (qty/cap)
-    const spans = label.querySelectorAll('span');
-    if (spans.length >= 2) spans[1].textContent = `${used.toFixed(1)} / ${capacity} kg`;
   }
 }
 
 /**
- * Ažurira forecast strip sa vremenskim ikonama.
+ * Ažurira forecast strip.
  * @param {string} today
  * @param {string} tomorrow
  */
 export function updateForecast(today, tomorrow) {
-  // Pun re-render je efikasniji — ali ova je dostupna za micro-update
   const el = document.querySelector('.hud-forecast');
   if (!el) return;
   import('./render/hud.js').then(({ renderForecast }) => {
@@ -258,19 +253,17 @@ export function updateForecast(today, tomorrow) {
 }
 
 /**
- * Ažurira countdown dani preostali.
+ * Ažurira countdown prikaz.
  * @param {number} day
  * @param {number} totalDays
  */
 export function updateCountdown(day, totalDays) {
-  const el = document.querySelector('.hud-countdown');
-  if (!el) return;
-  const span = el.querySelector('.day-num');
-  if (span) span.textContent = day;
+  const el = document.querySelector('.hud-countdown .day-num');
+  if (el) el.textContent = day;
 }
 
 /**
- * Renderuje action slot dugmad za tekući dan.
+ * Renderuje action slot indikatore.
  * @param {number} slotsRemaining
  * @param {number} totalSlots
  */
@@ -283,14 +276,14 @@ export function renderActionSlots(slotsRemaining, totalSlots) {
 }
 
 /**
- * Prikazuje log poruke u side panelu.
+ * Prikazuje log poruke u log panelu.
  * @param {Array<{day: number, text: string, type: string}>} log
  */
 export function renderLog(log) {
   const panel = document.querySelector('.log-panel');
   if (!panel) return;
   panel.innerHTML = '';
-  // Prikaži poslednjih 8 poruka, najnovije gore
+  // Poslednjih 8, najnovije gore
   const recent = log.slice(-8).reverse();
   for (const entry of recent) {
     const div = document.createElement('div');
