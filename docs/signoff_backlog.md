@@ -1,6 +1,8 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Ažurirano:** 2026-09-11 — **0 igara čeka sign-off. Backlog prazan. Nova igra u concept: Dan Posle.**
+**Ažurirano:** 2026-09-20 — **0 igara čeka sign-off. Backlog prazan. Zimovnica u impl/in_progress.**
+
+> ⚠️ **KORAK 0c drift (2026-09-20):** Pasoš registry drift: 34 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Gap: 40 released, 6 registered. Jovin posao — brand/copy odluka po igri.
 
 > ⚠️ **KORAK 0c drift (2026-09-11):** Pasoš registry drift: 33 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Gap: 38 released, 5 registered. Jovin posao — brand/copy odluka po igri.
 
