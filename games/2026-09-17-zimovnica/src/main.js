@@ -63,7 +63,11 @@ export function handleAction(actionType, params = {}) {
       state = result.state;
       if (result.persistent) persistent = result.persistent;
       saveGame(state, persistent);
-      renderFrame();
+      if (actionType === 'event_choice' && (!state.today_events || state.today_events.length === 0)) {
+        setScreen('game');
+      } else {
+        renderFrame();
+      }
     }
   });
 }
@@ -77,7 +81,11 @@ export function nextDay() {
   state = result.state;
   if (result.persistent) persistent = result.persistent;
   saveGame(state, persistent);
-  renderFrame();
+  if (state.today_events && state.today_events.length > 0) {
+    setScreen('event');
+  } else {
+    renderFrame();
+  }
 }
 
 /**

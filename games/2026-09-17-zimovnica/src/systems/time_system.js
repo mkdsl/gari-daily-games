@@ -13,7 +13,7 @@ import { createBatchJob } from '../entities/batchjob.js';
 import { createJar } from '../entities/jar.js';
 import { addLog, resolvePassiveJobs } from '../state.js';
 import { generateWeather } from './weather.js';
-import { drawDailyEvents } from './event_engine.js';
+import { drawDailyEvents, resolveEvent } from './event_engine.js';
 import { tickBacva, initBacva } from './barrel_init.js';
 import { checkProgressionUnlocks } from './progression.js';
 import { checkEnding } from './prestige.js';
@@ -91,7 +91,8 @@ export function advanceDay(state, persistent) {
  * @returns {{ state: object, persistent?: object } | null}
  */
 export function processAction(state, persistent, actionType, params) {
-  if (state.slots <= 0) return null;
+  // event_choice does not consume slots — bypass slot guard
+  if (actionType !== 'event_choice' && state.slots <= 0) return null;
 
   switch (actionType) {
     // Legacy names
@@ -114,6 +115,7 @@ export function processAction(state, persistent, actionType, params) {
     case 'destilisi_rakiju': return actionDestilisiRakiju(state, persistent, params);
     case 'prodaj':           return actionProdaj(state, persistent, params);
     case 'kupi_policu':      return actionKupiPolicu(state, persistent, params);
+    case 'event_choice':     return actionEventChoice(state, persistent, params);
     default:          return null;
   }
 }
@@ -139,13 +141,14 @@ function actionBerba(state, persistent, params) {
 function actionKuvanje(state, persistent, params) {
   const recipe = params?.recipe || '';
   switch (recipe) {
-    case 'ajvar':       return actionPeciPaprike(state, persistent, params); // simplified
+    case 'ajvar':       return actionTociAjvar(state, persistent, params);
     case 'sos':         return actionPraviSos(state, persistent, params);
     case 'pelat':       return actionPraviPelat(state, persistent, params);
     case 'dzem':        return actionPraviDzem(state, persistent, params);
     case 'pekmez':      return actionPraviPekmez(state, persistent, params);
     case 'tursija':     return actionPokupujTursiju(state, persistent, params);
     case 'suseno':      return actionSusiVoce(state, persistent, params);
+    case 'rakija':      return actionDestilisiRakiju(state, persistent, params);
     default:            return { state, persistent };
   }
 }
@@ -450,6 +453,40 @@ function actionKupiPolicu(state, persistent, params) {
   let s = { ...state, shelf_level: nextLevel, kasa: state.kasa - upgrade.cost };
   s = addLog(s, `📦 Polica upgrejdovana! Kapacitet: ${upgrade.capacity} kg.`, 'success');
   return { state: s, persistent };
+}
+
+/**
+ * Rešava event choice — primenjuje efekat izabranog odgovora, uklanja event.
+ * @param {object} state
+ * @param {object} persistent
+ * @param {object} params - { eventId, choiceId }
+ * @returns {{ state: object, persistent: object }}
+ */
+function actionEventChoice(state, persistent, params) {
+  const { eventId, choiceId } = params;
+  if (!eventId) return { state, persistent };
+
+  // Nađi event u today_events
+  const eventDef = state.today_events && state.today_events.find(e => e.id === eventId);
+  if (!eventDef) {
+    // Event ne postoji u listi — samo ukloni (sigurnost)
+    return {
+      state: { ...state, today_events: (state.today_events || []).filter(e => e.id !== eventId) },
+      persistent
+    };
+  }
+
+  // Mapiranje choiceId → indeks u choices arrayu
+  const choices = eventDef.choices || [];
+  const choiceIdx = choiceId ? choices.findIndex(c => c.id === choiceId) : 0;
+  const safeIdx = choiceIdx < 0 ? 0 : choiceIdx;
+
+  // Primijeni efekat izbora
+  const { state: newState, persistent: newPersistent } = resolveEvent(state, eventId, safeIdx, persistent);
+
+  // Ukloni razrješeni event iz liste
+  const remaining = (newState.today_events || []).filter(e => e.id !== eventId);
+  return { state: { ...newState, today_events: remaining }, persistent: newPersistent };
 }
 
 /**

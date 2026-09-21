@@ -171,8 +171,14 @@ function renderGame(root, state, persistent) {
   if (state.log && state.log.length > 0) {
     const logPanel = document.createElement('div');
     logPanel.className = 'log-panel';
+    const recent = state.log.slice(-8).reverse();
+    for (const entry of recent) {
+      const div = document.createElement('div');
+      div.className = `log-entry ${entry.type || 'info'}`;
+      div.textContent = `[D${entry.day}] ${entry.text}`;
+      logPanel.appendChild(div);
+    }
     screen.appendChild(logPanel);
-    renderLog(state.log);
   }
 
   // ── Next Day button ──
@@ -237,15 +243,17 @@ function buildActionGrid(state) {
     {
       action: 'kuvanje',
       params: { recipe: 'ajvar' },
+      kg: Math.max(0, s.paprike || 0),
       icon: JAR_ICONS.ajvar,
       label: 'Peči ajvar',
-      cost: `1 slot • paprike`,
-      disabled: slotsLeft < 1 || (s.paprike || 0) < 5,
+      cost: `2 slota • paprike`,
+      disabled: slotsLeft < 2 || (s.paprike || 0) < 5,
       title: 'Trebaš ≥5 kg paprika',
     },
     {
       action: 'kuvanje',
       params: { recipe: 'sos' },
+      kg: Math.max(0, s.paradajz || 0),
       icon: JAR_ICONS.sos,
       label: 'Paradajz sos',
       cost: '1 slot • paradajz',
@@ -255,6 +263,7 @@ function buildActionGrid(state) {
     {
       action: 'kuvanje',
       params: { recipe: 'pelat' },
+      kg: Math.max(0, s.paradajz || 0),
       icon: JAR_ICONS.pelat,
       label: 'Pelat',
       cost: '1 slot • paradajz',
@@ -264,6 +273,7 @@ function buildActionGrid(state) {
     {
       action: 'kuvanje',
       params: { recipe: 'dzem' },
+      kg: Math.max(0, s.jabuke || 0),
       icon: JAR_ICONS.dzem,
       label: 'Džem',
       cost: '1 slot • jabuke/šljive',
@@ -273,6 +283,7 @@ function buildActionGrid(state) {
     {
       action: 'kuvanje',
       params: { recipe: 'pekmez' },
+      kg: Math.max(0, s.sljive || 0),
       icon: JAR_ICONS.pekmez,
       label: 'Pekmez',
       cost: '1 slot • šljive',
@@ -282,6 +293,7 @@ function buildActionGrid(state) {
     {
       action: 'kuvanje',
       params: { recipe: 'tursija' },
+      kg: Math.max(0, (s.krastavci || 0) + (s.bostanusa || 0)),
       icon: JAR_ICONS.tursija,
       label: 'Turšija (3d)',
       cost: '1 slot • krastavci+bostanuša',
@@ -294,6 +306,7 @@ function buildActionGrid(state) {
   if (state.bačva_status === 'unsalted' || state.bačva_status === 'critical_window') {
     actions.push({
       action: 'bacva_init',
+      kg: Math.max(0, s.kupus || 0),
       icon: '🥬',
       label: 'Pokreni bačvu',
       cost: '2 slota • kupus',
@@ -304,14 +317,16 @@ function buildActionGrid(state) {
 
   // Rakija
   if (state.unlocks && state.unlocks.rakija) {
+    const rakijaKg = Math.max(0, (s.jabuke || 0) >= 15 ? (s.jabuke || 0) : (s.sljive || 0));
     actions.push({
       action: 'kuvanje',
       params: { recipe: 'rakija' },
+      kg: rakijaKg,
       icon: JAR_ICONS.rakija || '🫗',
       label: 'Rakija',
-      cost: '2 slota • šljive',
-      disabled: slotsLeft < 2 || (s.sljive || 0) < 8,
-      title: 'Trebaš ≥8 kg šljiva i 2 slota',
+      cost: '3 slota • šljive/jabuke',
+      disabled: slotsLeft < 3 || (s.sljive || 0) < 8,
+      title: 'Trebaš ≥8 kg šljiva ili 15 kg jabuka i 3 slota',
     });
   }
 
@@ -352,6 +367,7 @@ function buildActionBtn(actionDef, slotsLeft) {
       btn.dataset[k] = v;
     }
   }
+  if (actionDef.kg !== undefined) btn.dataset.kg = String(actionDef.kg);
   if (actionDef.title) btn.title = actionDef.title;
 
   const icon = document.createElement('span');
