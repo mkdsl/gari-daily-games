@@ -5,7 +5,7 @@
   "description": "14 dana do prve ruje, pun podrum sirovine. Odlučuješ šta postaje zimovnica, šta truli. Ajvar, turšija, kiseli kupus — strategija prezimljavanja.",
   "play_url": "https://mkdsl.github.io/gari-daily-games/games/2026-09-17-zimovnica/",
   "brand_serves": ["guncati", "mkdslend"],
-  "stage": "impl",
+  "stage": "polish",
   "status": "in_progress",
   "modules": {
     "index.html": "ES6 module loader, app shell",
@@ -53,7 +53,7 @@
     "total_js": 5310,
     "total_css": 1045
   },
-  "beta_score": null,
+  "beta_score": 3.5,
   "beta_score_iter2": null,
   "post_fix_score": null,
   "sef_signoff": false
