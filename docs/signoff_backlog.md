@@ -1,6 +1,8 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Ažurirano:** 2026-09-20 — **0 igara čeka sign-off. Backlog prazan. Zimovnica u impl/in_progress.**
+**Ažurirano:** 2026-09-22 — **1 igra čeka sign-off: Zimovnica (beta_score_iter2=7.0, sef_signoff.md bez [x]).**
+
+> ⚠️ **KORAK 0c drift (2026-09-22):** Pasoš registry drift: 33 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Gap: 39 released, 6 registered. Jovin posao — brand/copy odluka po igri.
 
 > ⚠️ **KORAK 0c drift (2026-09-20):** Pasoš registry drift: 34 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Gap: 40 released, 6 registered. Jovin posao — brand/copy odluka po igri.
 
@@ -158,3 +160,4 @@ Legacy igre (Park Mapa 05-21: failed/superseded, i stariji bez stage polja) se n
 - [2026-09-18] KORAK 0b: 1 unreleased (zimovnica, concept/in_progress — impl u toku). KORAK 0c: Pasoš registry drift **34** (released=40, registered=6 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. **Impl stage pokrenut: Zimovnica** — KORAK 4 (Jova scaffold+implementacija, 38 modula, DOM-based resource strategy).
 - [2026-09-19] KORAK 0a: nema drafta (beta_report_2.md i sef_signoff.md ne postoje za Zimovnicu). KORAK 0b: 1 unreleased (zimovnica, impl/in_progress). KORAK 0c: Pasoš registry drift **34** (released=40, registered=6 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. **gdg-concept-trigger NO-OP** — Zimovnica impl/in_progress, nije released. KORAK P safety-net ne aktivira se (routing nije "nova igra"). Open patches: cross-event-pasos (1 stavka), na-vezi (9 stavki), turneja-planer (17 stavki) — čeka gdg-patch-trigger.
 - [2026-09-21] KORAK 0b: 1 unreleased (zimovnica, impl/in_progress — polish pokrenut ova sesija). KORAK 0c: Pasoš registry drift **34** (released=40, registered=6 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. **Polish stage: Zimovnica** — KORAK 5/6 u toku.
+- [2026-09-22] KORAK 0a: `docs/sef_signoff.md` postoji ali bez `[x]` → **polish-idle exit** (čeka šef sign-off). KORAK 0b: 1 unreleased (zimovnica, polish/in_progress). KORAK 0c: Pasoš drift **33** (released=39, registered=6 u config.js) — Jovin posao, brand/copy odluka po igri. KORAK 0d/0e: nema orphana. ⚠️ **Zimovnica čeka šef sign-off** — beta_score_iter2=7.0, sef_signoff.md kreiran ali neoznačen. Šef: ček `[x]` u `games/2026-09-17-zimovnica/docs/sef_signoff.md` ili piši Gariju instrukcije. Play URL: https://mkdsl.github.io/gari-daily-games/games/2026-09-17-zimovnica/. ⚠️ **Detached HEAD recovery**: 25 commit-a Zimovnica impl+beta+fix bili su u detached HEAD stanju — fast-forward merge na main izvršen ova sesija. Sav Zimovnica kod sada na origin/main.
