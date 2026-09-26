@@ -273,7 +273,7 @@ function buildActionGrid(state) {
     {
       action: 'kuvanje',
       params: { recipe: 'dzem' },
-      kg: Math.max(0, s.jabuke || 0),
+      kg: Math.max(0, (s.jabuke || 0) + (s.sljive || 0)),
       icon: JAR_ICONS.dzem,
       label: 'Džem',
       cost: '1 slot • jabuke/šljive',
@@ -567,7 +567,7 @@ function buildEndingStats(state) {
   // Hack: grid je 3-col, ali smo stavili label/value par — treba 3 para = 6 cells
   // Gornji kod dodaje label i value odvojeno, ali grid je 3-col pa label ide u col1, value u col2, itd.
   // Bolje: uredi grid da bude 2-col po paru
-  grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+  grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
   grid.style.textAlign = 'center';
 
   return grid;

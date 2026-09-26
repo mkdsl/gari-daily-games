@@ -156,6 +156,9 @@ function actionKuvanje(state, persistent, params) {
 /** initBacva — starts barrel fermentation */
 function actionBacvaInit(state, persistent, params) {
   const kg = params?.kg || params?.kupus_kg || state.sirovine.kupus;
+  if ((kg || 0) < 20) {
+    return { state: addLog(state, '⚠️ Bačva zahteva min 20 kg kupusa.', 'warn'), persistent };
+  }
   const { state: s, error } = initBacva(state, kg);
   if (error) return { state: addLog(state, `⚠️ ${error}`, 'warn'), persistent };
   return { state: s, persistent };
@@ -307,22 +310,36 @@ function actionSusiVoce(state, persistent, params) {
   return { state: s, persistent };
 }
 
-/** Pravi džem od jabuka — -1 slot */
+/** Pravi džem od jabuka ili šljiva (jabuke prioritet, šljive fallback) — -1 slot */
 function actionPraviDzem(state, persistent, params) {
   const cost = 1;
   if (state.slots < cost) return null;
   const kg = params?.kg || 0;
-  if (kg <= 0) return { state: addLog(state, '⚠️ Unesi količinu jabuka.', 'warn'), persistent };
-  if ((state.sirovine.jabuke || 0) < kg) {
-    return { state: addLog(state, '⚠️ Nema dovoljno jabuka.', 'warn'), persistent };
+  if (kg <= 0) return { state: addLog(state, '⚠️ Unesi količinu voća za džem.', 'warn'), persistent };
+
+  const jabuke = state.sirovine.jabuke || 0;
+  const sljive = state.sirovine.sljive || 0;
+  const totalVoce = jabuke + sljive;
+
+  if (totalVoce < kg) {
+    return { state: addLog(state, '⚠️ Nema dovoljno voća za džem (jabuke ili šljive).', 'warn'), persistent };
   }
+
   const efficiency = state.prestige_bonuses?.recipe_efficiency || 1.0;
   const output = Math.floor(kg * YIELD.dzem * efficiency);
   const cap = getCapacity(state);
   const used = state.tegle.reduce((s, j) => s + j.qty, 0);
   if (used + output > cap) return { state: addLog(state, '⚠️ Police pune.', 'warn'), persistent };
 
-  const newSirovine = { ...state.sirovine, jabuke: state.sirovine.jabuke - kg };
+  // Jabuke first, šljive for remainder
+  const kg_jabuke = Math.min(jabuke, kg);
+  const kg_sljive = Math.min(Math.max(0, kg - jabuke), sljive);
+
+  const newSirovine = {
+    ...state.sirovine,
+    jabuke: jabuke - kg_jabuke,
+    sljive: sljive - kg_sljive,
+  };
   const jar = createJar('dzem', output, state.day);
   let s = { ...state, sirovine: newSirovine, tegle: [...state.tegle, jar], slots: state.slots - cost };
   s = addLog(s, `🍓 Džem: ${kg} kg → ${output} kg.`, 'success');
