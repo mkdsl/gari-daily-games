@@ -21,9 +21,11 @@ Beta score iter 2: **7.0/10** — ispod threshold-a za auto-release (8.0).
 - Prestige loop implementiran
 
 **Otvoreni problemi (LOW + NEW MEDIUM):**
-- BUG-07 (LOW): Ending stats grid vizuelno broken (3-col layout)
-- BUG-08 (LOW): `actionBacvaInit` nema 20kg minimum check
-- NEW MEDIUM: Džem dugme prikazuje se enabled kad igrač ima šljive ali ne jabuke — klik vraća grešku
+- ~~BUG-07 (LOW): Ending stats grid vizuelno broken (3-col layout)~~ — ✅ ZAKRPANO commit `05a6080` (2026-09-26)
+- ~~BUG-08 (LOW): `actionBacvaInit` nema 20kg minimum check~~ — ✅ ZAKRPANO commit `05a6080` (2026-09-26)
+- ~~NEW MEDIUM: Džem dugme prikazuje se enabled kad igrač ima šljive ali ne jabuke — klik vraća grešku~~ — ✅ ZAKRPANO commit `05a6080` (2026-09-26)
+
+**Svi navedeni problemi su ispravljeni.** Igra je sprema za test sa zakrpama.
 
 ---
 
