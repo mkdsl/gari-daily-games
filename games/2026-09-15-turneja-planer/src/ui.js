@@ -122,9 +122,10 @@ export function toast(msg, type = 'info', dur = 3000) {
  * @param {import('./content/cards.js').Card} card
  * @param {number} card_num - 1-4
  * @param {boolean} flipped
+ * @param {string|null} [city_flavor] - optional city-specific context line
  * @returns {HTMLElement}
  */
-export function createCardEl(card, card_num, flipped = false) {
+export function createCardEl(card, card_num, flipped = false, city_flavor = null) {
   const el = document.createElement('div');
   el.className = 'card' + (flipped ? ' card-flipped' : '');
   el.id = `card-${card.id}`;
@@ -140,6 +141,7 @@ export function createCardEl(card, card_num, flipped = false) {
       <div class="card-back">
         <div class="card-category">${getCategoryLabel(card.category)}</div>
         <h3 class="card-title">${card.title}</h3>
+        ${city_flavor ? `<p class="card-city-flavor">${city_flavor}</p>` : ''}
         <div class="card-options">
           ${card.options.map((opt, i) => `
             <button class="card-option" data-option="${'ABC'[i]}">

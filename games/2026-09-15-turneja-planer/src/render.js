@@ -12,6 +12,7 @@ import { getFarewellLines } from './systems/crew_mood.js';
 import { getEnding, ENDINGS, getMissedLabel, getZavrsenaCliffhanger } from './content/endings.js';
 import { getEndingBrandLines, getLiveEventCallout } from './content/brand_hooks.js';
 import { getCityAforizam } from './content/aforizmi.js';
+import { getCardCityFlavor, getCrewVoiceLine } from './content/decisions_data.js';
 import { sfxCardFlip, sfxClick, sfxCityTransition, sfxWin, sfxFail, sfxOptionSelect, sfxPrestige, sfxBassThump, sfxBorderCrossing, sfxCrowdCheer as _sfxCrowdCheer } from './audio.js';
 import { emit } from './input.js';
 import { prestigeLabel, getFanDBByCity } from './systems/prestige.js';
@@ -250,19 +251,25 @@ function renderCards(state) {
   const city = CITY_MAP.get(city_id);
   const drawn = state.drawn_card_ids;
   const resolved = state.card_outcomes.length;
+  const crew = state.selected_crew_ids.map(id => CREW_MAP.get(id)).filter(Boolean);
+  const crewVoice = resolved === 0
+    ? getCrewVoiceLine(crew, city_id, state.resources.crew_mood)
+    : null;
 
   root.innerHTML = `
     <div class="screen screen-cards" style="--city-color: ${city.color}">
       <div class="cards-header">
         <h2>${city.emoji} ${city.name} — Nastup</h2>
         <p class="cards-progress">Kartica ${Math.min(resolved + 1, drawn.length)} od ${drawn.length}</p>
+        ${crewVoice ? `<p class="crew-voice-line"><strong>${crewVoice.name}:</strong> ${crewVoice.line}</p>` : ''}
       </div>
       <div class="cards-grid" id="cards-grid">
         ${drawn.map((card_id, i) => {
           const card = CARD_MAP.get(card_id);
           const isResolved = i < resolved;
           const isCurrent = i === resolved;
-          const el = createCardEl(card, i + 1, isResolved);
+          const flavor = getCardCityFlavor(card_id, city_id);
+          const el = createCardEl(card, i + 1, isResolved, flavor);
           if (isCurrent) el.classList.add('card-current');
           if (isResolved) el.classList.add('card-done');
           return el.outerHTML;
