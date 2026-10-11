@@ -92,3 +92,16 @@ export function prestigeLabel(prestige) {
   const bonus = (prestige.fan_db.promo_eff_bonus * 100).toFixed(0);
   return `Sezona ${prestige.level + 1} | Fan DB: ${prestige.fan_db.total.toLocaleString()} | Promo +${bonus}%`;
 }
+
+/**
+ * Aggregate fan DB entries by city_id for display breakdown
+ * @param {{ entries: Array<{city_id: string, value: number}> }} fan_db
+ * @returns {Record<string, number>} city_id → accumulated fans
+ */
+export function getFanDBByCity(fan_db) {
+  const result = {};
+  for (const e of fan_db.entries || []) {
+    result[e.city_id] = (result[e.city_id] || 0) + e.value;
+  }
+  return result;
+}

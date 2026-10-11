@@ -12,7 +12,7 @@ import { getEnding, ENDINGS, getMissedLabel } from './content/endings.js';
 import { getEndingBrandLines } from './content/brand_hooks.js';
 import { sfxCardFlip, sfxClick, sfxCityTransition, sfxWin, sfxFail, sfxOptionSelect, sfxPrestige, sfxBassThump, sfxBorderCrossing, sfxCrowdCheer as _sfxCrowdCheer } from './audio.js';
 import { emit } from './input.js';
-import { prestigeLabel } from './systems/prestige.js';
+import { prestigeLabel, getFanDBByCity } from './systems/prestige.js';
 
 /** @type {HTMLElement} */
 let root;
@@ -521,6 +521,18 @@ function renderPrestige(state) {
           <div class="prestige-label">Početni budžet</div>
         </div>
       </div>
+      ${(() => {
+        const byCity = getFanDBByCity(state.prestige.fan_db);
+        const entries = Object.entries(byCity).sort((a, b) => b[1] - a[1]);
+        if (!entries.length) return '';
+        return `<div class="fan-db-breakdown">
+          <p class="fan-db-title">Fani pamte tebe:</p>
+          <p class="fan-db-cities">${entries.map(([cid, n]) => {
+            const city = CITY_MAP.get(cid);
+            return `${city?.emoji || '📍'} ${city?.name || cid} <strong>${Math.round(n).toLocaleString()}</strong>`;
+          }).join(' · ')}</p>
+        </div>`;
+      })()}
       <p class="prestige-msg">${state.prestige.past_endings.length > 0 ? getEnding(state.prestige.past_endings[state.prestige.past_endings.length - 1]).prestige_msg || '' : ''}</p>
       <button class="btn btn-primary" id="btn-prestige-start">Kreni u Sezonu ${state.prestige.level + 1} →</button>
     </div>
