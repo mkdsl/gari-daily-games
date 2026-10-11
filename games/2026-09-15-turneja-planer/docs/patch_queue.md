@@ -1,9 +1,9 @@
 # Patch Queue — Turneja Planer
 
 ## Otvoreni patčevi
-- [ ] P1 `src/systems/routing.js` + `src/main.js` — `logistics` skill `travel_cost_mult: -0.10` deklarisan u config.js ali `calcRouteCost` ne prima crew kao argument i ne čita mult → skill UI obećava popust koji ne postoji, mrtav efekat od impl-a
-- [ ] P2 `src/main.js` — `city_result.budget_delta` (linija 302) = `revenue - (crew + split)`, izostavlja travel_cost oduzet ranije u `route_selected` → Results ekran prikazuje lažno veću uštedu nego što je stvarna promena budžeta
-- [ ] P2 `src/main.js` — `TICKET_PRICE = 8` hardkodovano lokalno u `computeCityResults`, zaobilazi importovani `TICKET_PRICE_EUR` iz config.js → promena tiketa u config.js nema efekta na revenue kalkul
+- [x] P1 `src/systems/routing.js` + `src/main.js` — `logistics` skill `travel_cost_mult: -0.10` deklarisan u config.js ali `calcRouteCost` ne prima crew kao argument i ne čita mult → skill UI obećava popust koji ne postoji, mrtav efekat od impl-a (done 2026-10-11, commit 75f6f7c)
+- [x] P2 `src/main.js` — `city_result.budget_delta` (linija 302) = `revenue - (crew + split)`, izostavlja travel_cost oduzet ranije u `route_selected` → Results ekran prikazuje lažno veću uštedu nego što je stvarna promena budžeta (done 2026-10-11, commit 75f6f7c)
+- [x] P2 `src/main.js` — `TICKET_PRICE = 8` hardkodovano lokalno u `computeCityResults`, zaobilazi importovani `TICKET_PRICE_EUR` iz config.js → promena tiketa u config.js nema efekta na revenue kalkul (done 2026-10-11, commit 75f6f7c)
 
 - [ ] P3 `src/content/brand_hooks.js` — Kluboslavija live-event callout: dodati `KLUBOSLAVIJA_DATES` objekt sa stvarnim datumima gradova (Štrand, Sarajevo, Guncati grand finale) i funkciju `getLiveEventCallout(cityId)` → prikazuje se na Results ekranu ako `reputation >= 6`, tekst tipa "🎪 Kluboslavija dolazi u Novi Sad — stvarni datum, stvarni šou" — converts player u potencijalnog gosta
 - [ ] P3 `src/content/brand_hooks.js` + `src/content/cities.js` — Guncati ending enrichment: proširiti `getEndingBrandLines` za "Turneja Legenda" ending koji uključuje Guncati destinaciju — dodati Tom Sawyer / "povratak na selo" narativ + CTA ka Guncati masterclass programu, max 3 rečenice ispod postojećeg ending teksta
