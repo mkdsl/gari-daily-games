@@ -14,7 +14,7 @@ import { splitTotal, deductCrewCost, transportAllocEffects, techAllocCQ, promoMu
 import { calcRouteCost } from './systems/routing.js';
 import { createProgression, currentCityId, advanceCity, checkGuncatiGate } from './systems/progression.js';
 import { accumulateFanDB, performPrestige, createPrestigeState } from './systems/prestige.js';
-import { CARDS_PER_CITY, BORDER_EXTRA_COST, BORDER_EXTRA_MOOD } from './config.js';
+import { CARDS_PER_CITY, BORDER_EXTRA_COST, BORDER_EXTRA_MOOD, TICKET_PRICE_EUR, SKILL_EFFECTS } from './config.js';
 import { evaluateEnding } from './content/endings.js';
 import { rollCrowd } from './entities/city.js';
 import { pickVenueForCity } from './entities/venue.js';
@@ -61,9 +61,8 @@ function wireEvents() {
   });
 
   on('route_selected', (route) => {
-    const travel_cost = calcRouteCost(route);
-    const new_state = applyResourceDelta(state, { budget: -travel_cost });
-    setState({ ...new_state, route, city_index: 0, screen: 'crew_select' });
+    const pending_travel_cost = calcRouteCost(route);
+    setState({ ...state, route, city_index: 0, screen: 'crew_select', pending_travel_cost });
   });
 
   on('toggle_crew', (crew_id) => {
@@ -84,7 +83,12 @@ function wireEvents() {
     const crew = state.selected_crew_ids.map(id => CREW_MAP.get(id)).filter(Boolean);
     if (crew.length < 2) { toast('Minimum 2 člana!', 'warn'); return; }
     if (!hasDJing(crew)) { toast('Obavezan je member sa DJ skill-om!', 'error'); return; }
-    setState({ ...state, screen: 'city_budget', budget_split: { transport: 0, promo: 0, tech: 0 } });
+    const logisticsMult = crew.reduce((sum, m) => sum + (m.skills.logistics || 0) * SKILL_EFFECTS.logistics.travel_cost_mult, 0);
+    const route_travel_cost_paid = logisticsMult
+      ? Math.round(state.pending_travel_cost * (1 + logisticsMult))
+      : state.pending_travel_cost;
+    const new_state = applyResourceDelta(state, { budget: -route_travel_cost_paid });
+    setState({ ...new_state, screen: 'city_budget', budget_split: { transport: 0, promo: 0, tech: 0 }, route_travel_cost_paid });
   });
 
   on('budget_slider', ({ key, value }) => {
@@ -251,8 +255,7 @@ function computeCityResults(newState) {
 
   // Revenue from ticket sales
   const pm = promoMult(split.promo || 0);
-  const TICKET_PRICE = 8; // EUR
-  const revenue = Math.round(attendance * TICKET_PRICE * pm);
+  const revenue = Math.round(attendance * TICKET_PRICE_EUR * pm);
 
   // CQ: start at 5, add transport/tech effects, add crew skills, add card bonuses
   let cq = 5.0;
@@ -299,7 +302,7 @@ function computeCityResults(newState) {
     attendance,
     crowd_quality: cq,
     rep_gain,
-    budget_delta: revenue - (totalDailyRate(crew) + splitTotal(split)),
+    budget_delta: revenue - (totalDailyRate(crew) + splitTotal(split)) - (newState.city_index === 0 ? (newState.route_travel_cost_paid || 0) : 0),
   };
 
   const finalState = {

@@ -24,9 +24,10 @@ function permutations(arr) {
 /**
  * Calculate travel cost for a route (array of city ids, start=beograd always)
  * @param {string[]} route - city IDs in order (does NOT include beograd start)
+ * @param {number} [travelCostMult=0] - fractional modifier (e.g. -0.30 = 30% discount from logistics skill)
  * @returns {number} total EUR
  */
-export function calcRouteCost(route) {
+export function calcRouteCost(route, travelCostMult = 0) {
   const full = ['beograd', ...route];
   let total = 0;
   for (let i = 0; i < full.length - 1; i++) {
@@ -34,7 +35,7 @@ export function calcRouteCost(route) {
     const to = full[i + 1];
     total += (TRAVEL_COSTS[from]?.[to] ?? 0);
   }
-  return total;
+  return travelCostMult ? Math.round(total * (1 + travelCostMult)) : total;
 }
 
 /**
