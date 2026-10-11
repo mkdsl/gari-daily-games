@@ -182,7 +182,7 @@ function renderCityBudget(state) {
         <div>
           <h2 class="city-name">${city.name}</h2>
           <p class="city-tagline">${flavor.tagline || ''}</p>
-          <p class="city-arrival">${getArrivalMsg(city_id)}</p>
+          <p class="city-arrival">${getArrivalMsg(city_id, (state.prestige?.level ?? 0) > 0)}</p>
         </div>
       </div>
       <div class="city-meta">

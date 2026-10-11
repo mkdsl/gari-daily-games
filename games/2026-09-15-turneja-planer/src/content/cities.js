@@ -94,12 +94,22 @@ export function getCityAforizam(city_id) {
   return aforizmi[Math.floor(Math.random() * aforizmi.length)];
 }
 
+const PRESTIGE_ARRIVAL = {
+  beograd:  'Fanovi te pamte iz prošle sezone. Matični grad, veća očekivanja.',
+  novi_sad: 'Fanovi te pamte iz prošle sezone. Vojvodina ne zaboravlja.',
+  nis:      'Fanovi te pamte iz prošle sezone. Jug pamti ko je isporučio.',
+  sarajevo: 'Fanovi te pamte iz prošle sezone. Bosna ima dugu memoriju.',
+  guncati:  'Imanje te čeka ponovo. Šuma te prepoznaje.',
+};
+
 /**
  * Get city arrival message
  * @param {string} city_id
+ * @param {boolean} [is_prestige=false]
  * @returns {string}
  */
-export function getArrivalMsg(city_id) {
+export function getArrivalMsg(city_id, is_prestige = false) {
+  if (is_prestige && PRESTIGE_ARRIVAL[city_id]) return PRESTIGE_ARRIVAL[city_id];
   return CITY_FLAVOR[city_id]?.arrival_msg || 'Stigli ste.';
 }
 
