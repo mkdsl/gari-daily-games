@@ -86,9 +86,18 @@ export function getBrandCTA(brand_id) {
  * @param {string} ending_id
  * @returns {string[]}
  */
+const GUNCATI_LEGEND_LINES = [
+  '🌿 Stigao/la si do Guncata. Tom Sawyer bi bio ponosan — povratak na selo kao tačka završetka, ne kao bijeg.',
+  '🌿 Guncati grand finale nije slučajnost — to je selekcija. Pravi dolaze do kraja. Iduće sezone, Guncati Masterclass te čeka.',
+  '🌿 Livada, šuma, bas. Ako si spreman/a za sledeći korak — Guncati Masterclass program je tamo gde se priče pretvaraju u veštine.',
+];
+
 export function getEndingBrandLines(ending_id) {
   const lines = [];
-  if (ending_id === 'TURNEJA_LEGENDA' || ending_id === 'ZAVRSENO_I_PLACENO') {
+  if (ending_id === 'TURNEJA_LEGENDA') {
+    lines.push('🎵 ' + getBrandTagline('kluboslavija'));
+    lines.push(GUNCATI_LEGEND_LINES[Math.floor(Math.random() * GUNCATI_LEGEND_LINES.length)]);
+  } else if (ending_id === 'ZAVRSENO_I_PLACENO') {
     lines.push('🎵 ' + getBrandTagline('kluboslavija'));
     lines.push('🌿 ' + getBrandTagline('guncati'));
   }
