@@ -54,6 +54,15 @@ export const STAMPS = [
     game_url: 'https://mkdsl.github.io/gari-daily-games/games/2026-09-11-dan-posle/',
     description: 'Jutro posle festivala. 12 sati, 4 resursa, 32 micro-odluka.',
     event_date: '2026-09-11'
+  },
+  {
+    slug: 'turneja-planer',
+    display_name: 'Turneja Planer',
+    color: '#C47D2A',
+    claim_type: 'manual',
+    game_url: 'https://mkdsl.github.io/gari-daily-games/games/2026-09-15-turneja-planer/',
+    description: 'Planirao/la si turneju od Beograda do Guncata. Ruta, ekipa, budget — sve se vodi.',
+    event_date: '2026-09-15'
   }
   // TODO: buduće igre — dodaj slug ovde I u pasos-sdk.js SLUG_WHITELIST
   // Format: { slug, display_name, color, claim_type: 'auto'|'manual', game_url, description, event_date }
