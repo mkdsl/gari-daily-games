@@ -104,3 +104,12 @@ export function evaluateEnding(state) {
 export function getEnding(id) {
   return ENDINGS[id] || ENDINGS.ZAVRSENO_I_PLACENO;
 }
+
+/**
+ * Section label for "što si propustio" — null on wins (no regrets needed)
+ * @param {string} id
+ * @returns {string|null}
+ */
+export function getMissedLabel(id) {
+  return id === 'TURNEJA_LEGENDA' ? null : 'Što si propustio:';
+}

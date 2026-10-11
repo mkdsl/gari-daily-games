@@ -8,7 +8,7 @@ import { updateHUD, updateRouteDots, createCardEl, toast, deltaHTML, showModal, 
 import { CARD_MAP } from './content/cards.js';
 import { CITY_FLAVOR, getCityTagline, getArrivalMsg } from './content/cities.js';
 import { CREW_PROFILES, getCrewBio, getCrewDialog } from './content/crew_profiles.js';
-import { getEnding, ENDINGS } from './content/endings.js';
+import { getEnding, ENDINGS, getMissedLabel } from './content/endings.js';
 import { getEndingBrandLines } from './content/brand_hooks.js';
 import { sfxCardFlip, sfxClick, sfxCityTransition, sfxWin, sfxFail, sfxOptionSelect, sfxPrestige, sfxBassThump, sfxBorderCrossing, sfxCrowdCheer as _sfxCrowdCheer } from './audio.js';
 import { emit } from './input.js';
@@ -401,9 +401,38 @@ function renderTransit(state) {
 }
 
 // ---- ENDING ----
+
+/** Find 1-2 worst-impact card outcomes from the last city */
+function getMissedMoments(state) {
+  const outcomes = state.card_outcomes || [];
+  if (!outcomes.length) return [];
+  const lastCityId = state.route?.[state.route.length - 1];
+  const cityName = CITY_MAP.get(lastCityId)?.name || '';
+  return outcomes
+    .map(o => {
+      const fx = o.resolved_effects || {};
+      const impact = (fx.budget || 0) + (fx.reputation || 0) * 200 + (fx.crew_mood || 0) * 30;
+      return { ...o, impact };
+    })
+    .sort((a, b) => a.impact - b.impact)
+    .slice(0, 2)
+    .filter(o => o.impact < 0)
+    .map(o => {
+      const card = CARD_MAP.get(o.card_id);
+      const fx = o.resolved_effects || {};
+      const parts = [];
+      if (fx.budget < 0) parts.push(`${Math.round(fx.budget)} EUR`);
+      if (fx.reputation < 0) parts.push(`Rep ${fx.reputation.toFixed(1)}`);
+      if (fx.crew_mood < 0) parts.push(`Mood ${fx.crew_mood}`);
+      return `${cityName ? cityName + ': ' : ''}${card?.title || 'odluka'} → ${parts.join(', ')}`;
+    });
+}
+
 function renderEnding(state) {
   const ending = getEnding(state.ending_id);
   const brandLines = getEndingBrandLines(state.ending_id);
+  const missedLabel = getMissedLabel(state.ending_id);
+  const missed = missedLabel ? getMissedMoments(state) : [];
 
   sfxWin?.();
 
@@ -422,6 +451,12 @@ function renderEnding(state) {
       </div>
 
       <div class="ending-narrative">${ending.narrative}</div>
+
+      ${missed.length ? `
+      <div class="ending-missed">
+        <h4 class="missed-title">${missedLabel}</h4>
+        ${missed.map(m => `<p class="missed-item">❌ ${m}</p>`).join('')}
+      </div>` : ''}
 
       <div class="ending-brand">
         ${brandLines.map(l => `<p class="brand-line">${l}</p>`).join('')}
