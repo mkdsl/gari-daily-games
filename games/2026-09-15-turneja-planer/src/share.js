@@ -2,9 +2,10 @@
 
 /**
  * Capture the #game-root element as a canvas screenshot
+ * @param {string} [ending_id]
  * @returns {Promise<string>} data URL
  */
-async function captureScreenshot() {
+async function captureScreenshot(ending_id) {
   const el = document.getElementById('game-root');
   if (!el) throw new Error('No #game-root');
 
@@ -32,6 +33,14 @@ async function captureScreenshot() {
   ctx2d.font = '20px system-ui';
   ctx2d.fillStyle = '#52b788';
   ctx2d.fillText('Kluboslavija 2026', 300, 130);
+  if (ending_id === 'TURNEJA_LEGENDA') {
+    ctx2d.font = 'bold 16px system-ui';
+    ctx2d.fillStyle = '#E63946';
+    ctx2d.fillText('#KluboslavijaTurneja', 300, 330);
+    ctx2d.font = '14px system-ui';
+    ctx2d.fillStyle = '#A8DADC';
+    ctx2d.fillText('MKDSLend — Zabavni radni park.', 300, 360);
+  }
   return canvas.toDataURL('image/png');
 }
 
@@ -52,7 +61,11 @@ function buildShareText(state) {
   const budget = Math.round(state.resources.budget);
   const reach = state.resources.reach.toFixed(1);
 
-  return `🎧 Turneja Planer — Kluboslavija 2026\n${ending}\nReputacija: ${rep}/10 | Budžet: ${budget}€ | Reach: ${reach}k\nIgraj na: https://mkdsl.github.io/gari-daily-games/games/2026-09-15-turneja-planer/`;
+  const base = `🎧 Turneja Planer — Kluboslavija 2026\n${ending}\nReputacija: ${rep}/10 | Budžet: ${budget}€ | Reach: ${reach}k\nIgraj na: https://mkdsl.github.io/gari-daily-games/games/2026-09-15-turneja-planer/`;
+  if (state.ending_id === 'TURNEJA_LEGENDA') {
+    return `${base}\n#KluboslavijaTurneja\n🏗️ MKDSLend — Zabavni radni park.`;
+  }
+  return base;
 }
 
 /**
@@ -65,7 +78,7 @@ export async function shareResult(state) {
   try {
     let dataUrl;
     try {
-      dataUrl = await captureScreenshot();
+      dataUrl = await captureScreenshot(state.ending_id);
     } catch (e) {
       dataUrl = null;
     }
