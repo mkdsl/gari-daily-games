@@ -86,6 +86,12 @@ export function getBrandCTA(brand_id) {
  * @param {string} ending_id
  * @returns {string[]}
  */
+const MKDSLEND_META_LINES = [
+  '🏗️ Ovo je šta šef zaista radi svaki dan. Ne igra — stvarnost. mkdslend.com',
+  '🏗️ Planiraš turneju u igri. On planira pravi život. Isti alati, isti problemi. mkdslend.com',
+  '🏗️ Svaki run je jedan Šefov radni dan. Zabavni radni park — mkdslend.com',
+];
+
 const GUNCATI_LEGEND_LINES = [
   '🌿 Stigao/la si do Guncata. Tom Sawyer bi bio ponosan — povratak na selo kao tačka završetka, ne kao bijeg.',
   '🌿 Guncati grand finale nije slučajnost — to je selekcija. Pravi dolaze do kraja. Iduće sezone, Guncati Masterclass te čeka.',
@@ -101,7 +107,7 @@ export function getEndingBrandLines(ending_id) {
     lines.push('🎵 ' + getBrandTagline('kluboslavija'));
     lines.push('🌿 ' + getBrandTagline('guncati'));
   }
-  lines.push('🏗️ ' + getBrandTagline('mkdslend'));
+  lines.push(MKDSLEND_META_LINES[Math.floor(Math.random() * MKDSLEND_META_LINES.length)]);
   return lines;
 }
 
