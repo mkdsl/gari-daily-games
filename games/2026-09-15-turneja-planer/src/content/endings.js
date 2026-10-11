@@ -113,3 +113,29 @@ export function getEnding(id) {
 export function getMissedLabel(id) {
   return id === 'TURNEJA_LEGENDA' ? null : 'Što si propustio:';
 }
+
+/**
+ * Personalized cliffhanger line for ZAVRSENO_I_PLACENO ending.
+ * Shows how close/far player was from TURNEJA_LEGENDA.
+ * @param {{ budget: number, reputation: number, reach: number }} resources
+ * @returns {string}
+ */
+export function getZavrsenaCliffhanger(resources) {
+  const { budget, reputation, reach } = resources;
+  const budgetGap = Math.max(0, 2001 - budget);
+  const repGap = parseFloat(Math.max(0, 9.0 - reputation).toFixed(1));
+  const reachGap = Math.max(0, 40 - reach);
+
+  const gaps = [];
+  if (budgetGap > 0) gaps.push(`${budgetGap} EUR`);
+  if (repGap > 0) gaps.push(`${repGap} rep`);
+  if (reachGap > 0) gaps.push(`${Math.round(reachGap)}k reach`);
+
+  if (gaps.length === 0) return 'Solidno. Nisi legenda, ali si platio račune.';
+
+  const close = budgetGap < 300 && repGap < 1.0 && reachGap < 5;
+  if (close) {
+    return `Falilo ti je ${gaps.join(' i ')}. Jedna sezona više. Sledeća?`;
+  }
+  return `Do Legende: ${gaps.join(', ')}. Solidno. Nisi legenda, ali si platio račune.`;
+}
