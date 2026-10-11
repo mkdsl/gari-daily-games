@@ -96,11 +96,34 @@ export function getEndingBrandLines(ending_id) {
   return lines;
 }
 
-/** City-specific Kluboslavija dates */
+/** City-specific Kluboslavija dates — Turneja 2026 */
 export const KLUBOSLAVIJA_DATES = {
-  beograd: null,
-  novi_sad: 'Štrand Fest',
-  nis: null,
-  sarajevo: 'Sarajevo stop',
-  guncati: 'Grand Finale',
+  beograd:  { label: 'Avala', date: '20. jun' },
+  novi_sad: { label: 'Štrand Fest', date: '12. jul' },
+  nis:      null,
+  sarajevo: { label: 'Sarajevo Stop', date: '2. avg' },
+  guncati:  { label: 'Grand Finale', date: '6. sep' },
 };
+
+/** Display names per city */
+const CITY_DISPLAY = {
+  beograd:  'Beogradu',
+  novi_sad: 'Novom Sadu',
+  nis:      'Nišu',
+  sarajevo: 'Sarajevu',
+  guncati:  'Guncatima',
+};
+
+/**
+ * Get Kluboslavija live-event callout for city result screen
+ * @param {string} city_id
+ * @param {number} reputation
+ * @returns {string|null} callout line or null if no event / rep too low
+ */
+export function getLiveEventCallout(city_id, reputation) {
+  if (reputation < 6) return null;
+  const ev = KLUBOSLAVIJA_DATES[city_id];
+  if (!ev) return null;
+  const city = CITY_DISPLAY[city_id] || city_id;
+  return `🎪 Kluboslavija dolazi u ${city} — ${ev.label}, ${ev.date}. Stvarni datum, stvarni šou.`;
+}

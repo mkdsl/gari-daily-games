@@ -437,6 +437,16 @@
   font-size: 13px;
 }
 
+.kluboslavija-callout {
+  background: rgba(230, 57, 70, 0.12);
+  border: 1px solid #E63946;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #E63946;
+}
+
 /* Ending */
 .screen-ending { align-items: center; text-align: center; }
 .ending-header { display: flex; flex-direction: column; align-items: center; gap: 8px; }

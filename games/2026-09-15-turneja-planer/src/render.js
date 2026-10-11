@@ -10,7 +10,7 @@ import { CITY_FLAVOR, getCityTagline, getArrivalMsg } from './content/cities.js'
 import { CREW_PROFILES, getCrewBio, getCrewDialog } from './content/crew_profiles.js';
 import { getFarewellLines } from './systems/crew_mood.js';
 import { getEnding, ENDINGS, getMissedLabel } from './content/endings.js';
-import { getEndingBrandLines } from './content/brand_hooks.js';
+import { getEndingBrandLines, getLiveEventCallout } from './content/brand_hooks.js';
 import { sfxCardFlip, sfxClick, sfxCityTransition, sfxWin, sfxFail, sfxOptionSelect, sfxPrestige, sfxBassThump, sfxBorderCrossing, sfxCrowdCheer as _sfxCrowdCheer } from './audio.js';
 import { emit } from './input.js';
 import { prestigeLabel, getFanDBByCity } from './systems/prestige.js';
@@ -351,6 +351,11 @@ function renderResults(state) {
           </div>
         `).join('')}
       </div>
+
+      ${(() => {
+        const callout = getLiveEventCallout(city_id, state.reputation);
+        return callout ? `<div class="kluboslavija-callout">${callout}</div>` : '';
+      })()}
 
       <div class="results-actions">
         ${isLast
