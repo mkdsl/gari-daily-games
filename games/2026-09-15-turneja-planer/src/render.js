@@ -9,7 +9,7 @@ import { CARD_MAP } from './content/cards.js';
 import { CITY_FLAVOR, getCityTagline, getArrivalMsg } from './content/cities.js';
 import { CREW_PROFILES, getCrewBio, getCrewDialog } from './content/crew_profiles.js';
 import { getFarewellLines } from './systems/crew_mood.js';
-import { getEnding, ENDINGS, getMissedLabel, getZavrsenaCliffhanger } from './content/endings.js';
+import { getEnding, ENDINGS, getMissedLabel, getZavrsenaCliffhanger, getGuncatiDiagnosis } from './content/endings.js';
 import { getEndingBrandLines, getLiveEventCallout } from './content/brand_hooks.js';
 import { getCityAforizam } from './content/aforizmi.js';
 import { getCardCityFlavor, getCrewVoiceLine } from './content/decisions_data.js';
@@ -480,6 +480,9 @@ function renderEnding(state) {
 
       ${state.ending_id === 'ZAVRSENO_I_PLACENO' ? `
       <p class="zavrsena-cliffhanger">${getZavrsenaCliffhanger(state.resources)}</p>` : ''}
+
+      ${state.ending_id === 'GUNCATI_ZATVOREN' ? `
+      <p class="guncati-diagnosis">${getGuncatiDiagnosis(state)}</p>` : ''}
 
       ${missed.length ? `
       <div class="ending-missed">

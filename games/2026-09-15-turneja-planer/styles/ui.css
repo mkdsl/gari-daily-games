@@ -515,6 +515,15 @@
   color: var(--text-dim);
 }
 
+.guncati-diagnosis {
+  font-size: 14px;
+  font-style: italic;
+  color: #F77F00;
+  text-align: center;
+  max-width: 540px;
+  padding: 4px 0;
+}
+
 .zavrsena-cliffhanger {
   font-size: 14px;
   font-style: italic;

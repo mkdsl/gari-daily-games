@@ -106,6 +106,28 @@ export function getEnding(id) {
 }
 
 /**
+ * Diagnose why GUNCATI_ZATVOREN happened and return a variant narrative.
+ * @param {{ city_results: Array<{crowd_quality: number}>, resources: { crew_mood: number, budget: number } }} state
+ * @returns {string} extra narrative line
+ */
+export function getGuncatiDiagnosis(state) {
+  const results = state.city_results || [];
+  const avgCQ = results.length
+    ? results.reduce((s, r) => s + (r.crowd_quality || 5), 0) / results.length
+    : 5;
+  const mood = state.resources?.crew_mood ?? 5;
+  const budget = state.resources?.budget ?? 500;
+
+  if (mood <= 3 || budget < 200) {
+    return 'Nisu došli glasni. Atmosfera ne laže — squeezovao/la si crew do granice i Guncati je to video.';
+  }
+  if (avgCQ < 5) {
+    return 'Publika se pričala. Vijesti su male — loša crowd quality putuje do Guncata pre tebe.';
+  }
+  return 'Prilagodio/la si se svima. Guncati ne traži prilagodljive — traži ljude sa stavom.';
+}
+
+/**
  * Section label for "što si propustio" — null on wins (no regrets needed)
  * @param {string} id
  * @returns {string|null}
