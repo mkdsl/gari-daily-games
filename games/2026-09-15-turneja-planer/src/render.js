@@ -11,6 +11,7 @@ import { CREW_PROFILES, getCrewBio, getCrewDialog } from './content/crew_profile
 import { getFarewellLines } from './systems/crew_mood.js';
 import { getEnding, ENDINGS, getMissedLabel, getZavrsenaCliffhanger } from './content/endings.js';
 import { getEndingBrandLines, getLiveEventCallout } from './content/brand_hooks.js';
+import { getCityAforizam } from './content/aforizmi.js';
 import { sfxCardFlip, sfxClick, sfxCityTransition, sfxWin, sfxFail, sfxOptionSelect, sfxPrestige, sfxBassThump, sfxBorderCrossing, sfxCrowdCheer as _sfxCrowdCheer } from './audio.js';
 import { emit } from './input.js';
 import { prestigeLabel, getFanDBByCity } from './systems/prestige.js';
@@ -340,6 +341,8 @@ function renderResults(state) {
           <span class="stat-val ${result?.budget_delta >= 0 ? 'pos' : 'neg'}">${result?.budget_delta >= 0 ? '+' : ''}€ ${Math.round(result?.budget_delta || 0)}</span>
         </div>
       </div>
+
+      <p class="city-aforizam">"${getCityAforizam(state.resources)}"</p>
 
       <div class="card-outcomes-summary">
         <h3>Tvoje odluke:</h3>
