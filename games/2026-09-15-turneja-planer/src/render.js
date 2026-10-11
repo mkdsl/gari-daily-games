@@ -8,6 +8,7 @@ import { updateHUD, updateRouteDots, createCardEl, toast, deltaHTML, showModal, 
 import { CARD_MAP } from './content/cards.js';
 import { CITY_FLAVOR, getCityTagline, getArrivalMsg } from './content/cities.js';
 import { CREW_PROFILES, getCrewBio, getCrewDialog } from './content/crew_profiles.js';
+import { getFarewellLines } from './systems/crew_mood.js';
 import { getEnding, ENDINGS, getMissedLabel } from './content/endings.js';
 import { getEndingBrandLines } from './content/brand_hooks.js';
 import { sfxCardFlip, sfxClick, sfxCityTransition, sfxWin, sfxFail, sfxOptionSelect, sfxPrestige, sfxBassThump, sfxBorderCrossing, sfxCrowdCheer as _sfxCrowdCheer } from './audio.js';
@@ -433,6 +434,9 @@ function renderEnding(state) {
   const brandLines = getEndingBrandLines(state.ending_id);
   const missedLabel = getMissedLabel(state.ending_id);
   const missed = missedLabel ? getMissedMoments(state) : [];
+  const crew = state.selected_crew_ids.map(id => CREW_MAP.get(id)).filter(Boolean);
+  const is_prestige = state.prestige?.level > 0;
+  const farewells = getFarewellLines(crew, state.resources.crew_mood, is_prestige, CREW_PROFILES);
 
   sfxWin?.();
 
@@ -469,6 +473,12 @@ function renderEnding(state) {
         <button class="btn btn-primary" id="btn-restart">🔄 Ponovo igraj</button>
         <button class="btn btn-secondary" id="btn-share">📤 Podeli rezultat</button>
       </div>
+
+      ${farewells.length ? `
+      <div class="ending-farewells">
+        <h4 class="farewells-title">Crew se oprašta:</h4>
+        ${farewells.map(f => `<p class="farewell-line"><strong>${f.name}:</strong> ${f.line}</p>`).join('')}
+      </div>` : ''}
 
       <div class="city-history">
         <h3>Rezultati po gradovima:</h3>

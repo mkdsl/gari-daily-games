@@ -55,3 +55,30 @@ export function moodColor(mood) {
   if (mood >= 4) return '#f77f00';
   return '#e63946';
 }
+
+/**
+ * Get farewell line per active crew member based on final mood
+ * @param {import('../entities/crew_member.js').CrewMember[]} crew
+ * @param {number} mood - final crew_mood
+ * @param {boolean} [is_prestige=false]
+ * @param {Record<string, import('../content/crew_profiles.js').CrewProfile>} profiles
+ * @returns {Array<{name: string, line: string}>}
+ */
+export function getFarewellLines(crew, mood, is_prestige, profiles) {
+  return crew.map(m => {
+    const profile = profiles[m.id];
+    if (!profile?.farewells) return null;
+    const fw = profile.farewells;
+    let line;
+    if (is_prestige && fw.prestige) {
+      line = fw.prestige;
+    } else if (mood >= 7) {
+      line = fw.high;
+    } else if (mood <= 3) {
+      line = fw.low;
+    } else {
+      line = fw.mid;
+    }
+    return { name: m.name, line };
+  }).filter(Boolean);
+}
