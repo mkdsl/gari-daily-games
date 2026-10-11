@@ -82,6 +82,26 @@ export function getAllRoutableCityIds() {
 }
 
 /**
+ * Find cheapest alternative ordering of the same cities
+ * @param {string[]} chosen_route - player's route (city IDs, not including beograd)
+ * @returns {{ route: string[], cost: number, label: string, delta: number }|null}
+ *   null if chosen_route is already optimal or has only 1 city
+ */
+export function getCheapestAlternative(chosen_route) {
+  if (chosen_route.length <= 1) return null;
+  const chosen_cost = calcRouteCost(chosen_route);
+  const all = permutations(chosen_route).map(perm => ({
+    route: perm,
+    cost: calcRouteCost(perm),
+    label: ['Beograd', ...perm.map(id => getCityName(id))].join(' → '),
+  }));
+  all.sort((a, b) => a.cost - b.cost);
+  const best = all[0];
+  if (best.cost >= chosen_cost) return null;
+  return { ...best, delta: chosen_cost - best.cost };
+}
+
+/**
  * Get travel cost between two cities
  * @param {string} from
  * @param {string} to

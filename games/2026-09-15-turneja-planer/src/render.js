@@ -2,7 +2,7 @@
 
 import { CITY_MAP, CITIES } from './entities/city.js';
 import { ALL_CREW, CREW_MAP, hasDJing, totalDailyRate } from './entities/crew_member.js';
-import { getTopRoutes, getAllRoutableCityIds } from './systems/routing.js';
+import { getTopRoutes, getAllRoutableCityIds, getCheapestAlternative } from './systems/routing.js';
 import { splitTotal } from './systems/budget.js';
 import { updateHUD, updateRouteDots, createCardEl, toast, deltaHTML, showModal, hideModal } from './ui.js';
 import { CARD_MAP } from './content/cards.js';
@@ -356,6 +356,13 @@ function renderResults(state) {
         const callout = getLiveEventCallout(city_id, state.reputation);
         return callout ? `<div class="kluboslavija-callout">${callout}</div>` : '';
       })()}
+
+      ${isLast ? (() => {
+        const alt = getCheapestAlternative(state.route || []);
+        if (!alt) return '';
+        const mood_delta = alt.route.length >= 2 ? ` i ${alt.route.length - 1} Crew Mood` : '';
+        return `<div class="alt-route-hint">💡 <strong>Što je moglo biti:</strong> ${alt.label} štedelo bi ${alt.delta} EUR${mood_delta}.</div>`;
+      })() : ''}
 
       <div class="results-actions">
         ${isLast
