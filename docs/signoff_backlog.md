@@ -1,6 +1,8 @@
 # Signoff Backlog — Konsolidovani Test Paket
 
-**Ažurirano:** 2026-10-16 — **1 igra čeka sign-off: Zimovnica (beta_score_iter2=7.0, sef_signoff.md bez [x], 29. dan čekanja). ✅ Sva 3 navedena problema zakrpana commit 05a6080. Sprema za test.**
+**Ažurirano:** 2026-10-26 — **1 igra čeka sign-off: Zimovnica (beta_score_iter2=7.0, sef_signoff.md bez [x], 39. dan čekanja).**
+
+> ⚠️ **KORAK 0c drift (2026-10-26):** Pasoš registry drift: 33 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Gap: 40 released, 7 registered. Jovin posao — brand/copy odluka po igri.
 
 > ⚠️ **KORAK 0c drift (2026-10-11):** Pasoš registry drift: 34 released igara nije u SLUG_WHITELIST/STAMPS — vidi `games/2026-05-10-cross-event-pasos/src/config.js`. Gap: 40 released, 7 registered (turneja-planer dodato danas). Jovin posao — brand/copy odluka po igri.
 
